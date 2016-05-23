@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ehcache
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="http://www.ehcache.org/ehcache.xsd"
+        updateCheck="true"
+        monitoring="autodetect"
+        dynamicConfig="true"
+        defaultTransactionTimeoutInSeconds="15">
+
+    <!-- diskstore设置缓存文件 对所有的 cache 和 defaultCache 有效 -->
+    <diskStore path="java.io.tmpdir/cleverframe/ehcache/default"/>
+
+    <!-- defaultCache 默认的管理策略 -->
+    <defaultCache
+            maxEntriesLocalHeap="100"
+            eternal="false"
+            timeToIdleSeconds="300"
+            timeToLiveSeconds="600"
+            overflowToDisk="true"
+            maxEntriesLocalDisk="100000"/>
+
+    <!-- 用于存储shiro活动的会话 -->
+    <cache
+            name="shiro-activeSessionCache"
+            maxElementsInMemory="100"
+            overflowToDisk="true"
+            eternal="true"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="600"/>
+
+    <!-- 用于存储shiro的AuthenticationInfo信息-->
+    <cache
+            name="shiroAuthenticationCache"
+            maxElementsInMemory="100"
+            overflowToDisk="true"
+            eternal="true"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="600"/>
+
+    <!-- 用于存储shiro的AuthorizationInfo信息-->
+    <cache
+            name="shiroAuthorizationCache"
+            maxElementsInMemory="100"
+            overflowToDisk="true"
+            eternal="true"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="600"/>
+
+    <!--
+        <cache
+            name="org.apache.shiro.realm.text.PropertiesRealm-0-accounts"
+            maxElementsInMemory="100"
+            eternal="true"
+            overflowToDisk="true"/>
+
+        <cache
+            name="SimplePageCachingFilter"
+            maxElementsInMemory="100"
+            eternal="false"
+            overflowToDisk="true"
+            timeToIdleSeconds="120"
+            timeToLiveSeconds="120"
+            memoryStoreEvictionPolicy="LFU"/>
+      -->
+</ehcache>
+

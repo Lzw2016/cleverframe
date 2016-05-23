@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd"
+       default-lazy-init="false">
+
+    <description>Spring Context All</description>
+
+    <!-- 加载配置属性文件 -->
+    <!--<context:property-placeholder ignore-unresolvable="true" location="classpath:cleverframe.properties" />-->
+    <bean id="customPropertyPlaceholderConfigurer" class="org.cleverframe.common.configuration.CustomPropertyPlaceholderConfigurer">
+        <property name="fileEncoding" value="UTF-8" />
+        <property name="locations">
+            <list>
+                <value>classpath:cleverframe.properties</value>
+            </list>
+        </property>
+    </bean>
+
+    <!--
+        基本的配置文件：
+        1.设置扫描Spring Bean组件的规则
+        2.设置数据库连接信息和连接池、数据库事务等信息
+        3.设置服务端数据验证组件
+        4.EHcache的缓存配置
+    -->
+    <import resource="spring-context-base.xml" />
+
+    <!--
+        Spring整合Freemarker的配置:
+    -->
+    <import resource="spring-context-freemarker.xml"/>
+
+    <!--
+        配置Spring发送邮件的实现Bean
+    -->
+    <import resource="spring-context-javamail.xml"/>
+</beans>

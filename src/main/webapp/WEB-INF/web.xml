@@ -1,0 +1,189 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+        xmlns="http://java.sun.com/xml/ns/javaee"
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+        version="2.5">
+
+    <display-name>CleverFrame</display-name>
+
+    <!-- 激活Tomcat的defaultServlet来处理静态文件 -->
+    <!--
+        <servlet-mapping>
+            <servlet-name>default</servlet-name>
+            <url-pattern>*.jpg</url-pattern>
+        </servlet-mapping>
+        <servlet-mapping>
+            <servlet-name>default</servlet-name>
+            <url-pattern>*.gif</url-pattern>
+        </servlet-mapping>
+        <servlet-mapping>
+            <servlet-name>default</servlet-name>
+            <url-pattern>*.png</url-pattern>
+        </servlet-mapping>
+        <servlet-mapping>
+            <servlet-name>default</servlet-name>
+            <url-pattern>*.js</url-pattern>
+        </servlet-mapping>
+        <servlet-mapping>
+            <servlet-name>default</servlet-name>
+            <url-pattern>*.css</url-pattern>
+        </servlet-mapping>
+     -->
+
+    <!-- 加载Spring配置文件 -->
+    <!-- 指定配置文件 -->
+    <context-param>
+        <param-name>contextConfigLocation</param-name>
+        <param-value>classpath*:/spring-context-all.xml</param-value>
+    </context-param>
+    <!-- 声明Web容器监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    </listener>
+    <filter>
+        <filter-name>encodingFilter</filter-name>
+        <filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+        <init-param>
+            <param-name>encoding</param-name>
+            <param-value>UTF-8</param-value>
+        </init-param>
+        <init-param>
+            <param-name>forceEncoding</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>encodingFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+<!--
+
+    &lt;!&ndash; Hibernate 重要配置,解决Hibernate延迟加载问题 &ndash;&gt;
+    <filter>
+        <filter-name>openSessionInViewFilter</filter-name>
+        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>openSessionInViewFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+-->
+
+    <!-- Apache Shiro 安全过滤器-->
+<!--
+
+    <filter>
+        <filter-name>shiroFilter</filter-name>
+        <filter-class>org.springframework.web.filter.DelegatingFilterProxy</filter-class>
+        <init-param>
+            <param-name>targetFilterLifecycle</param-name>
+            <param-value>true</param-value>
+        </init-param>
+    </filter>
+    <filter-mapping>
+        <filter-name>shiroFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+        &lt;!&ndash; <dispatcher>REQUEST</dispatcher> &ndash;&gt;
+    </filter-mapping>
+-->
+
+    <!-- Spring MVC -->
+    <servlet>
+        <servlet-name>springServlet</servlet-name>
+        <servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+        <init-param>
+            <param-name>contextConfigLocation</param-name>
+            <param-value>classpath*:/spring-mvc-all.xml</param-value>
+        </init-param>
+        <load-on-startup>1</load-on-startup>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>springServlet</servlet-name>
+        <url-pattern>/</url-pattern>
+    </servlet-mapping>
+
+    <!-- 为了在Spring容器中获取当前线程所对应的HttpServletRequest对象而添加 -->
+    <!--
+        <listener>
+          <listener-class>
+              org.springframework.web.context.request.RequestContextListener
+          </listener-class>
+        </listener>
+    -->
+    <!-- log4j配置信息 -->
+    <!-- 设置在log4j中应用Web应用根路径的环境变量：cleverframe.root -->
+    <context-param>
+        <param-name>webAppRootKey</param-name>
+        <param-value>cleverframe.root</param-value>
+    </context-param>
+    <!-- 设置log4j的配置文件位置 -->
+    <context-param>
+        <param-name>log4jConfigLocation</param-name>
+        <param-value>/WEB-INF/classes/log4j.properties</param-value>
+    </context-param>
+    <!-- 设置刷新log4j配置文件的时间间隔 -->
+    <context-param>
+        <param-name>log4jRefreshInterval</param-name>
+        <param-value>6000</param-value>
+    </context-param>
+
+    <!-- 设置log4j的监听器，也可以使用servlet代替 -->
+    <listener>
+        <listener-class>org.springframework.web.util.Log4jConfigListener</listener-class>
+    </listener>
+
+    <!-- Druid数据库连接池监控界面配置 -->
+    <servlet>
+        <servlet-name>DruidStatView</servlet-name>
+        <servlet-class>com.alibaba.druid.support.http.StatViewServlet</servlet-class>
+        <init-param>
+            <param-name>allow</param-name>
+            <param-value>127.0.0.1</param-value>
+        </init-param>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>DruidStatView</servlet-name>
+        <url-pattern>/druid/*</url-pattern>
+    </servlet-mapping>
+
+    <!-- 随机验证码 -->
+    <servlet>
+        <servlet-name>validateCodeServlet</servlet-name>
+        <servlet-class>org.cleverframe.common.servlet.ImageValidateCodeServlet</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>validateCodeServlet</servlet-name>
+        <url-pattern>/servlet/validateCode</url-pattern>
+    </servlet-mapping>
+
+    <!-- Session 配置 -->
+    <session-config>
+        <session-timeout>20</session-timeout>
+    </session-config>
+
+    <!-- 系统监听器 -->
+    <listener>
+        <listener-class>org.cleverframe.common.servlet.ServerStartListener</listener-class>
+    </listener>
+
+    <!-- 错误 页面配置 -->
+    <!--
+        <error-page>
+            <exception-type>java.lang.Throwable</exception-type>
+            <location>/WEB-INF/views/error/500.html</location>
+        </error-page>
+        <error-page>
+            <error-code>500</error-code>
+            <location>/WEB-INF/views/error/500.html</location>
+        </error-page>
+        <error-page>
+            <error-code>404</error-code>
+            <location>/WEB-INF/views/error/404.html</location>
+        </error-page>
+    -->
+    
+    <welcome-file-list>
+        <welcome-file>/WEB-INF/modules/index.jsp</welcome-file>
+    </welcome-file-list>
+</web-app>
