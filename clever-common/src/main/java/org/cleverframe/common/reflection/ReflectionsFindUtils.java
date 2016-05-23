@@ -10,15 +10,16 @@ import org.slf4j.LoggerFactory;
 
 /**
  * 反射工具类，使用org.reflections实现<br/>
+ * 用于在运行时搜索类、方法、属性、注解等元数据<br/>
  * <p/>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-22 21:52 <br/>
  */
-public class MyReflectionsUtils {
+public class ReflectionsFindUtils {
     /**
      * 日志记录器
      */
-    private final static Logger logger = LoggerFactory.getLogger(MyReflectionsUtils.class);
+    private final static Logger logger = LoggerFactory.getLogger(ReflectionsFindUtils.class);
 
     /**
      * 反射操作类
@@ -45,9 +46,6 @@ public class MyReflectionsUtils {
 //        for (Class<? extends Object> clzz : allClasses) {
 //            logger.info(clzz.getName());
 //        }
-
-
-
 
 
     }

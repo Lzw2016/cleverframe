@@ -1,7 +1,9 @@
 package reflection;
 
-import com.google.common.reflect.Reflection;
+import model.Class;
 import model.Student;
+import org.cleverframe.common.persistence.Parameter;
+import org.cleverframe.common.reflection.ReflectionsUtils;
 import org.junit.*;
 import org.reflections.Reflections;
 import org.reflections.scanners.MethodParameterScanner;
@@ -14,7 +16,9 @@ import org.slf4j.LoggerFactory;
 import org.springframework.util.ReflectionUtils;
 
 import java.lang.reflect.Method;
+import java.util.ArrayList;
 import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -63,6 +67,112 @@ public class ReflectionsUtilsTest {
     }
 
     @Test
+    public void testInvokeGetter() {
+        Student student = new Student();
+        student.setAge(23);
+        student.setHeight(1.72);
+        student.setName("李志伟");
+        student.setSex(true);
+        student.setBirthday(new Date());
+
+        Class clzz = new Class();
+        clzz.setClassName("一班");
+        clzz.setGrade(3);
+        student.setClzz(clzz);
+
+        Object object;
+
+        object = ReflectionsUtils.invokeGetter(student, "birthday");
+        logger.info(object.toString());
+
+        object = ReflectionsUtils.invokeGetter(student, "clzz.className");
+        logger.info(object.toString());
+    }
+
+    @Test
+    public void testInvokeSetter() {
+        Student student = new Student();
+        student.setAge(23);
+        student.setHeight(1.72);
+        student.setName("李志伟");
+        student.setSex(true);
+        student.setBirthday(new Date());
+
+        Class clzz = new Class();
+        clzz.setClassName("一班");
+        clzz.setGrade(3);
+        student.setClzz(clzz);
+
+        ReflectionsUtils.invokeSetter(student, "height", 2.02);
+        logger.info(student.getHeight() + "");
+
+        ReflectionsUtils.invokeSetter(student, "clzz.className", "一班一班一班一班一班一班");
+        logger.info(student.getClzz().getClassName() + "");
+    }
+
+    @Test
+    public void testGetFieldValue() {
+        Student student = new Student();
+        student.setAge(23);
+        student.setHeight(1.72);
+        student.setName("李志伟");
+        student.setSex(true);
+        student.setBirthday(new Date());
+
+        Class clzz = new Class();
+        clzz.setClassName("一班");
+        clzz.setGrade(3);
+        student.setClzz(clzz);
+
+        Object object;
+
+        object = ReflectionsUtils.getFieldValue(student, "sex");
+        logger.info(object.toString());
+
+        object = ReflectionsUtils.getFieldValue(clzz, "grade");
+        logger.info(object.toString());
+    }
+
+    @Test
+    public void testSetFieldValue() {
+        Student student = new Student();
+        student.setAge(23);
+        student.setHeight(1.72);
+        student.setName("李志伟");
+        student.setSex(true);
+        student.setBirthday(new Date());
+
+        Class clzz = new Class();
+        clzz.setClassName("一班");
+        clzz.setGrade(3);
+        student.setClzz(clzz);
+
+        ReflectionsUtils.setFieldValue(student, "height", 2.02);
+        logger.info(student.getHeight() + "");
+
+        ReflectionsUtils.setFieldValue(clzz, "className", "一班一班一班一班一班一班");
+        logger.info(student.getClzz().getClassName() + "");
+    }
+
+    @Test
+    public void testGetClassGenricType() {
+        Object object;
+
+        object = ReflectionsUtils.getClassGenricType(Parameter.class);
+        logger.info(object.toString());
+
+        object = ReflectionsUtils.getClassGenricType(Parameter.class, 0);
+        logger.info(object.toString());
+
+        object = ReflectionsUtils.getClassGenricType(Parameter.class, 1);
+        logger.info(object.toString());
+
+        object = ReflectionsUtils.getClassGenricType(Parameter.class, 2);
+        logger.info(object.toString());
+    }
+
+
+    @Test
     public void test() {
         ConfigurationBuilder configurationBuilder = new ConfigurationBuilder();
         configurationBuilder.setUrls(ClasspathHelper.forPackage("org.cleverframe"));
@@ -87,7 +197,7 @@ public class ReflectionsUtilsTest {
         Set<Method> methodSet = reflections.getMethodsReturn(String.class);
         logger.info(methodSet.toString());
 
-        ReflectionUtils.invokeMethod(null,null);
+        ReflectionUtils.invokeMethod(null, null);
 //        student.getClass().getDeclaredMethod()
 
     }

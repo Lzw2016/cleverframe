@@ -1,7 +1,6 @@
 package mapper;
 
 import model.TestModel;
-import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.common.mapper.XStreamMapper;
 import org.junit.*;
 import org.slf4j.Logger;

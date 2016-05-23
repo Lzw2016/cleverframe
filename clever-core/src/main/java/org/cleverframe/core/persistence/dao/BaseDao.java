@@ -31,7 +31,7 @@ public abstract class BaseDao<T extends Serializable> {
      */
     public BaseDao() {
         Class<T> entityClass = ReflectionsUtils.getClassGenricType(getClass());
-        hibernateDao = new HibernateDao<T>(entityClass);
+        hibernateDao = new HibernateDao<>(entityClass);
     }
 
     /**
