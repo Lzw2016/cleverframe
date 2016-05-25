@@ -1,6 +1,9 @@
 package org.cleverframe.common.freemarker;
 
 import freemarker.template.Configuration;
+import org.cleverframe.common.exception.ExceptionUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.context.ResourceLoaderAware;
 import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
@@ -14,6 +17,10 @@ import org.springframework.ui.freemarker.FreeMarkerConfigurationFactory;
  * 创建时间：2016-5-25 9:09 <br/>
  */
 public class CustomFreeMarkerConfigurer extends FreeMarkerConfigurationFactory implements InitializingBean, ResourceLoaderAware {
+    /**
+     * 日志对象
+     */
+    private final static Logger logger = LoggerFactory.getLogger(CustomFreeMarkerConfigurer.class);
 
     /**
      * FreeMarker容器
@@ -31,7 +38,18 @@ public class CustomFreeMarkerConfigurer extends FreeMarkerConfigurationFactory i
         }
     }
 
+    /**
+     * @return 返回FreeMarker容器
+     */
     public Configuration getConfiguration() {
-        return configuration;
+        if (this.configuration == null) {
+            try {
+                this.configuration = createConfiguration();
+            } catch (Throwable e) {
+                logger.error("CustomFreeMarkerConfigurer创建getConfiguration失败", e);
+                throw ExceptionUtils.unchecked(e);
+            }
+        }
+        return this.configuration;
     }
 }

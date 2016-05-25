@@ -1,13 +1,13 @@
 /* -------------------------------- IdEntity --------------------------------
 id              bigint          NOT NULL    auto_increment          COMMENT '编号',
 company_code    varchar(255)    NOT NULL                            COMMENT '数据所属公司的机构编码',
-office_code     varchar(255)    NOT NULL                            COMMENT '数据直属机构的编码',
-create_by       bigint          NOT NULL                            COMMENT '创建者',
+org_code        varchar(255)    NOT NULL                            COMMENT '数据直属机构的编码',
+create_by       varchar(255)    NOT NULL                            COMMENT '创建者',
 create_date     datetime        NOT NULL                            COMMENT '创建时间',
-update_by       bigint          NOT NULL                            COMMENT '更新者',
+update_by       varchar(255)    NOT NULL                            COMMENT '更新者',
 update_date     datetime        NOT NULL                            COMMENT '更新时间',
 remarks         varchar(255)                                        COMMENT '备注信息',
-del_flag        char(1)         NOT NULL    DEFAULT '0'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
+del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
 uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
 PRIMARY KEY (id)
@@ -18,6 +18,48 @@ PRIMARY KEY (id)
 （1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
 
 -------------------------------- IdEntity -------------------------------- */
+
+
+
+-- 用户登录记
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 /*
 SYS模块管理页面
