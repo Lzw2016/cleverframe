@@ -1,3 +1,4 @@
+<%--suppress HtmlUnknownTarget --%>
 <%--
   Created by IntelliJ IDEA.
   User: LiZW
@@ -8,6 +9,7 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
+    <script src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.min.js" ></script>
     <title>JSP 测试页</title>
 </head>
 <body>
@@ -16,7 +18,6 @@ ${applicationScope.staticPath}<br/>
 ${applicationScope.docPath}<br/>
 ${applicationScope.viewsPath}<br/>
 ${applicationScope.mvcPath}<br/>
-
 
 </body>
 </html>

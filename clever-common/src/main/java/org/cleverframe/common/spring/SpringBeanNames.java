@@ -11,19 +11,8 @@ import org.cleverframe.common.IBeanNames;
  */
 @SuppressWarnings("unused")
 public class SpringBeanNames implements IBeanNames {
-
-    /**
-     * 系统配置服务Bean，实现org.cleverframe.common.configuration.IConfig接口
-     */
-    public static final String Config = "configService";
-
-    /**
-     * Spring发送邮件Bean，org.springframework.mail.javamail.JavaMailSenderImpl类实例
-     */
-    public static final String JavaMailSender = "javaMailSender";
-
     // -------------------------------------------------------------------------------------------//
-    // spring-context.xml配置文件的Bean名称
+    // spring-context-base.xml 配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
     /**
      * 数据库连接池Bean名称
@@ -45,18 +34,38 @@ public class SpringBeanNames implements IBeanNames {
      * EhCacheManagerFactoryBean Bean名称
      */
     public static final String CacheManager = "cacheManager";
+    /**
+     * 系统配置服务Bean，实现org.cleverframe.common.configuration.IConfig接口
+     */
+    public static final String Config = "configService";
+
+    // -------------------------------------------------------------------------------------------//
+    // spring-context-freemarker.xml 配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * Spring整合FreeMarker的Bean名称-用于前台页面输出(替代JSP)
+     */
+    public static final String FreemarkerConfig = "freemarkerConfig";
+
+    /**
+     * Spring整合FreeMarker的Bean名称-用于系统使用的模板，除去了JSP的功能
+     */
+    public static final String CustomFreeMarkerConfigurer = "customFreeMarkerConfigurer";
+
+    // -------------------------------------------------------------------------------------------//
+    // spring-context-javamail.xml 配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * Spring发送邮件Bean，org.springframework.mail.javamail.JavaMailSenderImpl类实例
+     */
+    public static final String JavaMailSender = "javaMailSender";
+
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-shiro.xml配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
 
-    // -------------------------------------------------------------------------------------------//
-    // spring-context-freemarker.xml配置文件的Bean名称
-    // -------------------------------------------------------------------------------------------//
-    /**
-     * Spring整合FreeMarker的Bean名称
-     */
-    public static final String FreemarkerConfig = "freemarkerConfig";
+
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-jedis.xml配置文件的Bean名称

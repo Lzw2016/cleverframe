@@ -5,8 +5,36 @@
 		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd">
 
 	<description>Spring Context FreeMarker</description>
-	
-	<!-- 配置FreeMarker属性 -->
+
+	<!-- 配置FreeMarker属性-用于系统中需要使用模版的地方 -->
+	<bean id="customFreeMarkerConfigurer" class="org.cleverframe.common.freemarker.CustomFreeMarkerConfigurer">
+		<!--注入自定义的模版加载器-->
+
+		<!-- 模板文件编码 -->
+		<property name="defaultEncoding" value="utf-8" />
+		<property name="freemarkerVariables">
+			<map>
+				<entry key="xml_escape">
+					<bean class="freemarker.template.utility.XmlEscape" />
+				</entry>
+			</map>
+		</property>
+		<!-- FreeMarker属性设置 -->
+		<property name="freemarkerSettings">
+			<props>
+				<!-- 刷新模板的周期，单位为秒 -->
+				<prop key="template_update_delay">3600</prop>
+				<prop key="locale">zh_CN</prop>
+				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+				<prop key="date_format">yyyy-MM-dd</prop>
+				<prop key="number_format">#.##</prop>
+                <!--空值没有默认值不抛异常-->
+                <prop key="classic_compatible">true</prop>
+			</props>
+		</property>
+	</bean>
+
+	<!-- 配置FreeMarker属性-用于前台界面模版(jsp替代方案) -->
 	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
 		<!-- 模板文件路径 -->
 		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
@@ -28,8 +56,13 @@
 				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
 				<prop key="date_format">yyyy-MM-dd</prop>
 				<prop key="number_format">#.##</prop>
+                <!--空值没有默认值不抛异常-->
+                <prop key="classic_compatible">true</prop>
 			</props>
 		</property>
 	</bean>
-	
+
+
+
+
 </beans>

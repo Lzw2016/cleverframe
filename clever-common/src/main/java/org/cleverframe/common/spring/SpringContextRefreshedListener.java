@@ -53,6 +53,18 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
         WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
         ServletContext servletContext = webApplicationContext.getServletContext();
         appPath = servletContext.getContextPath();
+        if(!staticPath.contains(appPath)) {
+            staticPath = appPath + "/" + staticPath;
+        }
+        if(!docPath.contains(appPath)) {
+            docPath = appPath + "/" + docPath;
+        }
+        if(!viewsPath.contains(appPath)) {
+            viewsPath = appPath + "/" + viewsPath;
+        }
+        if(!mvcPath.contains(appPath)) {
+            mvcPath = appPath + "/" + mvcPath;
+        }
         servletContext.setAttribute("appPath", appPath);
         servletContext.setAttribute("staticPath", staticPath);
         servletContext.setAttribute("docPath", docPath);
