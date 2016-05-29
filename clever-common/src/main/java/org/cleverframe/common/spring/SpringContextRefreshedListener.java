@@ -6,6 +6,7 @@ import org.springframework.context.ApplicationListener;
 import org.springframework.context.event.ContextRefreshedEvent;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import javax.servlet.ServletContext;
 
@@ -50,19 +51,29 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
         // TODO Spring初始化完成后处理
+        ServletContext servletContext = null;
         WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
-        ServletContext servletContext = webApplicationContext.getServletContext();
+        if (null != webApplicationContext) {
+            servletContext = webApplicationContext.getServletContext();
+        } else if (event.getSource() instanceof GenericWebApplicationContext) {
+            // 测试时起作用
+            servletContext = ((GenericWebApplicationContext) event.getSource()).getServletContext();
+        }
+        if (null == servletContext) {
+            logger.warn("### Spring MVC Context 容器初始化完成之后的处理-获取ServletContext失败");
+            return;
+        }
         appPath = servletContext.getContextPath();
-        if(!staticPath.contains(appPath)) {
+        if (!staticPath.contains(appPath)) {
             staticPath = appPath + "/" + staticPath;
         }
-        if(!docPath.contains(appPath)) {
+        if (!docPath.contains(appPath)) {
             docPath = appPath + "/" + docPath;
         }
-        if(!viewsPath.contains(appPath)) {
+        if (!viewsPath.contains(appPath)) {
             viewsPath = appPath + "/" + viewsPath;
         }
-        if(!mvcPath.contains(appPath)) {
+        if (!mvcPath.contains(appPath)) {
             mvcPath = appPath + "/" + mvcPath;
         }
         servletContext.setAttribute("appPath", appPath);

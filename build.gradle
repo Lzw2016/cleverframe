@@ -21,7 +21,7 @@ dependencies {
 }
 
 // ---------------------------------------------------------------------------------全局配置，对所有工程有效
- allprojects {
+allprojects {
     apply plugin: "java"
     apply plugin: "maven"
     apply plugin: "idea"
@@ -247,20 +247,9 @@ project(':clever-sys') {
     }
 }
 
-
-
-
-
-
-
-
-
-
 //// ##################其他依赖
 
 //compile('net.sf.ehcache:ehcache-web:2.0.4')
-
-
 
 //compile('redis.clients:jedis:2.8.1')
 //compile('com.googlecode.xmemcached:xmemcached:2.0.0')
@@ -269,8 +258,6 @@ project(':clever-sys') {
 //compile('io.netty:netty-all:4.0.36.Final')
 //compile('org.apache.commons:commons-math3:3.6.1') // 数学计算
 //compile('org.apache.commons:commons-pool2:2.4.2') // 资源池
-
-
 
 //compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
 //
@@ -287,7 +274,6 @@ project(':clever-sys') {
 //compile('com.github.snakerflow:snaker-hibernate4:2.5.1')
 //compile('com.github.snakerflow:snaker-quartz:2.5.1')
 //compile('com.github.snakerflow:snaker-ehcache:2.5.1')
-
 
 /*
 org.cleverframe

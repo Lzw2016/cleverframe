@@ -8,12 +8,12 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
  * 系统Service层的基础测试类<br/>
- *
+ * <p/>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-26 0:13 <br/>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations={"classpath:spring-context-all.xml"})
+@ContextConfiguration(locations = {"classpath:spring-context-all.xml"})
 public class ServiceTestBase extends AbstractJUnit4SpringContextTests {
     /**
      * 所有测试开始之前运行

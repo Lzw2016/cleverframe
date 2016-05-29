@@ -3,17 +3,10 @@ package common.javamail;
 import basetest.ServiceTestBase;
 import org.apache.commons.io.FileUtils;
 import org.cleverframe.common.javamail.SpringSendMailUtils;
-import org.cleverframe.common.time.DateTimeUtils;
 import org.junit.Test;
 
-import javax.activation.DataSource;
-import javax.activation.FileDataSource;
-import javax.activation.URLDataSource;
 import java.io.File;
 import java.io.IOException;
-import java.net.URL;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 作者：LiZW <br/>
