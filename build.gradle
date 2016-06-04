@@ -99,6 +99,7 @@ project(':clever-common') {
         // JavaBean转换
         compile('commons-beanutils:commons-beanutils:1.9.2')
         compile('net.sf.dozer:dozer:5.5.1')
+        compile ('net.sf.dozer:dozer-spring:5.5.1')
         // 编码解码
         compile('commons-codec:commons-codec:1.10')
         // 运行时的反射处理库

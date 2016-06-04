@@ -36,4 +36,13 @@
         配置Spring发送邮件的实现Bean
     -->
     <import resource="spring-context-javamail.xml"/>
+
+    <!--
+        Spring与Dozer整合
+    -->
+    <import resource="spring-context-dozer.xml"/>
+
+    <import resource="spring-context-shiro.xml"/>
+
+    <import resource="spring-context-snaker.xml"/>
 </beans>

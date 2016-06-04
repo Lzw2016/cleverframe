@@ -2,6 +2,7 @@ package org.cleverframe.core.vo.request;
 
 import org.cleverframe.common.vo.request.BaseRequestVo;
 import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
 import javax.validation.constraints.Pattern;
 
@@ -15,25 +16,29 @@ public class QLScriptAddVo extends BaseRequestVo {
     /**
      * 脚本类型，可取："SQL"、"HQL"
      */
+    @NotBlank(message = "脚本类型不能为空")
     @Pattern(regexp = "SQL|HQL", message = "脚本类型只能是：SQL、HQL")
     private String scriptType;
 
     /**
      * 查询脚本，可以使用模版技术拼接
      */
-    @Length(min = 1, max = 2000, message = "脚本内容不能为空，而且脚本长度不能操作2000个字符")
+    @NotBlank(message = "脚本内容不能为空")
+    @Length(min = 1, max = 2000, message = "脚本内容长度不能操作2000个字符")
     private String script;
 
     /**
      * 脚本名称，使用包名称+类名+方法名
      */
-    @Length(min = 1, max = 100, message = "脚本名称不能为空，而且脚本长度不能操作100个字符")
+    @NotBlank(message = "脚本名称不能为空")
+    @Length(min = 1, max = 100, message = "脚本名称长度不能操作100个字符")
     private String name;
 
     /**
      * 脚本功能说明
      */
-    @Length(min = 1, max = 1000, message = "脚本功能说明不能为空，而且脚本长度不能操作1000个字符")
+    @NotBlank(message = "脚本功能说明不能为空")
+    @Length(min = 1, max = 1000, message = "脚本功能说明长度不能操作1000个字符")
     private String description;
 
     /**

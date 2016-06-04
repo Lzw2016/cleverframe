@@ -16,7 +16,7 @@
 ${applicationScope.appPath}<br/>
 ${applicationScope.staticPath}<br/>
 ${applicationScope.docPath}<br/>
-${applicationScope.viewsPath}<br/>
+${applicationScope.modulesPath}<br/>
 ${applicationScope.mvcPath}<br/>
 
 </body>

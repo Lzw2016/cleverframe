@@ -29,4 +29,5 @@
     <import resource="spring-mvc-base.xml" />
 
 
+    <import resource="spring-mvc-shiro.xml"/>
 </beans>

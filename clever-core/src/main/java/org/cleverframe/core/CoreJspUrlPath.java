@@ -11,7 +11,17 @@ import org.cleverframe.common.IJspUrlPath;
  */
 public class CoreJspUrlPath implements IJspUrlPath {
     /**
-     * 数据库脚本管理页面
+     * core模块主页
+     */
+    public static final String CoreMain = "core/CoreMain";
+
+    /**
+     * 数据库脚本管理页
      */
     public static final String QLScript = "core/QLScript";
+
+    /**
+     * 系统配置管理页
+     */
+    public static final String Config = "core/Config";
 }

@@ -55,9 +55,18 @@ public class SpringBeanNames implements IBeanNames {
     // spring-context-javamail.xml 配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
     /**
-     * Spring发送邮件Bean，org.springframework.mail.javamail.JavaMailSenderImpl类实例
+     * Spring与Dozer整合
      */
     public static final String JavaMailSender = "javaMailSender";
+
+
+    // -------------------------------------------------------------------------------------------//
+    // spring-context-dozer.xml 配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * Spring发送邮件Bean，org.springframework.mail.javamail.JavaMailSenderImpl类实例
+     */
+    public static final String DozerBeanMapper = "dozerBeanMapper";
 
 
     // -------------------------------------------------------------------------------------------//

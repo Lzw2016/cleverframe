@@ -30,7 +30,6 @@ import javax.validation.Valid;
 /**
  * 作者：LiZW <br/>
  * 创建时间：2016-5-29 11:49 <br/>
- * TODO 重构修改
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
@@ -45,7 +44,7 @@ public class QLScriptController extends BaseController {
      * 跳转到数据库脚本管理页面<br>
      */
     // @RequiresRoles("root")
-    @RequestMapping("/getQLScriptJsp")
+    @RequestMapping("/QLScript" + VIEW_PAGE_SUFFIX)
     public ModelAndView getQLScriptJsp(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView(CoreJspUrlPath.QLScript);
     }
@@ -57,6 +56,7 @@ public class QLScriptController extends BaseController {
      */
     // @RequiresRoles("root")
     @RequestMapping("/findQLScriptByPage")
+    @ResponseBody
     public DataGridJson<QLScript> findQLScriptByPage(
             HttpServletRequest request,
             HttpServletResponse response,
@@ -86,15 +86,14 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptAddVo qlScriptAddVo,
             BindingResult bindingResult) {
-//        String qlStr = EncodeDecodeUtils.unescapeHtml(qlScriptAddVo.getScript());// HTML转码
-//        qlScriptAddVo.setScript(qlStr);
-//        QLScript qLScript = BeanMapper.mapper(qlScriptAddVo, QLScript.class);
-//        AjaxMessage<String> message = new AjaxMessage<>();
-//        if (beanValidator(bindingResult, message)) {
-//            qLScriptService.saveQLScript(qLScript);
-//            message.setResult("数据库脚本保存成功");
-//        }
-        AjaxMessage<String> message =  new AjaxMessage<>("李志伟","操作成功");
+        String qlStr = EncodeDecodeUtils.unescapeHtml(qlScriptAddVo.getScript());// HTML转码
+        qlScriptAddVo.setScript(qlStr);
+        QLScript qLScript = BeanMapper.mapper(qlScriptAddVo, QLScript.class);
+        AjaxMessage<String> message = new AjaxMessage<>();
+        if (beanValidator(bindingResult, message)) {
+            qLScriptService.saveQLScript(qLScript);
+            message.setResult("数据库脚本保存成功");
+        }
         return message;
     }
 
@@ -103,14 +102,12 @@ public class QLScriptController extends BaseController {
      */
     // @RequiresRoles("root")
     @RequestMapping("/updateQLScript")
-    public ModelAndView updateQLScript(
+    @ResponseBody
+    public AjaxMessage<String> updateQLScript(
             HttpServletRequest request,
             HttpServletResponse response,
             @Valid QLScriptUpdateVo qlScriptUpdateVo,
             BindingResult bindingResult) {
-        ModelAndView modelAndView = new ModelAndView();
-
-
         String qlStr = EncodeDecodeUtils.unescapeHtml(qlScriptUpdateVo.getScript());// HTML转码
         qlScriptUpdateVo.setScript(qlStr);
         QLScript qLScript = BeanMapper.mapper(qlScriptUpdateVo, QLScript.class);
@@ -120,10 +117,7 @@ public class QLScriptController extends BaseController {
             QLScriptUtils.removeTemplateCache(qLScript.getName());
             message.setResult("数据库脚本保存成功");
         }
-//        AjaxMessage<String> message =  new AjaxMessage<>("李志伟","操作成功");
-        modelAndView.getModelMap().put(XML_OR_JSON_ROOT, message);
-        return modelAndView;
-
+        return message;
     }
 
     /**
@@ -131,6 +125,7 @@ public class QLScriptController extends BaseController {
      */
     // @RequiresRoles("root")
     @RequestMapping("/deleteQLScript")
+    @ResponseBody
     public AjaxMessage<String> deleteQLScript(
             HttpServletRequest request,
             HttpServletResponse response,

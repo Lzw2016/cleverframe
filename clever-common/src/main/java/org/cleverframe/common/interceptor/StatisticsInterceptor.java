@@ -84,7 +84,8 @@ public class StatisticsInterceptor implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        logger.debug("### StatisticsInterceptor.postHandle ");
+        String viewName = modelAndView == null ? "null" : modelAndView.getViewName();
+        logger.debug("### StatisticsInterceptor.postHandle 对应视图名称:" + viewName);
     }
 
     /**

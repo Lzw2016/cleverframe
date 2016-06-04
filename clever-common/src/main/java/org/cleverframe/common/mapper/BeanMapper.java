@@ -1,6 +1,8 @@
 package org.cleverframe.common.mapper;
 
 import com.google.common.collect.Lists;
+import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
 import org.dozer.DozerBeanMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +25,18 @@ public class BeanMapper {
     /**
      * 持有Dozer单例, 避免重复创建DozerMapper消耗资源.
      */
-    private static final DozerBeanMapper DOZER_BEAN_MAPPER = new DozerBeanMapper();
+    private static final DozerBeanMapper DOZER_BEAN_MAPPER;
+
+    static {
+        DozerBeanMapper dozerBeanMapper = SpringContextHolder.getBean(SpringBeanNames.DozerBeanMapper);
+        if(dozerBeanMapper == null) {
+            DOZER_BEAN_MAPPER = new DozerBeanMapper();
+            logger.warn("### DozerBeanMapper注入失败, 请配置spring-context-dozer.xml文件");
+        } else {
+            DOZER_BEAN_MAPPER = dozerBeanMapper;
+            logger.info("### DozerBeanMapper注入成功");
+        }
+    }
 
     private BeanMapper() {
     }

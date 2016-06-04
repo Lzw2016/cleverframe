@@ -8,6 +8,31 @@ package org.cleverframe.common.attributes;
  */
 public class CommonApplicationAttributes implements IApplicationAttributes {
     /**
+     * 系统根路径：/CleverFrame
+     */
+    public static final String APP_PATH = "appPath";
+
+    /**
+     * 静态资源基路径：/CleverFrame/static
+     */
+    public static final String STATIC_PATH = "staticPath";
+
+    /**
+     * 系统文档基路径：/CleverFrame/modules/doc
+     */
+    public static final String DOC_PATH = "docPath";
+
+    /**
+     * 系统HTML、Jsp、Freemarker等系统页面基路径：/CleverFrame/modules
+     */
+    public static final String MODULES_PATH = "modulesPath";
+
+    /**
+     * MVC框架的请求映射基路径：/CleverFrame/mvc
+     */
+    public static final String MVC_PATH = "mvcPath";
+
+    /**
      * 服务器本次启动后处理的请求总数,类型:long
      */
     public static final String REQUEST_COUNT_BY_START = "Request_Count_By_Start";

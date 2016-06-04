@@ -45,6 +45,11 @@ public abstract class BaseController {
     public final static String XML_OR_JSON_ROOT = "xmlOrJsonRoot";
 
     /**
+     * 视图页面(JSP)的后缀
+     */
+    protected final static String VIEW_PAGE_SUFFIX = ".html";
+
+    /**
      * 验证Bean实例对象
      */
     @Autowired

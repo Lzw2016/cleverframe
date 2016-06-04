@@ -1,5 +1,6 @@
 package org.cleverframe.common.spring;
 
+import org.cleverframe.common.attributes.CommonApplicationAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -41,7 +42,7 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
     /**
      * 系统HTML、Jsp、Freemarker等系统页面基路径：/CleverFrame/modules
      */
-    private String viewsPath;
+    private String modulesPath;
 
     /**
      * MVC框架的请求映射基路径：/CleverFrame/mvc
@@ -70,27 +71,27 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
         if (!docPath.contains(appPath)) {
             docPath = appPath + "/" + docPath;
         }
-        if (!viewsPath.contains(appPath)) {
-            viewsPath = appPath + "/" + viewsPath;
+        if (!modulesPath.contains(appPath)) {
+            modulesPath = appPath + "/" + modulesPath;
         }
         if (!mvcPath.contains(appPath)) {
             mvcPath = appPath + "/" + mvcPath;
         }
-        servletContext.setAttribute("appPath", appPath);
-        servletContext.setAttribute("staticPath", staticPath);
-        servletContext.setAttribute("docPath", docPath);
-        servletContext.setAttribute("viewsPath", viewsPath);
-        servletContext.setAttribute("mvcPath", mvcPath);
+        servletContext.setAttribute(CommonApplicationAttributes.APP_PATH, appPath);
+        servletContext.setAttribute(CommonApplicationAttributes.STATIC_PATH, staticPath);
+        servletContext.setAttribute(CommonApplicationAttributes.DOC_PATH, docPath);
+        servletContext.setAttribute(CommonApplicationAttributes.MODULES_PATH, modulesPath);
+        servletContext.setAttribute(CommonApplicationAttributes.MVC_PATH, mvcPath);
 
         if (logger.isInfoEnabled()) {
             String tmp = "\r\n" +
                     "#=======================================================================================================================#\r\n" +
                     "# Spring MVC Context 容器初始化完成之后的处理：\r\n" +
-                    "#\t 设置ServletContext属性 appPath = " + appPath + "\r\n" +
-                    "#\t 设置ServletContext属性 staticPath = " + staticPath + "\r\n" +
-                    "#\t 设置ServletContext属性 docPath = " + docPath + "\r\n" +
-                    "#\t 设置ServletContext属性 viewsPath = " + viewsPath + "\r\n" +
-                    "#\t 设置ServletContext属性 mvcPath = " + mvcPath + "\r\n" +
+                    "#\t 设置ServletContext属性 " + CommonApplicationAttributes.APP_PATH + " = " + appPath + "\r\n" +
+                    "#\t 设置ServletContext属性 " + CommonApplicationAttributes.STATIC_PATH + " = " + staticPath + "\r\n" +
+                    "#\t 设置ServletContext属性 " + CommonApplicationAttributes.DOC_PATH + " = " + docPath + "\r\n" +
+                    "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MODULES_PATH + " = " + modulesPath + "\r\n" +
+                    "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MVC_PATH + " = " + mvcPath + "\r\n" +
                     "#=======================================================================================================================#\r\n";
             logger.info(tmp);
         }
@@ -124,12 +125,12 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
         this.docPath = docPath;
     }
 
-    public String getViewsPath() {
-        return viewsPath;
+    public String getModulesPath() {
+        return modulesPath;
     }
 
-    public void setViewsPath(String viewsPath) {
-        this.viewsPath = viewsPath;
+    public void setModulesPath(String modulesPath) {
+        this.modulesPath = modulesPath;
     }
 
     public String getMvcPath() {

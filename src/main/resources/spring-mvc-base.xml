@@ -30,7 +30,7 @@
 	<!-- 对静态资源文件的访问, 将无法mapping到Controller的path交给default servlet handler处理 -->
 	<!-- <mvc:default-servlet-handler/> -->
 	<mvc:resources mapping="/${staticPath}/**" location="/WEB-INF/static/" order="1" cache-period="31536000"/>
-	<mvc:resources mapping="/${viewsPath}/**" location="/WEB-INF/modules" order="2" cache-period="31536000"/>
+	<mvc:resources mapping="/${modulesPath}/**" location="/WEB-INF/modules/" order="2" cache-period="31536000"/>
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3.系统拦截器配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!--
@@ -192,7 +192,20 @@
 		1.配置一些 MessageConverter,查看AnnotationDrivenBeanDefinitionParser.getMessageConverters()
 		2.配置了异常处理 ExceptionHandlerExceptionResolver
 	-->
-	<mvc:annotation-driven/>
+	<mvc:annotation-driven>
+        <mvc:message-converters register-defaults="true">
+            <!-- 设置编码解决中文乱码问题 -->
+            <bean class="org.springframework.http.converter.StringHttpMessageConverter">
+                <constructor-arg index="0" type="java.nio.charset.Charset" name="defaultCharset" value="UTF-8"/>
+                <property name="supportedMediaTypes">
+                    <list>
+                        <value>text/plain;charset=UTF-8</value>
+                        <value>text/javascript;charset=UTF-8</value>
+                    </list>
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 7.commons-fileupload 文件上传配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- 上传文件拦截,设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes -->
@@ -215,6 +228,6 @@
 		<property name="docPath" value="${docPath}"/>
 		<property name="mvcPath" value="${mvcPath}"/>
 		<property name="staticPath" value="${staticPath}"/>
-		<property name="viewsPath" value="${viewsPath}"/>
+		<property name="modulesPath" value="${modulesPath}"/>
 	</bean>
 </beans>
