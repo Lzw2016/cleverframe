@@ -1,7 +1,7 @@
 package org.cleverframe.core.interceptor;
 
 import org.cleverframe.common.interceptor.IRequestStatistics;
-import org.cleverframe.common.vo.RequestInfo;
+import org.cleverframe.common.vo.request.RequestInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -13,6 +13,7 @@ import javax.servlet.http.HttpServletResponse;
  * 作者：LiZW <br/>
  * 创建时间：2016-5-19 17:09 <br/>
  */
+// TODO IRequestStatistics 未实现
 public class RequestStatisticsImpl implements IRequestStatistics {
     /**
      * 服务器本次启动后处理的请求总数 加1

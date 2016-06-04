@@ -10,4 +10,8 @@ import org.cleverframe.common.IJspUrlPath;
  * 创建时间：2016-5-14 0:11 <br/>
  */
 public class CoreJspUrlPath implements IJspUrlPath {
+    /**
+     * 数据库脚本管理页面
+     */
+    public static final String QLScript = "core/QLScript";
 }

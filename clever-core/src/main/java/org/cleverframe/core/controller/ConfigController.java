@@ -19,6 +19,7 @@ import java.util.Map;
  * 作者：LiZW <br/>
  * 创建时间：2016-5-19 10:45 <br/>
  */
+@SuppressWarnings("MVCPathVariableInspection")
 @Controller
 @RequestMapping(value = "/${mvcPath}/core/config")
 @Transactional(readOnly = true)

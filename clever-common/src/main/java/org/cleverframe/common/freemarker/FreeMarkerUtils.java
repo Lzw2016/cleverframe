@@ -42,7 +42,7 @@ public class FreeMarkerUtils {
 //        CONFIGURATION.setClassicCompatible(true);
 //    }
 
-    // 生成环境使用
+    // 生产环境使用
     static {
         Configuration configuration = null;
         CustomFreeMarkerConfigurer customFreeMarkerConfigurer = SpringContextHolder.getBean(SpringBeanNames.CustomFreeMarkerConfigurer);

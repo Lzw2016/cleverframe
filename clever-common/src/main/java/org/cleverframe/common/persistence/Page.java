@@ -2,6 +2,7 @@ package org.cleverframe.common.persistence;
 
 import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.configuration.BaseConfigNames;
+import org.cleverframe.common.configuration.BaseConfigValues;
 import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.utils.CookieUtils;
@@ -55,7 +56,7 @@ public class Page<T> {
     /**
      * 每页的数据量，需要使用setter赋值（最大500），小于等于0 表示不进行分页(分页无效)
      */
-    private int pageSize = Integer.valueOf(config.getConfig(BaseConfigNames.PAGE_PAGESIZE));
+    private int pageSize = Integer.valueOf(config != null ? config.getConfig(BaseConfigNames.PAGE_PAGESIZE) : BaseConfigValues.PAGE_PAGESIZE);
     /**
      * 当前页面的页码数  pageNo >= 1
      */

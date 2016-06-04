@@ -1,6 +1,6 @@
 package org.cleverframe.common.interceptor;
 
-import org.cleverframe.common.vo.RequestInfo;
+import org.cleverframe.common.vo.request.RequestInfo;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

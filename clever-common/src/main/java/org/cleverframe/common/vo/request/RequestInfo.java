@@ -1,4 +1,4 @@
-package org.cleverframe.common.vo;
+package org.cleverframe.common.vo.request;
 
 import java.io.Serializable;
 import java.util.Date;

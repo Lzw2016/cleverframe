@@ -21,6 +21,34 @@ PRIMARY KEY (id)
 
 
 /* ====================================================================================================================
+    core_qlscript -- 数据库脚本 SQL查询语句、HQL查询语句
+==================================================================================================================== */
+CREATE TABLE core_qlscript
+(
+    id              bigint          NOT NULL    auto_increment          COMMENT '编号',
+    company_code    varchar(255)    NOT NULL                            COMMENT '数据所属公司的机构编码',
+    org_code        varchar(255)    NOT NULL                            COMMENT '数据直属机构的编码',
+    create_by       varchar(255)    NOT NULL                            COMMENT '创建者',
+    create_date     datetime        NOT NULL                            COMMENT '创建时间',
+    update_by       varchar(255)    NOT NULL                            COMMENT '更新者',
+    update_date     datetime        NOT NULL                            COMMENT '更新时间',
+    remarks         varchar(255)                                        COMMENT '备注信息',
+    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
+    uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
+
+    script_type     varchar(10)     NOT NULL    DEFAULT 'SQL'           COMMENT '脚本类型，可取："SQL"、"HQL"',
+    script          varchar(2000)   NOT NULL                            COMMENT '脚本，可以使用模版技术拼接',
+    name            varchar(100)    NOT NULL    UNIQUE                  COMMENT '脚本名称，使用包名称+类名+方法名',
+    description     varchar(1000)   NOT NULL                            COMMENT '脚本功能说明',
+    PRIMARY KEY (id)
+) COMMENT = '数据库脚本';
+CREATE INDEX core_qlscript_name         ON  core_qlscript (name ASC);
+/*------------------------------------------------------------------------------------------------------------------------
+
+--------------------------------------------------------------------------------------------------------------------------*/
+
+
+/* ====================================================================================================================
     core_config -- 配置表
 ==================================================================================================================== */
 CREATE TABLE core_config
@@ -70,7 +98,7 @@ CREATE TABLE core_dict
     dict_type       varchar(100)    NOT NULL                            COMMENT '字典分类',
     description     varchar(500)    NOT NULL                            COMMENT '描述',
     sort            int             NOT NULL                            COMMENT '排序(升序)',
-  PRIMARY KEY (id)
+    PRIMARY KEY (id)
 ) COMMENT = '字典表';
 /*------------------------------------------------------------------------------------------------------------------------
 
@@ -100,7 +128,7 @@ CREATE TABLE core_mdict
     mdict_type      varchar(100)    NOT NULL                            COMMENT '字典类型',
     description     varchar(500)    NOT NULL                            COMMENT '描述',
     sort            int             NOT NULL                            COMMENT '排序(升序)',
-  PRIMARY KEY (id)
+    PRIMARY KEY (id)
 ) COMMENT = '多级字典表';
 /*------------------------------------------------------------------------------------------------------------------------
 每一个类型的所有字典都是一颗完整的树
@@ -142,9 +170,9 @@ if(修改了父级编号-节点位置发生变化) {
 
 
 /* ====================================================================================================================
-    core_qlscript -- 数据库脚本 SQL查询语句、HQL查询语句
+    core_template -- 模版数据表
 ==================================================================================================================== */
-CREATE TABLE core_qlscript
+CREATE TABLE core_template
 (
     id              bigint          NOT NULL    auto_increment          COMMENT '编号',
     company_code    varchar(255)    NOT NULL                            COMMENT '数据所属公司的机构编码',
@@ -157,13 +185,12 @@ CREATE TABLE core_qlscript
     del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
-    script_type     varchar(10)     NOT NULL    DEFAULT 'SQL'           COMMENT '脚本类型，可取："SQL"、"HQL"',
-    script          varchar(2000)   NOT NULL                            COMMENT '脚本，可以使用模版技术拼接',
-    name            varchar(100)    NOT NULL    UNIQUE                  COMMENT '脚本名称，使用包名称+类名+方法名',
-    description     varchar(1000)   NOT NULL                            COMMENT '脚本功能说明',
-  PRIMARY KEY (id)
-) COMMENT = '数据库脚本';
-CREATE INDEX core_qlscript_name         ON  core_qlscript (name ASC);
+    name            varchar(255)    NOT NULL    UNIQUE                  COMMENT '模版名称，不能重复',
+    content         varchar(2000)   NOT NULL                            COMMENT '模版内容',
+    locale          varchar(50)     NOT NULL                            COMMENT '模版语言',
+    description     varchar(1000)   NOT NULL                            COMMENT '模版说明',
+    PRIMARY KEY (id)
+) COMMENT = '模版数据表';
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/
@@ -185,19 +212,13 @@ CREATE TABLE core_access_log
     user_agent      varchar(100)                                        COMMENT '用户代理',
     has_exception   char(1)         NOT NULL    DEFAULT '1'             COMMENT '是否有异常（0：否；1：是）',
     exception_info  varchar(2000)                                       COMMENT '异常信息',
-  PRIMARY KEY (id)
+    PRIMARY KEY (id)
 ) COMMENT = '日志表';
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/
 
 
-
-
-
-
-
--- 系统模版
 
 
 

@@ -10,21 +10,27 @@ package org.cleverframe.common.ehcache;
  */
 @SuppressWarnings("unused")
 public class EhCacheNames {
+
+    /**
+     * 数据库脚本缓存名称
+     */
+    public static final String QLScriptCache = "QLScriptCache";
+
     // -------------------------------------------------------------------------------------------//
     // Shiro的缓存配置名称
     // -------------------------------------------------------------------------------------------//
     /**
      * Shiro活动的会话缓存名称
      */
-    public static final String SHIRO_ACTIVE_SESSION_CACHE = "shiro-activeSessionCache";
+    public static final String ShiroActiveSessionCache = "shiro-activeSessionCache";
     /**
      * Shiro的AuthenticationInfo信息缓存名称
      */
-    public static final String SHIRO_AUTHENTICATION_CACHE = "shiroAuthenticationCache";
+    public static final String ShiroAuthenticationCache = "shiroAuthenticationCache";
     /**
      * Shiro的AuthorizationInfo信息缓存名称
      */
-    public static final String SHIRO_AUTHORIZATION_CACHE = "shiroAuthorizationCache";
+    public static final String ShiroAuthorizationCache = "shiroAuthorizationCache";
 
 
 }

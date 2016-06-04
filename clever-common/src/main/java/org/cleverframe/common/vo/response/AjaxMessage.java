@@ -1,4 +1,4 @@
-package org.cleverframe.common.vo;
+package org.cleverframe.common.vo.response;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
@@ -43,6 +43,26 @@ public class AjaxMessage<T> implements Serializable {
     private String failUrl;
 
     /**
+     * 操作成功消息
+     */
+    private String successMessage;
+
+    /**
+     * 操作失败消息
+     */
+    private String failMessage;
+
+    /**
+     * 服务器是否发生异常
+     */
+    private boolean hasException = false;
+
+    /**
+     * 服务端异常消息
+     */
+    private String exceptionMessage;
+
+    /**
      * 服务端异常的堆栈信息
      */
     private String exceptionStack;
@@ -60,29 +80,65 @@ public class AjaxMessage<T> implements Serializable {
     }
 
     /**
-     * @param success 请求结果是否成功
-     * @param result  请求响应消息
-     * @param e       异常对象
+     * 请求服务端发生异常(hasException = true)时，使用的构造方法<br/>
+     *
+     * @param throwable        请求的异常对象
+     * @param exceptionMessage 请求的异常时的消息
      */
-    public AjaxMessage(boolean success, T result, Throwable e) {
-        this.success = success;
+    public AjaxMessage(Throwable throwable, String exceptionMessage) {
+        this(null, false, null, null, true, throwable, exceptionMessage);
+    }
+
+    /**
+     * 服务端请求完成并且操作成功(success = true)<br/>
+     *
+     * @param result         请求响应数据
+     * @param successMessage success=true时，请求成功时的消息
+     */
+    public AjaxMessage(T result, String successMessage) {
+        this(result, true, successMessage, null, false, null, null);
+    }
+
+    /**
+     * 服务端请求没有发生异常时，使用的构造方法<br/>
+     *
+     * @param success        请求结果是否成功
+     * @param successMessage success=true时，请求成功时的消息
+     * @param failMessage    success=false时，请求失败时的消息
+     */
+    public AjaxMessage(boolean success, String successMessage, String failMessage) {
+        this(null, success, successMessage, failMessage, false, null, null);
+    }
+
+    /**
+     * 服务端请求完成，没有发生异常时，使用的构造方法<br/>
+     *
+     * @param result         请求响应数据
+     * @param success        请求结果是否成功
+     * @param successMessage success=true时，请求成功时的消息
+     * @param failMessage    success=false时，请求失败时的消息
+     */
+    public AjaxMessage(T result, boolean success, String successMessage, String failMessage) {
+        this(result, success, successMessage, failMessage, false, null, null);
+    }
+
+    /**
+     * @param result           请求响应数据
+     * @param success          请求结果是否成功
+     * @param successMessage   success=true时，请求成功时的消息
+     * @param failMessage      success=false时，请求失败时的消息
+     * @param hasException     是否发生服务器异常
+     * @param throwable        请求的异常对象
+     * @param exceptionMessage 请求的异常时的消息
+     */
+    public AjaxMessage(T result, boolean success, String successMessage, String failMessage, boolean hasException, Throwable throwable, String exceptionMessage) {
         this.result = result;
-        this.exceptionStack = ExceptionUtils.getStackTraceAsString(e);
-    }
-
-    /**
-     * @param success 请求结果是否成功
-     */
-    public AjaxMessage(boolean success) {
-        this(success, null, null);
-    }
-
-    /**
-     * @param success 请求结果是否成功
-     * @param result  请求响应消息
-     */
-    public AjaxMessage(boolean success, T result) {
-        this(success, result, null);
+        this.success = success;
+        this.successMessage = successMessage;
+        this.failMessage = failMessage;
+        this.hasException = hasException;
+        this.exceptionStack = ExceptionUtils.getStackTraceAsString(throwable);
+        this.exceptionMessage = exceptionMessage;
     }
 
     /**
@@ -180,5 +236,37 @@ public class AjaxMessage<T> implements Serializable {
 
     public void setValidMessageList(List<ValidMessage> validMessageList) {
         this.validMessageList = validMessageList;
+    }
+
+    public String getSuccessMessage() {
+        return successMessage;
+    }
+
+    public void setSuccessMessage(String successMessage) {
+        this.successMessage = successMessage;
+    }
+
+    public String getFailMessage() {
+        return failMessage;
+    }
+
+    public void setFailMessage(String failMessage) {
+        this.failMessage = failMessage;
+    }
+
+    public String getExceptionMessage() {
+        return exceptionMessage;
+    }
+
+    public void setExceptionMessage(String exceptionMessage) {
+        this.exceptionMessage = exceptionMessage;
+    }
+
+    public boolean isHasException() {
+        return hasException;
+    }
+
+    public void setHasException(boolean hasException) {
+        this.hasException = hasException;
     }
 }

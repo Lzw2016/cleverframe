@@ -43,14 +43,13 @@ public class SpringBeanNames implements IBeanNames {
     // spring-context-freemarker.xml 配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
     /**
-     * Spring整合FreeMarker的Bean名称-用于前台页面输出(替代JSP)
-     */
-    public static final String FreemarkerConfig = "freemarkerConfig";
-
-    /**
      * Spring整合FreeMarker的Bean名称-用于系统使用的模板，除去了JSP的功能
      */
     public static final String CustomFreeMarkerConfigurer = "customFreeMarkerConfigurer";
+    /**
+     * Spring整合FreeMarker的Bean名称-用于前台页面输出(替代JSP)
+     */
+    public static final String FreemarkerConfig = "freemarkerConfig";
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-javamail.xml 配置文件的Bean名称

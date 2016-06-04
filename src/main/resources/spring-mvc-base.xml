@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xmlns:context="http://www.springframework.org/schema/context"
-	xmlns:mvc="http://www.springframework.org/schema/mvc"
-	xsi:schemaLocation="
-		http://www.springframework.org/schema/mvc
-		http://www.springframework.org/schema/mvc/spring-mvc-4.0.xsd
+	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	   xmlns:context="http://www.springframework.org/schema/context"
+	   xmlns:mvc="http://www.springframework.org/schema/mvc"
+	   xsi:schemaLocation="http://www.springframework.org/schema/mvc
+		http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
 		http://www.springframework.org/schema/beans
-		http://www.springframework.org/schema/beans/spring-beans-4.0.xsd
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
 		http://www.springframework.org/schema/context
-		http://www.springframework.org/schema/context/spring-context-4.0.xsd"
-	default-lazy-init="false">
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd"
+	   default-lazy-init="false">
 
 	<!-- 1.配置扫描@Controller策略 -->
 	<!-- 2.设置静态资源访问规则 -->
@@ -23,12 +22,12 @@
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 1.配置扫描@Controller策略 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- 使用Annotation自动注册Bean,只扫描@Controller,必须加上属性：use-default-filters="false" -->
-	<context:component-scan base-package="org.cleverframe" use-default-filters="false"><!-- base-package 如果多个，用“,”分隔 -->
+	<context:component-scan base-package="org.cleverframe" use-default-filters="false"><!-- base-package 如果多个,用“,”分隔 -->
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
 	</context:component-scan>
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2.设置静态资源访问规则 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!-- 对静态资源文件的访问， 将无法mapping到Controller的path交给default servlet handler处理 -->
+	<!-- 对静态资源文件的访问, 将无法mapping到Controller的path交给default servlet handler处理 -->
 	<!-- <mvc:default-servlet-handler/> -->
 	<mvc:resources mapping="/${staticPath}/**" location="/WEB-INF/static/" order="1" cache-period="31536000"/>
 	<mvc:resources mapping="/${viewsPath}/**" location="/WEB-INF/modules" order="2" cache-period="31536000"/>
@@ -43,7 +42,7 @@
 	http://{host}:{port}/{appName}/{mvc}/{MVC框架的请求映射路径}/
 -->
 	<mvc:interceptors>
-		<!-- 请求统计拦截器，此拦截器是"/**"路径拦截器 -->
+		<!-- 请求统计拦截器,此拦截器是"/**"路径拦截器 -->
         <mvc:interceptor>
             <mvc:mapping path="/**"/>
             <bean id="statisticsInterceptor" class="org.cleverframe.common.interceptor.StatisticsInterceptor">
@@ -52,27 +51,14 @@
                 </property>
             </bean>
         </mvc:interceptor>
-
-		<!-- 系统登入拦截器，已作废，现已使用Shiro实现登入以及访问控制 -->
-<!-- 		
-		<mvc:interceptor>
-			<mvc:mapping path="/**" />
-			<mvc:exclude-mapping path="/${staticPath}/**" />
-			<mvc:exclude-mapping path="/${viewsPath}/modules/system/Login.html" />
-			<mvc:exclude-mapping path="/${docPath}/FunctionList.html" />
-			<mvc:exclude-mapping path="/${mvcPath}/sys/login" />
-			<mvc:exclude-mapping path="/index.html" />
-			<bean id="Interceptor" class="org.cleverframe.modules.sys.interceptor." />
-		</mvc:interceptor>
- -->		
 	</mvc:interceptors>
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.配置视图与视图解析器 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- 确定MIME类型 1、检查扩展名（如action.json）；2、检查Parameter（如action?format=xml）；3、检查Accept Header -->
     <bean id="contentNegotiationManager" class="org.springframework.web.accept.ContentNegotiationManagerFactoryBean">
-        <!-- 是否根据URL后缀名确定MIME类型，例如：/userinfo/lzw.json 启用 -->
+        <!-- 是否根据URL后缀名确定MIME类型,例如：/userinfo/lzw.json 启用 -->
         <property name="favorPathExtension" value="true" />
-        <!-- 是否根据请求参数确定MIME类型，例如：?format=json 禁用 -->
+        <!-- 是否根据请求参数确定MIME类型,例如：?format=json 禁用 -->
         <property name="favorParameter" value="false" />
         <!-- 根据请求参数确定MIME类型时,请求参数的参数名,默认：?format=xxx -->
         <property name="parameterName" value="format" />
@@ -89,7 +75,7 @@
         <property name="defaultContentType" value="text/html"/>
     </bean>
 
-    <!-- 混合使用多种视图技术 -->
+    <!-- 混合试图解析器,混合使用多种视图技术 -->
 	<bean id="contentNegotiatingViewResolver" class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
 		<!-- 设置成优先级最高的视图解析器 -->
 		<property name="order" value="0"/>
@@ -98,85 +84,91 @@
 		<!-- 设置视图解析器 ,解析器解析顺序 -->
 		<property name="viewResolvers">
 			<list>
-				<!-- Bean ID视图解析器，将逻辑视图名字解析为bean的id属性，从而根据id属性，找定义View的bean -->
+				<!-- Bean ID视图解析器,将逻辑视图名字解析为bean的id属性,从而根据id属性,找定义View的bean -->
 				<ref bean="beanNameViewResolver"/>
 				<!-- FreeMarker视图解析器 -->
 				<ref bean="freeMarkerViewResolver"/>
-				<!-- JSP视图文件解析器配置，解析问URL文件,将逻辑视图名字解析为一个路径 -->
+				<!-- JSP视图文件解析器配置,解析问URL文件,将逻辑视图名字解析为一个路径 -->
 				<ref bean="internalResourceViewResolver"/>
 			</list>
 		</property>
 		<!-- 设置默认视图 -->
 		<property name="defaultViews">
 			<list>
-				<!-- Json视图,Jackson实现，application/json -->
+				<!-- Json视图,Jackson实现,application/json -->
 				<ref bean="mappingJackson2JsonView"/>
-				<!-- XML视图，xstream实现，application/xml -->
+				<!-- XML视图,xstream实现,application/xml -->
 				<ref bean="xStreamMarshallingView"/>
 			</list>
 		</property>
 	</bean>
 
-	<!-- Json视图,Jackson实现 -->
-	<bean id="mappingJackson2JsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" >
-		<!-- 定义Json根节点名称 -->
-		<!-- <property name="renderedAttributes" value="xmlOrJsonRoot"/> -->
-	</bean>
-
-	<!-- XML视图，xstream实现 -->
-	<bean id="xStreamMarshallingView" class="org.springframework.web.servlet.view.xml.MarshallingView">
-		<!-- 定义XML根节点名称 -->
-		<!-- <property name="modelKey" value="xmlOrJsonRoot"/> -->
-
-		<property name="marshaller">
-			<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
-				<!-- 定义XML解析驱动类 -->
-				<property name="streamDriver">
-					<bean class="com.thoughtworks.xstream.io.xml.StaxDriver"/>
-				</property>
-				<!-- 启用annotation -->
-				<property name="autodetectAnnotations" value="true" />
-				<!-- 类名别名 -->
-				<property name="aliases">
-					<map>
-						<!-- Account这个类的别名就变成了myBeans，那么转换后的xml中就是myBeans -->
-						<!-- <entry key="myBeans" value="com.zdp.domain.Account" /> -->
-					</map>
-				</property>
-				<!-- 基本属性别名 -->
-				<property name="fieldAliases">
-					<map>
-						<!-- Account中的brithday这个属性 -->
-						<!-- <entry key="com.zdp.domain.Account.birthday" value="birthday" /> -->
-					</map>
-				</property>
-			</bean>
-		</property>
-	</bean>
-
-	<!-- Bean ID视图解析器，将逻辑视图名字解析为bean的id属性，从而根据id属性，找定义View的bean -->
+	<!-- Bean ID视图解析器,将逻辑视图名字解析为bean的id属性,从而根据id属性,找定义View的bean -->
 	<bean id="beanNameViewResolver" class="org.springframework.web.servlet.view.BeanNameViewResolver">
 		<property name="order" value="10"/>
 	</bean>
 
 	<!-- FreeMarker视图解析器 -->
 	<bean id="freeMarkerViewResolver" class="org.springframework.web.servlet.view.freemarker.FreeMarkerViewResolver">
-        <property name="order" value="90"/>
-	    <property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
-	    <property name="viewNames" value="*.ftl"/>
-	    <property name="contentType" value="text/html; charset=utf-8"/>
-	    <property name="cache" value="true" />
-	    <property name="prefix" value="/WEB-INF/views/" />
-	    <property name="suffix" value=".ftl" />
+		<property name="order" value="90"/>
+		<property name="viewClass" value="org.springframework.web.servlet.view.freemarker.FreeMarkerView"/>
+		<property name="viewNames" value="*.ftl"/>
+		<property name="contentType" value="text/html; charset=utf-8"/>
+		<property name="cache" value="true" />
+		<property name="prefix" value="/WEB-INF/views/" />
+		<property name="suffix" value=".ftl" />
 	</bean>
 
-	<!-- JSP视图文件解析器配置，解析问URL文件,将逻辑视图名字解析为一个路径 -->
+	<!-- JSP视图文件解析器,解析问URL文件,将逻辑视图名字解析为一个路径 -->
 	<bean id="internalResourceViewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<!-- 设置成优先级最低的视图解析器 -->
 		<property name="order" value="100"/>
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
 		<property name="prefix" value="${jsp.view.prefix}"/>
 		<property name="suffix" value="${jsp.view.suffix}"/>
+	</bean>
+
+	<!-- Json视图,Jackson实现 -->
+	<bean id="mappingJackson2JsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" >
+		<!-- 设置编码 -->
+		<property name="encoding" value="UTF8"/>
+		<!-- 定义JSON根节点名称,要与BaseController.XML_OR_JSON_ROOT的值要一致 -->
+		<property name="modelKey" value="xmlOrJsonRoot"/>
+
+		<property name="extractValueFromSingleKeyModel" value="true" />
+	</bean>
+
+	<!-- XML视图,xstream实现 -->
+	<bean id="xStreamMarshallingView" class="org.springframework.web.servlet.view.xml.MarshallingView">
+		<!-- 定义XML根节点名称,要与BaseController.XML_OR_JSON_ROOT的值要一致 -->
+		<property name="modelKey" value="xmlOrJsonRoot"/>
+        <!-- 设置XML序列化实现 -->
+		<property name="marshaller">
+			<bean class="org.springframework.oxm.xstream.XStreamMarshaller">
+				<!-- 设置编码 -->
+				<property name="encoding" value="UTF8"/>
+				<!-- 定义XML解析驱动类,默认值XppDriver(编码取值XStreamMarshaller.encoding属性) -->
+				<property name="streamDriver">
+                    <!-- 其编码取值：Charset.defaultCharset(),需要设置JVM启动参数：-Dfile.encoding=UTF-8 -->
+					<bean class="com.thoughtworks.xstream.io.xml.Xpp3Driver"/>
+				</property>
+
+				<!-- 启用annotation -->
+				<property name="autodetectAnnotations" value="true" />
+				<!-- 类名别名 -->
+				<property name="aliases">
+					<map>
+						<entry key="AjaxMessage" value="org.cleverframe.common.vo.response.AjaxMessage"/>
+					</map>
+				</property>
+				<!-- 类基本属性别名 -->
+				<property name="fieldAliases">
+					<map>
+						<!-- <entry key="com.zdp.domain.Account.birthday" value="birthday" /> -->
+					</map>
+				</property>
+			</bean>
+		</property>
 	</bean>
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 5.Apache Shiro MVC层配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -187,46 +179,28 @@
 	</bean>
 -->
 
-    <!-- 异常处理页面 -->
-	<bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">
-        <!-- 定义默认的异常处理页面 -->
-        <property name="defaultErrorView" value="error"/>
-        <!-- 定义异常处理页面用来获取异常信息的变量名，如果不添加exceptionAttribute属性，则默认为exception -->
-        <property name="exceptionAttribute" value="exception"/>
-        <!-- 定义需要特殊处理的异常，用类名或完全路径名作为key，异常页面名作为值 -->
-        <property name="exceptionMappings">
-            <props>
-                <prop key="org.apache.shiro.authz.UnauthorizedException">error/403</prop>
-            </props>
-        </property>
-    </bean>
-
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 6.SpringMVC其它配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!-- 初始化系统属性值,在系统启动时调用，加入一些系统级别的属性值 -->
+	<!-- 初始化系统属性值,在系统启动时调用,加入一些系统级别的属性值 -->
 	<!-- <bean id="servletContextProperty" class="org.cleverframe.config.ServletContextProperty" init-method="init"/> -->
 
 	<!-- 定义无Controller的path与view直接映射 -->
 	<!-- <mvc:view-controller path="/" view-name="redirect:/index.html"/> -->
 
-	<!-- 注册了DefaultAnnotationHandlerMapping和AnnotationMethodHandlerAdapter两个bean，配置一些messageconverter -->
+	<!--
+	    解析类方法:org.springframework.web.servlet.config.AnnotationDrivenBeanDefinitionParser.parse()
+		主要Bean: RequestMappingHandlerMapping RequestMappingHandlerAdapter
+		1.配置一些 MessageConverter,查看AnnotationDrivenBeanDefinitionParser.getMessageConverters()
+		2.配置了异常处理 ExceptionHandlerExceptionResolver
+	-->
 	<mvc:annotation-driven/>
-<!-- 	
-	<mvc:annotation-driven>
-		<mvc:message-converters register-defaults="true">
-			<bean class="org.springframework.http.converter.StringHttpMessageConverter">
-				<property name="supportedMediaTypes" value="text/plain;charset=UTF-8" />
-			</bean>
-		</mvc:message-converters>
-	</mvc:annotation-driven>
- -->
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 7.commons-fileupload 文件上传配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!-- 上传文件拦截，设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes -->
+	<!-- 上传文件拦截,设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes -->
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="maxInMemorySize" value="10240" />
 		<property name="maxUploadSize" value="${web.maxUploadSize}" />
-		<!-- true：延迟解析上传的文件，先执行Controller里面的代码(默认为false) -->
+		<!-- true：延迟解析上传的文件,先执行Controller里面的代码(默认为false) -->
 		<property name="resolveLazily" value="true"/>
 		<!-- 文件上传使用的临时目录 -->
 		<property name="uploadTempDir">

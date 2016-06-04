@@ -1,9 +1,10 @@
 package org.cleverframe.common.controller;
 
 import org.apache.commons.lang3.StringEscapeUtils;
+import org.cleverframe.common.attributes.CommonRequestAttributes;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.time.DateTimeUtils;
-import org.cleverframe.common.vo.AjaxMessage;
+import org.cleverframe.common.vo.response.AjaxMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,8 +12,12 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.InitBinder;
+import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Validator;
 import java.beans.PropertyEditorSupport;
 import java.util.Date;
@@ -22,6 +27,7 @@ import java.util.List;
  * SpringMVC实现的控制器基类<br/>
  * 1.设置请求参数绑定配置，包括防止XSS攻击<br/>
  * 2.提供请求参数验证功能<br/>
+ * 3.统一处理Controller层的异常<br/>
  * TODO 3.提供IUserUtils，方便获取当前用户的组织架构信息<br/>
  *
  * @author LiZW
@@ -32,6 +38,11 @@ public abstract class BaseController {
      * 日志对象
      */
     private final static Logger logger = LoggerFactory.getLogger(BaseController.class);
+
+    /**
+     * Json视图、XML视图使用的根节点键值，需要与配置里的值一致<br/>
+     */
+    public final static String XML_OR_JSON_ROOT = "xmlOrJsonRoot";
 
     /**
      * 验证Bean实例对象
@@ -100,5 +111,24 @@ public abstract class BaseController {
             message.setSuccess(true);
         }
         return !bindingResult.hasErrors();
+    }
+
+    /**
+     * 默认的异常处理方法<br/>
+     * 1.返回AjaxMessage<br/>
+     * 2.错误信息存到request Attribute中，给拦截器处理(存储)<br/>
+     */
+    @ExceptionHandler(value = Throwable.class)
+    protected ModelAndView defaultErrorHandler(HttpServletRequest request, HttpServletResponse response, Throwable throwable) {
+        ModelAndView modelAndView = new ModelAndView();
+
+        // 错误信息存到request Attribute中，给拦截器处理(存储)
+        request.setAttribute(CommonRequestAttributes.SERVER_EXCEPTION, throwable);
+
+        // 如果是ajax请求直接返回响应数据，跳转到对应的错误页面
+        if ("true".equals(request.getParameter("ajaxRequest")) || request.getRequestURI().endsWith(".json") || request.getRequestURI().endsWith(".xml")) {
+            modelAndView.getModelMap().put(XML_OR_JSON_ROOT, new AjaxMessage<>(throwable, "服务器异常!"));
+        }
+        return modelAndView;
     }
 }

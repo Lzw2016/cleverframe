@@ -1,10 +1,12 @@
 package org.cleverframe.core.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.hibernate.CallbackException;
 import org.hibernate.Session;
 import org.hibernate.classic.Lifecycle;
-import org.hibernate.validator.constraints.Length;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.persistence.MappedSuperclass;
 import java.io.Serializable;
@@ -16,8 +18,15 @@ import java.util.Date;
  * 作者：LiZW <br/>
  * 创建时间：2016-5-12 9:35 <br/>
  */
+@SuppressWarnings("unused")
 @MappedSuperclass
-public abstract class DataEntity extends BaseEntity {
+public abstract class DataEntity implements BaseEntity, Lifecycle {
+    /**
+     * 日志对象
+     */
+    @JsonIgnore
+    private final static Logger logger = LoggerFactory.getLogger(BaseEntity.class);
+
     /**
      * 数据所属公司的机构编码
      */
@@ -53,7 +62,6 @@ public abstract class DataEntity extends BaseEntity {
     /**
      * 备注
      */
-    @Length(min = 0, max = 255, message = "备注信息长度必须是0——255个字符")
     protected String remarks;
 
     /**
@@ -66,6 +74,25 @@ public abstract class DataEntity extends BaseEntity {
      */
     protected String uuid;
 
+    /**
+     * 不能直接使用此属性，使用前确保调用了getUserUtils()
+     *
+     * @see #getUserUtils()
+     */
+//    @JsonIgnore
+//    @Transient
+//    private IUserUtils userUtils;
+
+    /**
+     * 获取用户工具
+     */
+//    public IUserUtils getUserUtils() {
+//        if (userUtils == null) {
+//            userUtils = SpringContextHolder.getBean(SysBeanNames.UserUtils);
+//        }
+//        return userUtils;
+//    }
+
     /*
      * 持久化前操作，在实体对象Save/Insert操作之前触发<br/>
      * 1.生成UUID<br/>
@@ -75,7 +102,6 @@ public abstract class DataEntity extends BaseEntity {
      * */
     @Override
     public boolean onSave(Session session) throws CallbackException {
-        super.onSave(session);
         //logger.debug("DataEntity--onSave");
 //        this.companyId = getUserUtils().getCurrentCompanyId();
 //        this.orgId = getUserUtils().getCurrentOrgId();
@@ -94,7 +120,6 @@ public abstract class DataEntity extends BaseEntity {
      * */
     @Override
     public boolean onUpdate(Session session) throws CallbackException {
-        super.onUpdate(session);
         //logger.debug("DataEntity--onUpdate");
 //        this.updateBy = getUserUtils().getCurrentUserId();
 //        this.updateDate = new Date();
@@ -104,7 +129,6 @@ public abstract class DataEntity extends BaseEntity {
     /*在实体对象Delete操作之前触发*/
     @Override
     public boolean onDelete(Session session) throws CallbackException {
-        super.onDelete(session);
         //logger.debug("DataEntity--onDelete");
         return Lifecycle.NO_VETO;
     }
@@ -112,7 +136,6 @@ public abstract class DataEntity extends BaseEntity {
     /*在实体对象被加载之后触发*/
     @Override
     public void onLoad(Session session, Serializable id) {
-        super.onLoad(session, id);
         //logger.debug("DataEntity--onLoad");
     }
 

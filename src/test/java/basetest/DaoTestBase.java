@@ -53,6 +53,6 @@ public class DaoTestBase extends AbstractTransactionalJUnit4SpringContextTests {
 
     @Test
     public void test() throws Exception {
-        logger.info("XXXX");
+        logger.info("### 测试Dao");
     }
 }

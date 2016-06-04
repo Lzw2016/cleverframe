@@ -1,6 +1,7 @@
 package org.cleverframe.common.interceptor;
 
-import org.cleverframe.common.vo.RequestInfo;
+import org.cleverframe.common.attributes.CommonRequestAttributes;
+import org.cleverframe.common.vo.request.RequestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -16,7 +17,7 @@ import javax.servlet.http.HttpServletResponse;
  * 创建时间：2016-5-16 16:12 <br/>
  *
  * @see IRequestStatistics
- * @see org.cleverframe.common.vo.RequestInfo
+ * @see RequestInfo
  */
 public class StatisticsInterceptor implements HandlerInterceptor {
     /**
@@ -83,7 +84,7 @@ public class StatisticsInterceptor implements HandlerInterceptor {
      */
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        logger.debug("### StatisticsInterceptor.postHandle");
+        logger.debug("### StatisticsInterceptor.postHandle ");
     }
 
     /**
@@ -91,6 +92,17 @@ public class StatisticsInterceptor implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        if (ex != null) {
+            logger.error("### afterCompletion - ！", ex);
+        }
+
+        // 从request Attribute中获取异常信息
+        Object object = request.getAttribute(CommonRequestAttributes.SERVER_EXCEPTION);
+        if(object instanceof Throwable) {
+            Throwable throwable = (Throwable) object;
+            logger.error("### 服务器发生异常", throwable);
+        }
+
         if (null == requestStatistics) {
             logger.error("### StatisticsInterceptor.afterCompletion 服务所有的请求统计实现类未注入，请注入：StatisticsInterceptor.requestStatistics");
         } else {

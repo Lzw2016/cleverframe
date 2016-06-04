@@ -5,9 +5,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.DisposableBean;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Lazy;
 import org.springframework.core.io.DefaultResourceLoader;
-import org.springframework.stereotype.Service;
+import org.springframework.stereotype.Component;
 import org.springframework.web.context.ContextLoader;
 import org.springframework.web.context.WebApplicationContext;
 
@@ -20,8 +19,8 @@ import org.springframework.web.context.WebApplicationContext;
  * 作者：LiZW <br/>
  * 创建时间：2016-5-9 14:25 <br/>
  */
-@Service("springContextHolder")
-@Lazy(false)
+// TODO springContextHolder 使用字符串常量
+@Component("springContextHolder")
 public class SpringContextHolder implements ApplicationContextAware, DisposableBean {
     /**
      * 日志记录器

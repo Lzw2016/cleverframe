@@ -87,9 +87,10 @@ project(':clever-common') {
         compile('com.alibaba:fastjson:1.2.8')
         compile('com.google.code.gson:gson:2.6.2')
         // json、xml 序列化和反序列化
-        compile('com.fasterxml.jackson.core:jackson-databind:2.7.3')
-        compile('com.fasterxml.jackson.core:jackson-annotations:2.7.3')
-        compile('com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.7.3')
+        compile('com.fasterxml.jackson.core:jackson-databind:2.7.4')
+        compile('com.fasterxml.jackson.core:jackson-annotations:2.7.4')
+        compile('com.fasterxml.jackson.module:jackson-module-jaxb-annotations:2.7.4')
+        compile ('com.fasterxml.jackson.dataformat:jackson-dataformat-xml:2.7.4')
         compile('com.thoughtworks.xstream:xstream:1.4.9')
         compile('dom4j:dom4j:1.6.1')
         compile('org.json:json:20160212')
@@ -146,8 +147,8 @@ project(':clever-common') {
         compile('org.springframework:spring-context:4.2.6.RELEASE')
         compile('org.springframework:spring-web:4.2.6.RELEASE')
         compile('org.springframework:spring-webmvc:4.2.6.RELEASE')
-        compile('org.springframework:spring-orm:4.2.6.RELEASE')
         compile('org.springframework:spring-oxm:4.2.6.RELEASE')
+        compile('org.springframework:spring-orm:4.2.6.RELEASE')
     }
 }
 
@@ -168,6 +169,7 @@ project(':clever-webui') {
 project(':clever-core') {
     dependencies {
         compile project(':clever-common')
+        compile project(':clever-webui')
         // ##################Web层框架
         // Spring Data
         compile('org.springframework.data:spring-data-jpa:1.9.4.RELEASE')

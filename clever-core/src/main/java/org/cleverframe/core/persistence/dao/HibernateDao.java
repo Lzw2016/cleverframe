@@ -1,6 +1,7 @@
 package org.cleverframe.core.persistence.dao;
 
 import org.apache.commons.lang3.math.NumberUtils;
+import org.cleverframe.common.exception.ExceptionUtils;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.persistence.Parameter;
 import org.cleverframe.common.reflection.ReflectionsUtils;
@@ -20,6 +21,8 @@ import org.hibernate.criterion.Projections;
 import org.hibernate.internal.CriteriaImpl;
 import org.hibernate.transform.ResultTransformer;
 import org.hibernate.transform.Transformers;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate4.HibernateTemplate;
@@ -45,8 +48,14 @@ import java.util.*;
  */
 public class HibernateDao<T extends Serializable> {
     /**
+     * 日志对象
+     */
+    private final static Logger logger = LoggerFactory.getLogger(HibernateDao.class);
+
+    /**
      * Spring提供的Hibernate的模版类
      */
+    @SuppressWarnings("SpringJavaAutowiredMembersInspection")
     @Autowired
     @Qualifier(SpringBeanNames.HibernateTemplate)
     private HibernateTemplate hibernateTemplate;
@@ -982,7 +991,7 @@ public class HibernateDao<T extends Serializable> {
     @SuppressWarnings("rawtypes")
     public long count(DetachedCriteria detachedCriteria) {
         Criteria criteria = detachedCriteria.getExecutableCriteria(getSession());
-        long totalCount = 0;
+        long totalCount;
         try {
             // Get orders
             Field field = CriteriaImpl.class.getDeclaredField("orderEntries");
@@ -997,10 +1006,9 @@ public class HibernateDao<T extends Serializable> {
             criteria.setProjection(null);
             // Restore orders
             field.set(criteria, orderEntrys);
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (Throwable e) {
+            logger.error(e.getMessage(), e);
+            throw ExceptionUtils.unchecked(e);
         }
         return totalCount;
     }

@@ -1,4 +1,4 @@
-package org.cleverframe.common.vo;
+package org.cleverframe.common.vo.response;
 
 import org.springframework.validation.FieldError;
 

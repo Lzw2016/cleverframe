@@ -10,5 +10,10 @@ public class CommonRequestAttributes implements IRequestAttributes {
     /**
      * 请求开始时间,类型：long
      */
-    public static final String REQUEST_START_TIME = "Request_Start_Time";
+    public static final String REQUEST_START_TIME = "Common_Request_Start_Time";
+
+    /**
+     * 服务器异常信息
+     */
+    public static final String SERVER_EXCEPTION = "Common_Server_Exception";
 }

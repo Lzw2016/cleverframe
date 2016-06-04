@@ -3,7 +3,7 @@ package basetest;
 import org.junit.*;
 import org.junit.runner.RunWith;
 import org.springframework.test.context.ContextConfiguration;
-import org.springframework.test.context.junit4.AbstractJUnit4SpringContextTests;
+import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
 import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 
 /**
@@ -14,7 +14,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @ContextConfiguration(locations = {"classpath:spring-context-all.xml"})
-public class ServiceTestBase extends AbstractJUnit4SpringContextTests {
+public class ServiceTestBase extends AbstractTransactionalJUnit4SpringContextTests {
     /**
      * 所有测试开始之前运行
      *

@@ -3,7 +3,7 @@ package org.cleverframe.common.vo;
 import java.io.Serializable;
 
 /**
- * 验证码信息
+ * 验证码信息，存放到Session中用于验证码比对<br/>
  *
  * @author LiZW
  * @version 2015年11月30日 下午2:23:37
