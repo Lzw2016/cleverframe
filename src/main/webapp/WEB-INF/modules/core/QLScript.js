@@ -1,21 +1,22 @@
 /**
  * 页面Js对象定义
+ * @param globalPath 系统全局路径对象
  */
-var pageJs = function () {
+var pageJs = function (globalPath) {
     // 当前pageJs对象
     var _this = this;
     // 分页查询地址
-    var findByPageUrl = mvcPath + "/common/findQLScriptByPage";
+    var findByPageUrl = globalPath.mvcPath + "/common/findQLScriptByPage";
     // 新增保存地址
-    var addUrl = mvcPath + "/common/addQLScript";
+    var addUrl = globalPath.mvcPath + "/common/addQLScript";
     // 编辑保存地址
-    var updateUrl = mvcPath + "/common/updateQLScript";
+    var updateUrl = globalPath.mvcPath + "/common/updateQLScript";
     // 删除地址
-    var delUrl = mvcPath + "/common/deleteQLScript";
+    var delUrl = globalPath.mvcPath + "/common/deleteQLScript";
     // 数据保存或更新地址,根据情况取值:addUrl、updateUrl
     var saveUrl = "";
     // 根据字典类别查询字典地址
-    var findDictTypeUrl = mvcPath + "/sys/findDictByType?dict-type=";
+    var findDictTypeUrl = globalPath.mvcPath + "/sys/findDictByType?dict-type=";
     findDictTypeUrl += encodeURIComponent("数据库脚本类型");
 
     // 数据查询表单
@@ -336,6 +337,10 @@ var pageJsObject = null;
  * 页面Js执行入口
  */
 $(document).ready(function () {
-    pageJsObject = new pageJs();
-    pageJsObject.init();
+    if (typeof(globalPath) == "undefined") {
+        alert("系统全局路径对象未定义(globalPath)");
+    } else {
+        pageJsObject = new pageJs(globalPath);
+        pageJsObject.init();
+    }
 });

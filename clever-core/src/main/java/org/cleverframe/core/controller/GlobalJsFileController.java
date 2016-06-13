@@ -24,7 +24,7 @@ import java.util.Map;
 @RequestMapping("/${mvcPath}/core/globaljs")
 public class GlobalJsFileController extends BaseController {
 
-    @RequestMapping("/globalSysPath.js")
+    @RequestMapping("/globalPath.js")
     @ResponseBody
     public String getGlobalSysPathJs(HttpServletRequest request, HttpServletResponse response) {
         ServletContext servletContext = request.getServletContext();
