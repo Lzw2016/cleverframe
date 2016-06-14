@@ -1,7 +1,7 @@
 /**
  * 页面Js对象定义
  */
-var pageJs = function () {
+var pageJs = function (globalPath) {
     // 当前pageJs对象
     var _this = this;
 
@@ -9,6 +9,7 @@ var pageJs = function () {
      * 页面初始化方法
      */
     this.init = function () {
+        console.log(globalPath);
         console.log("页面初始化");
     };
 
@@ -38,6 +39,10 @@ var pageJsObject = null;
  * 页面Js执行入口
  */
 $(document).ready(function () {
-    pageJsObject = new pageJs();
-    pageJsObject.init();
+    if (typeof(globalPath) == "undefined") {
+        alert("系统全局路径对象未定义(globalPath)");
+    } else {
+        pageJsObject = new pageJs(globalPath);
+        pageJsObject.init();
+    }
 });

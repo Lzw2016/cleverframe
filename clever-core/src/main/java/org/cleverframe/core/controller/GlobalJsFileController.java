@@ -24,6 +24,9 @@ import java.util.Map;
 @RequestMapping("/${mvcPath}/core/globaljs")
 public class GlobalJsFileController extends BaseController {
 
+    /**
+     * 返回全系统全局路径对象定义的js文件
+     */
     @RequestMapping("/globalPath.js")
     @ResponseBody
     public String getGlobalSysPathJs(HttpServletRequest request, HttpServletResponse response) {

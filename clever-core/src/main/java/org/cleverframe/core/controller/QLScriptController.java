@@ -11,6 +11,7 @@ import org.cleverframe.core.entity.QLScript;
 import org.cleverframe.core.qlscript.IQLScriptService;
 import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.core.vo.request.QLScriptAddVo;
+import org.cleverframe.core.vo.request.QLScriptDelVo;
 import org.cleverframe.core.vo.request.QLScriptQueryVo;
 import org.cleverframe.core.vo.request.QLScriptUpdateVo;
 import org.cleverframe.webui.easyui.data.DataGridJson;
@@ -19,7 +20,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -129,9 +129,14 @@ public class QLScriptController extends BaseController {
     public AjaxMessage<String> deleteQLScript(
             HttpServletRequest request,
             HttpServletResponse response,
-            @RequestParam(value = "name", required = true) String name) {
-        qLScriptService.deleteQLScript(name);
-        QLScriptUtils.removeTemplateCache(name);
-        return new AjaxMessage<>(true, "删除成功", "");
+            @Valid QLScriptDelVo qlScriptDelVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>();
+        if (beanValidator(bindingResult, message)) {
+            qLScriptService.deleteQLScript(qlScriptDelVo.getName());
+            QLScriptUtils.removeTemplateCache(qlScriptDelVo.getName());
+            message.setResult("删除成功");
+        }
+        return message;
     }
 }
