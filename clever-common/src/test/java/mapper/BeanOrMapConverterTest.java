@@ -3,7 +3,7 @@ package mapper;
 import model.Class;
 import model.Student;
 import model.TestModel;
-import org.cleverframe.common.mapper.BeanOrMapConverter;
+import org.cleverframe.common.mapper.BeanMapConverter;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -70,7 +70,7 @@ public class BeanOrMapConverterTest {
         map.put("birthday", new Date());
 
         TestModel model = new TestModel();
-        BeanOrMapConverter.toObject(model, map);
+        BeanMapConverter.toObject(model, map);
         logger.info(model.toString());
     }
 
@@ -86,7 +86,7 @@ public class BeanOrMapConverterTest {
         model.setSex(true);
         model.setBirthday(new Date());
 
-        Map<String, Object> map = BeanOrMapConverter.toMap(model);
+        Map<String, Object> map = BeanMapConverter.toMap(model);
         logger.info(map.toString());
     }
 
@@ -104,7 +104,7 @@ public class BeanOrMapConverterTest {
         clzz.setGrade(3);
         student.setClzz(clzz);
 
-        Map<String, Object> map = BeanOrMapConverter.toMap(student);
+        Map<String, Object> map = BeanMapConverter.toMap(student);
         logger.info(map.toString());
     }
 }

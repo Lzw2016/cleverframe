@@ -14,11 +14,11 @@ import org.slf4j.LoggerFactory;
  * 作者：LiZW <br/>
  * 创建时间：2016-5-1 13:03 <br/>
  */
-public class JsonOrXmlConverter {
+public class JsonXmlConverter {
     /**
      * 日志记录器
      */
-    private final static Logger logger = LoggerFactory.getLogger(JsonOrXmlConverter.class);
+    private final static Logger logger = LoggerFactory.getLogger(JsonXmlConverter.class);
 
     /**
      * XML字符串转换成Json字符串<br/>

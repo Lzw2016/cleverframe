@@ -10,7 +10,7 @@ import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.common.utils.HqlParserUtils;
 import org.cleverframe.common.utils.SqlParserUtils;
 import org.cleverframe.core.persistence.entity.BaseEntity;
-import org.cleverframe.core.persistence.entity.DataEntity;
+import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
@@ -183,6 +183,16 @@ public class HibernateDao<T extends Serializable> {
     }
 
     /**
+     * 保存或更新任意类型实体类对象
+     *
+     * @param entity 任意实体类对象
+     * @param <E>    实体类泛型
+     */
+    public <E extends Serializable> void saveOrUpdate(E entity) {
+        getSession().saveOrUpdate(entity);
+    }
+
+    /**
      * 直接从数据库删除数据，慎用
      *
      * @param entity 任意实体类对象
@@ -192,18 +202,42 @@ public class HibernateDao<T extends Serializable> {
     }
 
     /**
-     * 软删除实体类，实体类必须继承 DataEntity
+     * 直接从数据库删除数据，慎用
      *
-     * @param entity 实体类对象
-     * @param <E>    实体类泛型
+     * @param id 当前Dao对应的实体类对象的ID
+     * @return 更新记录数
      */
-    public <E extends DataEntity> void deleteForSoft(E entity) {
-        entity.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
-        getSession().update(entity);
+    public int deleteById(Serializable id) {
+        String updateHql = String.format("delete from %s where id = :p1", entityClass.getSimpleName());
+        return updateByHql(updateHql, new Parameter(id));
     }
 
     /**
-     * 更新任意类型实体类对象
+     * 软删除实体类，实体类必须继承 DataEntity<br/>
+     * <b>注意：只根据ID查询实体类，修改delFlag值然后更新，只会更新delFlag字段</b><br/>
+     *
+     * @param entity 实体类对象,ID必须有值
+     * @param <E>    实体类泛型
+     */
+    public <E extends IdEntity> void deleteForSoft(E entity) {
+        IdEntity idEntity = this.getEntity(entity.getClass(), entity.getId());
+        idEntity.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
+        getSession().update(idEntity);
+    }
+
+    /**
+     * 逻辑删除当前Dao对应的实体类对象<br/>
+     *
+     * @param id 当前Dao对应的实体类对象的ID
+     * @return 更新记录数
+     */
+    public int deleteByIdForSoft(Serializable id) {
+        String updateHql = String.format("update %s set delFlag='%s' where id = :p1", entityClass.getSimpleName(), BaseEntity.DEL_FLAG_DELETE);
+        return updateByHql(updateHql, new Parameter(id));
+    }
+
+    /**
+     * 更新任意类型实体类对象<br/>
      *
      * @param entity 任意实体类对象
      * @param <E>    实体类泛型
@@ -213,13 +247,27 @@ public class HibernateDao<T extends Serializable> {
     }
 
     /**
-     * 保存或更新任意类型实体类对象
+     * 更新继承IdEntity的实体类对象,可以控制不更新空值字段(可能会在更新之前查询一次数据库)<br/>
+     * <b>注意:只更新空值字段时entity参数的id必须有值</b>
      *
-     * @param entity 任意实体类对象
-     * @param <E>    实体类泛型
+     * @param entity           继承IdEntity的实体类对象,ID必须有值
+     * @param updateNullField  是否更新null值字段，对所有字段有效
+     * @param updateEmptyField 是否更新空值字段，只对String字段有效
+     * @param <E>              实体类泛型
      */
-    public <E extends Serializable> void saveOrUpdate(E entity) {
-        getSession().saveOrUpdate(entity);
+    public <E extends IdEntity> void update(E entity, boolean updateNullField, boolean updateEmptyField) {
+        // TODO 更新继承IdEntity的实体类对象,可以控制不更新空值字段(可能会在更新之前查询一次数据库)
+    }
+
+    /**
+     * 更新当前Dao对应的实体类对象的删除标记<br/>
+     *
+     * @param id      当前Dao对应的实体类对象的ID
+     * @param delFlag 删除标记常量，参考：BaseEntity
+     */
+    public int updateDelFlag(Serializable id, String delFlag) {
+        String updateHql = String.format("update %s set delFlag = :p2 where id = :p1", entityClass.getSimpleName());
+        return updateByHql(updateHql, new Parameter(id, delFlag));
     }
 
     /**
@@ -251,39 +299,6 @@ public class HibernateDao<T extends Serializable> {
     public long getTotalCount() {
         String hqlQuery = String.format("select count(*) from %s", entityClass.getName());
         return (Long) getSession().createQuery(hqlQuery).uniqueResult();
-    }
-
-    /**
-     * 直接从数据库删除数据，慎用
-     *
-     * @param id 当前Dao对应的实体类对象的ID
-     * @return 更新记录数
-     */
-    public int deleteById(Serializable id) {
-        String updateHql = String.format("delete from %s where id = :p1", entityClass.getSimpleName());
-        return updateByHql(updateHql, new Parameter(id));
-    }
-
-    /**
-     * 逻辑删除当前Dao对应的实体类对象<br/>
-     *
-     * @param id 当前Dao对应的实体类对象的ID
-     * @return 更新记录数
-     */
-    public int deleteByIdForSoft(Serializable id) {
-        String updateHql = String.format("update %s set delFlag='%s' where id = :p1", entityClass.getSimpleName(), BaseEntity.DEL_FLAG_DELETE);
-        return updateByHql(updateHql, new Parameter(id));
-    }
-
-    /**
-     * 更新当前Dao对应的实体类对象的删除标记<br/>
-     *
-     * @param id      当前Dao对应的实体类对象的ID
-     * @param delFlag 删除标记常量，参考：BaseEntity
-     */
-    public int updateDelFlag(Serializable id, String delFlag) {
-        String updateHql = String.format("update %s set delFlag = :p2 where id = :p1", entityClass.getSimpleName());
-        return updateByHql(updateHql, new Parameter(id, delFlag));
     }
 
     // ----------------------------------------------------------------

@@ -1,6 +1,6 @@
 package mapper;
 
-import org.cleverframe.common.mapper.JsonOrXmlConverter;
+import org.cleverframe.common.mapper.JsonXmlConverter;
 import org.junit.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -57,7 +57,7 @@ public class JsonOrXmlConverterTest {
     public void testJsonToXml() {
         String json = "[ {\"model.TestModel\":{\"birthday\":\"1993-04-29 15:41:16.76 UTC\",\"sex\":false,\"name\":\"李志伟11111111\"}}, " +
                 "{\"model.TestModel\":{\"birthday\":\"1993-04-29 15:41:16.76 UTC\",\"sex\":false,\"name\":\"李志伟11111111\"}} ]";
-        String xml = JsonOrXmlConverter.jsonToXml(json);
+        String xml = JsonXmlConverter.jsonToXml(json);
         logger.info(xml);
     }
 
@@ -72,7 +72,7 @@ public class JsonOrXmlConverterTest {
                         "  <sex>false</sex>\n" +
                         "  <birthday>1993-04-29 15:41:16.76 UTC</birthday>\n" +
                         "</model.TestModel>";
-        String json = JsonOrXmlConverter.xmlToJson(xml);
+        String json = JsonXmlConverter.xmlToJson(xml);
         logger.info(json);
     }
 }

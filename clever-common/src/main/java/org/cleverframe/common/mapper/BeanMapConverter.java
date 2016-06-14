@@ -15,11 +15,11 @@ import java.util.Map;
  * 作者：LiZW <br/>
  * 创建时间：2016-4-30 0:44 <br/>
  */
-public class BeanOrMapConverter {
+public class BeanMapConverter {
     /**
      * 日志记录器
      */
-    private final static Logger logger = LoggerFactory.getLogger(BeanOrMapConverter.class);
+    private final static Logger logger = LoggerFactory.getLogger(BeanMapConverter.class);
 
     /**
      * 把Map转换成JavaBean对象<br/>
