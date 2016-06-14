@@ -29,9 +29,10 @@ public class BeanMapper {
 
     static {
         DozerBeanMapper dozerBeanMapper = SpringContextHolder.getBean(SpringBeanNames.DozerBeanMapper);
-        if(dozerBeanMapper == null) {
-            DOZER_BEAN_MAPPER = new DozerBeanMapper();
-            logger.warn("### DozerBeanMapper注入失败, 请配置spring-context-dozer.xml文件");
+        if (dozerBeanMapper == null) {
+            RuntimeException runtimeException = new RuntimeException("### DozerBeanMapper注入失败, 请配置spring-context-dozer.xml文件");
+            logger.error(runtimeException.getMessage(), runtimeException);
+            DOZER_BEAN_MAPPER = null;
         } else {
             DOZER_BEAN_MAPPER = dozerBeanMapper;
             logger.info("### DozerBeanMapper注入成功");

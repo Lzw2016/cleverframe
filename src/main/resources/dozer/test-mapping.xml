@@ -3,6 +3,8 @@
           xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:schemaLocation="http://dozer.sourceforge.net
           http://dozer.sourceforge.net/schema/beanmapping.xsd">
+<!--
+
     <mapping>
         <class-a>org.dozer.vo.TestObject</class-a>
         <class-b>org.dozer.vo.TestObjectPrime</class-b>
@@ -20,5 +22,6 @@
             <b>oneFooPrime</b>
         </field>
     </mapping>
+-->
 
 </mappings>

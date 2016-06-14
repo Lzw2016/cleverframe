@@ -1,11 +1,15 @@
 package org.cleverframe.common.utils;
 
 import com.alibaba.fastjson.JSON;
+import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Map;
+import java.util.Set;
 
 /**
  * JavaBean工具，支持通过反射对JavaBean各种操作<br/>
@@ -132,5 +136,47 @@ public class JavaBeanUtils {
             logger.error("深克隆Bean实例失败", e);
             return null;
         }
+    }
+
+    /**
+     * 将对象source的值拷贝到对象destinationObject中,可以控制是否复制null值，和空字符串<br/>
+     * <b>注意：基本类型没有null状态!!!请使用包装类型</b><br/>
+     *
+     * @param source            数据源对象
+     * @param destinationObject 目标对象
+     * @param copyNullField     是否复制空值
+     * @param copyEmptyField    是否复制空字符串
+     * @return 成功返回true，失败返回false
+     */
+    public static boolean copyTo(Object source, Object destinationObject, boolean copyNullField, boolean copyEmptyField) {
+        try {
+            Map<String, Object> sourceMap = PropertyUtils.describe(source);
+            Map<String, Object> destinationObjectMap = PropertyUtils.describe(destinationObject);
+            Set<Map.Entry<String, Object>> sourceSet = sourceMap.entrySet();
+            for (Map.Entry<String, Object> entry : sourceSet) {
+                boolean override = true;
+                if (!copyNullField) {
+                    // 不复制空值
+                    if (entry.getValue() == null) {
+                        override = false;
+                    }
+                }
+                if (override && !copyEmptyField) {
+                    // 不复制空字符串
+                    if (entry.getValue() != null && entry.getValue() instanceof String && StringUtils.isBlank(entry.getValue().toString())) {
+                        override = false;
+                    }
+                }
+
+                if (override) {
+                    destinationObjectMap.put(entry.getKey(), entry.getValue());
+                }
+            }
+            BeanUtils.populate(destinationObject, destinationObjectMap);
+        } catch (Throwable e) {
+            logger.error("把JavaBean对象转换成Map出错", e);
+            return false;
+        }
+        return true;
     }
 }

@@ -1,5 +1,7 @@
 package org.cleverframe.common.persistence;
 
+import org.cleverframe.common.mapper.BeanMapConverter;
+
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -12,10 +14,24 @@ import java.util.Set;
  */
 public class Parameter extends HashMap<String, Object> {
     /**
-     * 默认构造
+     * 默认构造<br/>
      */
     public Parameter() {
 
+    }
+
+    /**
+     * 构造类，JavaBean对象的属性名转成key，属性值转成value<br/>
+     *
+     * @param bean JavaBean对象
+     */
+    public Parameter(Object bean) {
+        if (bean != null) {
+            Map<String, Object> map = BeanMapConverter.toMap(bean);
+            if (map != null && map.size() > 0) {
+                this.putAll(map);
+            }
+        }
     }
 
     /**

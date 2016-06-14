@@ -145,4 +145,24 @@ public class JavaBeanUtilsTest {
             testClone();
         }
     }
+
+    @Test
+    public void copyTo() {
+        Student source = new Student();
+        source.setAge(123456);
+        source.setHeight(1.23456);
+        source.setName("");
+        source.setSex(false);
+        source.setBirthday(new Date(123456789));
+
+        Student destinationObject = new Student();
+        destinationObject.setAge(23);
+        destinationObject.setHeight(1.72);
+        destinationObject.setName("李志伟");
+        destinationObject.setSex(true);
+        destinationObject.setBirthday(new Date());
+
+        JavaBeanUtils.copyTo(source, destinationObject, false, false);
+        logger.info(destinationObject.toString());
+    }
 }

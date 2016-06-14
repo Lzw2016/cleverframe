@@ -8,6 +8,7 @@ import org.cleverframe.common.reflection.ReflectionsUtils;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.common.utils.HqlParserUtils;
+import org.cleverframe.common.utils.JavaBeanUtils;
 import org.cleverframe.common.utils.SqlParserUtils;
 import org.cleverframe.core.persistence.entity.BaseEntity;
 import org.cleverframe.core.persistence.entity.IdEntity;
@@ -256,7 +257,16 @@ public class HibernateDao<T extends Serializable> {
      * @param <E>              实体类泛型
      */
     public <E extends IdEntity> void update(E entity, boolean updateNullField, boolean updateEmptyField) {
-        // TODO 更新继承IdEntity的实体类对象,可以控制不更新空值字段(可能会在更新之前查询一次数据库)
+        if (updateNullField && updateEmptyField) {
+            getSession().update(entity);
+            return;
+        }
+
+        IdEntity idEntity = this.getEntity(entity.getClass(), entity.getId());
+        if (!JavaBeanUtils.copyTo(entity, idEntity, updateNullField, updateEmptyField)) {
+            throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
+        }
+        getSession().update(idEntity);
     }
 
     /**
