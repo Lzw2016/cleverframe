@@ -269,6 +269,10 @@ public class HibernateDao<T extends Serializable> {
         }
 
         IdEntity idEntity = this.getEntity(entity.getClass(), entity.getId());
+        if(idEntity == null) {
+            logger.debug("### update更新数据不存在");
+            return;
+        }
         if (!JavaBeanUtils.copyTo(entity, idEntity, updateNullField, updateEmptyField)) {
             throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
         }
