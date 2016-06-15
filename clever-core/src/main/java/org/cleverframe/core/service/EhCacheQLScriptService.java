@@ -76,7 +76,7 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
         if (qLScript != null) {
             qLScriptDao.getHibernateDao().save(qLScript);
             // 只缓存状态正常的数据
-            if(qLScript.getDelFlag() != null && QLScript.DEL_FLAG_NORMAL == qLScript.getDelFlag()) {
+            if (qLScript.getDelFlag() != null && QLScript.DEL_FLAG_NORMAL == qLScript.getDelFlag()) {
                 Element element = new Element(qLScript.getName(), qLScript);
                 qLScriptCahe.put(element);
             }
@@ -96,10 +96,10 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
     @Override
     public boolean updateQLScript(QLScript qLScript) throws RuntimeException {
         if (qLScript != null) {
-            qLScriptDao.getHibernateDao().update(qLScript);
+            qLScriptDao.getHibernateDao().update(qLScript, false, true);
             qLScriptDao.getHibernateDao().getSession().flush();
             // 只缓存状态正常的数据
-            if(qLScript.getDelFlag() != null && QLScript.DEL_FLAG_NORMAL == qLScript.getDelFlag()) {
+            if (qLScript.getDelFlag() != null && QLScript.DEL_FLAG_NORMAL == qLScript.getDelFlag()) {
                 Element element = new Element(qLScript.getName(), qLScript);
                 qLScriptCahe.put(element);
             } else {
@@ -186,7 +186,7 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
         for (QLScript script : page.getList()) {
             qLScriptCahe.remove(script.getName());
             // 只缓存状态正常的数据
-            if(script.getDelFlag() != null && QLScript.DEL_FLAG_NORMAL == script.getDelFlag()) {
+            if (script.getDelFlag() != null && QLScript.DEL_FLAG_NORMAL == script.getDelFlag()) {
                 Element element = new Element(script.getName(), script);
                 qLScriptCahe.put(element);
             }

@@ -58,8 +58,8 @@ public class QLScriptDaoTest extends DaoTestBase {
     @Transactional(readOnly = false)
     public void testUpdate() {
         QLScript qLScript = new QLScript();
-//        qLScript.setId(1L);
-//        qLScript.setName("12345");
+        qLScript.setId(1L);
+        qLScript.setName("12345");
         qlScriptDao.getHibernateDao().getSession().update(qLScript);
 //        qlScriptDao.getHibernateDao().getSession().flush();
         logger.info(qLScript);

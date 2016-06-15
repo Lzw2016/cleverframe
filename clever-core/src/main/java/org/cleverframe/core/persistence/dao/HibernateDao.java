@@ -239,6 +239,10 @@ public class HibernateDao<T extends Serializable> {
 
     /**
      * 更新任意类型实体类对象<br/>
+     * <b>
+     *     注意：该方法直接使用Hibernate的update方法，<br/>
+     *     只适用于更新持久化状态的对象(已被持久化，并且在Session缓存中的实体类)
+     * </b><br/>
      *
      * @param entity 任意实体类对象
      * @param <E>    实体类泛型
@@ -249,7 +253,9 @@ public class HibernateDao<T extends Serializable> {
 
     /**
      * 更新继承IdEntity的实体类对象,可以控制不更新空值字段(可能会在更新之前查询一次数据库)<br/>
-     * <b>注意:只更新空值字段时entity参数的id必须有值</b>
+     * <b>
+     *     注意:只更新空值字段时entity参数的id必须有值<br/>
+     * </b>
      *
      * @param entity           继承IdEntity的实体类对象,ID必须有值
      * @param updateNullField  是否更新null值字段，对所有字段有效
