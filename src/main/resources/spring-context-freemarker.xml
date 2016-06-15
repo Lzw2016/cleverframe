@@ -11,8 +11,8 @@
 	<bean id="customFreeMarkerConfigurer" class="org.cleverframe.common.freemarker.CustomFreeMarkerConfigurer">
 		<!--注入自定义的模版加载器-->
 
-		<!-- 模板文件路径,暂时使用,考虑从数据库读取模版 -->
-		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
+		<!-- 模板文件路径,暂时使用,考虑从数据库读取模版 Web(/WEB-INF/classes/freemarker) Test(/freemarker/) -->
+		<property name="templateLoaderPath" value="/WEB-INF/classes/freemarker" />
 
 		<!-- 模板文件编码 -->
 		<property name="defaultEncoding" value="utf-8" />
