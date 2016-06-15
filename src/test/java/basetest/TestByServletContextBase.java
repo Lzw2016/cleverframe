@@ -33,8 +33,8 @@ import javax.servlet.ServletContext;
 @RunWith(SpringJUnit4ClassRunner.class)
 @WebAppConfiguration("src/main/webapp")
 @ContextHierarchy({
-        @ContextConfiguration(name = "parent", locations = "classpath:spring-context-all.xml"),
-        @ContextConfiguration(name = "child", locations = "classpath:spring-mvc-all.xml")
+        @ContextConfiguration(name = "parent", locations = "classpath:/spring/spring-context-all.xml"),
+        @ContextConfiguration(name = "child", locations = "classpath:/spring/spring-mvc-all.xml")
 })
 public class TestByServletContextBase extends AbstractJUnit4SpringContextTests {
 

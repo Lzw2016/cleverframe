@@ -11,7 +11,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  * 创建时间：2016-5-26 0:20 <br/>
  */
 @RunWith(SpringJUnit4ClassRunner.class)
-@ContextConfiguration(locations = {"classpath:spring-context-all.xml"})
+@ContextConfiguration(locations = {"classpath:/spring/spring-context-all.xml"})
 public class DaoTestBase extends AbstractTransactionalJUnit4SpringContextTests {
     /**
      * 所有测试开始之前运行
