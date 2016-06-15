@@ -19,6 +19,18 @@
             overflowToDisk="true"
             maxEntriesLocalDisk="100000"/>
 
+    <!-- 用于存储数据库脚本(SQL、HQL) -->
+    <cache
+            name="QLScriptCache"
+            maxElementsInMemory="100"
+            overflowToDisk="true"
+            eternal="true"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="600"/>
+
+
     <!-- 用于存储shiro活动的会话 -->
     <cache
             name="shiro-activeSessionCache"
