@@ -6,17 +6,17 @@ var pageJs = function (globalPath) {
     // 当前pageJs对象
     var _this = this;
     // 分页查询地址
-    var findByPageUrl = globalPath.mvcPath + "/common/findQLScriptByPage";
+    var findByPageUrl = globalPath.mvcPath + "/core/qlscript/findQLScriptByPage.json";
     // 新增保存地址
-    var addUrl = globalPath.mvcPath + "/common/addQLScript";
+    var addUrl = globalPath.mvcPath + "/core/qlscript/addQLScript.json";
     // 编辑保存地址
-    var updateUrl = globalPath.mvcPath + "/common/updateQLScript";
+    var updateUrl = globalPath.mvcPath + "/core/qlscript/updateQLScript.json";
     // 删除地址
-    var delUrl = globalPath.mvcPath + "/common/deleteQLScript";
+    var delUrl = globalPath.mvcPath + "/core/qlscript/deleteQLScript.json";
     // 数据保存或更新地址,根据情况取值:addUrl、updateUrl
     var saveUrl = "";
     // 根据字典类别查询字典地址
-    var findDictTypeUrl = globalPath.mvcPath + "/sys/findDictByType?dict-type=";
+    var findDictTypeUrl = globalPath.mvcPath + "/sys/findDictByType.json?dict-type=";
     findDictTypeUrl += encodeURIComponent("数据库脚本类型");
 
     // 数据查询表单

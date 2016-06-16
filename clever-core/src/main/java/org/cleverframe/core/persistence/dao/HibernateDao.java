@@ -240,8 +240,8 @@ public class HibernateDao<T extends Serializable> {
     /**
      * 更新任意类型实体类对象<br/>
      * <b>
-     *     注意：该方法直接使用Hibernate的update方法，<br/>
-     *     只适用于更新持久化状态的对象(已被持久化，并且在Session缓存中的实体类)
+     * 注意：该方法直接使用Hibernate的update方法，<br/>
+     * 只适用于更新持久化状态的对象(已被持久化，并且在Session缓存中的实体类)
      * </b><br/>
      *
      * @param entity 任意实体类对象
@@ -254,7 +254,7 @@ public class HibernateDao<T extends Serializable> {
     /**
      * 更新继承IdEntity的实体类对象,可以控制不更新空值字段(可能会在更新之前查询一次数据库)<br/>
      * <b>
-     *     注意:只更新空值字段时entity参数的id必须有值<br/>
+     * 注意:只更新空值字段时entity参数的id必须有值<br/>
      * </b>
      *
      * @param entity           继承IdEntity的实体类对象,ID必须有值
@@ -269,7 +269,7 @@ public class HibernateDao<T extends Serializable> {
         }
 
         IdEntity idEntity = this.getEntity(entity.getClass(), entity.getId());
-        if(idEntity == null) {
+        if (idEntity == null) {
             logger.debug("### update更新数据不存在");
             return;
         }
@@ -277,6 +277,37 @@ public class HibernateDao<T extends Serializable> {
             throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
         }
         getSession().update(idEntity);
+    }
+
+    /**
+     * 根据ID,更新实体类对象<br/>
+     *
+     * @param entityClass 更新的实体类类型,用于确定更新的数据库张
+     * @param id          更新实体类对象的ID
+     * @param entity      需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同的字段值
+     * @param <E>         泛型类型
+     */
+    public <E> void updateById(Class<T> entityClass, Serializable id, E entity) {
+        Object object = this.getEntity(entityClass, id);
+        if (object == null) {
+            logger.debug("### updateById更新数据不存在");
+            return;
+        }
+        if (!JavaBeanUtils.copyTo(entity, object, false, true)) {
+            throw new RuntimeException("### updateById异常(动态更新,可以控制不更新空值字段)");
+        }
+        getSession().update(object);
+    }
+
+    /**
+     * 根据ID,更新当前DAO对应的实体类对象<br/>
+     *
+     * @param id     更新实体类对象的ID
+     * @param entity 需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同的字段值
+     * @param <E>    泛型类型
+     */
+    public <E> void updateById(Serializable id, E entity) {
+        updateById(entityClass, id, entity);
     }
 
     /**

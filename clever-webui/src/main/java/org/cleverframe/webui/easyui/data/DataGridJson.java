@@ -23,7 +23,7 @@ public class DataGridJson<T> implements Serializable
     private long total = 0;
 
     /** 要显示的数据集合 */
-    private List<T> rows = new ArrayList<T>();
+    private List<T> rows = new ArrayList<>();
 
     /** 页脚统计的数据 */
     private List<T> footer;
@@ -54,7 +54,7 @@ public class DataGridJson<T> implements Serializable
     {
         if (this.rows == null)
         {
-            this.rows = new ArrayList<T>();
+            this.rows = new ArrayList<>();
         }
         this.rows.add(row);
         this.total = this.rows.size();
@@ -68,7 +68,7 @@ public class DataGridJson<T> implements Serializable
     {
         if (this.footer == null)
         {
-            this.footer = new ArrayList<T>();
+            this.footer = new ArrayList<>();
         }
         this.footer.add(footer);
         return this;
