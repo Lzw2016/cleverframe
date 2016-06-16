@@ -1,7 +1,10 @@
 package org.cleverframe.core.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.cleverframe.common.spring.SpringContextHolder;
+import org.cleverframe.common.user.IUserUtils;
+import org.cleverframe.common.utils.IDCreateUtils;
+import org.cleverframe.core.CoreBeanNames;
 import org.hibernate.CallbackException;
 import org.hibernate.Session;
 import org.hibernate.classic.Lifecycle;
@@ -21,11 +24,28 @@ import java.util.Date;
 @SuppressWarnings("unused")
 @MappedSuperclass
 public abstract class DataEntity implements BaseEntity, Lifecycle {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 日志对象
      */
-    @JsonIgnore
     private final static Logger logger = LoggerFactory.getLogger(BaseEntity.class);
+
+    /**
+     * 不能直接使用此属性，使用前确保调用了getUserUtils()
+     */
+    private static final IUserUtils userUtils;
+
+    static {
+        // TODO IUserUtils 生产环境不能使用使用[UserUtilsByTemp]实现
+        userUtils = SpringContextHolder.getBean(CoreBeanNames.UserUtilsByTemp);
+        if (userUtils == null) {
+            RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + CoreBeanNames.UserUtilsByTemp + "]");
+            logger.error(exception.getMessage(), exception);
+        } else {
+            logger.debug("### IUserUtils注入成功,BeanName=[" + CoreBeanNames.UserUtilsByTemp + "]");
+        }
+    }
 
     /**
      * 数据所属公司的机构编码
@@ -74,25 +94,6 @@ public abstract class DataEntity implements BaseEntity, Lifecycle {
      */
     protected String uuid;
 
-    /**
-     * 不能直接使用此属性，使用前确保调用了getUserUtils()
-     *
-     * @see #getUserUtils()
-     */
-//    @JsonIgnore
-//    @Transient
-//    private IUserUtils userUtils;
-
-    /**
-     * 获取用户工具
-     */
-//    public IUserUtils getUserUtils() {
-//        if (userUtils == null) {
-//            userUtils = SpringContextHolder.getBean(SysBeanNames.UserUtils);
-//        }
-//        return userUtils;
-//    }
-
     /*
      * 持久化前操作，在实体对象Save/Insert操作之前触发<br/>
      * 1.生成UUID<br/>
@@ -102,14 +103,14 @@ public abstract class DataEntity implements BaseEntity, Lifecycle {
      * */
     @Override
     public boolean onSave(Session session) throws CallbackException {
-        //logger.debug("DataEntity--onSave");
-//        this.companyId = getUserUtils().getCurrentCompanyId();
-//        this.orgId = getUserUtils().getCurrentOrgId();
-//        this.createBy = getUserUtils().getCurrentUserId();
-//        this.createDate = new Date();
-//        this.updateBy = getUserUtils().getCurrentUserId();
-//        this.updateDate = new Date();
-//        this.uuid = IDCreateUtils.uuid();
+        logger.debug("DataEntity--onSave");
+        this.companyCode = userUtils.getCompanyCode();
+        this.orgCode = userUtils.getOrgCode();
+        this.createBy = userUtils.getUserCode();
+        this.createDate = new Date();
+        this.updateBy = userUtils.getUserCode();
+        this.updateDate = new Date();
+        this.uuid = IDCreateUtils.uuid();
         return Lifecycle.NO_VETO;
     }
 
@@ -120,9 +121,9 @@ public abstract class DataEntity implements BaseEntity, Lifecycle {
      * */
     @Override
     public boolean onUpdate(Session session) throws CallbackException {
-        //logger.debug("DataEntity--onUpdate");
-//        this.updateBy = getUserUtils().getCurrentUserId();
-//        this.updateDate = new Date();
+        logger.debug("DataEntity--onUpdate");
+        this.updateBy = userUtils.getUserCode();
+        this.updateDate = new Date();
         return Lifecycle.NO_VETO;
     }
 

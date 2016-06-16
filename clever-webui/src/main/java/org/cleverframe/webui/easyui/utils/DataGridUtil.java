@@ -54,7 +54,7 @@ public class DataGridUtil
 	 * */
 	public static <E extends Serializable> List<Column> getColumns(Map<String, E> dataRow)
 	{
-		List<Column> columnList=new ArrayList<Column>();
+		List<Column> columnList=new ArrayList<>();
 		if (dataRow != null)
 		{
 			Set<String> columns = dataRow.keySet();

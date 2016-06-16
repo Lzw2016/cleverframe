@@ -14,7 +14,6 @@
     <!-- 1.设置扫描Spring Bean组件的规则 -->
     <!-- 2.设置数据库连接信息和连接池、数据库事务等信息 -->
     <!-- 3.设置服务端数据验证组件 -->
-    <!-- 4.EHcache的缓存配置 -->
     <description>Spring Context Base</description>
 
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 1.设置扫描Spring Bean组件的规则 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
@@ -94,12 +93,6 @@
     <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3.设置服务端数据验证组件 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
     <!-- 配置 JSR303 Bean Validator 定义 -->
     <bean id="validator" class="org.springframework.validation.beanvalidation.LocalValidatorFactoryBean" />
-
-    <!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 4.EHcache的缓存配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-    <!-- 本地缓存配置，用于缓存系统数据 -->
-    <bean id="cacheManager" class="org.springframework.cache.ehcache.EhCacheManagerFactoryBean">
-        <property name="configLocation" value="classpath:ehcache/ehcache-local.xml" />
-    </bean>
 
 <!--
     &lt;!&ndash; ==================================== &ndash;&gt;

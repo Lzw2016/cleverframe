@@ -5,6 +5,8 @@
 		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd"
        default-lazy-init="false">
 
+    <description>Spring Context Dozer</description>
+
     <bean id="dozerBeanMapper" class="org.dozer.spring.DozerBeanMapperFactoryBean">
         <!-- 转换配置文件路径设置 -->
         <property name="mappingFiles" value="classpath*:/dozer/*-mapping.xml"/>

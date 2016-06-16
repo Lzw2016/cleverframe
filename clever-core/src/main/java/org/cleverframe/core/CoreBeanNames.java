@@ -25,4 +25,7 @@ public class CoreBeanNames implements IBeanNames {
     // Other
     // -------------------------------------------------------------------------------------------//
     public static final String QLScriptTemplateLoader = "core_QLScriptTemplateLoader";
+
+    public static final String UserUtilsByTemp = "core_UserUtilsByTemp";
+
 }

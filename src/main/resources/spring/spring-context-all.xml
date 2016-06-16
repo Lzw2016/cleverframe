@@ -23,9 +23,13 @@
         1.设置扫描Spring Bean组件的规则
         2.设置数据库连接信息和连接池、数据库事务等信息
         3.设置服务端数据验证组件
-        4.EHcache的缓存配置
     -->
     <import resource="spring-context-base.xml" />
+
+    <!--
+        EHcache的缓存配置
+    -->
+    <import resource="spring-context-ehcache.xml"/>
 
     <!--
         Spring整合Freemarker的配置:
