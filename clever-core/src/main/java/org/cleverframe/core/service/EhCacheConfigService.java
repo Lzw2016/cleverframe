@@ -1,16 +1,18 @@
-package org.cleverframe.core.configuration;
+package org.cleverframe.core.service;
 
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.Element;
 import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.ehcache.EhCacheNames;
 import org.cleverframe.common.ehcache.EhCacheUtils;
+import org.cleverframe.common.persistence.Page;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.dao.ConfigDao;
 import org.cleverframe.core.entity.Config;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashMap;
 import java.util.List;
@@ -37,14 +39,16 @@ public class EhCacheConfigService implements IConfig {
     private Cache configCache = EhCacheUtils.createCache(EhCacheNames.ConfigCache);
 
     /**
-     * 获取配置信息,没有配置可以使用默认值
+     * 根据 配置键 查询配置对象<br/>
+     * <b>
+     * 1.先到缓存中获取,取不到再到数据库中获取<br/>
+     * 2.获取到之后放到缓存中<br/>
+     * </b>
      *
-     * @param key          配置键
-     * @param defaultValue 默认值
-     * @return 配置值，不存在返回defaultValue
+     * @param key 配置键
+     * @return 系统配置对象
      */
-    @Override
-    public String getConfig(String key, String defaultValue) {
+    public Config getByKey(String key) {
         Config config = null;
         Element element = configCache.get(key);
         if (null != element && element.getObjectValue() instanceof Config) {
@@ -55,8 +59,95 @@ public class EhCacheConfigService implements IConfig {
             if (config != null) {
                 element = new Element(config.getConfigKey(), config);
                 configCache.put(element);
-                return config.getConfigValue();
+                return config;
             }
+        }
+        return config;
+    }
+
+    /**
+     * 分页查询配置数据
+     *
+     * @param page    分页对象
+     * @param key     配置键
+     * @param value   配置数据值
+     * @param group   配置组名称
+     * @param swap    是否支持在线配置生效（0：否；1：是）
+     * @param id      ID
+     * @param uuid    UUID
+     * @param delFlag DelFlag
+     * @return 分页对象
+     */
+    public Page<Config> findByPage(Page<Config> page, String key, String value, String group, Character swap, Long id, String uuid, Character delFlag) {
+        page = configDao.findByPage(page, key, value, group, swap, id, uuid, delFlag);
+        for (Config config : page.getList()) {
+            if (Config.DEL_FLAG_NORMAL.equals(config.getDelFlag())) {
+                Element element = new Element(config.getConfigKey(), config);
+                configCache.put(element);
+            }
+        }
+        return page;
+    }
+
+    /**
+     * 保存配置信息到数据库,加到缓存中(不添加软删除的数据)<br/>
+     *
+     * @param config 配置信息对象
+     * @return 成功返回true，失败返回false
+     */
+    @Transactional(readOnly = false)
+    public boolean saveConfig(Config config) {
+        configDao.getHibernateDao().save(config);
+        if (Config.DEL_FLAG_NORMAL.equals(config.getDelFlag())) {
+            Element element = new Element(config.getConfigKey(), config);
+            configCache.put(element);
+        }
+        return true;
+    }
+
+    /**
+     * 更新配置信息到数据库,加到缓存中(不添加软删除的数据)<br/>
+     *
+     * @param config 配置信息对象
+     * @return 成功返回true，失败返回false
+     */
+    @Transactional(readOnly = false)
+    public boolean updateConfig(Config config) {
+        configDao.getHibernateDao().update(config.getId(), config);
+        if (Config.DEL_FLAG_NORMAL.equals(config.getDelFlag())) {
+            Element element = new Element(config.getConfigKey(), config);
+            configCache.put(element);
+        }
+        return true;
+    }
+
+    /**
+     * 直接从数据库删除配置信息,也会从缓存中删除<br/>
+     *
+     * @param key 配置键
+     * @return 成功返回true，失败返回false
+     */
+    @Transactional(readOnly = false)
+    public boolean deleteConfig(String key) {
+        configDao.deleteConfig(key);
+        configCache.remove(key);
+        return true;
+    }
+
+    /* ====================================================================================================================================================== */
+
+    /**
+     * 获取配置信息,没有配置可以使用默认值
+     *
+     * @param key          配置键
+     * @param defaultValue 默认值
+     * @return 配置值，不存在返回defaultValue
+     */
+    @Override
+    public String getConfig(String key, String defaultValue) {
+        Config config = getByKey(key);
+        if (config != null) {
+            return config.getConfigValue();
         }
         return defaultValue;
     }
@@ -126,6 +217,7 @@ public class EhCacheConfigService implements IConfig {
      * @return 更新成功返回true，失败返回false
      * @see #isCanUpdate(String)
      */
+    @Transactional(readOnly = false)
     @Override
     public boolean updateConfig(String key, String value) {
         Config config = configDao.getByKey(key);
@@ -148,10 +240,7 @@ public class EhCacheConfigService implements IConfig {
      */
     @Override
     public boolean isCanUpdate(String key) {
-        Config config = configDao.getByKey(key);
-        if (config != null) {
-            return Config.YES.equals(config.getHotSwap());
-        }
-        return false;
+        Config config = getByKey(key);
+        return config != null && Config.YES.equals(config.getHotSwap());
     }
 }

@@ -13,6 +13,8 @@ import javax.validation.constraints.Pattern;
  * 创建时间：2016-5-30 17:56 <br/>
  */
 public class QLScriptAddVo extends BaseRequestVo {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 脚本类型，可取："SQL"、"HQL"
      */

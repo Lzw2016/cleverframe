@@ -287,7 +287,7 @@ public class HibernateDao<T extends Serializable> {
      * @param entity      需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同的字段值
      * @param <E>         泛型类型
      */
-    public <E> void updateById(Class<T> entityClass, Serializable id, E entity) {
+    public <E> void update(Class<T> entityClass, Serializable id, E entity) {
         Object object = this.getEntity(entityClass, id);
         if (object == null) {
             logger.debug("### updateById更新数据不存在");
@@ -306,8 +306,8 @@ public class HibernateDao<T extends Serializable> {
      * @param entity 需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同的字段值
      * @param <E>    泛型类型
      */
-    public <E> void updateById(Serializable id, E entity) {
-        updateById(entityClass, id, entity);
+    public <E> void update(Serializable id, E entity) {
+        update(entityClass, id, entity);
     }
 
     /**

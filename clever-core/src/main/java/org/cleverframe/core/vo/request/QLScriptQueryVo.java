@@ -10,6 +10,8 @@ import org.cleverframe.common.vo.request.BaseRequestVo;
  * TODO 加校验
  */
 public class QLScriptQueryVo extends BaseRequestVo {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 数据全局标识UUID
      */

@@ -5,6 +5,7 @@ import org.cleverframe.common.persistence.Parameter;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.entity.Config;
 import org.cleverframe.core.persistence.dao.BaseDao;
+import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
@@ -54,10 +55,25 @@ public class ConfigDao extends BaseDao<Config> {
 
     /**
      * 查询所有的配置数据
+     *
      * @return 系统配置对象集合
      */
     public List<Config> getAllConfig() {
         Parameter param = new Parameter(Config.DEL_FLAG_NORMAL);
         return hibernateDao.findBySql("org.cleverframe.core.dao.ConfigDao.getAllConfig", param);
+    }
+
+    /**
+     * 直接从数据库删除配置信息<br/>
+     *
+     * @param key 配置键
+     * @return 成功返回true，失败返回false
+     */
+    public boolean deleteConfig(String key) {
+        Parameter param = new Parameter();
+        param.put("key", key);
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery("org.cleverframe.core.dao.ConfigDao.deleteConfig", param);
+        sqlQuery.executeUpdate();
+        return true;
     }
 }
