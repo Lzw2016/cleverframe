@@ -46,12 +46,12 @@ public class ConfigDao extends BaseDao<Config> {
     /**
      * 根据 配置键 查询配置对象
      *
-     * @param key 配置键
+     * @param configKey 配置键
      * @return 系统配置对象
      */
-    public Config getByKey(String key) {
+    public Config getByKey(String configKey) {
         Parameter param = new Parameter(Config.DEL_FLAG_NORMAL);
-        param.put("key", key);
+        param.put("configKey", configKey);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.ConfigDao.getByKey");
         return hibernateDao.getBySql(sql, param);
     }
@@ -70,12 +70,12 @@ public class ConfigDao extends BaseDao<Config> {
     /**
      * 直接从数据库删除配置信息<br/>
      *
-     * @param key 配置键
+     * @param configKey 配置键
      * @return 成功返回true，失败返回false
      */
-    public boolean deleteConfig(String key) {
+    public boolean deleteConfig(String configKey) {
         Parameter param = new Parameter();
-        param.put("key", key);
+        param.put("configKey", configKey);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.ConfigDao.deleteConfig");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         sqlQuery.executeUpdate();
