@@ -53,7 +53,7 @@ public class ConfigUpdateVo extends BaseRequestVo {
      */
     @NotBlank(message = "是否支持在线配置生效不能为空")
     @Pattern(regexp = "0|1", message = "是否支持在线配置生效只能是：0-否,1-是")
-    private Character hotSwap;
+    private String hotSwap;
 
     /**
      * 描述
@@ -122,11 +122,11 @@ public class ConfigUpdateVo extends BaseRequestVo {
         this.configGroup = configGroup;
     }
 
-    public Character getHotSwap() {
+    public String getHotSwap() {
         return hotSwap;
     }
 
-    public void setHotSwap(Character hotSwap) {
+    public void setHotSwap(String hotSwap) {
         this.hotSwap = hotSwap;
     }
 
