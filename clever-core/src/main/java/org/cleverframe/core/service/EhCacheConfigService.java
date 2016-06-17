@@ -234,6 +234,44 @@ public class EhCacheConfigService extends BaseService implements IConfig {
     }
 
     /**
+     * 新增或者更新配置信息(存在就更新，不存在就新增)<br/>
+     * <b>
+     * 注意：新增时 isCanUpdate = false<br/>
+     * </b>
+     *
+     * @param key   配置键
+     * @param value 配置值
+     * @return 新增返回true, 更新返回false
+     */
+    @Transactional(readOnly = false)
+    @Override
+    public boolean updateOrAddConfig(String key, String value) {
+        boolean result;
+        Config config = getByKey(key);
+        if (config == null) {
+            // 新增
+            config = new Config();
+            config.setConfigKey(key);
+            config.setConfigValue(value);
+            config.setConfigGroup(null);
+            config.setHotSwap(Config.NO);
+            config.setDescription("");
+            config.setSort(0);
+            configDao.getHibernateDao().save(config);
+            result = true;
+        } else {
+            // 更新
+            config.setConfigKey(key);
+            config.setConfigValue(value);
+            configDao.getHibernateDao().update(config);
+            result = false;
+        }
+        Element element = new Element(config.getConfigKey(), config);
+        configCache.put(element);
+        return result;
+    }
+
+    /**
      * 检查配置是否支持更新操作<br/>
      * 此处的更新是指能够在线更新生效，不需要重启服务器<br/>
      *
@@ -244,5 +282,13 @@ public class EhCacheConfigService extends BaseService implements IConfig {
     public boolean isCanUpdate(String key) {
         Config config = getByKey(key);
         return config != null && Config.YES.equals(config.getHotSwap());
+    }
+
+    /**
+     * 清除所有缓存数据
+     */
+    @Override
+    public void clearAllCache() {
+        configCache.removeAll();
     }
 }

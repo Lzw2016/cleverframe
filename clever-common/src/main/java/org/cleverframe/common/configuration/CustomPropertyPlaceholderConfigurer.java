@@ -1,12 +1,17 @@
 package org.cleverframe.common.configuration;
 
+import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.ConfigurableListableBeanFactory;
 import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Properties;
+import java.util.Set;
 
 /**
  * 自定义的属性文件配置处理器,处理*.properties文件里的数据<br/>
@@ -21,6 +26,11 @@ public class CustomPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
      * 日志对象
      */
     private final static Logger logger = LoggerFactory.getLogger(CustomPropertyPlaceholderConfigurer.class);
+
+    /**
+     * 系统属性配置文件的配置<br/>
+     */
+    public final static Map<String, String> PropertiesMap = new HashMap<>();
 
     /**
      * 处理属性数据，如：保存在系统缓存中
@@ -53,6 +63,7 @@ public class CustomPropertyPlaceholderConfigurer extends PropertyPlaceholderConf
      */
     @Override
     protected String convertProperty(String propertyName, String propertyValue) {
+        PropertiesMap.put(propertyName, propertyValue);
         logger.debug("### propertyName={} | propertyValue={}", propertyName, propertyValue);
         return super.convertProperty(propertyName, propertyValue);
     }

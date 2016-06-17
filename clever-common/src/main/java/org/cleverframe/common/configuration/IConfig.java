@@ -60,6 +60,17 @@ public interface IConfig {
     boolean updateConfig(String key, String value);
 
     /**
+     * 新增或者更新配置信息(存在就更新，不存在就新增)<br/>
+     * <b>
+     *     注意：新增时 isCanUpdate = false<br/>
+     * </b>
+     * @param key 配置键
+     * @param value 配置值
+     * @return 新增返回true,更新返回false
+     */
+    boolean updateOrAddConfig(String key, String value);
+
+    /**
      * 检查配置是否支持更新操作<br/>
      * 此处的更新是指能够在线更新生效，不需要重启服务器<br/>
      *
@@ -67,4 +78,9 @@ public interface IConfig {
      * @return 支持返回true，不支持返回false
      */
     boolean isCanUpdate(String key);
+
+    /**
+     * 清除所有缓存数据
+     */
+    void clearAllCache();
 }

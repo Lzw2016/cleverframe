@@ -1,6 +1,8 @@
 package org.cleverframe.common.spring;
 
 import org.cleverframe.common.attributes.CommonApplicationAttributes;
+import org.cleverframe.common.configuration.CustomPropertyPlaceholderConfigurer;
+import org.cleverframe.common.configuration.IConfig;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -10,6 +12,8 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import javax.servlet.ServletContext;
+import java.util.Map;
+import java.util.Set;
 
 /**
  * Spring容器初始化完毕事件，需要在Spring中注入该Bean<br/>
@@ -48,6 +52,40 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
      * MVC框架的请求映射基路径：/CleverFrame/mvc
      */
     private String mvcPath;
+
+    /**
+     * 把配置信息保存到数据库里<br/>
+     *
+     * @return 返回新增的配置数量
+     */
+    public int initPropertiesMap() {
+        int count = 0;
+        IConfig config = SpringContextHolder.getBean(SpringBeanNames.Config);
+        if (config == null) {
+            RuntimeException exception = new RuntimeException("未注入Bean:[" + SpringBeanNames.Config + "]");
+            logger.error(exception.getMessage(), exception);
+            return count;
+        }
+        // 必须清除缓存数据，防止数据库与缓存中的数据不一样
+        config.clearAllCache();
+        StringBuilder strTmp = new StringBuilder();
+        strTmp.append("\r\n");
+        strTmp.append("#=======================================================================================================================#\r\n");
+        strTmp.append("# 新增的配置如下:\r\n");
+        Set<Map.Entry<String, String>> set = CustomPropertyPlaceholderConfigurer.PropertiesMap.entrySet();
+        for (Map.Entry<String, String> entry : set) {
+            boolean flag = config.updateOrAddConfig(entry.getKey(), entry.getValue());
+            if (flag) {
+                strTmp.append("#\t ").append(entry.getKey()).append(" = ").append(entry.getValue()).append("\r\n");
+                count++;
+            }
+        }
+        strTmp.append("#=======================================================================================================================#");
+        if (logger.isDebugEnabled() && count > 0) {
+            logger.debug(strTmp.toString());
+        }
+        return count;
+    }
 
     @Override
     public void onApplicationEvent(ContextRefreshedEvent event) {
@@ -92,6 +130,7 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.DOC_PATH + " = " + docPath + "\r\n" +
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MODULES_PATH + " = " + modulesPath + "\r\n" +
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MVC_PATH + " = " + mvcPath + "\r\n" +
+                    "#\t 新增配置数据 " + initPropertiesMap() + "条\r\n" +
                     "#=======================================================================================================================#\r\n";
             logger.info(tmp);
         }
