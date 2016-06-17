@@ -16,6 +16,8 @@ public class CoreBeanNames implements IBeanNames {
 
     public static final String ConfigDao = "core_ConfigDao";
 
+    public static final String TemplateDao = "core_TemplateDao";
+
 
     // -------------------------------------------------------------------------------------------//
     // Service

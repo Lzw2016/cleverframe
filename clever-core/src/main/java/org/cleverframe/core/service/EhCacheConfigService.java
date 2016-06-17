@@ -6,6 +6,7 @@ import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.ehcache.EhCacheNames;
 import org.cleverframe.common.ehcache.EhCacheUtils;
 import org.cleverframe.common.persistence.Page;
+import org.cleverframe.common.service.BaseService;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.dao.ConfigDao;
 import org.cleverframe.core.entity.Config;
@@ -26,7 +27,7 @@ import java.util.Map;
  * 创建时间：2016-6-16 18:20 <br/>
  */
 @Service(CoreBeanNames.EhCacheConfigService)
-public class EhCacheConfigService implements IConfig {
+public class EhCacheConfigService extends BaseService implements IConfig {
 
     @Autowired
     @Qualifier(CoreBeanNames.ConfigDao)

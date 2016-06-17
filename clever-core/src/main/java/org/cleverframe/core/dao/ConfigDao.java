@@ -5,6 +5,7 @@ import org.cleverframe.common.persistence.Parameter;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.entity.Config;
 import org.cleverframe.core.persistence.dao.BaseDao;
+import org.cleverframe.core.utils.QLScriptUtils;
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
@@ -20,25 +21,26 @@ public class ConfigDao extends BaseDao<Config> {
     /**
      * 分页查询配置数据
      *
-     * @param page    分页对象
-     * @param key     配置键
-     * @param value   配置数据值
-     * @param group   配置组名称
-     * @param swap    是否支持在线配置生效（0：否；1：是）
-     * @param id      ID
-     * @param uuid    UUID
-     * @param delFlag DelFlag
+     * @param page        分页对象
+     * @param configKey   配置键
+     * @param configValue 配置数据值
+     * @param configGroup 配置组名称
+     * @param hotSwap     是否支持在线配置生效（0：否；1：是）
+     * @param id          ID
+     * @param uuid        UUID
+     * @param delFlag     DelFlag
      * @return 分页对象
      */
-    public Page<Config> findByPage(Page<Config> page, String key, String value, String group, Character swap, Long id, String uuid, Character delFlag) {
+    public Page<Config> findByPage(Page<Config> page, String configKey, String configValue, String configGroup, Character hotSwap, Long id, String uuid, Character delFlag) {
         Parameter param = new Parameter(delFlag);
-        param.put("key", key);
-        param.put("value", value);
-        param.put("group", group);
-        param.put("swap", swap);
+        param.put("configKey", configKey);
+        param.put("configValue", configValue);
+        param.put("configGroup", configGroup);
+        param.put("hotSwap", hotSwap);
         param.put("id", id);
         param.put("uuid", uuid);
-        return hibernateDao.findBySql(page, "org.cleverframe.core.dao.ConfigDao.findByPage", param);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.ConfigDao.findByPage");
+        return hibernateDao.findBySql(page, sql, param);
     }
 
     /**
@@ -50,7 +52,8 @@ public class ConfigDao extends BaseDao<Config> {
     public Config getByKey(String key) {
         Parameter param = new Parameter(Config.DEL_FLAG_NORMAL);
         param.put("key", key);
-        return hibernateDao.getBySql("org.cleverframe.core.dao.ConfigDao.getByKey", param);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.ConfigDao.getByKey");
+        return hibernateDao.getBySql(sql, param);
     }
 
     /**
@@ -60,7 +63,8 @@ public class ConfigDao extends BaseDao<Config> {
      */
     public List<Config> getAllConfig() {
         Parameter param = new Parameter(Config.DEL_FLAG_NORMAL);
-        return hibernateDao.findBySql("org.cleverframe.core.dao.ConfigDao.getAllConfig", param);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.ConfigDao.getAllConfig");
+        return hibernateDao.findBySql(sql, param);
     }
 
     /**
@@ -72,7 +76,8 @@ public class ConfigDao extends BaseDao<Config> {
     public boolean deleteConfig(String key) {
         Parameter param = new Parameter();
         param.put("key", key);
-        SQLQuery sqlQuery = hibernateDao.createSqlQuery("org.cleverframe.core.dao.ConfigDao.deleteConfig", param);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.ConfigDao.deleteConfig");
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         sqlQuery.executeUpdate();
         return true;
     }
