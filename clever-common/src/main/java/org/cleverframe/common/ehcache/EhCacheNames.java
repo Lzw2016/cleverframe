@@ -12,6 +12,11 @@ package org.cleverframe.common.ehcache;
 public class EhCacheNames {
 
     /**
+     * 用于缓存已经处理的SQL脚本(CountSql)
+     */
+    public static final String CountSql = "CountSql";
+
+    /**
      * 数据库脚本缓存名称
      */
     public static final String QLScriptCache = "QLScriptCache";
@@ -20,7 +25,6 @@ public class EhCacheNames {
      * 系统配置缓存名称
      */
     public static final String ConfigCache = "ConfigCache";
-
 
     // -------------------------------------------------------------------------------------------//
     // Shiro的缓存配置名称

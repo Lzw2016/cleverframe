@@ -19,6 +19,17 @@
             overflowToDisk="true"
             maxEntriesLocalDisk="100000"/>
 
+    <!-- 用于缓存已经处理的SQL脚本(CountSql) -->
+    <cache
+            name="CountSql"
+            maxElementsInMemory="100"
+            overflowToDisk="true"
+            eternal="true"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="600"/>
+
     <!-- 用于存储数据库脚本(SQL、HQL) -->
     <cache
             name="QLScriptCache"

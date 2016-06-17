@@ -11,6 +11,9 @@ import org.cleverframe.common.IBeanNames;
  */
 @SuppressWarnings("unused")
 public class SpringBeanNames implements IBeanNames {
+
+    public static final String SpringContextHolder = "springContextHolder";
+
     // -------------------------------------------------------------------------------------------//
     // spring-context-base.xml 配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//

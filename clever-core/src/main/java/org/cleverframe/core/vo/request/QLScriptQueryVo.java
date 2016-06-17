@@ -7,7 +7,6 @@ import org.cleverframe.common.vo.request.BaseRequestVo;
  * <p/>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-30 21:46 <br/>
- * TODO 加校验
  */
 public class QLScriptQueryVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;

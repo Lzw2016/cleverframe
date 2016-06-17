@@ -19,8 +19,7 @@ import org.springframework.web.context.WebApplicationContext;
  * 作者：LiZW <br/>
  * 创建时间：2016-5-9 14:25 <br/>
  */
-// TODO springContextHolder 使用字符串常量
-@Component("springContextHolder")
+@Component(SpringBeanNames.SpringContextHolder)
 public class SpringContextHolder implements ApplicationContextAware, DisposableBean {
     /**
      * 日志记录器

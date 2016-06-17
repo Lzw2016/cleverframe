@@ -1,19 +1,23 @@
 package org.cleverframe.common.utils;
 
 import com.alibaba.fastjson.JSON;
+import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
 import net.sf.jsqlparser.expression.Alias;
 import net.sf.jsqlparser.expression.Function;
 import net.sf.jsqlparser.parser.CCJSqlParserUtil;
 import net.sf.jsqlparser.schema.Column;
 import net.sf.jsqlparser.statement.Statement;
 import net.sf.jsqlparser.statement.select.*;
+import org.cleverframe.common.ehcache.EhCacheNames;
+import org.cleverframe.common.ehcache.EhCacheUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.concurrent.ConcurrentHashMap;
 
 /**
  * SQL解析工具，处理SQL语句。使用jsqlparser框架<br/>
@@ -38,9 +42,8 @@ public class SqlParserUtils {
     private static final Alias TABLE_ALIAS;
     /**
      * 缓存已经修改过的sql <br/>
-     * TODO 必须使用Ehcahe缓存，确定CACHE的最大数量
      */
-    private static final Map<String, String> CACHE = new ConcurrentHashMap<>();
+    private static final Cache CountSqlCache = EhCacheUtils.createCache(EhCacheNames.CountSql);
 
     static {
         COUNT_ITEM = new ArrayList<>();
@@ -56,14 +59,22 @@ public class SqlParserUtils {
      * @return 已经生成了的智能Count-sql，是一个序列化了的 Map&lt;String, String&gt;
      */
     public static String getCountSqlCache() {
-        return JSON.toJSONString(CACHE);
+        Map<String, String> map =new HashMap<>();
+        List list = CountSqlCache.getKeys();
+        for (Object key : list) {
+            Object value = CountSqlCache.get(key);
+            if(value != null){
+                map.put(key.toString(), value.toString());
+            }
+        }
+        return JSON.toJSONString(map);
     }
 
     /**
      * 清空已经生成了的智能Count-sql，让其再次重新生成
      */
     public static void clearCountSqlCache() {
-        CACHE.clear();
+        CountSqlCache.removeAll();
     }
 
     private static void isSupportedSql(String sql) {
@@ -81,8 +92,9 @@ public class SqlParserUtils {
     public static String getSmartCountSql(String sql) {
         // 校验是否支持该sql
         isSupportedSql(sql);
-        if (CACHE.get(sql) != null) {
-            return CACHE.get(sql);
+        Element element = CountSqlCache.get(sql);
+        if (element != null) {
+            return element.getObjectValue().toString();
         }
         // 解析SQL
         Statement stmt;
@@ -92,7 +104,8 @@ public class SqlParserUtils {
             logger.warn("获取智能的Count-sql失败，SQL语句：" + sql, e);
             // 无法解析的用一般方法返回count语句
             String countSql = getSimpleCountSql(sql);
-            CACHE.put(sql, countSql);
+            element = new Element(sql, countSql);
+            CountSqlCache.put(element);
             return countSql;
         }
         Select select = (Select) stmt;
@@ -104,7 +117,8 @@ public class SqlParserUtils {
         // 处理为count查询
         sqlToCount(select);
         String result = select.toString();
-        CACHE.put(sql, result);
+        element = new Element(sql, result);
+        CountSqlCache.put(element);
         return result;
     }
 
