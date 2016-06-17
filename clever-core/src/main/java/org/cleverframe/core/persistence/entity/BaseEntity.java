@@ -13,20 +13,20 @@ public interface BaseEntity extends Serializable {
     /**
      * 表示显示的常值
      */
-    char SHOW = '1';
+    Character SHOW = '1';
     /**
      * 表示隐藏的常值
      */
-    char HIDE = '0';
+    Character HIDE = '0';
 
     /**
      * 是
      */
-    char YES = '1';
+    Character YES = '1';
     /**
      * 否
      */
-    char NO = '0';
+    Character NO = '0';
 
     /**
      * 删除标记名称
@@ -35,47 +35,47 @@ public interface BaseEntity extends Serializable {
     /**
      * 删除标记,1：正常
      */
-    char DEL_FLAG_NORMAL = '1';
+    Character DEL_FLAG_NORMAL = '1';
     /**
      * 删除标记,2：删除
      */
-    char DEL_FLAG_DELETE = '2';
+    Character DEL_FLAG_DELETE = '2';
     /**
      * 删除标记,3：审核
      */
-    char DEL_FLAG_AUDIT = '3';
+    Character DEL_FLAG_AUDIT = '3';
 
     /**
      * 自身关联实体类的fullPath属性分隔标识
      */
-    char FULL_PATH_SPLIT = '-';
+    Character FULL_PATH_SPLIT = '-';
 
     /**
      * 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
      */
-    char DATA_SCOPE_ALL = '1';
+    Character DATA_SCOPE_ALL = '1';
     /**
      * 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
      */
-    char DATA_SCOPE_COMPANY_AND_CHILD = '2';
+    Character DATA_SCOPE_COMPANY_AND_CHILD = '2';
     /**
      * 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
      */
-    char DATA_SCOPE_COMPANY = '3';
+    Character DATA_SCOPE_COMPANY = '3';
     /**
      * 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
      */
-    char DATA_SCOPE_ORG_AND_CHILD = '4';
+    Character DATA_SCOPE_ORG_AND_CHILD = '4';
     /**
      * 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
      */
-    char DATA_SCOPE_ORG = '5';
+    Character DATA_SCOPE_ORG = '5';
     /**
      * 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
      */
-    char DATA_SCOPE_SELF = '8';
+    Character DATA_SCOPE_SELF = '8';
     /**
      * 数据范围（1：所有数据；2：所在公司及以下数据；3：所在公司数据；4：所在机构及以下数据；5：所在机构数据；8：仅本人数据；9：按明细设置）
      */
-    char DATA_SCOPE_CUSTOM = '9';
+    Character DATA_SCOPE_CUSTOM = '9';
 }

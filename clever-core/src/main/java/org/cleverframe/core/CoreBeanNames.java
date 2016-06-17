@@ -14,11 +14,15 @@ public class CoreBeanNames implements IBeanNames {
     // -------------------------------------------------------------------------------------------//
     public static final String QLScriptDao = "core_QLScriptDao";
 
+    public static final String ConfigDao = "core_ConfigDao";
+
 
     // -------------------------------------------------------------------------------------------//
     // Service
     // -------------------------------------------------------------------------------------------//
     public static final String EhCacheQLScriptService = "core_EhCacheQLScriptService";
+
+    public static final String EhCacheConfigService = "core_EhCacheConfigService";
 
 
     // -------------------------------------------------------------------------------------------//

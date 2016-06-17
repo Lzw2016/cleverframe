@@ -9,6 +9,14 @@ import java.util.Map;
  * 创建时间：2016-5-11 23:42 <br/>
  */
 public interface IConfig {
+    /**
+     * 获取配置信息,没有配置可以使用默认值
+     *
+     * @param key 配置键
+     * @param defaultValue 默认值
+     * @return 配置值，不存在返回defaultValue
+     */
+    String getConfig(String key, String defaultValue);
 
     /**
      * 获取配置信息

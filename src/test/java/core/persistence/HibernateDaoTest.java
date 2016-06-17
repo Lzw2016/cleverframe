@@ -26,4 +26,13 @@ public class HibernateDaoTest extends DaoTestBase {
         hibernateDao.flush();
         logger.info("###---");
     }
+
+    @Test
+    public void test() {
+        char a = '1';
+        //noinspection UnnecessaryBoxing
+        Character b = new Character('1');
+        //noinspection ConstantConditions
+        logger.debug(('1' == a) + "  " + ('1' == b) + "  " + (a == b));
+    }
 }

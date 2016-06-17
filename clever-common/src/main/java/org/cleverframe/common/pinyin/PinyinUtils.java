@@ -193,7 +193,7 @@ public class PinyinUtils {
      * @return 成功返回首字母，失败返回字符'0'
      */
     public static char toHeadPinYin(char c) {
-        char headChar = '0';
+        Character headChar = '0';
         try {
             String[] pinyin = PinyinHelper.toHanyuPinyinStringArray(c);
             if (pinyin != null && pinyin.length > 0) {

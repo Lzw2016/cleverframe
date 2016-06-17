@@ -1,6 +1,8 @@
 package org.cleverframe.core.persistence.dao;
 
 import org.cleverframe.common.reflection.ReflectionsUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
 
@@ -14,6 +16,12 @@ import java.io.Serializable;
  * @param <T> 实体类类型，特定Dao继承此类时必须指明泛型T的具体类型
  */
 public abstract class BaseDao<T extends Serializable> {
+    /**
+     * 日志对象
+     */
+    @SuppressWarnings("unused")
+    private final static Logger logger = LoggerFactory.getLogger(BaseDao.class);
+
     /**
      * HibernateDao工具类
      */

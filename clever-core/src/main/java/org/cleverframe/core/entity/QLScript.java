@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @DynamicInsert
 @DynamicUpdate
 public class QLScript extends IdEntity {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 脚本类型:SQL
      */

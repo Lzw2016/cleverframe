@@ -16,6 +16,12 @@ public class EhCacheNames {
      */
     public static final String QLScriptCache = "QLScriptCache";
 
+    /**
+     * 系统配置缓存名称
+     */
+    public static final String ConfigCache = "ConfigCache";
+
+
     // -------------------------------------------------------------------------------------------//
     // Shiro的缓存配置名称
     // -------------------------------------------------------------------------------------------//

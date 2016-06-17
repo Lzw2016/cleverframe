@@ -18,6 +18,7 @@ import java.io.Serializable;
  */
 @MappedSuperclass
 public abstract class IdEntity extends DataEntity {
+    private static final long serialVersionUID = 1L;
     /**
      * 编号，Entity主键 ，使用统一的主键生成策略
      */

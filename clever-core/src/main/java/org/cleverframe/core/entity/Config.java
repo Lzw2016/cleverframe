@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @DynamicInsert
 @DynamicUpdate
 public class Config extends IdEntity {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 配置键
      */
