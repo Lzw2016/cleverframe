@@ -30,6 +30,16 @@
             diskPersistent="true"
             diskExpiryThreadIntervalSeconds="600"/>
 
+    <!-- 用于存储系统配置 -->
+    <cache
+            name="ConfigCache"
+            maxElementsInMemory="100"
+            overflowToDisk="true"
+            eternal="true"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="600"/>
 
     <!-- 用于存储shiro活动的会话 -->
     <cache
