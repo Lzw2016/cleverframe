@@ -4,6 +4,7 @@ package org.cleverframe.core.controller;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;
+import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.CoreJspUrlPath;
@@ -46,7 +47,7 @@ public class ConfigController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(ConfigController.class);
 
     @Autowired
-    @Qualifier(CoreBeanNames.EhCacheConfigService)
+    @Qualifier(SpringBeanNames.Config)
     private EhCacheConfigService ehCacheConfigService;
 
     @RequestMapping("/Config" + VIEW_PAGE_SUFFIX)

@@ -36,6 +36,7 @@ public class Page<T> {
     /**
      * 系统配置操作类
      */
+    @SuppressWarnings("SpringJavaAutowiredMembersInspection")
     @Autowired
     @Qualifier(SpringBeanNames.Config)
     private IConfig config;

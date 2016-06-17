@@ -1,6 +1,7 @@
 package org.cleverframe.core;
 
 import org.cleverframe.common.IBeanNames;
+import org.cleverframe.common.spring.SpringBeanNames;
 
 /**
  * 定义当前core模块定义的Spring Bean名称<br/>
@@ -23,9 +24,6 @@ public class CoreBeanNames implements IBeanNames {
     // Service
     // -------------------------------------------------------------------------------------------//
     public static final String EhCacheQLScriptService = "core_EhCacheQLScriptService";
-
-    public static final String EhCacheConfigService = "core_EhCacheConfigService";
-
 
     // -------------------------------------------------------------------------------------------//
     // Other
