@@ -179,7 +179,7 @@ public class EncodeDecodeUtils {
      * URL 编码, Encode默认为UTF-8.
      *
      * @param url url字符串
-     * @return url解码字符串
+     * @return url编码字符串
      */
     public static String urlEncode(String url) {
         try {
@@ -194,7 +194,7 @@ public class EncodeDecodeUtils {
      * URL 解码, Encode默认为UTF-8.
      *
      * @param url url解码字符串
-     * @return url字符串
+     * @return url解码字符串
      */
     public static String urlDecode(String url) {
         try {
