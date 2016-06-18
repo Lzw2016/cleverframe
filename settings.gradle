@@ -1,6 +1,6 @@
 rootProject.name = 'cleverframe'
 include 'clever-common'
-include 'clever-freemarker'
+include 'clever-qlscript'
 include 'clever-generator'
 include 'clever-monitor'
 include 'clever-fastdfs'

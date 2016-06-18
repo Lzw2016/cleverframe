@@ -219,7 +219,7 @@ project(':clever-monitor') {
     }
 }
 
-project(':clever-freemarker') {
+project(':clever-qlscript') {
     dependencies {
         compile project(':clever-common')
     }
