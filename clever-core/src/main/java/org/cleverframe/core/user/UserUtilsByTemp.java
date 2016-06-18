@@ -1,7 +1,7 @@
 package org.cleverframe.core.user;
 
+import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.user.IUserUtils;
-import org.cleverframe.core.CoreBeanNames;
 import org.springframework.stereotype.Service;
 
 /**
@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
  * 作者：LiZW <br/>
  * 创建时间：2016-6-16 10:55 <br/>
  */
-@Service(CoreBeanNames.UserUtilsByTemp)
+@Service(SpringBeanNames.UserUtils)
 public class UserUtilsByTemp implements IUserUtils {
     @Override
     public String getUserCode() {

@@ -1,10 +1,10 @@
 package org.cleverframe.core.persistence.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.common.user.IUserUtils;
 import org.cleverframe.common.utils.IDCreateUtils;
-import org.cleverframe.core.CoreBeanNames;
 import org.hibernate.CallbackException;
 import org.hibernate.Session;
 import org.hibernate.classic.Lifecycle;
@@ -38,12 +38,12 @@ public abstract class DataEntity implements BaseEntity, Lifecycle {
 
     static {
         // TODO IUserUtils 生产环境不能使用使用[UserUtilsByTemp]实现
-        userUtils = SpringContextHolder.getBean(CoreBeanNames.UserUtilsByTemp);
+        userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
         if (userUtils == null) {
-            RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + CoreBeanNames.UserUtilsByTemp + "]");
+            RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
             logger.error(exception.getMessage(), exception);
         } else {
-            logger.debug("### IUserUtils注入成功,BeanName=[" + CoreBeanNames.UserUtilsByTemp + "]");
+            logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
         }
     }
 

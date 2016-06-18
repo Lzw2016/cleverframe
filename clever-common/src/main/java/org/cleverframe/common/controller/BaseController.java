@@ -3,7 +3,9 @@ package org.cleverframe.common.controller;
 import org.apache.commons.lang3.StringEscapeUtils;
 import org.cleverframe.common.attributes.CommonRequestAttributes;
 import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.common.time.DateTimeUtils;
+import org.cleverframe.common.user.IUserUtils;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -28,7 +30,6 @@ import java.util.List;
  * 1.设置请求参数绑定配置，包括防止XSS攻击<br/>
  * 2.提供请求参数验证功能<br/>
  * 3.统一处理Controller层的异常<br/>
- * TODO 3.提供IUserUtils，方便获取当前用户的组织架构信息<br/>
  *
  * @author LiZW
  * @version 2015年5月28日 下午4:38:30
@@ -48,6 +49,22 @@ public abstract class BaseController {
      * 视图页面(JSP)的后缀
      */
     protected final static String VIEW_PAGE_SUFFIX = ".html";
+
+    /**
+     * 不能直接使用此属性，使用前确保调用了getUserUtils()
+     */
+    protected static final IUserUtils userUtils;
+
+    static {
+        // TODO IUserUtils 生产环境不能使用使用[UserUtilsByTemp]实现
+        userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+        if (userUtils == null) {
+            RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
+            logger.error(exception.getMessage(), exception);
+        } else {
+            logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
+        }
+    }
 
     /**
      * 验证Bean实例对象
