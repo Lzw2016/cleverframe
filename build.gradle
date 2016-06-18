@@ -153,19 +153,6 @@ project(':clever-common') {
     }
 }
 
-// 系统使用文档
-project(':clever-doc') {
-    dependencies {
-        compile project(':clever-common')
-    }
-}
-// 实现了UI框架中的Json结构对应的Java对象
-project(':clever-webui') {
-    dependencies {
-        compile project(':clever-common')
-        compile('com.github.abel533:ECharts:2.2.7')
-    }
-}
 // 系统基础功能
 project(':clever-core') {
     dependencies {
@@ -195,6 +182,20 @@ project(':clever-core') {
     }
 }
 
+// 系统使用文档
+project(':clever-doc') {
+    dependencies {
+        compile project(':clever-common')
+    }
+}
+// 实现了UI框架中的Json结构对应的Java对象
+project(':clever-webui') {
+    dependencies {
+        compile project(':clever-common')
+        compile('com.github.abel533:ECharts:2.2.7')
+    }
+}
+
 project(':clever-fastdfs') {
     dependencies {
         compile project(':clever-common')
@@ -214,12 +215,6 @@ project(':clever-generator') {
 }
 
 project(':clever-monitor') {
-    dependencies {
-        compile project(':clever-common')
-    }
-}
-
-project(':clever-qlscript') {
     dependencies {
         compile project(':clever-common')
     }
