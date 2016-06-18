@@ -136,10 +136,6 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
         }
     }
 
-    public static Logger getLogger() {
-        return logger;
-    }
-
     public String getAppPath() {
         return appPath;
     }
