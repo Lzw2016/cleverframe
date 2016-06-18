@@ -37,6 +37,6 @@ public class GlobalJsFileController extends BaseController {
         dataModel.put(CommonApplicationAttributes.DOC_PATH, servletContext.getAttribute(CommonApplicationAttributes.DOC_PATH));
         dataModel.put(CommonApplicationAttributes.MODULES_PATH, servletContext.getAttribute(CommonApplicationAttributes.MODULES_PATH));
         dataModel.put(CommonApplicationAttributes.MVC_PATH, servletContext.getAttribute(CommonApplicationAttributes.MVC_PATH));
-        return FreeMarkerUtils.templateBindData("test.ftl", dataModel);
+        return FreeMarkerUtils.templateBindData("globalPath.ftl", dataModel);
     }
 }
