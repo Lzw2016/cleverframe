@@ -33,7 +33,6 @@ public abstract class IdEntity extends DataEntity {
      * */
     @Override
     public boolean onSave(Session session) throws CallbackException {
-        // TODO IdEntity 持久化前操作
         super.onSave(session);
         // logger.debug("IdEntity--onSave");
         return Lifecycle.NO_VETO;

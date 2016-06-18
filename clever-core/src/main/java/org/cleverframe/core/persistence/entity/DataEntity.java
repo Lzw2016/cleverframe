@@ -37,7 +37,6 @@ public abstract class DataEntity implements BaseEntity, Lifecycle {
     private static final IUserUtils userUtils;
 
     static {
-        // TODO IUserUtils 生产环境不能使用使用[UserUtilsByTemp]实现
         userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
         if (userUtils == null) {
             RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
