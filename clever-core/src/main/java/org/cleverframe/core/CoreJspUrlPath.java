@@ -30,5 +30,10 @@ public class CoreJspUrlPath implements IJspUrlPath {
      */
     public static final String Template = "core/Template";
 
+    /**
+     * 数据字典管理
+     */
+    public static final String Dict = "core/Dict";
+
 
 }

@@ -18,6 +18,8 @@ import javax.persistence.Table;
 @DynamicInsert
 @DynamicUpdate
 public class Dict extends IdEntity {
+    private static final long serialVersionUID = 1L;
+
     /**
      * 字典键
      */

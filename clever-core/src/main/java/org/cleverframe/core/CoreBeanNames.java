@@ -18,12 +18,15 @@ public class CoreBeanNames implements IBeanNames {
 
     public static final String TemplateDao = "core_TemplateDao";
 
+    public static final String DictDao = "core_DictDao";
+
 
     // -------------------------------------------------------------------------------------------//
     // Service
     // -------------------------------------------------------------------------------------------//
     public static final String EhCacheQLScriptService = "core_EhCacheQLScriptService";
     public static final String EhCacheTemplateService = "core_EhCacheTemplateService";
+    public static final String DictService = "core_DictService";
 
     // -------------------------------------------------------------------------------------------//
     // Other

@@ -39,7 +39,6 @@ import java.util.Map;
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
 @RequestMapping(value = "/${mvcPath}/core/config")
-@Transactional(readOnly = true)
 public class ConfigController extends BaseController {
     /**
      * 日志对象

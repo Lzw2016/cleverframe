@@ -35,7 +35,7 @@ public class TemplateDao extends BaseDao<Template> {
      * @param page    分页对象
      * @param name    查询参数：模版名称
      * @param locale  查询参数：模版语言
-     * @param id      查询参数：脚本ID
+     * @param id      查询参数：ID
      * @param uuid    查询参数：UUID
      * @param delFlag 查询参数：删除标记
      * @return 分页数据
@@ -77,6 +77,4 @@ public class TemplateDao extends BaseDao<Template> {
         sqlQuery.executeUpdate();
         return true;
     }
-
-
 }
