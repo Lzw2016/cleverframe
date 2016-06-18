@@ -1,4 +1,4 @@
-package org.cleverframe.core.qlscript;
+package org.cleverframe.core.freemarker;
 
 import freemarker.cache.TemplateLoader;
 import org.apache.commons.lang3.StringUtils;

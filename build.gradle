@@ -219,7 +219,7 @@ project(':clever-monitor') {
     }
 }
 
-project(':clever-qlscript') {
+project(':clever-freemarker') {
     dependencies {
         compile project(':clever-common')
     }
@@ -289,7 +289,7 @@ clever-web                      -- 最后的可以运行的WEB项目
 
 
 
-    clever-qlscript             --
+    clever-freemarker             --
     clever-freemarker           --
     clever-generator            -- 代码生成系统
     clever-monitor              --

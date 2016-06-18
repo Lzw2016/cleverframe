@@ -1,4 +1,4 @@
-package org.cleverframe.core.qlscript;
+package org.cleverframe.core.freemarker;
 
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.core.entity.QLScript;

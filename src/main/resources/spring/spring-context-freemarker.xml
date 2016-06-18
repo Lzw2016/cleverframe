@@ -1,69 +1,75 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
-	   xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	   xsi:schemaLocation="http://www.springframework.org/schema/beans
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
 	    http://www.springframework.org/schema/beans/spring-beans-4.2.xsd"
-	   default-lazy-init="false">
+       default-lazy-init="false">
 
-	<description>Spring Context FreeMarker</description>
+    <description>Spring Context FreeMarker</description>
 
-	<!-- 配置FreeMarker属性-用于系统中需要使用模版的地方 -->
-	<bean id="customFreeMarkerConfigurer" class="org.cleverframe.common.freemarker.CustomFreeMarkerConfigurer">
-		<!--注入自定义的模版加载器-->
+    <!-- 配置FreeMarker属性-用于系统中需要使用模版的地方 -->
+    <bean id="customFreeMarkerConfigurer" class="org.cleverframe.common.freemarker.CustomFreeMarkerConfigurer">
+        <!-- 在读取模板文件之前的模版加载器,优先在这些模版加载器中加载模版 -->
+        <property name="preTemplateLoaders">
+            <list>
+                <!-- 数据库模版加载器 -->
+                <bean class="org.cleverframe.core.freemarker.DataBaseTemplateLoader"/>
+            </list>
+        </property>
 
-		<!-- 模板文件路径,暂时使用,考虑从数据库读取模版 -->
-		<property name="templateLoaderPath" value="classpath:/freemarker/" />
+        <!-- 模板文件路径,暂时使用,考虑从数据库读取模版 -->
+        <property name="templateLoaderPath" value="classpath:/freemarker/"/>
 
-		<!-- 模板文件编码 -->
-		<property name="defaultEncoding" value="utf-8" />
-		<property name="freemarkerVariables">
-			<map>
-				<entry key="xml_escape">
-					<bean class="freemarker.template.utility.XmlEscape" />
-				</entry>
-			</map>
-		</property>
-		<!-- FreeMarker属性设置 -->
-		<property name="freemarkerSettings">
-			<props>
-				<!-- 刷新模板的周期，单位为秒 -->
-				<prop key="template_update_delay">3600</prop>
-				<prop key="locale">zh_CN</prop>
-				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
-				<prop key="date_format">yyyy-MM-dd</prop>
-				<prop key="number_format">#.##</prop>
+        <!-- 模板文件编码 -->
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape">
+                    <bean class="freemarker.template.utility.XmlEscape"/>
+                </entry>
+            </map>
+        </property>
+        <!-- FreeMarker属性设置 -->
+        <property name="freemarkerSettings">
+            <props>
+                <!-- 刷新模板的周期，单位为秒 -->
+                <prop key="template_update_delay">3600</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="number_format">#.##</prop>
                 <!--空值没有默认值不抛异常-->
                 <prop key="classic_compatible">true</prop>
-			</props>
-		</property>
-	</bean>
+            </props>
+        </property>
+    </bean>
 
-	<!-- 配置FreeMarker属性-用于前台界面模版(jsp替代方案) -->
-	<bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
-		<!-- 模板文件路径 -->
-		<property name="templateLoaderPath" value="/WEB-INF/ftl/" />
-		<!-- 模板文件编码 -->
-		<property name="defaultEncoding" value="utf-8" />
-		<property name="freemarkerVariables">
-			<map>
-				<entry key="xml_escape">
-					<bean class="freemarker.template.utility.XmlEscape" />
-				</entry>
-			</map>
-		</property>
-		<!-- FreeMarker属性设置 -->
-		<property name="freemarkerSettings">
-			<props>
-				<!-- 刷新模板的周期，单位为秒 -->
-				<prop key="template_update_delay">3600</prop>
-				<prop key="locale">zh_CN</prop>
-				<prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
-				<prop key="date_format">yyyy-MM-dd</prop>
-				<prop key="number_format">#.##</prop>
+    <!-- 配置FreeMarker属性-用于前台界面模版(jsp替代方案) -->
+    <bean id="freemarkerConfig" class="org.springframework.web.servlet.view.freemarker.FreeMarkerConfigurer">
+        <!-- 模板文件路径 -->
+        <property name="templateLoaderPath" value="/WEB-INF/ftl/"/>
+        <!-- 模板文件编码 -->
+        <property name="defaultEncoding" value="utf-8"/>
+        <property name="freemarkerVariables">
+            <map>
+                <entry key="xml_escape">
+                    <bean class="freemarker.template.utility.XmlEscape"/>
+                </entry>
+            </map>
+        </property>
+        <!-- FreeMarker属性设置 -->
+        <property name="freemarkerSettings">
+            <props>
+                <!-- 刷新模板的周期，单位为秒 -->
+                <prop key="template_update_delay">3600</prop>
+                <prop key="locale">zh_CN</prop>
+                <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
+                <prop key="date_format">yyyy-MM-dd</prop>
+                <prop key="number_format">#.##</prop>
                 <!--空值没有默认值不抛异常-->
                 <prop key="classic_compatible">true</prop>
-			</props>
-		</property>
-	</bean>
+            </props>
+        </property>
+    </bean>
 
 </beans>
