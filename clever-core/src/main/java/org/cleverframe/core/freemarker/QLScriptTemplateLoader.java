@@ -49,7 +49,8 @@ public class QLScriptTemplateLoader implements TemplateLoader {
         name = StringUtils.replace(name, "_" + locale, "");
         QLScript qLScript = qLScriptService.getQLScriptByName(name);
         if (qLScript == null) {
-            throw new IOException("脚本不存在，脚本名称：" + name);
+            RuntimeException exception = new RuntimeException("脚本不存在，脚本名称：" + name);
+            logger.error(exception.getMessage(), exception);
         }
         return qLScript;
     }

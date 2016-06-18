@@ -1,5 +1,10 @@
 package org.cleverframe.common.service;
 
+import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
+import org.cleverframe.common.user.IUserUtils;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
@@ -11,13 +16,22 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional(readOnly = true)
 public abstract class BaseService {
-//    /** 日志对象 */
-//    //private final static Logger logger = LoggerFactory.getLogger(BaseService.class);
-//
-//    /**
-//     * IUserUtils方便获取当前用户的组织架构信息
-//     */
-//    @Autowired
-//    @Qualifier(SysBeanNames.UserUtils)
-//    protected IUserUtils userUtils;
+    /** 日志对象 */
+    private final static Logger logger = LoggerFactory.getLogger(BaseService.class);
+
+    /**
+     * 不能直接使用此属性
+     */
+    protected static final IUserUtils userUtils;
+
+    static {
+        userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+        if (userUtils == null) {
+            RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
+            logger.error(exception.getMessage(), exception);
+        } else {
+            logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
+        }
+    }
+
 }

@@ -23,6 +23,7 @@ public class CoreBeanNames implements IBeanNames {
     // Service
     // -------------------------------------------------------------------------------------------//
     public static final String EhCacheQLScriptService = "core_EhCacheQLScriptService";
+    public static final String EhCacheTemplateService = "core_EhCacheTemplateService";
 
     // -------------------------------------------------------------------------------------------//
     // Other

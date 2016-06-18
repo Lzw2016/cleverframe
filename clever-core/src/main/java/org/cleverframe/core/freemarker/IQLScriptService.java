@@ -21,27 +21,24 @@ public interface IQLScriptService {
      *
      * @param name 数据库脚本名称(使用包名称+类名+方法名)
      * @return 数据库脚本信息(QLScript), 不存在返回null
-     * @throws RuntimeException
      */
-    QLScript getQLScriptByName(String name) throws RuntimeException;
+    QLScript getQLScriptByName(String name);
 
     /**
      * 保存数据库脚本，也会保存到QLScript缓存中(只缓存状态正常的数据)<br/>
      *
      * @param qLScript 数据库脚本对象
      * @return 成功返回true，失败返回false
-     * @throws RuntimeException
      */
-    boolean saveQLScript(QLScript qLScript) throws RuntimeException;
+    boolean saveQLScript(QLScript qLScript);
 
     /**
      * 更新数据库脚本，也会刷新QLScript缓存数据(只缓存状态正常的数据，如果被软删除就移除缓存数据)<br/>
      *
      * @param qLScript 数据库脚本信息(QLScript)
      * @return 成功返回true，失败返回false
-     * @throws RuntimeException
      */
-    boolean updateQLScript(QLScript qLScript) throws RuntimeException;
+    boolean updateQLScript(QLScript qLScript);
 
     /**
      * 直接删除数据库脚本，也会从QLScript缓存中删除<br/>
@@ -49,9 +46,8 @@ public interface IQLScriptService {
      *
      * @param name 脚本名称(使用包名称+类名+方法名)
      * @return 成功返回true，失败返回false
-     * @throws RuntimeException
      */
-    boolean deleteQLScript(String name) throws RuntimeException;
+    boolean deleteQLScript(String name);
 
     /**
      * 获取数据库脚本(只获取没有被软删除的数据)，直接到数据库里获取，并覆盖到QLScript缓存<br/>
@@ -60,9 +56,8 @@ public interface IQLScriptService {
      *
      * @param name 脚本名称(使用包名称+类名+方法名)
      * @return 返回新的QLScript，否则返回null
-     * @throws RuntimeException
      */
-    QLScript refreshQLScript(String name) throws RuntimeException;
+    QLScript refreshQLScript(String name);
 
     /**
      * 从数据库查询所有的QL脚本，并存到QLScript缓存中(只缓存状态正常的数据，如果被软删除就移除缓存数据)<br/>
@@ -70,9 +65,8 @@ public interface IQLScriptService {
      * 2.在从数据库查询所有的QLScript(不包含软删除的数据)，添加到缓存中<br/>
      *
      * @return 所有数据库脚本(不包含软删除的数据)
-     * @throws RuntimeException
      */
-    List<QLScript> findAllQLScript() throws RuntimeException;
+    List<QLScript> findAllQLScript();
 
     /**
      * 获取数据库脚本，使用分页，同时把查询到的数据放入QLScript缓存(只缓存状态正常的数据，如果被软删除就移除缓存数据)<br/>
@@ -84,7 +78,6 @@ public interface IQLScriptService {
      * @param uuid       查询参数：UUID
      * @param delFlag    查询参数：删除标记
      * @return 分页数据
-     * @throws RuntimeException
      */
-    Page<QLScript> findAllQLScript(Page<QLScript> page, String name, String scriptType, Long id, String uuid, Character delFlag) throws RuntimeException;
+    Page<QLScript> findAllQLScript(Page<QLScript> page, String name, String scriptType, Long id, String uuid, Character delFlag);
 }

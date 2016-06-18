@@ -61,7 +61,6 @@ public class EhCacheConfigService extends BaseService implements IConfig {
             if (config != null) {
                 element = new Element(config.getConfigKey(), config);
                 configCache.put(element);
-                return config;
             }
         }
         return config;
@@ -86,6 +85,8 @@ public class EhCacheConfigService extends BaseService implements IConfig {
             if (Config.DEL_FLAG_NORMAL.equals(config.getDelFlag())) {
                 Element element = new Element(config.getConfigKey(), config);
                 configCache.put(element);
+            } else {
+                configCache.remove(config.getConfigKey());
             }
         }
         return page;
@@ -119,6 +120,8 @@ public class EhCacheConfigService extends BaseService implements IConfig {
         if (Config.DEL_FLAG_NORMAL.equals(config.getDelFlag())) {
             Element element = new Element(config.getConfigKey(), config);
             configCache.put(element);
+        } else {
+            configCache.remove(config.getConfigKey());
         }
         return true;
     }
@@ -175,9 +178,13 @@ public class EhCacheConfigService extends BaseService implements IConfig {
         Map<String, String> configMap = new HashMap<>();
         List<Config> configList = configDao.getAllConfig();
         for (Config config : configList) {
-            Element element = new Element(config.getConfigKey(), config);
-            configCache.put(element);
-            configMap.put(config.getConfigKey(), config.getConfigValue());
+            if (Config.DEL_FLAG_NORMAL.equals(config.getDelFlag())) {
+                Element element = new Element(config.getConfigKey(), config);
+                configCache.put(element);
+                configMap.put(config.getConfigKey(), config.getConfigValue());
+            } else {
+                configCache.remove(config.getConfigKey());
+            }
         }
         return configMap;
     }
@@ -192,8 +199,12 @@ public class EhCacheConfigService extends BaseService implements IConfig {
     public boolean reLoad(String key) {
         Config config = configDao.getByKey(key);
         if (config != null) {
-            Element element = new Element(key, config);
-            configCache.put(element);
+            if (Config.DEL_FLAG_NORMAL.equals(config.getDelFlag())) {
+                Element element = new Element(config.getConfigKey(), config);
+                configCache.put(element);
+            } else {
+                configCache.remove(config.getConfigKey());
+            }
             return true;
         }
         return false;

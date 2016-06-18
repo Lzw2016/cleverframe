@@ -44,10 +44,9 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
      *
      * @param name 数据库脚本名称(使用包名称+类名+方法名)
      * @return 数据库脚本信息(QLScript), 不存在返回null
-     * @throws RuntimeException
      */
     @Override
-    public QLScript getQLScriptByName(String name) throws RuntimeException {
+    public QLScript getQLScriptByName(String name) {
         QLScript qLScript = null;
         Element element = qLScriptCahe.get(name);
         if (null != element && element.getObjectValue() instanceof QLScript) {
@@ -68,11 +67,10 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
      *
      * @param qLScript 数据库脚本对象
      * @return 成功返回true，失败返回false
-     * @throws RuntimeException
      */
     @Transactional(readOnly = false)
     @Override
-    public boolean saveQLScript(QLScript qLScript) throws RuntimeException {
+    public boolean saveQLScript(QLScript qLScript) {
         if (qLScript != null) {
             qLScriptDao.getHibernateDao().save(qLScript);
             // 只缓存状态正常的数据
@@ -90,11 +88,10 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
      *
      * @param qLScript 数据库脚本信息(QLScript)
      * @return 成功返回true，失败返回false
-     * @throws RuntimeException
      */
     @Transactional(readOnly = false)
     @Override
-    public boolean updateQLScript(QLScript qLScript) throws RuntimeException {
+    public boolean updateQLScript(QLScript qLScript) {
         if (qLScript != null) {
             qLScriptDao.getHibernateDao().update(qLScript, false, true);
             qLScriptDao.getHibernateDao().getSession().flush();
@@ -116,11 +113,10 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
      *
      * @param name 脚本名称(使用包名称+类名+方法名)
      * @return 成功返回true，失败返回false
-     * @throws RuntimeException
      */
     @Transactional(readOnly = false)
     @Override
-    public boolean deleteQLScript(String name) throws RuntimeException {
+    public boolean deleteQLScript(String name) {
         qLScriptCahe.remove(name);
         return qLScriptDao.deleteQLScript(name);
     }
@@ -132,15 +128,16 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
      *
      * @param name 脚本名称(使用包名称+类名+方法名)
      * @return 返回新的QLScript，否则返回null
-     * @throws RuntimeException
      */
     @Override
-    public QLScript refreshQLScript(String name) throws RuntimeException {
+    public QLScript refreshQLScript(String name) {
         qLScriptCahe.remove(name);
         QLScript qLScript = qLScriptDao.getQLScriptByname(name);
-        if (qLScript != null) {
+        if (qLScript != null && QLScript.DEL_FLAG_NORMAL.equals(qLScript.getDelFlag())) {
             Element element = new Element(qLScript.getName(), qLScript);
             qLScriptCahe.put(element);
+        } else {
+            qLScriptCahe.remove(name);
         }
         return qLScript;
     }
@@ -151,10 +148,9 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
      * 2.在从数据库查询所有的QLScript(不包含软删除的数据)，添加到缓存中<br/>
      *
      * @return 所有数据库脚本(不包含软删除的数据)
-     * @throws RuntimeException
      */
     @Override
-    public List<QLScript> findAllQLScript() throws RuntimeException {
+    public List<QLScript> findAllQLScript() {
         // 先清空缓存
         qLScriptCahe.removeAll();
         // 在从数据库查询所有的QLScript(不包含软删除的数据)，添加到缓存中
@@ -178,10 +174,9 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
      * @param uuid       查询参数：UUID
      * @param delFlag    查询参数：删除标记
      * @return 分页数据
-     * @throws RuntimeException
      */
     @Override
-    public Page<QLScript> findAllQLScript(Page<QLScript> page, String name, String scriptType, Long id, String uuid, Character delFlag) throws RuntimeException {
+    public Page<QLScript> findAllQLScript(Page<QLScript> page, String name, String scriptType, Long id, String uuid, Character delFlag) {
         page = qLScriptDao.findQLScriptByPage(page, name, scriptType, id, uuid, delFlag);
         for (QLScript script : page.getList()) {
             qLScriptCahe.remove(script.getName());
