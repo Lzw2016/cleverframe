@@ -15,7 +15,7 @@ public class TemplateAddVo extends BaseRequestVo {
      * 备注
      */
     @Length(max = 255, message = "备注信息长度不能超过255个字符")
-    protected String remarks;
+    private String remarks;
 
     /**
      * 模版名称，不能重复

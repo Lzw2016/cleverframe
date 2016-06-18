@@ -137,9 +137,9 @@ public class EhCacheTemplateService extends BaseService implements ITemplateServ
      * @return 所有数据库脚本(不包含软删除的数据)
      */
     @Override
-    public List<Template> findAllTemplate() {
+    public List<Template> findAll() {
         templateCache.removeAll();
-        List<Template> templateList = templateDao.findAllTemplate();
+        List<Template> templateList = templateDao.findAll();
         for (Template template : templateList) {
             if (Template.DEL_FLAG_NORMAL.equals(template.getDelFlag())) {
                 Element element = new Element(template.getName(), template);
@@ -161,8 +161,8 @@ public class EhCacheTemplateService extends BaseService implements ITemplateServ
      * @return 分页数据
      */
     @Override
-    public Page<Template> findAllTemplate(Page<Template> page, String name, String locale, Long id, String uuid, Character delFlag) {
-        page = templateDao.findAll(page, name, locale, id, uuid, delFlag);
+    public Page<Template> findByPage(Page<Template> page, String name, String locale, Long id, String uuid, Character delFlag) {
+        page = templateDao.findByPage(page, name, locale, id, uuid, delFlag);
         for (Template template : page.getList()) {
             if (Template.DEL_FLAG_NORMAL.equals(template.getDelFlag())) {
                 Element element = new Element(template.getName(), template);

@@ -24,4 +24,11 @@ public class CoreJspUrlPath implements IJspUrlPath {
      * 系统配置管理页
      */
     public static final String Config = "core/Config";
+
+    /**
+     * 系统FreeMarker模版管理
+     */
+    public static final String Template = "core/Template";
+
+
 }

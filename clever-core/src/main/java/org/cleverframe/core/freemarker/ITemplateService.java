@@ -62,7 +62,7 @@ public interface ITemplateService {
      *
      * @return 所有数据库脚本(不包含软删除的数据)
      */
-    List<Template> findAllTemplate();
+    List<Template> findAll();
 
     /**
      * 获取数据库脚本，使用分页，同时把查询到的数据放入缓存(只缓存状态正常的数据，如果被软删除就移除缓存数据)<br/>
@@ -75,5 +75,5 @@ public interface ITemplateService {
      * @param delFlag 查询参数：删除标记
      * @return 分页数据
      */
-    Page<Template> findAllTemplate(Page<Template> page, String name, String locale, Long id, String uuid, Character delFlag);
+    Page<Template> findByPage(Page<Template> page, String name, String locale, Long id, String uuid, Character delFlag);
 }

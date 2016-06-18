@@ -51,7 +51,7 @@ public class ConfigController extends BaseController {
     private EhCacheConfigService ehCacheConfigService;
 
     @RequestMapping("/Config" + VIEW_PAGE_SUFFIX)
-    public ModelAndView getDictJsp(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView getConfigJsp(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView(CoreJspUrlPath.Config);
     }
 

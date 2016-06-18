@@ -23,9 +23,9 @@ public class TemplateDao extends BaseDao<Template> {
      *
      * @return 模版集合
      */
-    public List<Template> findAllTemplate() {
+    public List<Template> findAll() {
         Parameter param = new Parameter(Template.DEL_FLAG_NORMAL);
-        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.TemplateDao.findAllTemplate");
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.TemplateDao.findAll");
         return hibernateDao.findBySql(sql, param);
     }
 
@@ -40,13 +40,13 @@ public class TemplateDao extends BaseDao<Template> {
      * @param delFlag 查询参数：删除标记
      * @return 分页数据
      */
-    public Page<Template> findAll(Page<Template> page, String name, String locale, Long id, String uuid, Character delFlag) {
+    public Page<Template> findByPage(Page<Template> page, String name, String locale, Long id, String uuid, Character delFlag) {
         Parameter param = new Parameter(delFlag);
         param.put("name", name);
         param.put("locale", locale);
         param.put("id", id);
         param.put("uuid", uuid);
-        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.TemplateDao.findAll");
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.TemplateDao.findByPage");
         return hibernateDao.findBySql(page, sql, param);
     }
 
