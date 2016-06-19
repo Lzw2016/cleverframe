@@ -39,7 +39,7 @@ public class MDictController extends BaseController {
     private MDictService mDictService;
 
     @RequestMapping("/MDict" + VIEW_PAGE_SUFFIX)
-    public ModelAndView getDictJsp(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView getMDictJsp(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView(CoreJspUrlPath.MDict);
     }
 
