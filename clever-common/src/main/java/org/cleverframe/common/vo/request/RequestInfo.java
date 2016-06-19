@@ -156,7 +156,7 @@ public class RequestInfo implements Serializable {
                 ", remoteAddr='" + remoteAddr + '\'' +
                 ", userAgent='" + userAgent + '\'' +
                 ", hasException='" + hasException + '\'' +
-                ", exceptionInfo='" + exceptionInfo + '\'' +
+                ", exceptionInfo='" + (exceptionInfo == null ? "0" : exceptionInfo.length()) + '\'' +
                 '}';
     }
 }

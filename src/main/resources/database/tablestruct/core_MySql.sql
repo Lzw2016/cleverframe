@@ -211,7 +211,7 @@ CREATE TABLE core_access_log
     remote_addr     varchar(30)                                         COMMENT '客户端的IP地址',
     user_agent      varchar(100)                                        COMMENT '用户代理',
     has_exception   char(1)         NOT NULL    DEFAULT '1'             COMMENT '是否有异常（0：否；1：是）',
-    exception_info  varchar(2000)                                       COMMENT '异常信息',
+    exception_info  varchar(15000)                                      COMMENT '异常信息',
     PRIMARY KEY (id)
 ) COMMENT = '日志表';
 /*------------------------------------------------------------------------------------------------------------------------
