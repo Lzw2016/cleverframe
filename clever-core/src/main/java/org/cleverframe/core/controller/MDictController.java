@@ -9,6 +9,7 @@ import org.cleverframe.core.CoreJspUrlPath;
 import org.cleverframe.core.entity.MDict;
 import org.cleverframe.core.service.MDictService;
 import org.cleverframe.core.vo.request.MDictAddVo;
+import org.cleverframe.core.vo.request.MDictDelVo;
 import org.cleverframe.core.vo.request.MDictQueryVo;
 import org.cleverframe.core.vo.request.MDictUpdateVo;
 import org.cleverframe.webui.easyui.data.DataGridJson;
@@ -89,12 +90,12 @@ public class MDictController extends BaseController {
     }
 
     /**
-     * 更新配置信息对象<br>
+     * 更新<br>
      */
     // @RequiresRoles("root")
-    @RequestMapping("/updateDict")
+    @RequestMapping("/updateMDict")
     @ResponseBody
-    public AjaxMessage<String> updateDict(
+    public AjaxMessage<String> updateMDict(
             HttpServletRequest request,
             HttpServletResponse response,
             @Valid MDictUpdateVo mDictUpdateVo,
@@ -103,7 +104,26 @@ public class MDictController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
             mDictService.updateMDict(mDict, message);
-            message.setResult("更新数据字典成功");
+            message.setResult("更新多级数据字典成功");
+        }
+        return message;
+    }
+
+    /**
+     * 删除<br>
+     */
+    // @RequiresRoles("root")
+    @RequestMapping("/deleteDict")
+    @ResponseBody
+    public AjaxMessage<String> deleteDict(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid MDictDelVo mDictDelVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>();
+        if (beanValidator(bindingResult, message)) {
+            mDictService.deleteMDict(mDictDelVo.getFullPath());
+            message.setResult("多级数据字典删除成功");
         }
         return message;
     }

@@ -1,5 +1,6 @@
 package org.cleverframe.core.dao;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.persistence.Parameter;
 import org.cleverframe.core.CoreBeanNames;
@@ -9,6 +10,7 @@ import org.cleverframe.core.utils.QLScriptUtils;
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -62,14 +64,32 @@ public class MDictDao extends BaseDao<MDict> {
     }
 
     /**
+     * 查询所有子节点
+     *
+     * @param fullPath 节点路径
+     * @return 数据字典集合
+     */
+    public List<MDict> findChildByFullPath(String fullPath) {
+        if (StringUtils.isBlank(fullPath)) {
+            return new ArrayList<>();
+        } else {
+            fullPath = fullPath + MDict.FULL_PATH_SPLIT + "%";
+        }
+        Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
+        param.put("fullPath", fullPath);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.findChildByFullPath");
+        return hibernateDao.findBySql(sql, param);
+    }
+
+    /**
      * 根据字典类型删除所有数据字典，直接从数据库删除
      *
-     * @param dictType 查询参数：字典分类
+     * @param mdictType 查询参数：字典分类
      * @return 成功返回true，失败返回false
      */
-    public boolean deleteByType(String dictType) {
-        Parameter param = new Parameter();
-        param.put("dictType", dictType);
+    public boolean deleteByType(String mdictType) {
+        Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
+        param.put("mdictType", mdictType);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.deleteByType");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         sqlQuery.executeUpdate();
@@ -82,12 +102,73 @@ public class MDictDao extends BaseDao<MDict> {
      * @param fullPath 节点路径
      * @return 成功返回true，失败返回false
      */
-    public boolean deleteChild(String fullPath) {
-        Parameter param = new Parameter();
+    public boolean deleteAllChild(String fullPath) {
+        Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
         param.put("fullPath", fullPath);
-        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.deleteChild");
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.deleteAllChild");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         sqlQuery.executeUpdate();
         return true;
+    }
+
+    /**
+     * 更新一个节点的所有子节点的mdictType
+     *
+     * @param parentFullPath 节点的全路径
+     * @param mdictType      节点类型
+     * @return 更新的数据数量
+     */
+    public int updateChildMDictType(String parentFullPath, String mdictType) {
+        if (StringUtils.isBlank(parentFullPath)) {
+            return 0;
+        } else {
+            parentFullPath = parentFullPath + MDict.FULL_PATH_SPLIT + "%";
+        }
+        Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
+        param.put("fullPath", parentFullPath);
+        param.put("mdictType", mdictType);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.updateChildMDictType");
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
+        return sqlQuery.executeUpdate();
+    }
+
+    /**
+     * 更新一个节点的所有节点的fullPath(重新计算所有子节点的fullPath)
+     *
+     * @param parentFullPath    更新前的parentFullPath
+     * @param newParentFullPath 新的parentFullPath值
+     * @return 更新的数据数量
+     */
+    public int updateChildFullPath(String parentFullPath, String newParentFullPath) {
+        List<MDict> mDictList = findChildByFullPath(parentFullPath);
+        for (MDict mDict : mDictList) {
+            String fullPath = mDict.getFullPath();
+            fullPath = fullPath.replace(parentFullPath, newParentFullPath);
+            mDict.setFullPath(fullPath);
+            hibernateDao.update(mDict);
+        }
+        return mDictList.size();
+    }
+
+    /**
+     * 根据全路径删除多级字典(直接从数据库删除)<br/>
+     * <b>
+     * 同时删除所有子节点<br/>
+     * </b>
+     *
+     * @param fullPath 全路径
+     * @return 删除的数据数量
+     */
+    public int deleteMDict(String fullPath) {
+        if (StringUtils.isBlank(fullPath)) {
+            return 0;
+        } else {
+            fullPath = fullPath + MDict.FULL_PATH_SPLIT + "%";
+        }
+        Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
+        param.put("fullPath", fullPath);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.deleteMDict");
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
+        return sqlQuery.executeUpdate();
     }
 }

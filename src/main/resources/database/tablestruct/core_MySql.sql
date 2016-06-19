@@ -122,7 +122,7 @@ CREATE TABLE core_mdict
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     parent_id       bigint          NOT NULL                            COMMENT '父级编号,根节点的父级编号是：-1',
-    full_path       varchar(255)    NOT NULL                            COMMENT '树结构的全路径用“-”隔开,包含自己的ID',
+    full_path       varchar(255)    NOT NULL    UNIQUE                  COMMENT '树结构的全路径用“-”隔开,包含自己的ID',
     mdict_key       varchar(100)    NOT NULL                            COMMENT '字典名称',
     mdict_value     varchar(255)    NOT NULL                            COMMENT '字典数据值',
     mdict_type      varchar(100)    NOT NULL                            COMMENT '字典类型',
