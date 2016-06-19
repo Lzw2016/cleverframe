@@ -8,6 +8,7 @@ import org.cleverframe.core.entity.AccessLog;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -66,6 +67,7 @@ public class AccessLogService extends BaseService {
      * @param accessLog 访问日志数据
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean addAccessLog(AccessLog accessLog) {
         accessLogDao.getHibernateDao().save(accessLog);
         return true;

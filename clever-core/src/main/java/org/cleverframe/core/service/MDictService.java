@@ -9,6 +9,7 @@ import org.cleverframe.core.entity.MDict;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 作者：LiZW <br/>
@@ -47,6 +48,7 @@ public class MDictService extends BaseService {
      * @param ajaxMessage 请求响应对象
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean saveMDict(MDict mDict, AjaxMessage ajaxMessage) {
         MDict parent = null;
         if (mDict.getParentId() != -1L) {
@@ -107,6 +109,7 @@ public class MDictService extends BaseService {
      * @param ajaxMessage 请求响应对象
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean updateMDict(MDict mDict, AjaxMessage ajaxMessage) {
         MDict oldMDict = mDictDao.getHibernateDao().get(mDict.getId());
         if (oldMDict == null) {
@@ -173,6 +176,7 @@ public class MDictService extends BaseService {
      * @param fullPath 全路径
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean deleteMDict(String fullPath) {
         mDictDao.deleteMDict(fullPath);
         return true;

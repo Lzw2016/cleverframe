@@ -8,6 +8,7 @@ import org.cleverframe.core.entity.Dict;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 作者：LiZW <br/>
@@ -41,6 +42,7 @@ public class DictService extends BaseService {
      * @param dict 数据字典对象
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean saveDict(Dict dict) {
         dictDao.getHibernateDao().save(dict);
         return true;
@@ -52,6 +54,7 @@ public class DictService extends BaseService {
      * @param dict 数据字典对象
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean updateDict(Dict dict) {
         dictDao.getHibernateDao().update(dict, false, true);
         return true;
@@ -63,6 +66,7 @@ public class DictService extends BaseService {
      * @param id 数据字典ID
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean deleteDict(Long id) {
         Dict dict = new Dict();
         dict.setId(id);
