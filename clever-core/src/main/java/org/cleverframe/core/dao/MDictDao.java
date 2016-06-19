@@ -11,6 +11,7 @@ import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -48,6 +49,7 @@ public class MDictDao extends BaseDao<MDict> {
      */
     public List<MDict> findAllRoot() {
         Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
+        param.put("parentId", -1L);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.findAllRoot");
         return hibernateDao.findBySql(sql, param);
     }
@@ -127,6 +129,8 @@ public class MDictDao extends BaseDao<MDict> {
         Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
         param.put("fullPath", parentFullPath);
         param.put("mdictType", mdictType);
+        param.put("updateBy", userUtils.getUserCode());
+        param.put("updateDate", new Date());
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.updateChildMDictType");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         return sqlQuery.executeUpdate();
@@ -163,7 +167,7 @@ public class MDictDao extends BaseDao<MDict> {
         if (StringUtils.isBlank(fullPath)) {
             return 0;
         } else {
-            fullPath = fullPath + MDict.FULL_PATH_SPLIT + "%";
+            fullPath = fullPath + "%";
         }
         Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
         param.put("fullPath", fullPath);
