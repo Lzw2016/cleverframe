@@ -113,9 +113,9 @@ public class MDictController extends BaseController {
      * 删除<br>
      */
     // @RequiresRoles("root")
-    @RequestMapping("/deleteDict")
+    @RequestMapping("/deleteMDict")
     @ResponseBody
-    public AjaxMessage<String> deleteDict(
+    public AjaxMessage<String> deleteMDict(
             HttpServletRequest request,
             HttpServletResponse response,
             @Valid MDictDelVo mDictDelVo,

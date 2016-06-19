@@ -41,6 +41,7 @@ public class QLScriptUtils {
     static {
         try {
             CONFIGURATION = new Configuration(Configuration.VERSION_2_3_23);
+            CONFIGURATION.setTemplateUpdateDelayMilliseconds(1000 * 10);
             CONFIGURATION.setLocale(Locale.SIMPLIFIED_CHINESE);
             // FreeMarker 模版数据null值处理，不抛异常
             // CONFIGURATION.setClassicCompatible(true);

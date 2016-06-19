@@ -33,7 +33,7 @@
         <property name="freemarkerSettings">
             <props>
                 <!-- 刷新模板的周期，单位为秒 -->
-                <prop key="template_update_delay">3600</prop>
+                <prop key="template_update_delay">10</prop>
                 <prop key="locale">zh_CN</prop>
                 <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
                 <prop key="date_format">yyyy-MM-dd</prop>
@@ -61,7 +61,7 @@
         <property name="freemarkerSettings">
             <props>
                 <!-- 刷新模板的周期，单位为秒 -->
-                <prop key="template_update_delay">3600</prop>
+                <prop key="template_update_delay">10</prop>
                 <prop key="locale">zh_CN</prop>
                 <prop key="datetime_format">yyyy-MM-dd HH:mm:ss</prop>
                 <prop key="date_format">yyyy-MM-dd</prop>
