@@ -32,7 +32,7 @@ public abstract class DataEntity implements BaseEntity, Lifecycle {
     private final static Logger logger = LoggerFactory.getLogger(BaseEntity.class);
 
     /**
-     * 不能直接使用此属性，使用前确保调用了getUserUtils()
+     * 用户信息获取接口
      */
     private static final IUserUtils userUtils;
 

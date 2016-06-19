@@ -35,5 +35,10 @@ public class CoreJspUrlPath implements IJspUrlPath {
      */
     public static final String Dict = "core/Dict";
 
+    /**
+     * 多级数据字典管理
+     */
+    public static final String MDict = "core/MDict";
+
 
 }

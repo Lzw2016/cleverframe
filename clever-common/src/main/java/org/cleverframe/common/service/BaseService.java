@@ -20,7 +20,7 @@ public abstract class BaseService {
     private final static Logger logger = LoggerFactory.getLogger(BaseService.class);
 
     /**
-     * 不能直接使用此属性
+     * 用户信息获取接口
      */
     protected static final IUserUtils userUtils;
 

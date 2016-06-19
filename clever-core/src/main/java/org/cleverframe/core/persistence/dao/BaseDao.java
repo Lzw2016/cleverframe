@@ -1,6 +1,9 @@
 package org.cleverframe.core.persistence.dao;
 
 import org.cleverframe.common.reflection.ReflectionsUtils;
+import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
+import org.cleverframe.common.user.IUserUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -23,16 +26,24 @@ public abstract class BaseDao<T extends Serializable> {
     private final static Logger logger = LoggerFactory.getLogger(BaseDao.class);
 
     /**
+     * 用户信息获取接口
+     */
+    protected static final IUserUtils userUtils;
+
+    static {
+        userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+        if (userUtils == null) {
+            RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
+            logger.error(exception.getMessage(), exception);
+        } else {
+            logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
+        }
+    }
+
+    /**
      * HibernateDao工具类
      */
     protected HibernateDao<T> hibernateDao;
-
-//    /**
-//     * IUserUtils方便获取当前用户的组织架构信息
-//     */
-//    @Autowired
-//    @Qualifier(SysBeanNames.UserUtils)
-//    protected IUserUtils userUtils;
 
     /**
      * 默认构造，初始化HibernateDao工具类

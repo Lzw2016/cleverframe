@@ -51,7 +51,7 @@ public abstract class BaseController {
     protected final static String VIEW_PAGE_SUFFIX = ".html";
 
     /**
-     * 不能直接使用此属性
+     * 用户信息获取接口
      */
     protected static final IUserUtils userUtils;
 

@@ -100,16 +100,16 @@ public class HibernateDao<T extends Serializable> {
      */
     private void setParameter(Query query, Parameter parameter) {
         if (parameter != null) {
-            Set<String> keySet = parameter.keySet();
-            for (String string : keySet) {
-                Object value = parameter.get(string);
+            Set<Map.Entry<String, Object>> paramSet = parameter.entrySet();
+            for (Map.Entry<String, Object> entry : paramSet) {
+                Object value = entry.getValue();
                 // 这里考虑传入的参数是什么类型，不同类型使用的方法不同
                 if (value instanceof Collection<?>) {
-                    query.setParameterList(string, (Collection<?>) value);
+                    query.setParameterList(entry.getKey(), (Collection<?>) value);
                 } else if (value instanceof Object[]) {
-                    query.setParameterList(string, (Object[]) value);
+                    query.setParameterList(entry.getKey(), (Object[]) value);
                 } else {
-                    query.setParameter(string, value);
+                    query.setParameter(entry.getKey(), value);
                 }
             }
         }

@@ -9,9 +9,9 @@ import javax.validation.constraints.Pattern;
 
 /**
  * 作者：LiZW <br/>
- * 创建时间：2016-6-18 22:19 <br/>
+ * 创建时间：2016-6-19 12:04 <br/>
  */
-public class DictUpdateVo extends BaseRequestVo {
+public class MDictUpdateVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,25 +34,31 @@ public class DictUpdateVo extends BaseRequestVo {
     private String remarks;
 
     /**
+     * 父级编号,根节点的父级编号是：-1
+     */
+    @NotNull(message = "父节点不能为空")
+    private Long parentId;
+
+    /**
      * 字典键
      */
     @NotBlank(message = "字典键不能为空")
     @Length(max = 100, message = "字典键长度不能超过100个字符")
-    private String dictKey;
+    private String mdictKey;
 
     /**
-     * 字典数据值
+     * 字典值
      */
-    @NotBlank(message = "字典数据值不能为空")
-    @Length(max = 255, message = "字典数据值长度不能超过255个字符")
-    private String dictValue;
+    @NotBlank(message = "字典值不能为空")
+    @Length(max = 255, message = "字典值长度不能超过255个字符")
+    private String mdictValue;
 
     /**
      * 字典分类
      */
     @NotBlank(message = "字典分类不能为空")
     @Length(max = 100, message = "字典分类长度不能超过100个字符")
-    private String dictType;
+    private String mdictType;
 
     /**
      * 字典描述
@@ -60,6 +66,12 @@ public class DictUpdateVo extends BaseRequestVo {
     @NotBlank(message = "字典描述不能为空")
     @Length(max = 500, message = "字典描述长度不能超过500个字符")
     private String description;
+
+    /**
+     * 排序(升序)
+     */
+    @NotNull(message = "字典排序不能为空")
+    private Long sort;
 
     /*--------------------------------------------------------------
     *          getter、setter
@@ -89,28 +101,36 @@ public class DictUpdateVo extends BaseRequestVo {
         this.remarks = remarks;
     }
 
-    public String getDictKey() {
-        return dictKey;
+    public Long getParentId() {
+        return parentId;
     }
 
-    public void setDictKey(String dictKey) {
-        this.dictKey = dictKey;
+    public void setParentId(Long parentId) {
+        this.parentId = parentId;
     }
 
-    public String getDictValue() {
-        return dictValue;
+    public String getMdictKey() {
+        return mdictKey;
     }
 
-    public void setDictValue(String dictValue) {
-        this.dictValue = dictValue;
+    public void setMdictKey(String mdictKey) {
+        this.mdictKey = mdictKey;
     }
 
-    public String getDictType() {
-        return dictType;
+    public String getMdictValue() {
+        return mdictValue;
     }
 
-    public void setDictType(String dictType) {
-        this.dictType = dictType;
+    public void setMdictValue(String mdictValue) {
+        this.mdictValue = mdictValue;
+    }
+
+    public String getMdictType() {
+        return mdictType;
+    }
+
+    public void setMdictType(String mdictType) {
+        this.mdictType = mdictType;
     }
 
     public String getDescription() {
@@ -119,5 +139,13 @@ public class DictUpdateVo extends BaseRequestVo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public Long getSort() {
+        return sort;
+    }
+
+    public void setSort(Long sort) {
+        this.sort = sort;
     }
 }
