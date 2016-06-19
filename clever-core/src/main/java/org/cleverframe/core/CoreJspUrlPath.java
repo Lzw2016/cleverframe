@@ -40,5 +40,10 @@ public class CoreJspUrlPath implements IJspUrlPath {
      */
     public static final String MDict = "core/MDict";
 
+    /**
+     * 系统访问日志管理
+     */
+    public static final String AccessLog = "core/AccessLog";
+
 
 }

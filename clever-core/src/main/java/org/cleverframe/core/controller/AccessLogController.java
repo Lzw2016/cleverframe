@@ -3,6 +3,7 @@ package org.cleverframe.core.controller;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.core.CoreBeanNames;
+import org.cleverframe.core.CoreJspUrlPath;
 import org.cleverframe.core.entity.AccessLog;
 import org.cleverframe.core.service.AccessLogService;
 import org.cleverframe.core.vo.request.AccessLogQueryVo;
@@ -13,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,15 +33,21 @@ public class AccessLogController extends BaseController {
     @Qualifier(CoreBeanNames.AccessLogService)
     private AccessLogService accessLogService;
 
+    @RequestMapping("/AccessLog" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getAccessLogJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(CoreJspUrlPath.AccessLog);
+    }
+
+
     /**
      * 查询配置信息，使用分页
      *
      * @return EasyUI DataGrid控件的json数据
      */
     // @RequiresRoles("root")
-    @RequestMapping("/findConfigByPage")
+    @RequestMapping("/findAccessLogByPage")
     @ResponseBody
-    public DataGridJson<AccessLog> findConfigByPage(
+    public DataGridJson<AccessLog> findAccessLogByPage(
             HttpServletRequest request,
             HttpServletResponse response,
             @Valid AccessLogQueryVo accessLogQueryVo,
