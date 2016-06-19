@@ -1,7 +1,13 @@
 package org.cleverframe.core.interceptor;
 
 import org.cleverframe.common.interceptor.IRequestStatistics;
+import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.vo.request.RequestInfo;
+import org.cleverframe.core.CoreBeanNames;
+import org.cleverframe.core.entity.AccessLog;
+import org.cleverframe.core.service.AccessLogService;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -15,6 +21,11 @@ import javax.servlet.http.HttpServletResponse;
  */
 // TODO RequestStatisticsImpl 未实现
 public class RequestStatisticsImpl implements IRequestStatistics {
+
+    @Autowired
+    @Qualifier(CoreBeanNames.AccessLogService)
+    private AccessLogService accessLogService;
+
     /**
      * 服务器本次启动后处理的请求总数 加1
      *
@@ -95,6 +106,8 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean saveRequestInfo(HttpServletRequest request, HttpServletResponse response, RequestInfo requestInfo) {
-        return false;
+        AccessLog accessLog = BeanMapper.mapper(requestInfo, AccessLog.class);
+        accessLogService.addAccessLog(accessLog);
+        return true;
     }
 }

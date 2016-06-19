@@ -17,7 +17,7 @@ public class CoreBeanNames implements IBeanNames {
     public static final String TemplateDao = "core_TemplateDao";
     public static final String DictDao = "core_DictDao";
     public static final String MDictDao = "core_MDictDao";
-
+    public static final String AccessLogDao = "core_AccessLogDao";
 
     // -------------------------------------------------------------------------------------------//
     // Service
@@ -26,6 +26,7 @@ public class CoreBeanNames implements IBeanNames {
     public static final String EhCacheTemplateService = "core_EhCacheTemplateService";
     public static final String DictService = "core_DictService";
     public static final String MDictService = "core_MDictService";
+    public static final String AccessLogService = "core_AccessLogService";
 
     // -------------------------------------------------------------------------------------------//
     // Other

@@ -1,6 +1,12 @@
 package org.cleverframe.common.interceptor;
 
 import org.cleverframe.common.attributes.CommonRequestAttributes;
+import org.cleverframe.common.exception.ExceptionUtils;
+import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
+import org.cleverframe.common.user.IUserUtils;
+import org.cleverframe.common.utils.HttpServletRequestUtils;
+import org.cleverframe.common.utils.UserAgentUtils;
 import org.cleverframe.common.vo.request.RequestInfo;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,6 +15,7 @@ import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * 请求统计拦截器，此拦截器是"/**"路径拦截器，需要在Spring中注入该Bean<br/>
@@ -24,6 +31,21 @@ public class StatisticsInterceptor implements HandlerInterceptor {
      * 日志对象
      */
     private final static Logger logger = LoggerFactory.getLogger(StatisticsInterceptor.class);
+
+    /**
+     * 用户信息获取接口
+     */
+    private static final IUserUtils userUtils;
+
+    static {
+        userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+        if (userUtils == null) {
+            RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
+            logger.error(exception.getMessage(), exception);
+        } else {
+            logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
+        }
+    }
 
     /**
      * 服务器请求统计服务类，需要在Spring中注入实现类
@@ -99,7 +121,7 @@ public class StatisticsInterceptor implements HandlerInterceptor {
 
         // 从request Attribute中获取异常信息
         Object object = request.getAttribute(CommonRequestAttributes.SERVER_EXCEPTION);
-        if(object instanceof Throwable) {
+        if (object instanceof Throwable) {
             Throwable throwable = (Throwable) object;
             logger.error("### 服务器发生异常", throwable);
         }
@@ -109,6 +131,20 @@ public class StatisticsInterceptor implements HandlerInterceptor {
         } else {
             // 存储请求信息
             RequestInfo requestInfo = new RequestInfo();
+            requestInfo.setLoginName(userUtils.getUserCode());
+            requestInfo.setRequestTime(new Date());
+            requestInfo.setRequestUri(HttpServletRequestUtils.getRequestUri(request));
+            requestInfo.setMethod(request.getMethod());
+            requestInfo.setParams(HttpServletRequestUtils.getRequestParams(request));
+            requestInfo.setProcessTime(10L);// TODO 使用request作用域计算
+            requestInfo.setRemoteAddr(request.getRemoteAddr() + ":" + request.getRemotePort());
+            requestInfo.setUserAgent(UserAgentUtils.getUserAgent(request).toString());
+            if (object instanceof Throwable) {
+                requestInfo.setHasException('1');
+                requestInfo.setExceptionInfo(ExceptionUtils.getStackTraceAsString((Throwable) object));
+            } else {
+                requestInfo.setHasException('0');
+            }
             boolean saveRequestInfoFlag = requestStatistics.saveRequestInfo(request, response, requestInfo);
             if (logger.isDebugEnabled()) {
                 String tmp = "\r\n" +
