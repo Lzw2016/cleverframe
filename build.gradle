@@ -13,6 +13,7 @@ jettyRun {
 dependencies {
     compile project(':clever-common')
     compile project(':clever-core')
+    compile project(':clever-generator')
 
     testCompile('junit:junit:4.12')
     testCompile('org.springframework:spring-test:4.2.6.RELEASE')
@@ -182,6 +183,20 @@ project(':clever-core') {
     }
 }
 
+// 代码生成模块
+project(':clever-generator') {
+    dependencies {
+        compile project(':clever-common')
+        compile project(':clever-core')
+
+        // ##################获取数据库元信息的库
+        compile('us.fatehi:schemacrawler:14.08.06')
+        compile('us.fatehi:schemacrawler-mysql:14.08.06') {
+            exclude group: 'mysql', module: 'mysql-connector-java'
+        }
+    }
+}
+
 // 系统使用文档
 project(':clever-doc') {
     dependencies {
@@ -203,19 +218,6 @@ project(':clever-fastdfs') {
 }
 
 project(':clever-fileupload') {
-    dependencies {
-        compile project(':clever-common')
-        compile project(':clever-core')
-
-        // ##################获取数据库元信息的库
-        compile('us.fatehi:schemacrawler:14.08.06')
-        compile('us.fatehi:schemacrawler-mysql:14.08.06') {
-            exclude group: 'mysql', module: 'mysql-connector-java'
-        }
-    }
-}
-
-project(':clever-generator') {
     dependencies {
         compile project(':clever-common')
     }

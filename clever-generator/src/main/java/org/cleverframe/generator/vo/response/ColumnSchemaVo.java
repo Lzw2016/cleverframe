@@ -6,7 +6,7 @@ import org.cleverframe.common.vo.response.BaseResponseVo;
  * 作者：LiZW <br/>
  * 创建时间：2016-6-20 14:37 <br/>
  */
-public class ColumnSchema extends BaseResponseVo {
+public class ColumnSchemaVo extends BaseResponseVo {
     private static final long serialVersionUID = 1L;
 
     /**

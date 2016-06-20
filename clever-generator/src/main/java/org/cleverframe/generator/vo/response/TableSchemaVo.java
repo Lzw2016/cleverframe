@@ -8,7 +8,7 @@ import java.util.Date;
  * 作者：LiZW <br/>
  * 创建时间：2016-6-20 14:26 <br/>
  */
-public class TableSchema extends BaseResponseVo {
+public class TableSchemaVo extends BaseResponseVo {
     private static final long serialVersionUID = 1L;
 
     /**
