@@ -53,7 +53,15 @@
         <!-- 配置监控统计拦截的filters -->
         <property name="filters" value="stat" />
 
-
+        <!-- 数据库连接属性 -->
+        <property name="connectProperties">
+            <props>
+                <!-- Oracle如果想要获取元数据的remarks(注释)信息,需要加此参数 -->
+                <prop key="remarksReporting">true</prop>
+                <!-- MySQL获取table元数据remarks(注释)信息,需要加此参数 -->
+                <prop key="useInformationSchema">true</prop>
+            </props>
+        </property>
     </bean>
 
     <!-- 定义Hibernate Session工厂 -->

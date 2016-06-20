@@ -114,6 +114,8 @@ public abstract class BaseController {
     protected boolean beanValidator(BindingResult bindingResult, AjaxMessage<?> message) {
         if (bindingResult.hasErrors()) {
             message.setSuccess(false);
+            message.setSuccessMessage(null);
+            message.setFailMessage("请求参数校验失败！");
             List<FieldError> validError = bindingResult.getFieldErrors();
             for (FieldError fieldError : validError) {
                 String entityName = fieldError.getObjectName();

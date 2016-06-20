@@ -3,6 +3,7 @@ package org.cleverframe.generator.vo.response;
 import org.cleverframe.common.vo.response.BaseResponseVo;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * 作者：LiZW <br/>
@@ -10,6 +11,11 @@ import java.util.Date;
  */
 public class TableSchemaVo extends BaseResponseVo {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 数据库名称
+     */
+    private String schemaName;
 
     /**
      * 表名称
@@ -61,9 +67,30 @@ public class TableSchemaVo extends BaseResponseVo {
      */
     private Date createTime;
 
+    /**
+     * 数据库列
+     */
+    private List<ColumnSchemaVo> columnList;
+
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
+
+    public String getSchemaName() {
+        return schemaName;
+    }
+
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
+    }
+
+    public List<ColumnSchemaVo> getColumnList() {
+        return columnList;
+    }
+
+    public void setColumnList(List<ColumnSchemaVo> columnList) {
+        this.columnList = columnList;
+    }
 
     public String getTableName() {
         return tableName;

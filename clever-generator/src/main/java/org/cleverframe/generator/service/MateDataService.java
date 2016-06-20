@@ -1,10 +1,13 @@
 package org.cleverframe.generator.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.generator.GeneratorBeanNames;
+import org.cleverframe.generator.vo.response.ColumnSchemaVo;
 import org.cleverframe.generator.vo.response.DataBaseSummaryVo;
+import org.cleverframe.generator.vo.response.TableSchemaVo;
 import org.hibernate.Session;
 import org.hibernate.jdbc.Work;
 import org.slf4j.Logger;
@@ -13,14 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.orm.hibernate4.HibernateTemplate;
 import org.springframework.stereotype.Service;
-import schemacrawler.schema.Catalog;
-import schemacrawler.schema.Schema;
-import schemacrawler.schema.Table;
-import schemacrawler.schema.View;
-import schemacrawler.schemacrawler.ExcludeAll;
-import schemacrawler.schemacrawler.SchemaCrawlerException;
-import schemacrawler.schemacrawler.SchemaCrawlerOptions;
-import schemacrawler.schemacrawler.SchemaInfoLevelBuilder;
+import schemacrawler.schema.*;
+import schemacrawler.schemacrawler.*;
 import schemacrawler.utility.SchemaCrawlerUtility;
 
 import java.sql.Connection;
@@ -116,5 +113,84 @@ public class MateDataService extends BaseService {
             }
         });
         return resultList;
+    }
+
+    /**
+     * 获取数据库表结构，包含字段(列)的详细信息<br/>
+     *
+     * @param schemaName  数据库名
+     * @param tableName   数据库表名称
+     * @param ajaxMessage 请求响应对象
+     * @return 数据库表结构信息, 未找到返回null
+     */
+    public TableSchemaVo getTableSchema(final String schemaName, final String tableName, final AjaxMessage ajaxMessage) {
+        final TableSchemaVo tableSchemaVo = new TableSchemaVo();
+        if (StringUtils.isBlank(schemaName) || StringUtils.isBlank(tableName)) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("数据库名称和表名称不能为空");
+        }
+        final String fullTableName = schemaName + "." + tableName;
+        Session session = getSession();
+        session.doWork(new Work() {
+            @Override
+            public void execute(Connection connection) throws SQLException {
+                final SchemaCrawlerOptions options = new SchemaCrawlerOptions();
+                options.setSchemaInfoLevel(SchemaInfoLevelBuilder.maximum());
+                options.setRoutineInclusionRule(new ExcludeAll());
+                options.setSchemaInclusionRule(new RegularExpressionInclusionRule(schemaName));
+                options.setTableInclusionRule(new RegularExpressionInclusionRule(fullTableName));
+                Catalog catalog;
+                try {
+                    catalog = SchemaCrawlerUtility.getCatalog(connection, options);
+                } catch (SchemaCrawlerException e) {
+                    ajaxMessage.setSuccess(false);
+                    ajaxMessage.setFailMessage("获取数据库基本信息(概要)出错");
+                    logger.error("### getTableSchema 获取数据库表结构出错", e);
+                    return;
+                }
+                if (catalog.getTables().size() < 1) {
+                    ajaxMessage.setSuccess(false);
+                    ajaxMessage.setFailMessage("表不存在，表名称=[" + fullTableName + "]");
+                    return;
+                }
+                if (catalog.getTables().size() > 1) {
+                    ajaxMessage.setSuccess(false);
+                    ajaxMessage.setFailMessage("存在多个表，表名称=[" + fullTableName + "] 个数=[" + catalog.getTables().size() + "]");
+                    return;
+                }
+
+                for (final Table table : catalog.getTables()) {
+                    List<ColumnSchemaVo> columnList = new ArrayList<>();
+                    tableSchemaVo.setColumnList(columnList);
+                    tableSchemaVo.setSchemaName(table.getSchema().getFullName());
+                    tableSchemaVo.setTableName(table.getName());
+                    tableSchemaVo.setDescription(table.getRemarks());
+                    for (final Column column : table.getColumns()) {
+                        ColumnSchemaVo columnSchemaVo = new ColumnSchemaVo();
+                        columnSchemaVo.setSchemaName(table.getSchema().getFullName());
+                        columnSchemaVo.setTableName(table.getName());
+                        columnSchemaVo.setColumnName(column.getName());
+                        columnSchemaVo.setOrdinalPosition(column.getOrdinalPosition());
+                        columnSchemaVo.setDataType(column.getColumnDataType().getFullName());
+                        columnSchemaVo.setSize(column.getSize());
+                        columnSchemaVo.setWidth(column.getWidth());
+                        columnSchemaVo.setDecimalDigits(column.getDecimalDigits());
+                        columnSchemaVo.setNotNull(column.isNullable());
+                        columnSchemaVo.setAutoIncrement(column.isAutoIncremented());
+                        columnSchemaVo.setGenerated(column.isGenerated());
+                        columnSchemaVo.setHidden(column.isHidden());
+                        columnSchemaVo.setPartOfForeignKey(column.isPartOfForeignKey());
+                        columnSchemaVo.setPartOfIndex(column.isPartOfIndex());
+                        columnSchemaVo.setPartOfPrimaryKey(column.isPartOfPrimaryKey());
+                        columnSchemaVo.setPartOfUniqueIndex(column.isPartOfUniqueIndex());
+                        columnSchemaVo.setDefaultValue(column.getDefaultValue());
+                        columnSchemaVo.setComment(column.getRemarks());
+                        columnSchemaVo.setAttributes(column.getAttributes());
+                        columnList.add(columnSchemaVo);
+                    }
+                }
+            }
+        });
+        return tableSchemaVo;
     }
 }

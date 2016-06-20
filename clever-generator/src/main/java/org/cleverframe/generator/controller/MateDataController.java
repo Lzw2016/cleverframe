@@ -4,15 +4,19 @@ import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.generator.GeneratorBeanNames;
 import org.cleverframe.generator.service.MateDataService;
+import org.cleverframe.generator.vo.request.TableSchemaQueryVo;
 import org.cleverframe.generator.vo.response.DataBaseSummaryVo;
+import org.cleverframe.generator.vo.response.TableSchemaVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.validation.Valid;
 import java.util.List;
 
 /**
@@ -43,5 +47,24 @@ public class MateDataController extends BaseController {
         List<DataBaseSummaryVo> resultList = mateDataService.findAllDataBaseSummary(ajaxMessage);
         ajaxMessage.setResult(resultList);
         return ajaxMessage;
+    }
+
+    /**
+     *
+     */
+    // @RequiresRoles("root")
+    @RequestMapping("/getTableSchema")
+    @ResponseBody
+    public AjaxMessage<TableSchemaVo> getTableSchema(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid TableSchemaQueryVo tableSchemaQueryVo,
+            BindingResult bindingResult) {
+        AjaxMessage<TableSchemaVo> message = new AjaxMessage<>(true, "数据库表结构查询成功", null);
+        if (beanValidator(bindingResult, message)) {
+            TableSchemaVo tableSchemaVo = mateDataService.getTableSchema(tableSchemaQueryVo.getSchemaName(), tableSchemaQueryVo.getTableName(), message);
+            message.setResult(tableSchemaVo);
+        }
+        return message;
     }
 }

@@ -3,6 +3,8 @@ package org.cleverframe.generator.vo.response;
 import org.cleverframe.common.vo.response.BaseResponseVo;
 
 /**
+ * 数据库详细信息，概要信息使用类{@link DataBaseSummaryVo}<br/>
+ * <p/>
  * 作者：LiZW <br/>
  * 创建时间：2016-6-20 15:13 <br/>
  */
