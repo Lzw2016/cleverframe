@@ -194,6 +194,12 @@ project(':clever-generator') {
         compile('us.fatehi:schemacrawler-mysql:14.08.06') {
             exclude group: 'mysql', module: 'mysql-connector-java'
         }
+
+        // ##################代码格式依赖库
+        compile('org.jsoup:jsoup:1.9.2')
+        compile('jalopy:jalopy:1.5rc3')
+        compile('org.eclipse.jdt:core:3.3.0-v_771')
+        compile('dom4j:dom4j:1.6.1')
     }
 }
 
