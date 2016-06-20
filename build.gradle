@@ -205,6 +205,13 @@ project(':clever-fastdfs') {
 project(':clever-fileupload') {
     dependencies {
         compile project(':clever-common')
+        compile project(':clever-core')
+
+        // ##################获取数据库元信息的库
+        compile('us.fatehi:schemacrawler:14.08.06')
+        compile('us.fatehi:schemacrawler-mysql:14.08.06') {
+            exclude group: 'mysql', module: 'mysql-connector-java'
+        }
     }
 }
 
