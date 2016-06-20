@@ -52,6 +52,8 @@
 -->
         <!-- 配置监控统计拦截的filters -->
         <property name="filters" value="stat" />
+
+
     </bean>
 
     <!-- 定义Hibernate Session工厂 -->

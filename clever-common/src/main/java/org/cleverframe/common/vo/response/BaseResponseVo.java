@@ -9,5 +9,5 @@ import java.io.Serializable;
  * 创建时间：2016-5-30 18:00 <br/>
  */
 public class BaseResponseVo implements Serializable {
-
+    private static final long serialVersionUID = 1L;
 }
