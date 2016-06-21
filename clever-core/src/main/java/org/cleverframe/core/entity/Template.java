@@ -4,6 +4,7 @@ import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.Table;
 
@@ -28,6 +29,7 @@ public class Template extends IdEntity {
     /**
      * 模版内容
      */
+    @Column(columnDefinition = "BLOB")
     private String content;
 
     /**

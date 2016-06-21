@@ -37,7 +37,7 @@ CREATE TABLE core_qlscript
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     script_type     varchar(10)     NOT NULL    DEFAULT 'SQL'           COMMENT '脚本类型，可取："SQL"、"HQL"',
-    script          varchar(2000)   NOT NULL                            COMMENT '脚本，可以使用模版技术拼接',
+    script          varchar(18000)  NOT NULL                            COMMENT '脚本，可以使用模版技术拼接',
     name            varchar(100)    NOT NULL    UNIQUE                  COMMENT '脚本名称，使用包名称+类名+方法名',
     description     varchar(1000)   NOT NULL                            COMMENT '脚本功能说明',
     PRIMARY KEY (id)
@@ -186,7 +186,7 @@ CREATE TABLE core_template
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     name            varchar(255)    NOT NULL    UNIQUE                  COMMENT '模版名称，不能重复',
-    content         varchar(2000)   NOT NULL                            COMMENT '模版内容',
+    content         blob            NOT NULL                            COMMENT '模版内容',
     locale          varchar(50)     NOT NULL                            COMMENT '模版语言',
     description     varchar(1000)   NOT NULL                            COMMENT '模版说明',
     PRIMARY KEY (id)

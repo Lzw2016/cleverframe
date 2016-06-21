@@ -26,7 +26,7 @@ public class QLScriptAddVo extends BaseRequestVo {
      * 查询脚本，可以使用模版技术拼接
      */
     @NotBlank(message = "脚本内容不能为空")
-    @Length(max = 2000, message = "脚本内容长度不能操作2000个字符")
+    @Length(max = 18000, message = "脚本内容长度不能操作18000个字符")
     private String script;
 
     /**
