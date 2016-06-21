@@ -1,7 +1,7 @@
 package org.cleverframe.generator.vo.request;
 
 import org.cleverframe.common.vo.request.BaseRequestVo;
-import org.hibernate.validator.constraints.NotEmpty;
+import org.hibernate.validator.constraints.NotBlank;
 
 /**
  * 作者：LiZW <br/>
@@ -13,13 +13,13 @@ public class TableSchemaQueryVo extends BaseRequestVo {
     /**
      * 数据库名称
      */
-    @NotEmpty(message = "数据库名称不能为空")
+    @NotBlank(message = "数据库名称不能为空")
     private String schemaName;
 
     /**
      * 表名称
      */
-    @NotEmpty(message = "表名称不能为空")
+    @NotBlank(message = "表名称不能为空")
     private String tableName;
 
     /*--------------------------------------------------------------

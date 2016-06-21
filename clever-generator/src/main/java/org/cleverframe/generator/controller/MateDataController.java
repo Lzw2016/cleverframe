@@ -50,7 +50,7 @@ public class MateDataController extends BaseController {
     }
 
     /**
-     *
+     * 获取数据库表结构，包含字段(列)的详细信息<br/>
      */
     // @RequiresRoles("root")
     @RequestMapping("/getTableSchema")

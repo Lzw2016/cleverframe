@@ -81,9 +81,9 @@ public class JavaFormatUtils {
             if (jalopy.getState() == Jalopy.State.OK || jalopy.getState() == Jalopy.State.PARSED) {
                 result = stringBuffer.toString();// 格式化成功
             } else if (jalopy.getState() == Jalopy.State.WARN) {
-                result = javaCode;// 格式化成功，但是有警告
+                result = stringBuffer.toString();// 格式化成功，但是有警告
             } else if (jalopy.getState() == Jalopy.State.ERROR) {
-                result = javaCode; // 格式化失败
+                // 格式化失败
                 logger.warn("### javaFormatByJalopy格式化失败");
             }
         } catch (Throwable e) {
