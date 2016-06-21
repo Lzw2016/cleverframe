@@ -27,6 +27,7 @@ public class CodeFormatService extends BaseService {
             result = html;
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("格式化失败");
+            ajaxMessage.setSuccessMessage(null);
         }
         return result;
     }
@@ -45,6 +46,7 @@ public class CodeFormatService extends BaseService {
             result = javaCode;
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("格式化失败");
+            ajaxMessage.setSuccessMessage(null);
         }
         return result;
     }
@@ -63,6 +65,7 @@ public class CodeFormatService extends BaseService {
             result = json;
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("格式化失败");
+            ajaxMessage.setSuccessMessage(null);
         }
         return result;
     }
@@ -81,6 +84,7 @@ public class CodeFormatService extends BaseService {
             result = sql;
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("格式化失败");
+            ajaxMessage.setSuccessMessage(null);
         }
         return result;
     }
@@ -99,6 +103,7 @@ public class CodeFormatService extends BaseService {
             result = xml;
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("格式化失败");
+            ajaxMessage.setSuccessMessage(null);
         }
         return result;
     }

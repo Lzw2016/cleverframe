@@ -194,8 +194,20 @@ public class AjaxMessage<T> implements Serializable {
         return success;
     }
 
+    /**
+     * 设置请求是否成功<br/>
+     * <b>
+     * 设置true,置空failMessage<br/>
+     * 设置false,置空successMessage<br/>
+     * </b>
+     */
     public void setSuccess(boolean success) {
         this.success = success;
+        if (success) {
+            this.failMessage = null;
+        } else {
+            this.successMessage = null;
+        }
     }
 
     public T getResult() {
@@ -242,16 +254,24 @@ public class AjaxMessage<T> implements Serializable {
         return successMessage;
     }
 
+    /**
+     * 设置请求成功返回的消息，置空failMessage
+     */
     public void setSuccessMessage(String successMessage) {
         this.successMessage = successMessage;
+        this.failMessage = null;
     }
 
     public String getFailMessage() {
         return failMessage;
     }
 
+    /**
+     * 设置请求失败返回的消息，置空successMessage
+     */
     public void setFailMessage(String failMessage) {
         this.failMessage = failMessage;
+        this.successMessage = null;
     }
 
     public String getExceptionMessage() {
