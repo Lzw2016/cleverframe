@@ -206,12 +206,12 @@ CREATE TABLE core_access_log
     request_time    datetime        NOT NULL                            COMMENT '请求时间',
     request_uri     varchar(255)    NOT NULL                            COMMENT '请求URI',
     method          varchar(20)     NOT NULL                            COMMENT '操作方式',
-    params          varchar(2000)                                       COMMENT '操作提交的数据',
+    params          MediumBlob                                          COMMENT '操作提交的数据',
     process_time    bigint          NOT NULL                            COMMENT '请求处理时间',
     remote_addr     varchar(30)                                         COMMENT '客户端的IP地址',
     user_agent      varchar(100)                                        COMMENT '用户代理',
     has_exception   char(1)         NOT NULL    DEFAULT '1'             COMMENT '是否有异常（0：否；1：是）',
-    exception_info  varchar(15000)                                      COMMENT '异常信息',
+    exception_info  MediumBlob                                          COMMENT '异常信息',
     PRIMARY KEY (id)
 ) COMMENT = '日志表';
 /*------------------------------------------------------------------------------------------------------------------------

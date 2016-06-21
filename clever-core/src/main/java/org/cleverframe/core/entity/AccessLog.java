@@ -50,6 +50,8 @@ public class AccessLog implements Serializable {
     /**
      * 请求参数数据
      */
+//    @Lob
+    @Column(columnDefinition="MEDIUMBLOB")
     private String params;
 
     /**
@@ -72,6 +74,8 @@ public class AccessLog implements Serializable {
     /**
      * 异常信息
      */
+//    @Lob
+    @Column(columnDefinition="MEDIUMBLOB")
     private String exceptionInfo;
 
     /*--------------------------------------------------------------
