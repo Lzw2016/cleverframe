@@ -6,7 +6,7 @@ import org.cleverframe.common.exception.ExceptionUtils;
 import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.entity.QLScript;
-import org.cleverframe.core.freemarker.IQLScriptService;
+import org.cleverframe.core.service.IQLScriptService;
 import org.cleverframe.core.freemarker.QLScriptTemplateLoader;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;

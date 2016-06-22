@@ -8,7 +8,7 @@ import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.CoreJspUrlPath;
 import org.cleverframe.core.entity.QLScript;
-import org.cleverframe.core.freemarker.IQLScriptService;
+import org.cleverframe.core.service.IQLScriptService;
 import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.core.vo.request.QLScriptAddVo;
 import org.cleverframe.core.vo.request.QLScriptDelVo;

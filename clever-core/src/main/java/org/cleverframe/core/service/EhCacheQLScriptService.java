@@ -9,7 +9,6 @@ import org.cleverframe.common.service.BaseService;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.dao.QLScriptDao;
 import org.cleverframe.core.entity.QLScript;
-import org.cleverframe.core.freemarker.IQLScriptService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

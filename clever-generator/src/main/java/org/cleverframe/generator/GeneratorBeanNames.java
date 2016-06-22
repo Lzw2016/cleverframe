@@ -20,6 +20,7 @@ public class GeneratorBeanNames implements IBeanNames {
     public static final String MateDataService = "generator_MateDataService";
     public static final String CodeFormatService = "generator_CodeFormatService";
     public static final String CodeTemplateService = "generator_CodeTemplateService";
+    public static final String GeneratorCodeService = "generator_GeneratorCodeService";
 
     // -------------------------------------------------------------------------------------------//
     // Other

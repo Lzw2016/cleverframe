@@ -3,6 +3,7 @@ package org.cleverframe.core.freemarker;
 import freemarker.cache.TemplateLoader;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.entity.Template;
+import org.cleverframe.core.service.ITemplateService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;

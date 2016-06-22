@@ -9,7 +9,6 @@ import org.cleverframe.common.service.BaseService;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.dao.TemplateDao;
 import org.cleverframe.core.entity.Template;
-import org.cleverframe.core.freemarker.ITemplateService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;

@@ -1,4 +1,4 @@
-package org.cleverframe.core.freemarker;
+package org.cleverframe.core.service;
 
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.core.entity.Template;

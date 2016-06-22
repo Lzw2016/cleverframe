@@ -35,11 +35,46 @@ CREATE TABLE generator_code_template
     full_path       varchar(255)    NOT NULL    UNIQUE                  COMMENT '树结构的全路径用“-”隔开,包含自己的ID',
     name            varchar(255)    NOT NULL    UNIQUE                  COMMENT '代码模版名称，不能重复',
     node_type       char(1)         NOT NULL                            COMMENT '节点类型(0:模版分类; 1:代码模版)',
-    template_ref    varchar(255)    NOT NULL                            COMMENT '脚本模版引用，与core_template的name字段关联',
+    template_ref    varchar(255)                                        COMMENT '脚本模版引用，与core_template的name字段关联',
     description     varchar(1000)   NOT NULL                            COMMENT '模版说明',
     code_type       varchar(50)     NOT NULL                            COMMENT '模版代码语言，如：java、html、jsp、sql',
     PRIMARY KEY (id)
 ) COMMENT = '代码模版信息';
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
