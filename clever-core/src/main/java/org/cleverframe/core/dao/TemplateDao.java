@@ -77,4 +77,18 @@ public class TemplateDao extends BaseDao<Template> {
         sqlQuery.executeUpdate();
         return true;
     }
+
+    /**
+     * 模版名称是否存在
+     *
+     * @param name 模版名称
+     * @return 存在返回true，不存在返回false
+     */
+    public boolean templateNameExists(String name) {
+        Parameter param = new Parameter();
+        param.put("name", name);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.TemplateDao.templateNameExists");
+        long count = hibernateDao.getBySql(long.class, sql, param);
+        return count > 0;
+    }
 }

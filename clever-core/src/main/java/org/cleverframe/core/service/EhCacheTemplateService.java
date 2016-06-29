@@ -36,6 +36,17 @@ public class EhCacheTemplateService extends BaseService implements ITemplateServ
     private Cache templateCache = EhCacheUtils.createCache(EhCacheNames.TemplateCache);
 
     /**
+     * 模版名称是否存在
+     *
+     * @param name 模版名称
+     * @return 存在返回true，不存在返回false
+     */
+    @Override
+    public boolean templateNameExists(String name) {
+        return templateDao.templateNameExists(name);
+    }
+
+    /**
      * 根据模版名称查询模版<br/>
      *
      * @param name 模版名称

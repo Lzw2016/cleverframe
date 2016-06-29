@@ -12,6 +12,15 @@ import java.util.List;
  * 创建时间：2016-6-18 12:26 <br/>
  */
 public interface ITemplateService {
+
+    /**
+     * 模版名称是否存在
+     *
+     * @param name 模版名称
+     * @return 存在返回true，不存在返回false
+     */
+    boolean templateNameExists(String name);
+
     /**
      * 根据模版名称查询模版<br/>
      *

@@ -1,5 +1,6 @@
 package org.cleverframe.generator.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.core.CoreBeanNames;
@@ -31,11 +32,15 @@ public class CodeTemplateService extends BaseService {
      * 增加代码模版,逻辑如下
      * <pre>
      * 代码模版CodeTemplate
-     *      1.如果不是根节点
-     *      2.计算出节点路径 fullPath
+     *      1.如果不是根节点，验证父节点存在
+     *      2.根据节点类型设置模版引用
+     *      3.计算出节点路径 fullPath
+     *      4.验证代码模版名称不存在
      * 模版信息Template
-     *      1.根据模版名称查询模版是否存在,若模版存在就更新模版信息
-     *      2.若模版不存在新增模版
+     *      5.验证模版名称不存在
+     *      6.保存模版信息Template
+     *      7.保存代码模版CodeTemplate
+     *      8.更新CodeTemplate fullPath属性
      * </pre>
      *
      * @param codeTemplate 代码模版信息
@@ -46,6 +51,7 @@ public class CodeTemplateService extends BaseService {
     public boolean addCodeTemplate(CodeTemplate codeTemplate, Template template, AjaxMessage ajaxMessage) {
         CodeTemplate parent = null;
         if (codeTemplate.getParentId() != -1) {
+            // 不是根节点，验证父节点存在
             parent = codeTemplateDao.getHibernateDao().get(codeTemplate.getParentId());
             if (parent == null) {
                 ajaxMessage.setSuccess(false);
@@ -56,8 +62,10 @@ public class CodeTemplateService extends BaseService {
 
         // 设置templateRef
         if (CodeTemplate.NodeTypeCategory.equals(codeTemplate.getNodeType())) {
+            // 节点类型是分类节点
             codeTemplate.setTemplateRef(null);
         } else if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
+            // 节点类型是模版节点
             codeTemplate.setTemplateRef(template.getName());
         } else {
             ajaxMessage.setSuccess(false);
@@ -72,8 +80,24 @@ public class CodeTemplateService extends BaseService {
             codeTemplate.setFullPath(parent.getFullPath());
         }
 
-        // TODO 根据模版名称查询模版是否存在
+        // 根据模版名称查询模版是否存在
+        if (codeTemplateDao.codeTemplateNameExists(template.getName()) && templateService.templateNameExists(template.getName())) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("模版名称已存在，模版名称[" + template.getName() + "]");
+            return false;
+        }
 
+        // 保存数据
+        templateService.saveTemplate(template);
+        codeTemplateDao.getHibernateDao().save(codeTemplate);
+
+        // 更新CodeTemplate fullPath属性
+        if (StringUtils.isBlank(codeTemplate.getFullPath())) {
+            codeTemplate.setFullPath(codeTemplate.getId().toString());
+        } else {
+            codeTemplate.setFullPath(codeTemplate.getFullPath() + CodeTemplate.FULL_PATH_SPLIT + codeTemplate.getId());
+        }
+        codeTemplateDao.getHibernateDao().update(codeTemplate);
         return true;
     }
 }

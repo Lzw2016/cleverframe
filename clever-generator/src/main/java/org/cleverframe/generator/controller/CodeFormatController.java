@@ -30,6 +30,9 @@ public class CodeFormatController extends BaseController {
     @Qualifier(GeneratorBeanNames.CodeFormatService)
     private CodeFormatService codeFormatService;
 
+    /**
+     * 格式化代码
+     */
     @RequestMapping("/format")
     @ResponseBody
     public AjaxMessage<String> format(

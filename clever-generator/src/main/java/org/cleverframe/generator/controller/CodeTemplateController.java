@@ -32,7 +32,6 @@ public class CodeTemplateController extends BaseController {
     @Qualifier(GeneratorBeanNames.CodeTemplateService)
     private CodeTemplateService codeTemplateService;
 
-
     /**
      * 新增代码模版
      */

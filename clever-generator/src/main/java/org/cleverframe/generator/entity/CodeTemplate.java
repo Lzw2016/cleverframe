@@ -8,6 +8,8 @@ import javax.persistence.Entity;
 import javax.persistence.Table;
 
 /**
+ * 代码模版，扩展模版(Template)的属性
+ *
  * 作者：LiZW <br/>
  * 创建时间：2016-6-21 21:19 <br/>
  */

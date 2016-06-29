@@ -1,5 +1,6 @@
 package org.cleverframe.core.service;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.vo.response.AjaxMessage;
@@ -68,7 +69,11 @@ public class MDictService extends BaseService {
             mDict.setFullPath(parent.getFullPath());
         }
         mDictDao.getHibernateDao().save(mDict);
-        mDict.setFullPath(mDict.getFullPath() + MDict.FULL_PATH_SPLIT + mDict.getId());
+        if (StringUtils.isBlank(mDict.getFullPath())) {
+            mDict.setFullPath(mDict.getId().toString());
+        } else {
+            mDict.setFullPath(mDict.getFullPath() + MDict.FULL_PATH_SPLIT + mDict.getId());
+        }
         mDictDao.getHibernateDao().update(mDict);
         return true;
     }
