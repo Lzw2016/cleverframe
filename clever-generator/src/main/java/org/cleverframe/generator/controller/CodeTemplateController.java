@@ -8,6 +8,7 @@ import org.cleverframe.generator.GeneratorBeanNames;
 import org.cleverframe.generator.entity.CodeTemplate;
 import org.cleverframe.generator.service.CodeTemplateService;
 import org.cleverframe.generator.vo.request.CodeTemplateAddVo;
+import org.cleverframe.generator.vo.request.CodeTemplateUpdateVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -42,7 +43,7 @@ public class CodeTemplateController extends BaseController {
             HttpServletResponse response,
             @Valid CodeTemplateAddVo codeTemplateAddVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "", null);
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "新增代码模版成功", null);
         CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateAddVo, CodeTemplate.class);
         Template template = BeanMapper.mapper(codeTemplateAddVo, Template.class);
         template.setName(codeTemplateAddVo.getName());
@@ -51,4 +52,25 @@ public class CodeTemplateController extends BaseController {
         }
         return ajaxMessage;
     }
+
+    /**
+     * 更新代码模版
+     */
+    @RequestMapping("/updateCodeTemplate")
+    @ResponseBody
+    public AjaxMessage<String> updateCodeTemplate(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid CodeTemplateUpdateVo codeTemplateUpdateVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "更新代码模版", null);
+        CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateUpdateVo, CodeTemplate.class);
+        Template template = BeanMapper.mapper(codeTemplateUpdateVo, Template.class);
+        template.setName(codeTemplateUpdateVo.getName());
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            codeTemplateService.updateCodeTemplate(codeTemplate, template, ajaxMessage);
+        }
+        return ajaxMessage;
+    }
+
 }

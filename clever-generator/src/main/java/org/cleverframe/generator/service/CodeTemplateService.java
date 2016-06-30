@@ -100,5 +100,18 @@ public class CodeTemplateService extends BaseService {
         codeTemplateDao.getHibernateDao().update(codeTemplate);
         return true;
     }
+
+    /**
+     * 更新代码模版
+     *
+     * @param codeTemplate 代码模版信息
+     * @param template     模版对象
+     * @param ajaxMessage  请求响应信息
+     * @return 成功返回true，失败返回false
+     */
+    public boolean updateCodeTemplate(CodeTemplate codeTemplate, Template template, AjaxMessage ajaxMessage) {
+
+        return true;
+    }
 }
 
