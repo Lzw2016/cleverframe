@@ -32,7 +32,7 @@ public class CodeTemplateService extends BaseService {
      * 增加代码模版,逻辑如下
      * <pre>
      * 代码模版CodeTemplate
-     *      1.如果不是根节点，验证父节点存在
+     *      1.如果不是根节点，验证父节点存在，并验证父节点类型必须是[模版分类]
      *      2.根据节点类型设置模版引用
      *      3.计算出节点路径 fullPath
      *      4.验证代码模版名称不存在
@@ -56,6 +56,12 @@ public class CodeTemplateService extends BaseService {
             if (parent == null) {
                 ajaxMessage.setSuccess(false);
                 ajaxMessage.setFailMessage("代码模版的父节点不存在，节点ID=[" + codeTemplate.getParentId() + "]");
+                return false;
+            }
+            // 验证父节点类型必须是[模版分类]
+            if (CodeTemplate.NodeTypeCode.toString().equals(parent.getCodeType())) {
+                ajaxMessage.setSuccess(false);
+                ajaxMessage.setFailMessage("父节点类型必须是[模版分类]");
                 return false;
             }
         }
@@ -88,7 +94,9 @@ public class CodeTemplateService extends BaseService {
         }
 
         // 保存数据
-        templateService.saveTemplate(template);
+        if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
+            templateService.saveTemplate(template);
+        }
         codeTemplateDao.getHibernateDao().save(codeTemplate);
 
         // 更新CodeTemplate fullPath属性
@@ -102,7 +110,13 @@ public class CodeTemplateService extends BaseService {
     }
 
     /**
-     * 更新代码模版
+     * 更新代码模版,逻辑如下
+     * <per>
+     * 1.不能修改节点类型
+     * 2.修改节点位置，验证父节点存在，并验证父节点类型必须是[模版分类]
+     * 3.更新CodeTemplate fullPath属性
+     * 4.更新CodeTemplate
+     * </per>
      *
      * @param codeTemplate 代码模版信息
      * @param template     模版对象
@@ -110,7 +124,47 @@ public class CodeTemplateService extends BaseService {
      * @return 成功返回true，失败返回false
      */
     public boolean updateCodeTemplate(CodeTemplate codeTemplate, Template template, AjaxMessage ajaxMessage) {
+        CodeTemplate oldCodeTemplate = codeTemplateDao.getHibernateDao().get(codeTemplate.getId());
+        if (oldCodeTemplate == null) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("更新的数据不存在，ID=[" + codeTemplate.getName() + "]");
+            return false;
+        }
 
+        // 不能修改节点类型
+        if (!oldCodeTemplate.getNodeType().equals(codeTemplate.getNodeType())) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("不能修改节点类型");
+            return false;
+        }
+
+        // 修改节点位置，验证父节点存在，并验证父节点类型必须是[模版分类]
+        CodeTemplate parent = null;
+        if (!oldCodeTemplate.getParentId().equals(codeTemplate.getParentId()) && codeTemplate.getParentId() != -1) {
+            // 修改之后不是根节点,验证父节点存在
+            parent = codeTemplateDao.getHibernateDao().get(codeTemplate.getParentId());
+            if (parent == null) {
+                ajaxMessage.setSuccess(false);
+                ajaxMessage.setFailMessage("代码模版的父节点不存在，节点ID=[" + codeTemplate.getParentId() + "]");
+                return false;
+            }
+            // 验证父节点类型必须是[模版分类]
+            if (CodeTemplate.NodeTypeCode.toString().equals(parent.getCodeType())) {
+                ajaxMessage.setSuccess(false);
+                ajaxMessage.setFailMessage("父节点类型必须是[模版分类]");
+                return false;
+            }
+        }
+
+        // 更新CodeTemplate fullPath属性
+        if (parent != null) {
+            codeTemplate.setFullPath(parent.getFullPath() + CodeTemplate.FULL_PATH_SPLIT + codeTemplate.getId());
+        }
+
+        // 更新CodeTemplate
+        codeTemplateDao.getHibernateDao().getSession().evict(oldCodeTemplate);
+        codeTemplateDao.getHibernateDao().getSession().update(codeTemplate);
+        templateService.updateTemplate(template);
         return true;
     }
 }

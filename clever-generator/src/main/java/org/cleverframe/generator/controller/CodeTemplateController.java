@@ -67,6 +67,7 @@ public class CodeTemplateController extends BaseController {
         CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateUpdateVo, CodeTemplate.class);
         Template template = BeanMapper.mapper(codeTemplateUpdateVo, Template.class);
         template.setName(codeTemplateUpdateVo.getName());
+        template.setId(null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             codeTemplateService.updateCodeTemplate(codeTemplate, template, ajaxMessage);
         }

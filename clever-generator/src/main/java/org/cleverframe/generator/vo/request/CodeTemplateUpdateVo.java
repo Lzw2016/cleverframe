@@ -15,6 +15,19 @@ public class CodeTemplateUpdateVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 数据ID
+     */
+    @NotBlank(message = "数据ID不能为空")
+    private Long id;
+
+    /**
+     * 删除标记（1：正常；2：删除；3：审核）,以字典表sys_dict.dict_key=‘删除标记’为准'
+     */
+    @NotBlank(message = "删除标记不能为空")
+    @Pattern(regexp = "1|2", message = "删除标记只能是：1(正常)、2(删除)")
+    private String delFlag;
+
+    /**
      * 备注
      */
     @Length(max = 255, message = "备注信息长度不能超过255个字符")
@@ -32,13 +45,6 @@ public class CodeTemplateUpdateVo extends BaseRequestVo {
     @NotBlank(message = "代码模版名称不能为空")
     @Length(max = 255, message = "代码模版名称长度不能超过255个字符")
     private String name;
-
-    /**
-     * 节点类型(0:模版分类; 1:代码模版)
-     */
-    @NotNull(message = "节点类型不能为空")
-    @Pattern(regexp = "0|1", message = "节点类型只能是：0(模版分类)、1(代码模版)")
-    private String nodeType;
 
     /**
      * 脚本模版引用，与core_template的name字段关联
@@ -106,14 +112,6 @@ public class CodeTemplateUpdateVo extends BaseRequestVo {
         this.name = name;
     }
 
-    public String getNodeType() {
-        return nodeType;
-    }
-
-    public void setNodeType(String nodeType) {
-        this.nodeType = nodeType;
-    }
-
     public String getTemplateRef() {
         return templateRef;
     }
@@ -152,5 +150,21 @@ public class CodeTemplateUpdateVo extends BaseRequestVo {
 
     public void setLocale(String locale) {
         this.locale = locale;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
     }
 }

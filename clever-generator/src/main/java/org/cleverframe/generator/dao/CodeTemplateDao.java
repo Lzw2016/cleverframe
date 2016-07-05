@@ -28,5 +28,16 @@ public class CodeTemplateDao extends BaseDao<CodeTemplate> {
         return count > 0;
     }
 
-
+    /**
+     * 根据代码模版名称获取代码模版(包含软删除了的数据)
+     *
+     * @param name 代码模版名称
+     * @return 代码模版
+     */
+    public CodeTemplate getByName(String name) {
+        Parameter param = new Parameter();
+        param.put("name", name);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.generator.dao.CodeTemplateDao.getByName");
+        return hibernateDao.getBySql(sql, param);
+    }
 }
