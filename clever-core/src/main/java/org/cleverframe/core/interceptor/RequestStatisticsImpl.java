@@ -1,7 +1,10 @@
 package org.cleverframe.core.interceptor;
 
+import org.cleverframe.common.attributes.CommonApplicationAttributes;
+import org.cleverframe.common.attributes.CommonRequestAttributes;
 import org.cleverframe.common.interceptor.IRequestStatistics;
 import org.cleverframe.common.mapper.BeanMapper;
+import org.cleverframe.common.utils.ConversionUtils;
 import org.cleverframe.common.vo.request.RequestInfo;
 import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.entity.AccessLog;
@@ -27,13 +30,35 @@ public class RequestStatisticsImpl implements IRequestStatistics {
     private AccessLogService accessLogService;
 
     /**
+     * 服务器本次启动后处理的请求总数,类型:long
+     */
+    private static volatile long REQUEST_COUNT_BY_START;
+
+    /**
+     * 服务器当天处理请求总数(00:00:00--23:59:59),类型:long
+     */
+    private static volatile long REQUEST_COUNT_BY_DAY;
+
+    /**
+     * 统计服务器当前小时处理请求总数(n:00:00-n:59:59),类型:long
+     */
+    private static volatile long REQUEST_COUNT_BY_HOUR;
+
+    /**
+     * 最后一次请求的时间,类型:long
+     */
+    private static volatile long LAST_REQUEST_TIME;
+
+    /**
      * 服务器本次启动后处理的请求总数 加1
      *
      * @return 操作成功返回 true
      */
     @Override
     public boolean addRequestCountByStart(HttpServletRequest request, HttpServletResponse response) {
-        return false;
+        REQUEST_COUNT_BY_START++;
+        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_START, REQUEST_COUNT_BY_START);
+        return true;
     }
 
     /**
@@ -43,7 +68,9 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean addRequestCountByDay(HttpServletRequest request, HttpServletResponse response) {
-        return false;
+        REQUEST_COUNT_BY_DAY++;
+        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_DAY, REQUEST_COUNT_BY_DAY);
+        return true;
     }
 
     /**
@@ -53,7 +80,9 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean addRequestCountByHour(HttpServletRequest request, HttpServletResponse response) {
-        return false;
+        REQUEST_COUNT_BY_HOUR++;
+        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_HOUR, REQUEST_COUNT_BY_HOUR);
+        return true;
     }
 
     /**
@@ -61,7 +90,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getRequestCountByStart(HttpServletRequest request, HttpServletResponse response) {
-        return 0;
+        return REQUEST_COUNT_BY_START;
     }
 
     /**
@@ -69,7 +98,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getRequestCountByDay(HttpServletRequest request, HttpServletResponse response) {
-        return 0;
+        return REQUEST_COUNT_BY_DAY;
     }
 
     /**
@@ -77,7 +106,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getRequestCountByHour(HttpServletRequest request, HttpServletResponse response) {
-        return 0;
+        return REQUEST_COUNT_BY_HOUR;
     }
 
     /**
@@ -87,7 +116,9 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean setLastRequestTime(HttpServletRequest request, HttpServletResponse response) {
-        return false;
+        LAST_REQUEST_TIME = System.currentTimeMillis();
+        request.getServletContext().setAttribute(CommonApplicationAttributes.LAST_REQUEST_TIME, LAST_REQUEST_TIME);
+        return true;
     }
 
     /**
@@ -95,7 +126,27 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getLastRequestTime(HttpServletRequest request, HttpServletResponse response) {
-        return 0;
+        return LAST_REQUEST_TIME;
+    }
+
+    /**
+     * 设置当前请求请求时间
+     *
+     * @return 操作成功返回 true
+     */
+    @Override
+    public boolean setRequestStartTime(HttpServletRequest request, HttpServletResponse response) {
+        long lastRequestTime = System.currentTimeMillis();
+        request.setAttribute(CommonRequestAttributes.REQUEST_START_TIME, lastRequestTime);
+        return true;
+    }
+
+    /**
+     * @return 返回当前请求请求时间
+     */
+    @Override
+    public long getRequestStartTime(HttpServletRequest request, HttpServletResponse response) {
+        return ConversionUtils.converter(request.getAttribute(CommonRequestAttributes.REQUEST_START_TIME), System.currentTimeMillis());
     }
 
     /**

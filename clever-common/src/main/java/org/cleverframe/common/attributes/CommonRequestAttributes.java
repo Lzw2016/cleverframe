@@ -8,7 +8,7 @@ package org.cleverframe.common.attributes;
  */
 public class CommonRequestAttributes implements IRequestAttributes {
     /**
-     * 请求开始时间,类型：long
+     * 请求开始时间,类型：long(用于计算请求处理用时)
      */
     public static final String REQUEST_START_TIME = "Common_Request_Start_Time";
 

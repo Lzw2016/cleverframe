@@ -67,6 +67,17 @@ public interface IRequestStatistics {
     long getLastRequestTime(HttpServletRequest request, HttpServletResponse response);
 
     /**
+     * 设置当前请求请求时间
+     * @return 操作成功返回 true
+     */
+    boolean setRequestStartTime(HttpServletRequest request, HttpServletResponse response);
+
+    /**
+     * @return 返回当前请求请求时间
+     */
+    long getRequestStartTime(HttpServletRequest request, HttpServletResponse response);
+
+    /**
      * 存储请求信息
      *
      * @param requestInfo 请求信息

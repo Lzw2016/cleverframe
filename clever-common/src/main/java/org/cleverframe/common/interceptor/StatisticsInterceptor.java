@@ -4,6 +4,7 @@ import org.cleverframe.common.attributes.CommonRequestAttributes;
 import org.cleverframe.common.exception.ExceptionUtils;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.spring.SpringContextHolder;
+import org.cleverframe.common.time.DateTimeUtils;
 import org.cleverframe.common.user.IUserUtils;
 import org.cleverframe.common.utils.HttpServletRequestUtils;
 import org.cleverframe.common.utils.UserAgentUtils;
@@ -69,6 +70,9 @@ public class StatisticsInterceptor implements HandlerInterceptor {
         if (null == requestStatistics) {
             logger.error("### StatisticsInterceptor.preHandle 服务所有的请求统计实现类未注入，请注入：StatisticsInterceptor.requestStatistics");
         } else {
+            // 设置当前请求请求时间
+            requestStatistics.setRequestStartTime(request, response);
+
             // 设置最后一次请求的时间
             boolean lastRequestTimeFlag = requestStatistics.setLastRequestTime(request, response);
 
@@ -115,6 +119,7 @@ public class StatisticsInterceptor implements HandlerInterceptor {
      */
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
+        // 存在异常
         if (ex != null) {
             logger.error("### afterCompletion - ！", ex);
         }
@@ -126,17 +131,15 @@ public class StatisticsInterceptor implements HandlerInterceptor {
             logger.error("### 服务器发生异常", throwable);
         }
 
-        if (null == requestStatistics) {
-            logger.error("### StatisticsInterceptor.afterCompletion 服务所有的请求统计实现类未注入，请注入：StatisticsInterceptor.requestStatistics");
-        } else {
-            // 存储请求信息
+        // 存储请求信息
+        if (null != requestStatistics) {
             RequestInfo requestInfo = new RequestInfo();
             requestInfo.setLoginName(userUtils.getUserCode());
             requestInfo.setRequestTime(new Date());
             requestInfo.setRequestUri(HttpServletRequestUtils.getRequestUri(request));
             requestInfo.setMethod(request.getMethod());
             requestInfo.setParams(HttpServletRequestUtils.getRequestParams(request));
-            requestInfo.setProcessTime(10L);// TODO 使用request作用域计算
+            requestInfo.setProcessTime(System.currentTimeMillis() - requestStatistics.getRequestStartTime(request, response));
             requestInfo.setRemoteAddr(request.getRemoteAddr() + ":" + request.getRemotePort());
             requestInfo.setUserAgent(UserAgentUtils.getUserAgent(request).toString());
             if (object instanceof Throwable) {
@@ -151,10 +154,21 @@ public class StatisticsInterceptor implements HandlerInterceptor {
                         "#=======================================================================================================================#\r\n" +
                         "# 请求处理完成(已渲染视图)的处理：\r\n" +
                         "#\t 存储请求信息：" + saveRequestInfoFlag + "\r\n" +
-                        "#\t 请求信息：" + requestInfo.toString() + " \r\n" +
+                        "#\t ------------------------------------------------\r\n" +
+                        "#\t 登录名：" + requestInfo.getLoginName() + " \r\n" +
+                        "#\t 请求时间：" + DateTimeUtils.formatToString(requestInfo.getRequestTime(), "yyyy-MM-dd HH:mm:ss.SSS") + " \r\n" +
+                        "#\t 请求URI：" + requestInfo.getRequestUri() + " \r\n" +
+                        "#\t 操作方式：" + requestInfo.getMethod() + " \r\n" +
+                        "#\t 请求参数数据：" + requestInfo.getParams() + " \r\n" +
+                        "#\t 请求处理时间(ms)：" + requestInfo.getProcessTime() + "ms \r\n" +
+                        "#\t 客户端的IP地址：" + requestInfo.getRemoteAddr() + " \r\n" +
+                        "#\t 用户代理：" + requestInfo.getUserAgent() + " \r\n" +
+                        "#\t 是否有异常(0：否；1：是)：" + requestInfo.getHasException() + " \r\n" +
                         "#=======================================================================================================================#\r\n";
                 logger.debug(tmp);
             }
+        } else {
+            logger.error("### StatisticsInterceptor.afterCompletion 服务所有的请求统计实现类未注入，请注入：StatisticsInterceptor.requestStatistics");
         }
     }
 }
