@@ -94,7 +94,7 @@ public class StatisticsInterceptor implements HandlerInterceptor {
                         "#\t 服务器当天处理请求总数(00:00:00--23:59:59) 加1：" + requestCountByDayFlag + "\r\n" +
                         "#\t 统计服务器当前小时处理请求总数(n:00:00-n:59:59) 加1：" + requestCountByHourFlag + "\r\n" +
                         "#\t ------------------------------------------------\r\n" +
-                        "#\t 最后一次请求的时间：" + requestStatistics.getLastRequestTime(request, response) + "\r\n" +
+                        "#\t 最后一次请求的时间：" + DateTimeUtils.getDate(requestStatistics.getLastRequestTime(request, response), "yyyy-MM-dd HH:mm:ss.SSS") + "\r\n" +
                         "#\t 服务器本次启动后处理的请求总数：" + requestStatistics.getRequestCountByStart(request, response) + "\r\n" +
                         "#\t 服务器当天处理请求总数(00:00:00--23:59:59)：" + requestStatistics.getRequestCountByDay(request, response) + "\r\n" +
                         "#\t 服务器当前小时处理请求总数(n:00:00-n:59:59)：" + requestStatistics.getRequestCountByHour(request, response) + "\r\n" +
