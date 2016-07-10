@@ -4,6 +4,7 @@ import org.cleverframe.common.vo.request.BaseRequestVo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -18,7 +19,7 @@ public class QLScriptUpdateVo extends BaseRequestVo {
     /**
      * 数据ID
      */
-    @NotBlank(message = "数据ID不能为空")
+    @NotNull(message = "数据ID不能为空")
     private Long id;
 
     /**

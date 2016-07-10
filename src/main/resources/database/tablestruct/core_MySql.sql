@@ -93,8 +93,8 @@ CREATE TABLE core_dict
     del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
-    dict_key        varchar(100)    NOT NULL                            COMMENT '字典键',
-    dict_value      varchar(255)    NOT NULL                            COMMENT '字典数据值',
+    dict_key        varchar(100)    NOT NULL                            COMMENT '字典键(显示值)',
+    dict_value      varchar(255)    NOT NULL                            COMMENT '字典数据值(隐藏值)',
     dict_type       varchar(100)    NOT NULL                            COMMENT '字典分类',
     description     varchar(500)    NOT NULL                            COMMENT '描述',
     sort            int             NOT NULL                            COMMENT '排序(升序)',

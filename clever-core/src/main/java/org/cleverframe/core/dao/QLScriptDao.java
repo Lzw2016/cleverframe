@@ -33,12 +33,12 @@ public class QLScriptDao extends BaseDao<QLScript> {
      * 4.:id id 脚本ID<br/>
      * 5.:uuid uuid 数据UUID<br/>
      */
-    public static final String SQL_FIND_ALL_QLSCRIPT = "SELECT * FROM core_qlscript WHERE del_flag=:delFlag "
-            + " AND (name LIKE :name OR :name = '' ) "
-            + " AND (script_type=:scriptType OR :scriptType='' ) "
-            + " AND (id=:id OR :id=-1) "
-            + " AND (uuid=:uuid OR :uuid='') "
-            + " ORDER BY name ";
+    public static final String SQL_FIND_ALL_QLSCRIPT = "SELECT * FROM core_qlscript WHERE (del_flag=:delFlag OR :delFlag IS NULL) "
+            + " AND (name LIKE :name OR :name = '' OR :name IS NULL) "
+            + " AND (script_type=:scriptType OR :scriptType='' OR :scriptType IS NULL) "
+            + " AND (id=:id OR :id=-1 OR :id IS NULL) "
+            + " AND (uuid=:uuid OR :uuid='' OR :uuid IS NULL) "
+            + " ORDER BY name, update_date DESC";
 
     /**
      * 直接从数据库删除SQL脚本，参数 name：数据库脚本名称

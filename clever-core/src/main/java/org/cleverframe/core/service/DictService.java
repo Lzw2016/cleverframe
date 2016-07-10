@@ -10,6 +10,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 作者：LiZW <br/>
  * 创建时间：2016-6-18 21:23 <br/>
@@ -72,5 +74,15 @@ public class DictService extends BaseService {
         dict.setId(id);
         dictDao.getHibernateDao().delete(dict);
         return true;
+    }
+
+    /**
+     * 根据字典类型查询所有的字典
+     *
+     * @param dictType 字典类型
+     * @return 字典集合
+     */
+    public List<Dict> findDictByType(String dictType) {
+        return dictDao.findByType(dictType);
     }
 }

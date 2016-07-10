@@ -62,6 +62,9 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptQueryVo qlScriptQueryVo,
             BindingResult bindingResult) {
+        if(qlScriptQueryVo.getDelFlag() == null){
+            qlScriptQueryVo.setDelFlag('1');
+        }
         DataGridJson<QLScript> json = new DataGridJson<>();
         Page<QLScript> qLScriptPage = qLScriptService.findAllQLScript(
                 new Page<QLScript>(request, response),

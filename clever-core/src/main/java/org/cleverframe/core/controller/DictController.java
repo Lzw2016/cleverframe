@@ -12,18 +12,22 @@ import org.cleverframe.core.vo.request.DictAddVo;
 import org.cleverframe.core.vo.request.DictDelVo;
 import org.cleverframe.core.vo.request.DictQueryVo;
 import org.cleverframe.core.vo.request.DictUpdateVo;
+import org.cleverframe.webui.easyui.data.ComboBoxJson;
 import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 作者：LiZW <br/>
@@ -90,7 +94,7 @@ public class DictController extends BaseController {
     }
 
     /**
-     * 更新配置信息对象<br>
+     * 更新数据字典对象<br>
      */
     // @RequiresRoles("root")
     @RequestMapping("/updateDict")
@@ -110,7 +114,7 @@ public class DictController extends BaseController {
     }
 
     /**
-     * 删除配置信息对象<br>
+     * 删除数据字典对象<br>
      */
     // @RequiresRoles("root")
     @RequestMapping("/deleteDict")
@@ -126,5 +130,23 @@ public class DictController extends BaseController {
             message.setResult("数据字典删除成功");
         }
         return message;
+    }
+
+    /**
+     * 根据字典类型查询所有的字典
+     */
+    @RequestMapping("/findDictByType")
+    @ResponseBody
+    public List<ComboBoxJson> findDictByType(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(required = true, name = "dictType") String dictType) {
+        List<ComboBoxJson> comboBoxJsonList = new ArrayList<>();
+        List<Dict> dictList = dictService.findDictByType(dictType);
+        for (Dict dict : dictList) {
+            ComboBoxJson comboBoxJson = new ComboBoxJson(false, dict.getDictKey(), dict.getDictValue(), dict);
+            comboBoxJsonList.add(comboBoxJson);
+        }
+        return comboBoxJsonList;
     }
 }

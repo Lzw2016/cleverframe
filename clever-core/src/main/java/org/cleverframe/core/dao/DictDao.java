@@ -76,4 +76,17 @@ public class DictDao extends BaseDao<Dict> {
         sqlQuery.executeUpdate();
         return true;
     }
+
+    /**
+     * 根据字典类型查询所有的字典
+     *
+     * @param dictType 字典类型
+     * @return 字典集合
+     */
+    public List<Dict> findDictByType(String dictType) {
+        Parameter param = new Parameter(Dict.DEL_FLAG_NORMAL);
+        param.put("dictType", dictType);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.DictDao.findDictByType");
+        return hibernateDao.findBySql(sql, param);
+    }
 }
