@@ -71,7 +71,7 @@
         <thead>
         <tr>
             <th data-options="width:650,align:'left',hidden:false,field:'name'">脚本名称</th>
-            <th data-options="width:70 ,align:'left',hidden:false,field:'scriptType'">脚本类型</th>
+            <th data-options="width:70 ,align:'left',hidden:false,field:'scriptType',formatter:pageJsObject.scriptTypeFormatter">脚本类型</th>
             <th data-options="width:450,align:'left',hidden:false,field:'description'">脚本说明</th>
             <th data-options="width:100,align:'left',hidden:true ,field:'script'">脚本</th>
 
@@ -83,7 +83,7 @@
             <th data-options="width:50 ,align:'left',hidden:true ,field:'updateBy'">更新者</th>
             <th data-options="width:130,align:'left',hidden:false,field:'updateDate'">更新时间</th>
             <th data-options="width:100,align:'left',hidden:false,field:'remarks'">备注信息</th>
-            <th data-options="width:80 ,align:'left',hidden:false ,field:'delFlag'">删除标记</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'delFlag',formatter:pageJsObject.delFlagFormatter">删除标记</th>
             <th data-options="width:80 ,align:'left',hidden:true ,field:'uuid'">UUID</th>
         </tr>
         </thead>

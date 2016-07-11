@@ -77,6 +77,10 @@ var pageJs = function (globalPath) {
     var addScript = null;
     var editScript = null;
 
+    // 字典数据
+    //var scriptTypeDate;
+    //var delFlag;
+
     /**
      * 页面初始化方法
      */
@@ -399,6 +403,32 @@ var pageJs = function (globalPath) {
                 }, "json");
             }
         });
+    };
+
+    // 脚本类型列格式化
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.scriptTypeFormatter = function (value, rowData, rowIndex){
+        var result = "";
+        $(searchType.combobox('getData')).each(function(index, data) {
+            if(data.value == value) {
+                result = data.text;
+                return false;
+            }
+        });
+        return result;
+    };
+
+    // 删除标记格式化
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.delFlagFormatter = function (value, rowData, rowIndex){
+        var result = "";
+        $(searchDelFlag.combobox('getData')).each(function(index, data) {
+            if(data.value == value) {
+                result = data.text;
+                return false;
+            }
+        });
+        return result;
     };
 };
 
