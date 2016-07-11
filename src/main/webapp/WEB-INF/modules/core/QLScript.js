@@ -13,8 +13,6 @@ var pageJs = function (globalPath) {
     var updateUrl = globalPath.mvcPath + "/core/qlscript/updateQLScript.json";
     // 删除地址
     var delUrl = globalPath.mvcPath + "/core/qlscript/deleteQLScript.json";
-    // 数据保存或更新地址,根据情况取值:addUrl、updateUrl
-    var saveUrl = "";
     // 根据字典类别查询字典地址
     var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
 
@@ -38,6 +36,17 @@ var pageJs = function (globalPath) {
     var searchDelFlag = $("#searchDelFlag");
     var searchId = $("#searchId");
     var searchUuid = $("#searchUuid");
+
+    // 数据新增对话框
+    var addDialog = $("#addDialog");
+    // 数据新增表单
+    var addForm = $("#addForm");
+    // 数据新增对话框 按钮栏
+    var addDialogButtons = $("#addDialogButtons");
+    // 数据新增对话框 新增按钮
+    var addDialogButtonsSave = $("#addDialogButtonsSave");
+    // 数据新增对话框 取消按钮
+    var addDialogButtonsCancel = $("#addDialogButtonsCancel");
 
     // 数据编辑对话框
     var editDialog = $("#editDialog");
@@ -66,6 +75,7 @@ var pageJs = function (globalPath) {
     //var editUpdateDate = $("#editUpdateDate");
 
     // SQL编辑器
+    var addScript = null;
     var editScript = null;
 
     /**
@@ -127,8 +137,13 @@ var pageJs = function (globalPath) {
             }
         });
 
+        // 初始化新增对话框
+        _this.initAddDialog();
+        // 初始化编辑对话框
         _this.initEditDialog();
+        // 页面数据初始化
         _this.dataBind();
+        // 事件绑定初始化
         _this.eventBind();
     };
 
@@ -148,40 +163,116 @@ var pageJs = function (globalPath) {
             dataTable.datagrid('load');
         });
 
-        // 数据显示表格 增加
+        // 新增
         dataTableButtonsAdd.click(function () {
-            _this.add();
+            addDialog.dialog('open');
+            addDialog.form('reset');
+            addScript.setValue('\r\n');
         });
 
-        // 数据显示表格 编辑
+        // 新增 -- 保存
+        addDialogButtonsSave.click(function () {
+            _this.addData();
+        });
+
+        // 新增 -- 取消
+        addDialogButtonsCancel.click(function () {
+            addDialog.dialog('close');
+        });
+
+        // 编辑
         dataTableButtonsEdit.click(function () {
-            _this.edit();
+            var row = dataTable.datagrid('getSelected');
+            if (row == null) {
+                $.messager.alert("提示", "请选择要编辑的数据！", "info");
+                return;
+            }
+            if (row) {
+                editDialog.dialog('open');
+                editForm.form('load', row);
+                editScript.setValue(row.script);
+            }
         });
 
-        // 数据显示表格 删除
-        dataTableButtonsDel.click(function () {
-            _this.del();
-        });
-
-        // 数据编辑表单 保存
+        // 编辑 -- 保存
         editDialogButtonsSave.click(function () {
-            _this.saveOrUpdate();
+            _this.updateData();
         });
 
-        // 数据编辑表单 取消
+        // 编辑 -- 取消
         editDialogButtonsCancel.click(function () {
             editDialog.dialog('close');
+        });
+
+        // 删除
+        dataTableButtonsDel.click(function () {
+            _this.delData();
         });
     };
 
     // ---------------------------------------------------------------------------------------------------------
 
     /**
+     * 初始化新增对话框
+     */
+    this.initAddDialog = function () {
+        addDialog.dialog({
+            title: "新增数据库脚本信息",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            minWidth: 850,
+            minHeight: 450,
+            modal: true,
+            buttons: "#addDialogButtons",
+            onOpen: function() {
+                if(addScript != null) {
+                    return;
+                }
+                // SQL编辑器-初始化,
+                addScript = CodeMirror.fromTextArea(document.getElementById("addScript"), {
+                    mode: "text/x-mysql",
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    indentUnit: 4,
+                    readOnly: false
+                });
+                addScript.setSize("auto", "auto");
+                addScript.setOption("theme", "cobalt");
+                addScript.setValue('\r\n');
+            }
+        });
+        addName.textbox({
+            required: true,
+            validType: 'length[5,100]'
+        });
+        addScriptType.combobox({
+            required: true,
+            validType: 'length[1,10]',
+            url: findDictTypeUrl + encodeURIComponent("数据库脚本类型"),
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 50
+        });
+        addDescription.textbox({
+            required: true,
+            validType: 'length[2,1000]',
+            multiline: true
+        });
+        addRemarks.textbox({
+            validType: 'length[0,255]',
+            multiline: true
+        });
+    };
+
+    /**
      * 初始化编辑对话框
      */
     this.initEditDialog = function () {
         editDialog.dialog({
-            title: "数据库脚本信息",
+            title: "编辑数据库脚本信息",
             closed: true,
             minimizable: false,
             maximizable: false,
@@ -236,60 +327,52 @@ var pageJs = function (globalPath) {
         editId.textbox({
             readonly: true
         });
-
-        //editDelFlag.textbox({
-        //    readonly: true
-        //});
-        //editCompanyCode.textbox({
-        //    readonly: true
-        //});
-        //editOrgCode.textbox({
-        //    readonly: true
-        //});
-        //editCreateBy.textbox({
-        //    readonly: true
-        //});
-        //editCreateDate.textbox({
-        //    readonly: true
-        //});
-        //editUpdateBy.textbox({
-        //    readonly: true
-        //});
-        //editUpdateDate.textbox({
-        //    readonly: true
-        //});
     };
 
     /**
-     * 新增数据
+     * 保存数据
      */
-    this.add = function () {
-        saveUrl = addUrl;
-        editDialog.dialog('open').dialog('setTitle', '新增数据库脚本');
-        editForm.form('reset');
+    this.addData = function () {
+        editForm.form("submit", {
+            url: addUrl,
+            success: function (data) {
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    editDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.message, timeout: 5000, showType: 'slide'});
+                    dataTable.datagrid('reload');
+                } else {
+                    // 保存失败
+                }
+            }
+        });
     };
 
     /**
-     * 编辑数据
+     * 更新数据
      */
-    this.edit = function () {
-        saveUrl = updateUrl;
-        var row = dataTable.datagrid('getSelected');
-        if (row == null) {
-            $.messager.alert("提示", "请选择要编辑的数据！", "info");
-            return;
-        }
-        if (row) {
-            editDialog.dialog('open').dialog('setTitle', '编辑数据库脚本');
-            editForm.form('load', row);
-            editScript.setValue(row.script);
-        }
+    this.updateData = function () {
+        editForm.form("submit", {
+            url: updateUrl,
+            success: function (data) {
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    editDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.message, timeout: 5000, showType: 'slide'});
+                    dataTable.datagrid('reload');
+                } else {
+                    // 保存失败
+                }
+            }
+        });
     };
 
     /**
      * 删除数据
      */
-    this.del = function () {
+    this.delData = function () {
         var row = dataTable.datagrid('getSelected');
         if (row == null) {
             $.messager.alert("提示", "请选择要删除的数据！", "info");
@@ -309,26 +392,6 @@ var pageJs = function (globalPath) {
             }
         });
     };
-
-    /**
-     * 保存或更新数据
-     */
-    this.saveOrUpdate = function () {
-        editForm.form("submit", {
-            url: saveUrl,
-            success: function (data) {
-                data = $.parseJSON(data);
-                if (data.success) {
-                    // 保存成功
-                    editDialog.dialog('close');
-                    $.messager.show({title: '提示', msg: data.message, timeout: 5000, showType: 'slide'});
-                    dataTable.datagrid('reload');
-                } else {
-                    // 保存失败
-                }
-            }
-        });
-    }
 };
 
 /**

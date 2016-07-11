@@ -82,7 +82,7 @@
             <th data-options="width:50 ,align:'left',hidden:true ,field:'updateBy'">更新者</th>
             <th data-options="width:130,align:'left',hidden:false,field:'updateDate'">更新时间</th>
             <th data-options="width:100,align:'left',hidden:false,field:'remarks'">备注信息</th>
-            <th data-options="width:50 ,align:'left',hidden:true ,field:'delFlag'">删除标记</th>
+            <th data-options="width:50 ,align:'left',hidden:false ,field:'delFlag'">删除标记</th>
             <th data-options="width:80 ,align:'left',hidden:true ,field:'uuid'">UUID</th>
         </tr>
         </thead>
@@ -93,6 +93,36 @@
         <a id="dataTableButtonsEdit" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
         <a id="dataTableButtonsDel" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
     </div>
+</div>
+
+<%-- 新增对话框 --%>
+<div id="addDialog" style="width: 850px;height: 450px;padding: 5px 10px">
+    <form id="addForm" method="post">
+        <div class="row">
+            <label for="addName">脚本名称</label>
+            <input id="addName" name="name" style="width: 700px"/>
+        </div>
+        <div class="row">
+            <label for="addScriptType">脚本类型</label>
+            <input id="addScriptType" name="scriptType" style="width: 150px"/>
+        </div>
+        <div class="row">
+            <label for="addDescription">脚本说明</label>
+            <input id="addDescription" name="description" style="width: 700px; height: 80px;"/>
+        </div>
+        <div class="row">
+            <label for="addRemarks">备注信息</label>
+            <input id="addRemarks" name="remarks" style="width: 700px; height: 50px;"/>
+        </div>
+        <div class="row" style="margin-top: 15px;">
+            <label for="addScript">脚本内容</label>
+            <textarea id="addScript" name="script"></textarea>
+        </div>
+    </form>
+</div>
+<div id="addDialogButtons">
+    <a id="addDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
+    <a id="addDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 </div>
 
 <%-- 编辑对话框 --%>
