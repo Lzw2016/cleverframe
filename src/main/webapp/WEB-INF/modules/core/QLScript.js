@@ -79,7 +79,7 @@ var pageJs = function (globalPath) {
             editable: false,
             valueField: 'value',
             textField: 'text',
-            panelHeight: 60
+            panelHeight: 80
         });
         // 设置删除标记下拉框
         searchDelFlag.combobox({
@@ -88,7 +88,7 @@ var pageJs = function (globalPath) {
             editable: false,
             valueField: 'value',
             textField: 'text',
-            panelHeight: 80
+            panelHeight: 100
         });
 
         // 设置数据显示表格
