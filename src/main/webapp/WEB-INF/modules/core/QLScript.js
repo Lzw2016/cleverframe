@@ -17,7 +17,6 @@ var pageJs = function (globalPath) {
     var saveUrl = "";
     // 根据字典类别查询字典地址
     var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
-    findDictTypeUrl += encodeURIComponent("数据库脚本类型");
 
     // 数据查询表单
     var searchForm = $("#searchForm");
@@ -76,20 +75,20 @@ var pageJs = function (globalPath) {
         // 设置脚本类型下拉框
         searchType.combobox({
             required: false,
-            url: findDictTypeUrl,
+            url: findDictTypeUrl + encodeURIComponent("数据库脚本类型")+ "&hasSelectAll=true",
             editable: false,
             valueField: 'value',
-            textField: 'value',
-            panelHeight: 50
+            textField: 'text',
+            panelHeight: 60
         });
         // 设置删除标记下拉框
         searchDelFlag.combobox({
             required: false,
-            url: findDictTypeUrl,
+            url: findDictTypeUrl + encodeURIComponent("删除标记") + "&hasSelectAll=true",
             editable: false,
             valueField: 'value',
-            textField: 'value',
-            panelHeight: 50
+            textField: 'text',
+            panelHeight: 80
         });
 
         // 设置数据显示表格
@@ -216,7 +215,7 @@ var pageJs = function (globalPath) {
         editScriptType.combobox({
             required: true,
             validType: 'length[1,10]',
-            url: findDictTypeUrl,
+            url: findDictTypeUrl + encodeURIComponent("数据库脚本类型"),
             editable: false,
             valueField: 'value',
             textField: 'text',

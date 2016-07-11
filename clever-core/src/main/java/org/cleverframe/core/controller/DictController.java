@@ -8,10 +8,7 @@ import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.CoreJspUrlPath;
 import org.cleverframe.core.entity.Dict;
 import org.cleverframe.core.service.DictService;
-import org.cleverframe.core.vo.request.DictAddVo;
-import org.cleverframe.core.vo.request.DictDelVo;
-import org.cleverframe.core.vo.request.DictQueryVo;
-import org.cleverframe.core.vo.request.DictUpdateVo;
+import org.cleverframe.core.vo.request.*;
 import org.cleverframe.webui.easyui.data.ComboBoxJson;
 import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +16,6 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
@@ -140,11 +136,22 @@ public class DictController extends BaseController {
     public List<ComboBoxJson> findDictByType(
             HttpServletRequest request,
             HttpServletResponse response,
-            @RequestParam(required = true, name = "dictType") String dictType) {
+            @Valid DictQueryByTypeVo dictQueryByTypeVo,
+            BindingResult bindingResult) {
         List<ComboBoxJson> comboBoxJsonList = new ArrayList<>();
-        List<Dict> dictList = dictService.findDictByType(dictType);
+        List<Dict> dictList = dictService.findDictByType(dictQueryByTypeVo.getDictType());
+        if (dictQueryByTypeVo.getHasSelectAll()) {
+            ComboBoxJson comboBoxJson = new ComboBoxJson(false, dictQueryByTypeVo.getSelectAllKey(), dictQueryByTypeVo.getSelectAllValue(), dictQueryByTypeVo);
+            if (dictQueryByTypeVo.getDefaultSelectKey() == null) {
+                comboBoxJson.setSelected(true);
+            }
+            comboBoxJsonList.add(comboBoxJson);
+        }
         for (Dict dict : dictList) {
             ComboBoxJson comboBoxJson = new ComboBoxJson(false, dict.getDictKey(), dict.getDictValue(), dict);
+            if (dict.getDictKey().equals(dictQueryByTypeVo.getDefaultSelectKey())) {
+                comboBoxJson.setSelected(true);
+            }
             comboBoxJsonList.add(comboBoxJson);
         }
         return comboBoxJsonList;
