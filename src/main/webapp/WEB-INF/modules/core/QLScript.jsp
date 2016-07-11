@@ -14,6 +14,7 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/ajxGlobalEventByEasyUI.js"--%>
 
     <%-- CodeMirror --%>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
@@ -82,7 +83,7 @@
             <th data-options="width:50 ,align:'left',hidden:true ,field:'updateBy'">更新者</th>
             <th data-options="width:130,align:'left',hidden:false,field:'updateDate'">更新时间</th>
             <th data-options="width:100,align:'left',hidden:false,field:'remarks'">备注信息</th>
-            <th data-options="width:50 ,align:'left',hidden:false ,field:'delFlag'">删除标记</th>
+            <th data-options="width:80 ,align:'left',hidden:false ,field:'delFlag'">删除标记</th>
             <th data-options="width:80 ,align:'left',hidden:true ,field:'uuid'">UUID</th>
         </tr>
         </thead>
@@ -128,6 +129,9 @@
 <%-- 编辑对话框 --%>
 <div id="editDialog" style="width: 850px;height: 450px;padding: 5px 10px">
     <form id="editForm" method="post">
+        <input id="editId" name="id" type="hidden"/>
+        <input id="editUuid" name="uuid" type="hidden"/>
+
         <div class="row">
             <label for="editName">脚本名称</label>
             <input id="editName" name="name" style="width: 700px"/>
@@ -135,7 +139,11 @@
         <div class="row">
             <label for="editScriptType">脚本类型</label>
             <input id="editScriptType" name="scriptType" style="width: 150px"/>
+
+            <label for="editDelFlag" style="margin-left: 30px">删除标记</label>
+            <input id="editDelFlag" name="delFlag" style="width: 150px"/>
         </div>
+
         <div class="row">
             <label for="editDescription">脚本说明</label>
             <input id="editDescription" name="description" style="width: 700px; height: 80px;"/>
@@ -144,41 +152,10 @@
             <label for="editRemarks">备注信息</label>
             <input id="editRemarks" name="remarks" style="width: 700px; height: 50px;"/>
         </div>
-        <div class="row">
-            <label for="editUuid">数据UUID</label>
-            <input id="editUuid" name="uuid" style="width: 400px"/>
-        </div>
-        <div class="row">
-            <label for="editId">脚本编码</label>
-            <input id="editId" name="id" style="width: 400px"/>
-        </div>
         <div class="row" style="margin-top: 15px;">
             <label for="editScript">脚本内容</label>
             <textarea id="editScript" name="script"></textarea>
         </div>
-<%--
-
-        <div class="row">
-            <label for="editOrgCode">数据直属机构</label>
-            <input id="editOrgCode" name="orgId">
-        </div>
-        <div class="row">
-            <label for="editCreateBy">创建者</label>
-            <input id="editCreateBy" name="createBy">
-        </div>
-        <div class="row">
-            <label for="editCreateDate">创建时间</label>
-            <input id="editCreateDate" name="createDate">
-        </div>
-        <div class="row">
-            <label for="editUpdateBy">更新者</label>
-            <input id="editUpdateBy" name="updateBy">
-        </div>
-        <div class="row">
-            <label for="editUpdateDate">更新时间</label>
-            <input id="editUpdateDate" name="updateDate">
-        </div>
---%>
     </form>
 </div>
 <div id="editDialogButtons">

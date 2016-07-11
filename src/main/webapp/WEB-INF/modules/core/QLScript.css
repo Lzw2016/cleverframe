@@ -26,6 +26,12 @@
     margin-right: 0;
 }
 
+/*新增表单样式*/
+#addForm .row {
+    margin-bottom: 8px;
+    width: inherit;
+}
+
 /*编辑表单样式*/
 #editForm .row {
     margin-bottom: 8px;

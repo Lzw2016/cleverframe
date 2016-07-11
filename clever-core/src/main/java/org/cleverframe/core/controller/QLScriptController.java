@@ -26,6 +26,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.Date;
 
 /**
  * 作者：LiZW <br/>
@@ -62,9 +63,6 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptQueryVo qlScriptQueryVo,
             BindingResult bindingResult) {
-        if(qlScriptQueryVo.getDelFlag() == null){
-            qlScriptQueryVo.setDelFlag('1');
-        }
         DataGridJson<QLScript> json = new DataGridJson<>();
         Page<QLScript> qLScriptPage = qLScriptService.findAllQLScript(
                 new Page<QLScript>(request, response),
@@ -89,13 +87,12 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptAddVo qlScriptAddVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "数据库脚本保存成功", null);
         String qlStr = EncodeDecodeUtils.unescapeHtml(qlScriptAddVo.getScript());// HTML转码
         qlScriptAddVo.setScript(qlStr);
         QLScript qLScript = BeanMapper.mapper(qlScriptAddVo, QLScript.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
             qLScriptService.saveQLScript(qLScript);
-            message.setResult("数据库脚本保存成功");
         }
         return message;
     }
@@ -111,14 +108,15 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptUpdateVo qlScriptUpdateVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "数据库脚本保存成功", null);
         String qlStr = EncodeDecodeUtils.unescapeHtml(qlScriptUpdateVo.getScript());// HTML转码
         qlScriptUpdateVo.setScript(qlStr);
         QLScript qLScript = BeanMapper.mapper(qlScriptUpdateVo, QLScript.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
+            qLScript.setUpdateDate(new Date());
+            qLScript.setUpdateBy(userUtils.getUserCode());
             qLScriptService.updateQLScript(qLScript);
             QLScriptUtils.removeTemplateCache(qLScript.getName());
-            message.setResult("数据库脚本保存成功");
         }
         return message;
     }
@@ -134,11 +132,10 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptDelVo qlScriptDelVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> message = new AjaxMessage<>();
+        AjaxMessage<String> message = new AjaxMessage<>(true, "删除成功", null);
         if (beanValidator(bindingResult, message)) {
             qLScriptService.deleteQLScript(qlScriptDelVo.getName());
             QLScriptUtils.removeTemplateCache(qlScriptDelVo.getName());
-            message.setResult("删除成功");
         }
         return message;
     }

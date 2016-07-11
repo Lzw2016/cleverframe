@@ -48,6 +48,12 @@ var pageJs = function (globalPath) {
     // 数据新增对话框 取消按钮
     var addDialogButtonsCancel = $("#addDialogButtonsCancel");
 
+    var addName = $("#addName");
+    var addScriptType = $("#addScriptType");
+    var addDescription = $("#addDescription");
+    var addRemarks = $("#addRemarks");
+
+
     // 数据编辑对话框
     var editDialog = $("#editDialog");
     // 数据编辑表单
@@ -65,14 +71,7 @@ var pageJs = function (globalPath) {
     var editRemarks = $("#editRemarks");
     var editUuid = $("#editUuid");
     var editId = $("#editId");
-
-    //var editDelFlag = $("#editDelFlag");
-    //var editCompanyCode = $("#editCompanyCode");
-    //var editOrgCode = $("#editOrgCode");
-    //var editCreateBy = $("#editCreateBy");
-    //var editCreateDate = $("#editCreateDate");
-    //var editUpdateBy = $("#editUpdateBy");
-    //var editUpdateDate = $("#editUpdateDate");
+    var editDelFlag = $("#editDelFlag");
 
     // SQL编辑器
     var addScript = null;
@@ -94,7 +93,7 @@ var pageJs = function (globalPath) {
         // 设置删除标记下拉框
         searchDelFlag.combobox({
             required: false,
-            url: findDictTypeUrl + encodeURIComponent("删除标记") + "&hasSelectAll=true",
+            url: findDictTypeUrl + encodeURIComponent("删除标记") + "&hasSelectAll=true&defaultSelectKey=" + encodeURIComponent("正常"),
             editable: false,
             valueField: 'value',
             textField: 'text',
@@ -118,7 +117,7 @@ var pageJs = function (globalPath) {
             pageSize: 50,
             pageList: [10, 20, 30, 50, 100, 150],
             onDblClickRow: function (rowIndex, rowData) {
-                _this.edit();
+                _this.openEditDialog();
             },
             onBeforeLoad: function (param) {
                 // 增加查询参数
@@ -166,7 +165,7 @@ var pageJs = function (globalPath) {
         // 新增
         dataTableButtonsAdd.click(function () {
             addDialog.dialog('open');
-            addDialog.form('reset');
+            addForm.form('reset');
             addScript.setValue('\r\n');
         });
 
@@ -182,16 +181,7 @@ var pageJs = function (globalPath) {
 
         // 编辑
         dataTableButtonsEdit.click(function () {
-            var row = dataTable.datagrid('getSelected');
-            if (row == null) {
-                $.messager.alert("提示", "请选择要编辑的数据！", "info");
-                return;
-            }
-            if (row) {
-                editDialog.dialog('open');
-                editForm.form('load', row);
-                editScript.setValue(row.script);
-            }
+            _this.openEditDialog();
         });
 
         // 编辑 -- 保存
@@ -321,26 +311,44 @@ var pageJs = function (globalPath) {
             validType: 'length[0,255]',
             multiline: true
         });
-        editUuid.textbox({
-            readonly: true
+        editDelFlag.combobox({
+            required: true,
+            url: findDictTypeUrl + encodeURIComponent("删除标记"),
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 80
         });
-        editId.textbox({
-            readonly: true
-        });
+    };
+
+    /**
+     * 打开编辑对话框
+     */
+    this.openEditDialog = function () {
+        var row = dataTable.datagrid('getSelected');
+        if (row == null) {
+            $.messager.alert("提示", "请选择要编辑的数据！", "info");
+            return;
+        }
+        if (row) {
+            editDialog.dialog('open');
+            editForm.form('load', row);
+            editScript.setValue(row.script);
+        }
     };
 
     /**
      * 保存数据
      */
     this.addData = function () {
-        editForm.form("submit", {
+        addForm.form("submit", {
             url: addUrl,
             success: function (data) {
                 data = $.parseJSON(data);
                 if (data.success) {
                     // 保存成功
-                    editDialog.dialog('close');
-                    $.messager.show({title: '提示', msg: data.message, timeout: 5000, showType: 'slide'});
+                    addDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
                     dataTable.datagrid('reload');
                 } else {
                     // 保存失败
@@ -360,7 +368,7 @@ var pageJs = function (globalPath) {
                 if (data.success) {
                     // 保存成功
                     editDialog.dialog('close');
-                    $.messager.show({title: '提示', msg: data.message, timeout: 5000, showType: 'slide'});
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
                     dataTable.datagrid('reload');
                 } else {
                     // 保存失败
@@ -378,12 +386,12 @@ var pageJs = function (globalPath) {
             $.messager.alert("提示", "请选择要删除的数据！", "info");
             return;
         }
-        $.messager.confirm("确认删除", "您确定删除数据库脚本?<br/>" + row.name, function (r) {
+        $.messager.confirm("确认删除", "您确定删除数据库脚本?<br/>" + row.description, function (r) {
             if (r) {
                 $.post(delUrl, row, function (data) {
                     if (data.success) {
                         // 删除成功
-                        $.messager.show({title: '提示', msg: data.message, timeout: 5000, showType: 'slide'});
+                        $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
                         dataTable.datagrid('reload');
                     } else {
                         // 删除失败

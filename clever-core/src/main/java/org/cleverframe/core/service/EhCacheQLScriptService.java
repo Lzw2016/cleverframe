@@ -93,7 +93,7 @@ public class EhCacheQLScriptService extends BaseService implements IQLScriptServ
     public boolean updateQLScript(QLScript qLScript) {
         if (qLScript != null) {
             qLScriptDao.getHibernateDao().update(qLScript, false, true);
-            qLScriptDao.getHibernateDao().getSession().flush();
+//            qLScriptDao.getHibernateDao().getSession().flush();
             // 只缓存状态正常的数据
             if (qLScript.getDelFlag() != null && QLScript.DEL_FLAG_NORMAL == qLScript.getDelFlag()) {
                 Element element = new Element(qLScript.getName(), qLScript);
