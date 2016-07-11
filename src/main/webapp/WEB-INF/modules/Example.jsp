@@ -13,6 +13,8 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/ajxGlobalEventByEasyUI.js"--%>
 
     <%-- Bootstrap --%>
     <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.6-dist/css/bootstrap.min.css" />
