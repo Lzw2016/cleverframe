@@ -37,13 +37,11 @@ public class AccessLogDao extends BaseDao<AccessLog> {
      * @param requestEndTime   请求时间(最大)
      * @param requestUri       请求URI
      * @param method           操作方式
-     * @param params           操作提交的数据
      * @param processMinTime   请求处理时间(最小)
      * @param processMaxTime   请求处理时间(最大)
      * @param remoteAddr       客户端的IP地址
      * @param userAgent        用户代理
      * @param hasException     是否有异常（0：否；1：是）
-     * @param exceptionInfo    异常信息
      * @return 分页对象
      */
     public Page<AccessLog> findByPage(Page<AccessLog> page,
@@ -52,26 +50,22 @@ public class AccessLogDao extends BaseDao<AccessLog> {
                                       Date requestEndTime,
                                       String requestUri,
                                       String method,
-                                      String params,
                                       Long processMinTime,
                                       Long processMaxTime,
                                       String remoteAddr,
                                       String userAgent,
-                                      Character hasException,
-                                      String exceptionInfo) {
+                                      Character hasException) {
         Parameter param = new Parameter();
         param.put("loginName", loginName);
         param.put("requestStartTime", requestStartTime);
         param.put("requestEndTime", requestEndTime);
         param.put("requestUri", "%" + requestUri + "%");
         param.put("method", method);
-        param.put("params", "%" + requestUri + "%");
         param.put("processMinTime", processMinTime);
         param.put("processMaxTime", processMaxTime);
-        param.put("remoteAddr", remoteAddr);
+        param.put("remoteAddr", "%"+ remoteAddr +"%");
         param.put("userAgent", "%" + userAgent + "%");
         param.put("hasException", hasException);
-        param.put("exceptionInfo", "%" + exceptionInfo + "%");
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.AccessLogDao.findByPage");
         return hibernateDao.findBySql(page, sql, param);
     }

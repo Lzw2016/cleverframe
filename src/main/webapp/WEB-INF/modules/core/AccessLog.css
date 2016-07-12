@@ -1,0 +1,27 @@
+/*查询表单样式*/
+#searchForm {
+    margin-top: 8px;
+    margin-left: 15px;
+}
+
+#searchForm .row {
+    margin-bottom: 8px;
+}
+
+#searchForm .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#searchForm .row input, select {
+    width: 160px;
+}
+
+#searchForm .row .column {
+    margin-right: 10px;
+}
+
+#searchForm .row .columnLast {
+    margin-right: 0;
+}

@@ -37,11 +37,6 @@ public class AccessLogQueryVo extends BaseRequestVo {
     private String method;
 
     /**
-     * 请求参数数据
-     */
-    private String params;
-
-    /**
      * 请求处理时间(最小)
      */
     private Long processMinTime;
@@ -63,10 +58,6 @@ public class AccessLogQueryVo extends BaseRequestVo {
      * 是否有异常（0：否；1：是）
      */
     private Character hasException;
-    /**
-     * 异常信息
-     */
-    private String exceptionInfo;
 
     /*--------------------------------------------------------------
      *          getter、setter
@@ -112,14 +103,6 @@ public class AccessLogQueryVo extends BaseRequestVo {
         this.method = method;
     }
 
-    public String getParams() {
-        return params;
-    }
-
-    public void setParams(String params) {
-        this.params = params;
-    }
-
     public Long getProcessMinTime() {
         return processMinTime;
     }
@@ -158,13 +141,5 @@ public class AccessLogQueryVo extends BaseRequestVo {
 
     public void setHasException(Character hasException) {
         this.hasException = hasException;
-    }
-
-    public String getExceptionInfo() {
-        return exceptionInfo;
-    }
-
-    public void setExceptionInfo(String exceptionInfo) {
-        this.exceptionInfo = exceptionInfo;
     }
 }

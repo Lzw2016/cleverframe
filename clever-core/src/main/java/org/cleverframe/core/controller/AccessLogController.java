@@ -38,7 +38,6 @@ public class AccessLogController extends BaseController {
         return new ModelAndView(CoreJspUrlPath.AccessLog);
     }
 
-
     /**
      * 查询配置信息，使用分页
      *
@@ -60,13 +59,11 @@ public class AccessLogController extends BaseController {
                 accessLogQueryVo.getRequestEndTime(),
                 accessLogQueryVo.getRequestUri(),
                 accessLogQueryVo.getMethod(),
-                accessLogQueryVo.getParams(),
                 accessLogQueryVo.getProcessMinTime(),
                 accessLogQueryVo.getProcessMaxTime(),
                 accessLogQueryVo.getRemoteAddr(),
                 accessLogQueryVo.getUserAgent(),
-                accessLogQueryVo.getHasException(),
-                accessLogQueryVo.getExceptionInfo());
+                accessLogQueryVo.getHasException());
         json.setRows(qLScriptPage.getList());
         json.setTotal(qLScriptPage.getCount());
         return json;
