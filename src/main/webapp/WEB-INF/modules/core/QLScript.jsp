@@ -32,7 +32,7 @@
 </head>
 <body class="easyui-layout" data-options="fit:true,border:false">
 <%-- 页面上部 --%>
-<div data-options="region:'north',border:true,minWidth:800" style="height:110px;">
+<div data-options="region:'north',border:true,minWidth:800" style="height:80px;">
     <form id="searchForm" method="post">
         <div class="row">
             <span class="columnLast">
@@ -49,17 +49,6 @@
             <span class="column">
                 <label for="searchDelFlag">删除标记</label>
                 <input id="searchDelFlag" name="delFlag" class="easyui-combobox">
-            </span>
-            <span class="columnLast">
-                <label for="searchId">数据ID</label>
-                <input id="searchId" name="id" class="easyui-numberbox">
-            </span>
-        </div>
-
-        <div class="row">
-            <span class="columnLast">
-                <label for="searchUuid">数据UUID</label>
-                <input id="searchUuid" name="uuid" class="easyui-textbox" style="width: 400px">
             </span>
         </div>
     </form>

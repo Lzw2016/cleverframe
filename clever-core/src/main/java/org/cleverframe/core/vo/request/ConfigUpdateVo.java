@@ -4,6 +4,7 @@ import org.cleverframe.common.vo.request.BaseRequestVo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -18,28 +19,25 @@ public class ConfigUpdateVo extends BaseRequestVo {
     /**
      * 数据ID
      */
-    @NotBlank(message = "数据ID不能为空")
+    @NotNull(message = "数据ID不能为空")
     private Long id;
 
     /**
      * 删除标记（1：正常；2：删除；3：审核）,以字典表sys_dict.dict_key=‘删除标记’为准'
      */
-    @NotBlank(message = "删除标记不能为空")
     @Pattern(regexp = "1|2", message = "删除标记只能是：1(正常)、2(删除)")
     private String delFlag;
 
     /**
      * 配置键
      */
-    @NotBlank(message = "配置键不能为空")
-    @Length(min = 1, max = 100, message = "配置键长度不能超过100个字符")
+    @Length(min = 0, max = 100, message = "配置键长度不能超过100个字符")
     private String configKey;
 
     /**
      * 配置数据值
      */
-    @NotBlank(message = "配置数据值不能为空")
-    @Length(min = 1, max = 255, message = "配置数据值长度不能超过255个字符")
+    @Length(min = 0, max = 255, message = "配置数据值长度不能超过255个字符")
     private String configValue;
 
     /**
@@ -51,21 +49,18 @@ public class ConfigUpdateVo extends BaseRequestVo {
     /**
      * 是否支持在线配置生效（0：否；1：是）
      */
-    @NotBlank(message = "是否支持在线配置生效不能为空")
     @Pattern(regexp = "0|1", message = "是否支持在线配置生效只能是：0-否,1-是")
     private String hotSwap;
 
     /**
      * 描述
      */
-    @NotBlank(message = "配置描述不能为空")
     @Length(min = 1, max = 500, message = "配置描述长度不能操作500个字符")
     private String description;
 
     /**
      * 排序(升序)
      */
-    @NotBlank(message = "排序值不能为空")
     private Integer sort;
 
     /**

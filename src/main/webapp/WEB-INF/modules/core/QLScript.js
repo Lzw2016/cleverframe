@@ -118,7 +118,7 @@ var pageJs = function (globalPath) {
             pagination: true,
             loadMsg: "正在加载，请稍候...",
             toolbar: "#dataTableButtons",
-            pageSize: 50,
+            pageSize: 30,
             pageList: [10, 20, 30, 50, 100, 150],
             onDblClickRow: function (rowIndex, rowData) {
                 _this.openEditDialog();

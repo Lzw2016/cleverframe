@@ -4,6 +4,7 @@ import org.cleverframe.common.vo.request.BaseRequestVo;
 import org.hibernate.validator.constraints.Length;
 import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -52,7 +53,7 @@ public class ConfigAddVo extends BaseRequestVo {
     /**
      * 排序(升序)
      */
-    @NotBlank(message = "排序值不能为空")
+    @NotNull(message = "排序值不能为空")
     private Integer sort;
 
     /**

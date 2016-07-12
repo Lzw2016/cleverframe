@@ -93,11 +93,10 @@ public class ConfigController extends BaseController {
             HttpServletResponse response,
             @Valid ConfigAddVo configAddVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "配置信息保存成功", null);
         Config config = BeanMapper.mapper(configAddVo, Config.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
             ehCacheConfigService.saveConfig(config);
-            message.setResult("配置信息保存成功");
         }
         return message;
     }
@@ -113,11 +112,10 @@ public class ConfigController extends BaseController {
             HttpServletResponse response,
             @Valid ConfigUpdateVo configUpdateVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "更新配置信息对象成功", null);
         Config config = BeanMapper.mapper(configUpdateVo, Config.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
             ehCacheConfigService.updateConfig(config);
-            message.setResult("更新配置信息对象成功");
         }
         return message;
     }
@@ -133,10 +131,9 @@ public class ConfigController extends BaseController {
             HttpServletResponse response,
             @Valid ConfigDelVo configDelVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> message = new AjaxMessage<>();
+        AjaxMessage<String> message = new AjaxMessage<>(true, "配置信息删除成功", null);
         if (beanValidator(bindingResult, message)) {
             ehCacheConfigService.deleteConfig(configDelVo.getConfigKey());
-            message.setResult("配置信息删除成功");
         }
         return message;
     }
