@@ -1,5 +1,6 @@
 package org.cleverframe.core.controller;
 
+import org.cleverframe.common.codec.EncodeDecodeUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;
@@ -80,11 +81,11 @@ public class DictController extends BaseController {
             HttpServletResponse response,
             @Valid DictAddVo dictAddVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "数据字典保存成功", null);
+        dictAddVo.setRemarks(EncodeDecodeUtils.unescapeHtml(dictAddVo.getRemarks()));// HTML转码
         Dict dict = BeanMapper.mapper(dictAddVo, Dict.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
             dictService.saveDict(dict);
-            message.setResult("数据字典保存成功");
         }
         return message;
     }
@@ -100,11 +101,11 @@ public class DictController extends BaseController {
             HttpServletResponse response,
             @Valid DictUpdateVo dictUpdateVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "更新数据字典成功", null);
+        dictUpdateVo.setRemarks(EncodeDecodeUtils.unescapeHtml(dictUpdateVo.getRemarks()));// HTML转码
         Dict dict = BeanMapper.mapper(dictUpdateVo, Dict.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
             dictService.updateDict(dict);
-            message.setResult("更新数据字典成功");
         }
         return message;
     }
@@ -120,10 +121,9 @@ public class DictController extends BaseController {
             HttpServletResponse response,
             @Valid DictDelVo dictDelVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> message = new AjaxMessage<>();
+        AjaxMessage<String> message = new AjaxMessage<>(true, "数据字典删除成功", null);
         if (beanValidator(bindingResult, message)) {
             dictService.deleteDict(dictDelVo.getId());
-            message.setResult("数据字典删除成功");
         }
         return message;
     }

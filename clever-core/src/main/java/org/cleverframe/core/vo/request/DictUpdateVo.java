@@ -23,7 +23,6 @@ public class DictUpdateVo extends BaseRequestVo {
     /**
      * 删除标记（1：正常；2：删除；3：审核）,以字典表sys_dict.dict_key=‘删除标记’为准'
      */
-    @NotBlank(message = "删除标记不能为空")
     @Pattern(regexp = "1|2", message = "删除标记只能是：1(正常)、2(删除)")
     private String delFlag;
 
@@ -36,28 +35,24 @@ public class DictUpdateVo extends BaseRequestVo {
     /**
      * 字典键
      */
-    @NotBlank(message = "字典键不能为空")
     @Length(max = 100, message = "字典键长度不能超过100个字符")
     private String dictKey;
 
     /**
      * 字典数据值
      */
-    @NotBlank(message = "字典数据值不能为空")
     @Length(max = 255, message = "字典数据值长度不能超过255个字符")
     private String dictValue;
 
     /**
      * 字典分类
      */
-    @NotBlank(message = "字典分类不能为空")
     @Length(max = 100, message = "字典分类长度不能超过100个字符")
     private String dictType;
 
     /**
      * 字典描述
      */
-    @NotBlank(message = "字典描述不能为空")
     @Length(max = 500, message = "字典描述长度不能超过500个字符")
     private String description;
 

@@ -30,7 +30,7 @@
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
 
     <%-- 加载自定义的全局JS文件 --%>
-    <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalSysPath.js"></script>
+    <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
     <link rel="stylesheet" type="text/css" href="${applicationScope.modulesPath}/Example.css">
     <script type="text/javascript" src="${applicationScope.modulesPath}/Example.js"></script>

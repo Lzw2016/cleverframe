@@ -47,7 +47,6 @@ public class DictAddVo extends BaseRequestVo {
     @Length(max = 500, message = "字典描述长度不能超过500个字符")
     private String description;
 
-
     /**
      * 字典排序
      */
