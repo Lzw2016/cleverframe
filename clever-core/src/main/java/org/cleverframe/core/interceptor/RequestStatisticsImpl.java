@@ -4,6 +4,7 @@ import org.cleverframe.common.attributes.CommonApplicationAttributes;
 import org.cleverframe.common.attributes.CommonRequestAttributes;
 import org.cleverframe.common.interceptor.IRequestStatistics;
 import org.cleverframe.common.mapper.BeanMapper;
+import org.cleverframe.common.time.DateTimeUtils;
 import org.cleverframe.common.utils.ConversionUtils;
 import org.cleverframe.common.vo.request.RequestInfo;
 import org.cleverframe.core.CoreBeanNames;
@@ -14,6 +15,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.util.Date;
 
 /**
  * 服务所有的请求统计默认实现类，不依赖任何中间件<br/>
@@ -47,7 +49,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
     /**
      * 最后一次请求的时间,类型:long
      */
-    private static volatile long LAST_REQUEST_TIME;
+    private static volatile long LAST_REQUEST_TIME = System.currentTimeMillis();
 
     /**
      * 服务器本次启动后处理的请求总数 加1
@@ -68,7 +70,12 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean addRequestCountByDay(HttpServletRequest request, HttpServletResponse response) {
-        REQUEST_COUNT_BY_DAY++;
+        Date endDate = DateTimeUtils.getDayEndTime(new Date(LAST_REQUEST_TIME));
+        if (endDate.compareTo(new Date()) < 0) {
+            REQUEST_COUNT_BY_DAY = 1;
+        } else {
+            REQUEST_COUNT_BY_DAY++;
+        }
         request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_DAY, REQUEST_COUNT_BY_DAY);
         return true;
     }
@@ -80,7 +87,12 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean addRequestCountByHour(HttpServletRequest request, HttpServletResponse response) {
-        REQUEST_COUNT_BY_HOUR++;
+        Date endDate = DateTimeUtils.getHourEndTime(new Date(LAST_REQUEST_TIME));
+        if (endDate.compareTo(new Date()) < 0) {
+            REQUEST_COUNT_BY_HOUR = 1;
+        } else {
+            REQUEST_COUNT_BY_HOUR++;
+        }
         request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_HOUR, REQUEST_COUNT_BY_HOUR);
         return true;
     }
