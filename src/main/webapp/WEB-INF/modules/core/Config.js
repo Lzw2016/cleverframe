@@ -416,7 +416,7 @@ var pageJs = function (globalPath) {
                 return false;
             }
         });
-        return result;
+        return result == "" ? value : result;
     };
 
     // 热配置生效格式化
@@ -429,7 +429,7 @@ var pageJs = function (globalPath) {
                 return false;
             }
         });
-        return result;
+        return result == "" ? value : result;
     };
 };
 

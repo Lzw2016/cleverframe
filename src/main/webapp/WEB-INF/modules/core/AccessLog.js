@@ -233,7 +233,7 @@ var pageJs = function (globalPath) {
                 return false;
             }
         });
-        return result;
+        return result == "" ? value : result;
     };
 
     // 格式化

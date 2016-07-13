@@ -2,8 +2,8 @@ package org.cleverframe.core.vo.request;
 
 import org.cleverframe.common.vo.request.BaseRequestVo;
 import org.hibernate.validator.constraints.Length;
-import org.hibernate.validator.constraints.NotBlank;
 
+import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 
 /**
@@ -15,13 +15,12 @@ public class TemplateUpdateVo extends BaseRequestVo {
     /**
      * 数据ID
      */
-    @NotBlank(message = "数据ID不能为空")
+    @NotNull(message = "数据ID不能为空")
     private Long id;
 
     /**
      * 删除标记（1：正常；2：删除；3：审核）,以字典表sys_dict.dict_key=‘删除标记’为准'
      */
-    @NotBlank(message = "删除标记不能为空")
     @Pattern(regexp = "1|2", message = "删除标记只能是：1(正常)、2(删除)")
     private String delFlag;
 
@@ -34,28 +33,24 @@ public class TemplateUpdateVo extends BaseRequestVo {
     /**
      * 模版名称，不能重复
      */
-    @NotBlank(message = "模版名称不能为空")
     @Length(max = 255, message = "模版名称长度不能超过255个字符")
     private String name;
 
     /**
      * 模版内容
      */
-    @NotBlank(message = "模版内容不能为空")
-    @Length(max = 2000, message = "模版内容长度不能超过2000个字符")
+    @Length(max = 2000000, message = "模版内容长度不能超过2000000个字符")
     private String content;
 
     /**
      * 模版语言
      */
-    @NotBlank(message = "模版语言不能为空")
     @Length(max = 50, message = "模版语言长度不能超过2000个字符")
     private String locale;
 
     /**
      * 模版说明
      */
-    @NotBlank(message = "模版说明不能为空")
     @Length(max = 1000, message = "模版说明长度不能超过2000个字符")
     private String description;
 

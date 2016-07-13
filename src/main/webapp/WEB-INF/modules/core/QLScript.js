@@ -34,8 +34,6 @@ var pageJs = function (globalPath) {
     var searchName = $("#searchName");
     var searchType = $("#searchType");
     var searchDelFlag = $("#searchDelFlag");
-    var searchId = $("#searchId");
-    var searchUuid = $("#searchUuid");
 
     // 数据新增对话框
     var addDialog = $("#addDialog");
@@ -415,7 +413,7 @@ var pageJs = function (globalPath) {
                 return false;
             }
         });
-        return result;
+        return result == "" ? value : result;
     };
 
     // 删除标记格式化
@@ -428,7 +426,7 @@ var pageJs = function (globalPath) {
                 return false;
             }
         });
-        return result;
+        return result == "" ? value : result;
     };
 };
 

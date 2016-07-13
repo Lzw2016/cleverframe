@@ -5,52 +5,49 @@ var pageJs = function (globalPath) {
     // 当前pageJs对象
     var _this = this;
     // 分页查询地址
-    var findByPageUrl = globalPath.mvcPath + "/core/dict/findDictByPage.json";
+    var findByPageUrl = globalPath.mvcPath + "/core/template/findTemplateByPage.json";
     // 新增保存地址
-    var addUrl = globalPath.mvcPath + "/core/dict/addDict.json";
+    var addUrl = globalPath.mvcPath + "/core/template/addTemplate.json";
     // 编辑保存地址
-    var updateUrl = globalPath.mvcPath + "/core/dict/updateDict.json";
+    var updateUrl = globalPath.mvcPath + "/core/template/updateTemplate.json";
     // 删除地址
-    var delUrl = globalPath.mvcPath + "/core/dict/deleteDict.json";
+    var delUrl = globalPath.mvcPath + "/core/template/deleteTemplate.json";
     // 根据字典类别查询字典地址
     var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
 
     // 数据查询表单
     var searchForm = $("#searchForm");
-    // 字典分类-查询
-    var searchDictKey = $("#searchDictKey");
-    // 删除标记-查询
+    var searchName = $("#searchName");
+    var searchLocale = $("#searchLocale");
     var searchDelFlag = $("#searchDelFlag");
 
     // 数据显示表格
     var dataTable = $("#dataTable");
-    // 数据显示表格 - 按钮栏
+    // 数据显示表格 按钮栏
     var dataTableButtons = $("#dataTableButtons");
-    // 数据显示表格 - 查询
+    // 数据显示表格 查询按钮
     var dataTableButtonsSearch = $("#dataTableButtonsSearch");
-    // 数据显示表格 - 新增
+    // 数据显示表格 增加按钮
     var dataTableButtonsAdd = $("#dataTableButtonsAdd");
-    // 数据显示表格 - 编辑
+    // 数据显示表格 编辑按钮
     var dataTableButtonsEdit = $("#dataTableButtonsEdit");
-    // 数据显示表格 - 删除
+    // 数据显示表格 删除按钮
     var dataTableButtonsDel = $("#dataTableButtonsDel");
 
     // 新增对话框
     var addDialog = $("#addDialog");
     // 新增表单
     var addForm = $("#addForm");
-    // 字典键
-    var addDictKey = $("#addDictKey");
-    // 字典数据值
-    var addDictValue = $("#addDictValue");
-    // 字典分类
-    var addDictType = $("#addDictType");
-    // 排序
-    var addSort = $("#addSort");
-    // 描述
+    // 模版名称
+    var addName = $("#addName");
+    // 模版语言
+    var addLocale = $("#addLocale");
+    // 配置描述
     var addDescription = $("#addDescription");
     // 备注信息
     var addRemarks = $("#addRemarks");
+    // 模版内容
+    var addContent = null;
 
     // 新增对话框 - 按钮栏
     var addDialogButtons = $("#addDialogButtons");
@@ -61,26 +58,24 @@ var pageJs = function (globalPath) {
 
     // 编辑对话框
     var editDialog = $("#editDialog");
-    // 更新数据表单
+    // 编辑表单
     var editForm = $("#editForm");
-    // 字典键
-    var editDictKey = $("#editDictKey");
-    // 字典数据值
-    var editDictValue = $("#editDictValue");
-    // 字典分类
-    var editDictType = $("#editDictType");
+    // 模版名称
+    var editName = $("#editName");
+    // 模版语言
+    var editLocale = $("#editLocale");
     // 删除标记
     var editDelFlag = $("#editDelFlag");
-    // 排序
-    var editSort = $("#editSort");
-    // 描述
+    // 配置描述
     var editDescription = $("#editDescription");
     // 备注信息
     var editRemarks = $("#editRemarks");
+    // 模版内容
+    var editContent = null;
 
     // 编辑对话框 - 按钮栏
     var editDialogButtons = $("#editDialogButtons");
-    // 编辑对话框 - 新增
+    // 编辑对话框 - 编辑
     var editDialogButtonsSave = $("#editDialogButtonsSave");
     // 编辑对话框 - 取消
     var editDialogButtonsCancel = $("#editDialogButtonsCancel");
@@ -89,6 +84,14 @@ var pageJs = function (globalPath) {
      * 页面初始化方法
      */
     this.init = function () {
+        $("#searchLocale").combobox({
+            required: false,
+            url: findDictTypeUrl + encodeURIComponent("国际化语言后缀")+ "&hasSelectAll=true",
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 80
+        });
         // 设置删除标记下拉框
         searchDelFlag.combobox({
             required: false,
@@ -103,7 +106,7 @@ var pageJs = function (globalPath) {
         //noinspection JSUnusedLocalSymbols
         dataTable.datagrid({
             url: findByPageUrl,
-            idField: 'configKey',
+            idField: 'name',
             fit: true,
             fitColumns: false,
             striped: true,
@@ -137,7 +140,7 @@ var pageJs = function (globalPath) {
 
         // 初始化新增对话框
         _this.initAddDialog();
-        //// 初始化编辑对话框
+        // 初始化编辑对话框
         _this.initEditDialog();
         // 页面数据初始化
         _this.dataBind();
@@ -166,6 +169,7 @@ var pageJs = function (globalPath) {
         dataTableButtonsAdd.click(function () {
             addDialog.dialog('open');
             addForm.form('reset');
+            addContent.setValue('\r\n');
         });
 
         // 新增 -- 保存
@@ -200,36 +204,46 @@ var pageJs = function (globalPath) {
     };
 
     // ---------------------------------------------------------------------------------------------------------
-
     // 初始化新增对话框
     this.initAddDialog = function () {
         addDialog.dialog({
-            title: "新增数据字典",
+            title: "新增模版数据",
             closed: true,
             minimizable: false,
-            maximizable: false,
+            maximizable: true,
             resizable: false,
             minWidth: 850,
             minHeight: 330,
             modal: true,
-            buttons: "#addDialogButtons"
+            buttons: "#addDialogButtons",
+            onOpen: function() {
+                if(addContent != null) {
+                    return;
+                }
+                // SQL编辑器-初始化,
+                addContent = CodeMirror.fromTextArea(document.getElementById("addContent"), {
+                    mode: "text/x-java",
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    indentUnit: 4,
+                    readOnly: false
+                });
+                addContent.setSize("auto", "auto");
+                addContent.setOption("theme", "cobalt");
+                addContent.setValue('\r\n');
+            }
         });
-        addDictKey.textbox({
-            required: true,
-            validType: 'length[0,100]'
-        });
-        addDictValue.textbox({
+        addName.textbox({
             required: true,
             validType: 'length[0,255]'
         });
-        addDictType.textbox({
+        addLocale.combobox({
             required: false,
-            validType: 'length[0,100]'
-        });
-        addSort.numberspinner({
-            required: true,
-            value: 0,
-            editable: true
+            url: findDictTypeUrl + encodeURIComponent("国际化语言后缀"),
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 80
         });
         addDescription.textbox({
             required: true,
@@ -245,40 +259,43 @@ var pageJs = function (globalPath) {
     // 初始化编辑对话框
     this.initEditDialog = function () {
         editDialog.dialog({
-            title: "更新数据字典",
+            title: "更新模版数据",
             closed: true,
             minimizable: false,
-            maximizable: false,
+            maximizable: true,
             resizable: false,
             minWidth: 850,
-            minHeight: 360,
+            minHeight: 330,
             modal: true,
-            buttons: "#editDialogButtons"
+            buttons: "#editDialogButtons",
+            onOpen: function() {
+                if(editContent != null) {
+                    return;
+                }
+                // SQL编辑器-初始化,
+                editContent = CodeMirror.fromTextArea(document.getElementById("editContent"), {
+                    mode: "text/x-java",
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    indentUnit: 4,
+                    readOnly: false
+                });
+                editContent.setSize("auto", "auto");
+                editContent.setOption("theme", "cobalt");
+                editContent.setValue('\r\n');
+            }
         });
-        editDictKey.textbox({
-            required: true,
-            validType: 'length[0,100]'
-        });
-        editDictValue.textbox({
+        editName.textbox({
             required: true,
             validType: 'length[0,255]'
         });
-        editDictType.textbox({
+        editLocale.combobox({
             required: false,
-            validType: 'length[0,100]'
-        });
-        editDelFlag.combobox({
-            required: true,
-            url: findDictTypeUrl + encodeURIComponent("删除标记"),
+            url: findDictTypeUrl + encodeURIComponent("国际化语言后缀"),
             editable: false,
             valueField: 'value',
             textField: 'text',
             panelHeight: 80
-        });
-        editSort.numberspinner({
-            required: true,
-            value: 0,
-            editable: true
         });
         editDescription.textbox({
             required: true,
@@ -288,6 +305,14 @@ var pageJs = function (globalPath) {
         editRemarks.textbox({
             validType: 'length[0,255]',
             multiline: true
+        });
+        editDelFlag.combobox({
+            required: true,
+            url: findDictTypeUrl + encodeURIComponent("删除标记"),
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 80
         });
     };
 
@@ -303,6 +328,11 @@ var pageJs = function (globalPath) {
         if (row) {
             editDialog.dialog('open');
             editForm.form('load', row);
+            if (!row.content || row.content == null) {
+                editContent.setValue("");
+            } else {
+                editContent.setValue(row.content);
+            }
         }
     };
 
@@ -355,7 +385,7 @@ var pageJs = function (globalPath) {
             $.messager.alert("提示", "请选择要删除的数据！", "info");
             return;
         }
-        $.messager.confirm("确认删除", "您确定删除数据字典?<br/>" + row.dictKey, function (r) {
+        $.messager.confirm("确认删除", "您确定删除模版信息?<br/>" + row.name, function (r) {
             if (r) {
                 $.post(delUrl, row, function (data) {
                     if (data.success) {
@@ -368,6 +398,18 @@ var pageJs = function (globalPath) {
                 }, "json");
             }
         });
+    };
+
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.localeFormatter = function (value, rowData, rowIndex){
+        var result = "";
+        $(searchLocale.combobox('getData')).each(function(index, data) {
+            if(data.value == value) {
+                result = data.text;
+                return false;
+            }
+        });
+        return result == "" ? value : result;
     };
 
     // 删除标记格式化

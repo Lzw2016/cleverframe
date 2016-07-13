@@ -80,11 +80,11 @@ public class TemplateController extends BaseController {
             HttpServletResponse response,
             @Valid TemplateAddVo templateAddVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "模版数据保存成功", null);
         Template template = BeanMapper.mapper(templateAddVo, Template.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
+
         if (beanValidator(bindingResult, message)) {
             ehCacheTemplateService.saveTemplate(template);
-            message.setResult("模版数据保存成功");
         }
         return message;
     }
@@ -100,11 +100,10 @@ public class TemplateController extends BaseController {
             HttpServletResponse response,
             @Valid TemplateUpdateVo templateUpdateVo,
             BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "更新模版数据成功", null);
         Template template = BeanMapper.mapper(templateUpdateVo, Template.class);
-        AjaxMessage<String> message = new AjaxMessage<>();
         if (beanValidator(bindingResult, message)) {
             ehCacheTemplateService.updateTemplate(template);
-            message.setResult("更新模版数据成功");
         }
         return message;
     }
@@ -120,10 +119,9 @@ public class TemplateController extends BaseController {
             HttpServletResponse response,
             @Valid TemplateDelVo templateDelVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> message = new AjaxMessage<>();
+        AjaxMessage<String> message = new AjaxMessage<>(true, "模版数据删除成功", null);
         if (beanValidator(bindingResult, message)) {
             ehCacheTemplateService.deleteTemplate(templateDelVo.getName());
-            message.setResult("模版数据删除成功");
         }
         return message;
     }
