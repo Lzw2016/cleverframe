@@ -19,6 +19,7 @@ import java.util.Date;
 @DynamicInsert
 @DynamicUpdate
 public class AccessLog implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 编号
      */
@@ -50,7 +51,8 @@ public class AccessLog implements Serializable {
     /**
      * 请求参数数据
      */
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Lob
+    @Column(columnDefinition = "MediumText")
     private String params;
 
     /**
@@ -73,7 +75,8 @@ public class AccessLog implements Serializable {
     /**
      * 异常信息
      */
-    @Column(columnDefinition = "MEDIUMBLOB")
+    @Lob
+    @Column(columnDefinition = "MediumText")
     private String exceptionInfo;
 
     /*--------------------------------------------------------------

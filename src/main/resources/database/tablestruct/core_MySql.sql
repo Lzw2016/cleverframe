@@ -186,7 +186,7 @@ CREATE TABLE core_template
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     name            varchar(255)    NOT NULL    UNIQUE                  COMMENT '模版名称，不能重复',
-    content         blob            NOT NULL                            COMMENT '模版内容',
+    content         MediumText      NOT NULL                            COMMENT '模版内容',
     locale          varchar(50)     NOT NULL                            COMMENT '模版语言',
     description     varchar(1000)   NOT NULL                            COMMENT '模版说明',
     PRIMARY KEY (id)
@@ -206,12 +206,12 @@ CREATE TABLE core_access_log
     request_time    datetime        NOT NULL                            COMMENT '请求时间',
     request_uri     varchar(255)    NOT NULL                            COMMENT '请求URI',
     method          varchar(20)     NOT NULL                            COMMENT '操作方式',
-    params          MediumBlob                                          COMMENT '操作提交的数据',
+    params          MediumText                                          COMMENT '操作提交的数据',
     process_time    bigint          NOT NULL                            COMMENT '请求处理时间',
     remote_addr     varchar(30)                                         COMMENT '客户端的IP地址',
     user_agent      varchar(100)                                        COMMENT '用户代理',
     has_exception   char(1)         NOT NULL    DEFAULT '1'             COMMENT '是否有异常（0：否；1：是）',
-    exception_info  MediumBlob                                          COMMENT '异常信息',
+    exception_info  MediumText                                          COMMENT '异常信息',
     PRIMARY KEY (id)
 ) COMMENT = '日志表';
 /*------------------------------------------------------------------------------------------------------------------------
