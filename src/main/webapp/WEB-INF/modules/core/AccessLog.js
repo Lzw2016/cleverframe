@@ -171,7 +171,7 @@ var pageJs = function (globalPath) {
                     lineNumbers: true,
                     matchBrackets: true,
                     indentUnit: 4,
-                    readOnly: false
+                    readOnly: true
                 });
                 viewExceptionInfo.setSize("auto", "auto");
                 //viewExceptionInfo.setSize("100%", "800");
