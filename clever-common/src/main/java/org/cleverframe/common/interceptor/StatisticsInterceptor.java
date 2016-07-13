@@ -73,9 +73,6 @@ public class StatisticsInterceptor implements HandlerInterceptor {
             // 设置当前请求请求时间
             requestStatistics.setRequestStartTime(request, response);
 
-            // 设置最后一次请求的时间
-            boolean lastRequestTimeFlag = requestStatistics.setLastRequestTime(request, response);
-
             // 服务器本次启动后处理的请求总数 加1
             boolean requestCountByStartFlag = requestStatistics.addRequestCountByStart(request, response);
 
@@ -84,6 +81,9 @@ public class StatisticsInterceptor implements HandlerInterceptor {
 
             // 服务器当前小时处理请求总数(n:00:00-n:59:59) 加1
             boolean requestCountByHourFlag = requestStatistics.addRequestCountByHour(request, response);
+
+            // 设置最后一次请求的时间-- 必须在请求数量统计之后调用，否则会导致 RequestCountByDay RequestCountByHour 无法清零
+            boolean lastRequestTimeFlag = requestStatistics.setLastRequestTime(request, response);
 
             if (logger.isDebugEnabled()) {
                 String tmp = "\r\n" +

@@ -122,6 +122,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
 
     /**
      * 设置最后一次请求的时间
+     * <b>注意:必须在请求数量统计之后调用，否则会导致 RequestCountByDay RequestCountByHour 无法清零</b>
      *
      * @return 操作成功返回 true
      */
