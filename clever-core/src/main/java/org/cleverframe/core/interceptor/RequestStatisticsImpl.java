@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.Date;
+import java.util.concurrent.atomic.AtomicLong;
 
 /**
  * 服务所有的请求统计默认实现类，不依赖任何中间件<br/>
@@ -33,22 +34,22 @@ public class RequestStatisticsImpl implements IRequestStatistics {
     /**
      * 服务器本次启动后处理的请求总数,类型:long
      */
-    private static volatile long REQUEST_COUNT_BY_START = 0;
+    private static AtomicLong REQUEST_COUNT_BY_START = new AtomicLong(0L);
 
     /**
      * 服务器当天处理请求总数(00:00:00--23:59:59),类型:long
      */
-    private static volatile long REQUEST_COUNT_BY_DAY = 0;
+    private static AtomicLong REQUEST_COUNT_BY_DAY = new AtomicLong(0L);
 
     /**
      * 统计服务器当前小时处理请求总数(n:00:00-n:59:59),类型:long
      */
-    private static volatile long REQUEST_COUNT_BY_HOUR = 0;
+    private static AtomicLong REQUEST_COUNT_BY_HOUR = new AtomicLong(0L);
 
     /**
      * 最后一次请求的时间,类型:long
      */
-    private static volatile long LAST_REQUEST_TIME = System.currentTimeMillis();
+    private static AtomicLong LAST_REQUEST_TIME = new AtomicLong(System.currentTimeMillis());
 
     /**
      * 服务器本次启动后处理的请求总数 加1
@@ -57,8 +58,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean addRequestCountByStart(HttpServletRequest request, HttpServletResponse response) {
-        REQUEST_COUNT_BY_START++;
-        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_START, REQUEST_COUNT_BY_START);
+        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_START, REQUEST_COUNT_BY_START.incrementAndGet());
         return true;
     }
 
@@ -69,13 +69,13 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean addRequestCountByDay(HttpServletRequest request, HttpServletResponse response) {
-        Date endDate = DateTimeUtils.getDayEndTime(new Date(LAST_REQUEST_TIME));
+        Date endDate = DateTimeUtils.getDayEndTime(new Date(LAST_REQUEST_TIME.get()));
         if (endDate.compareTo(new Date()) < 0) {
-            REQUEST_COUNT_BY_DAY = 1;
+            REQUEST_COUNT_BY_DAY.set(1L);
         } else {
-            REQUEST_COUNT_BY_DAY++;
+            REQUEST_COUNT_BY_DAY.incrementAndGet();
         }
-        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_DAY, REQUEST_COUNT_BY_DAY);
+        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_DAY, REQUEST_COUNT_BY_DAY.get());
         return true;
     }
 
@@ -86,13 +86,13 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean addRequestCountByHour(HttpServletRequest request, HttpServletResponse response) {
-        Date endDate = DateTimeUtils.getHourEndTime(new Date(LAST_REQUEST_TIME));
+        Date endDate = DateTimeUtils.getHourEndTime(new Date(LAST_REQUEST_TIME.get()));
         if (endDate.compareTo(new Date()) < 0) {
-            REQUEST_COUNT_BY_HOUR = 1;
+            REQUEST_COUNT_BY_HOUR.set(1L);
         } else {
-            REQUEST_COUNT_BY_HOUR++;
+            REQUEST_COUNT_BY_HOUR.incrementAndGet();
         }
-        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_HOUR, REQUEST_COUNT_BY_HOUR);
+        request.getServletContext().setAttribute(CommonApplicationAttributes.REQUEST_COUNT_BY_HOUR, REQUEST_COUNT_BY_HOUR.get());
         return true;
     }
 
@@ -101,7 +101,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getRequestCountByStart(HttpServletRequest request, HttpServletResponse response) {
-        return REQUEST_COUNT_BY_START;
+        return REQUEST_COUNT_BY_START.get();
     }
 
     /**
@@ -109,7 +109,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getRequestCountByDay(HttpServletRequest request, HttpServletResponse response) {
-        return REQUEST_COUNT_BY_DAY;
+        return REQUEST_COUNT_BY_DAY.get();
     }
 
     /**
@@ -117,7 +117,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getRequestCountByHour(HttpServletRequest request, HttpServletResponse response) {
-        return REQUEST_COUNT_BY_HOUR;
+        return REQUEST_COUNT_BY_HOUR.get();
     }
 
     /**
@@ -128,7 +128,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public boolean setLastRequestTime(HttpServletRequest request, HttpServletResponse response) {
-        LAST_REQUEST_TIME = System.currentTimeMillis();
+        LAST_REQUEST_TIME.set(System.currentTimeMillis());
         request.getServletContext().setAttribute(CommonApplicationAttributes.LAST_REQUEST_TIME, LAST_REQUEST_TIME);
         return true;
     }
@@ -138,7 +138,7 @@ public class RequestStatisticsImpl implements IRequestStatistics {
      */
     @Override
     public long getLastRequestTime(HttpServletRequest request, HttpServletResponse response) {
-        return LAST_REQUEST_TIME;
+        return LAST_REQUEST_TIME.get();
     }
 
     /**
