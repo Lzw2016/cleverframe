@@ -222,8 +222,8 @@ CREATE TABLE sys_menu
 
     parent_id       bigint          NOT NULL                            COMMENT '父级编号,根节点的父级编号是：-1',
     full_path       varchar(255)    NOT NULL                            COMMENT '树结构的全路径用“-”隔开,包含自己的ID',
-    category        varchar(100)    NOT NULL                            COMMENT '菜单类别,如：系统不同模块的菜单(模块名)、个人快捷菜单(login_name)',
-    menu_type       char(1)         NOT NULL    DEFAULT '1'             COMMENT '菜单类型（1：系统模块菜单，2：个人快捷菜单）',
+    category        varchar(100)    NOT NULL                            COMMENT '菜单类别,如：系统不同模块的菜单(模块名)、个人快捷菜单(login_name)',-- 模块名称
+    menu_type       char(1)         NOT NULL    DEFAULT '1'             COMMENT '菜单类型（1：系统模块菜单，2：个人快捷菜单）',-- "System" 表示系统菜单，"login_name" 表示个人快捷菜单
     name            varchar(50)     NOT NULL                            COMMENT '菜单名称',
     href            varchar(255)                                        COMMENT '菜单地址',
     icon            varchar(50)                                         COMMENT '图标',

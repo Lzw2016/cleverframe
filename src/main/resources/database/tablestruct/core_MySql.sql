@@ -196,32 +196,19 @@ CREATE TABLE core_template
 --------------------------------------------------------------------------------------------------------------------------*/
 
 
-系统资源表-权限(资源)表 sys_permission
+/* ====================================================================================================================
+    core_resources -- 系统资源(权限)表
+==================================================================================================================== */
 CREATE TABLE core_resources
 (
     id              bigint          NOT NULL    auto_increment          COMMENT '编号',
-    company_id      bigint          NOT NULL                            COMMENT '数据所属公司的ID,用于公司之间的数据隔离',
-    org_id          bigint          NOT NULL                            COMMENT '数据直属机构的ID',
-    create_by       bigint          NOT NULL                            COMMENT '创建者',
-    create_date     datetime        NOT NULL                            COMMENT '创建时间',
-    update_by       bigint          NOT NULL                            COMMENT '更新者',
-    update_date     datetime        NOT NULL                            COMMENT '更新时间',
-    remarks         varchar(255)                                        COMMENT '备注信息',
-    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）,以字典表sys_dict.dict_key=‘删除标记’为准',
-    uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
-
-    menu_id         bigint          NOT NULL                            COMMENT '所属菜单,系统模块菜单ID',
-    permission      varchar(100)    NOT NULL    UNIQUE                  COMMENT '权限标识字符串',
-    permission_type char(1)         NOT NULL                            COMMENT '权限类型（1：URL权限；2：UI权限）',
-    name            varchar(50)     NOT NULL                            COMMENT '权限名称',
-    url             varchar(255)    NOT NULL                            COMMENT '权限对应的请求地址(冗余数据,只是用来查看的,要以代码中的权限注解为准)',
+    title           varchar(255)    NOT NULL                            COMMENT '资源标题',
+    resources_url   varchar(255)    NOT NULL    UNIQUE                  COMMENT '资源URL地址',
+    permission      varchar(255)    NOT NULL    UNIQUE                  COMMENT '资源访问所需要的权限标识字符串',
+    resources_type  char(1)         NOT NULL                            COMMENT '资源类型（1：URL资源；2：UI资源）',
+    description     varchar(1000)   NOT NULL                            COMMENT '资源说明',
     PRIMARY KEY (id)
-) COMMENT = '权限(资源)表';
-
-
-
-
-
+) COMMENT = '系统资源(权限)表';
 
 
 /* ====================================================================================================================
