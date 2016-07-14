@@ -27,7 +27,7 @@ public class Resources implements Serializable {
     /**
      * UI资源（1：URL资源；2：UI资源）
      */
-    public static final Character UI_RESOURCES = '1';
+    public static final Character UI_RESOURCES = '2';
 
     /**
      * 编号
@@ -54,7 +54,7 @@ public class Resources implements Serializable {
     /**
      * 资源类型（1：URL资源；2：UI资源）
      */
-    private String resourcesType;
+    private Character resourcesType;
 
     /**
      * 资源说明
@@ -97,11 +97,11 @@ public class Resources implements Serializable {
         this.permission = permission;
     }
 
-    public String getResourcesType() {
+    public Character getResourcesType() {
         return resourcesType;
     }
 
-    public void setResourcesType(String resourcesType) {
+    public void setResourcesType(Character resourcesType) {
         this.resourcesType = resourcesType;
     }
 

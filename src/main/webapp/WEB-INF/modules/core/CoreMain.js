@@ -14,7 +14,7 @@ var pageJs = function () {
     var tabsCenter = $('#tabsCenter');
 
     // 获取菜单信息地址
-    var menuUrl = "${pageScope.mvcPath}/sys/findMenuByCategory?category=";
+    var menuUrl = globalPath.mvcPath + "/sys/findMenuByCategory?category=";
     menuUrl += encodeURIComponent("SYS模块菜单");
 
     /**
@@ -203,6 +203,10 @@ var pageJsObject = null;
  * 页面Js执行入口
  */
 $(document).ready(function () {
-    pageJsObject = new pageJs();
-    pageJsObject.init();
+    if (typeof(globalPath) == "undefined") {
+        alert("系统全局路径对象未定义(globalPath)");
+    } else {
+        pageJsObject = new pageJs(globalPath);
+        pageJsObject.init();
+    }
 });

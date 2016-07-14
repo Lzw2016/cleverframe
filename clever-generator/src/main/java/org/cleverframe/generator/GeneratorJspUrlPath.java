@@ -11,5 +11,8 @@ import org.cleverframe.common.IJspUrlPath;
  */
 public class GeneratorJspUrlPath implements IJspUrlPath {
 
-    
+    /**
+     * 代码生成页面主页
+     */
+    public static final String GeneratorMain = "generator/GeneratorMain";
 }
