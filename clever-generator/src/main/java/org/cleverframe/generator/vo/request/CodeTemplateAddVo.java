@@ -41,13 +41,6 @@ public class CodeTemplateAddVo extends BaseRequestVo {
     private String nodeType;
 
     /**
-     * 脚本模版引用，与core_template的name字段关联
-     */
-    @NotBlank(message = "模版名称不能为空")
-    @Length(max = 255, message = "模版名称长度不能超过255个字符")
-    private String templateRef;
-
-    /**
      * 模版说明
      */
     @NotBlank(message = "模版说明不能为空")
@@ -112,14 +105,6 @@ public class CodeTemplateAddVo extends BaseRequestVo {
 
     public void setNodeType(String nodeType) {
         this.nodeType = nodeType;
-    }
-
-    public String getTemplateRef() {
-        return templateRef;
-    }
-
-    public void setTemplateRef(String templateRef) {
-        this.templateRef = templateRef;
     }
 
     public String getDescription() {

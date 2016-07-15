@@ -12,6 +12,7 @@ import org.cleverframe.generator.entity.CodeTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * 作者：LiZW <br/>
@@ -48,6 +49,7 @@ public class CodeTemplateService extends BaseService {
      * @param ajaxMessage  请求响应信息
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean addCodeTemplate(CodeTemplate codeTemplate, Template template, AjaxMessage ajaxMessage) {
         CodeTemplate parent = null;
         if (codeTemplate.getParentId() != -1) {
@@ -123,6 +125,7 @@ public class CodeTemplateService extends BaseService {
      * @param ajaxMessage  请求响应信息
      * @return 成功返回true，失败返回false
      */
+    @Transactional(readOnly = false)
     public boolean updateCodeTemplate(CodeTemplate codeTemplate, Template template, AjaxMessage ajaxMessage) {
         CodeTemplate oldCodeTemplate = codeTemplateDao.getHibernateDao().get(codeTemplate.getId());
         if (oldCodeTemplate == null) {

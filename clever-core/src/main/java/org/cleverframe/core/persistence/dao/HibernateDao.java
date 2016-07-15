@@ -633,6 +633,7 @@ public class HibernateDao<T extends Serializable> {
 
     /**
      * 通过SQL查找一个实体对象，带参数<br/>
+     * <b>注意:使用count(*)查询时返回值是BigInteger,entityClass参数传null</b>
      *
      * @param entityClass 设置返回实体的类型
      * @param sqlQuery    SQL查询
@@ -648,6 +649,7 @@ public class HibernateDao<T extends Serializable> {
 
     /**
      * 通过SQL查找一个实体对象，带参数<br/>
+     * <b>注意:使用count(*)查询时返回值是BigInteger,entityClass参数传null</b>
      *
      * @param entityClass 设置返回实体的类型
      * @param sqlQuery    SQL查询
@@ -660,6 +662,7 @@ public class HibernateDao<T extends Serializable> {
 
     /**
      * 通过SQL查找一个实体对象，带参数<br/>
+     * <b>注意:使用count(*)查询时返回值是BigInteger,entityClass参数传null</b>
      *
      * @param entityClass 设置返回实体的类型
      * @param sqlQuery    SQL查询
@@ -672,6 +675,7 @@ public class HibernateDao<T extends Serializable> {
 
     /**
      * 通过SQL查找一个实体对象<br/>
+     * <b>注意:使用count(*)查询时返回值是BigInteger,entityClass参数传null</b>
      *
      * @param entityClass 设置返回实体的类型
      * @param sqlQuery    SQL查询

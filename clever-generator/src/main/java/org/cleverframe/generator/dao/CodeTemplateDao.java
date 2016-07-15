@@ -7,6 +7,8 @@ import org.cleverframe.generator.GeneratorBeanNames;
 import org.cleverframe.generator.entity.CodeTemplate;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
+
 /**
  * 作者：LiZW <br/>
  * 创建时间：2016-6-21 21:58 <br/>
@@ -24,8 +26,8 @@ public class CodeTemplateDao extends BaseDao<CodeTemplate> {
         Parameter param = new Parameter();
         param.put("name", name);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.generator.dao.CodeTemplateDao.codeTemplateNameExists");
-        long count = hibernateDao.getBySql(long.class, sql, param);
-        return count > 0;
+        BigInteger count = hibernateDao.getBySql(null, sql, param);
+        return count.longValue() > 0;
     }
 
     /**

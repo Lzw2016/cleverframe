@@ -28,7 +28,7 @@ public class CodeTemplate extends IdEntity {
     /**
      * 节点类型 1:代码模版
      */
-    public static final Character NodeTypeCode = '0';
+    public static final Character NodeTypeCode = '1';
 
     /**
      * 父级编号,根节点的父级编号是：-1

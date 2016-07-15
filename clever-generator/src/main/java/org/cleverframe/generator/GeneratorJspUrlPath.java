@@ -25,4 +25,9 @@ public class GeneratorJspUrlPath implements IJspUrlPath {
      * 数据库表结构查看页面
      */
     public static final String TableSchema = "generator/TableSchema";
+
+    /**
+     * 代码模版管理页面
+     */
+    public static final String CodeTemplate = "generator/CodeTemplate";
 }
