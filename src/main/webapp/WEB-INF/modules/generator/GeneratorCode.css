@@ -1,0 +1,89 @@
+html, body {
+    margin: 0;
+    padding: 0;
+    border: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.logo {
+    font-family: "微软雅黑", "Helvetica Neue", ​Helvetica, ​Arial, ​sans-serif, serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #444;
+    cursor: default;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    line-height: 28px;
+}
+
+.topNav {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+    font-size: 12px;
+    line-height: 25px;
+}
+
+.topNav a {
+    text-decoration: none;
+    color: #222;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 25px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.topNav a:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+/* 数据库使用图标 ModulesImage */
+.icon-database{
+    background:url('image/database.png') no-repeat center center;
+}
+.icon-table{
+    background:url('image/table.png') no-repeat center center;
+}
+.icon-binary{
+    background:url('image/binary.png') no-repeat center center;
+}
+.icon-boolean{
+    background:url('image/boolean.png') no-repeat center center;
+}
+.icon-datetime{
+    background:url('image/datetime.png') no-repeat center center;
+}
+.icon-lob{
+    background:url('image/lob.png') no-repeat center center;
+}
+.icon-number{
+    background:url('image/number.png') no-repeat center center;
+}
+.icon-rowid{
+    background:url('image/rowid.png') no-repeat center center;
+}
+.icon-string{
+    background:url('image/string.png') no-repeat center center;
+}
+.icon-text{
+    background:url('image/text.png') no-repeat center center;
+}
+.icon-unknown{
+    background:url('image/unknown.png') no-repeat center center;
+}
+.icon-uuid{
+    background:url('image/uuid.png') no-repeat center center;
+}
+.icon-folderTable{
+    background:url('image/folder_table.png') no-repeat center center;
+}
+.icon-folderView{
+    background:url('image/folder_view.png') no-repeat center center;
+}
+
+/* 模版使用图标 */

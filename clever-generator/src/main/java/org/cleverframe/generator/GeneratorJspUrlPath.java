@@ -14,5 +14,15 @@ public class GeneratorJspUrlPath implements IJspUrlPath {
     /**
      * 代码生成页面主页
      */
+    public static final String GeneratorCode = "generator/GeneratorCode";
+
+    /**
+     * Generator模块管理页面
+     */
     public static final String GeneratorMain = "generator/GeneratorMain";
+
+    /**
+     * 数据库表结构查看页面
+     */
+    public static final String TableSchema = "generator/TableSchema";
 }

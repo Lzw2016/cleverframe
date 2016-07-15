@@ -1,0 +1,77 @@
+/*查询表单样式*/
+#dataBaseTableInfoPanel {
+    margin-top: 8px;
+    margin-left: 15px;
+}
+
+#dataBaseTableInfoPanel .row {
+    margin-bottom: 8px;
+}
+
+#dataBaseTableInfoPanel .row .label {
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#dataBaseTableInfoPanel .row .value {
+    text-align: left;
+    font-size: 14px;
+}
+
+#dataBaseTableInfoPanel .row .column {
+    margin-right: 50px;
+}
+
+#dataBaseTableInfoPanel .row .columnLast {
+    margin-right: 0;
+}
+
+
+/* 数据库使用图标 ModulesImage */
+.icon-database{
+    background:url('image/database.png') no-repeat center center;
+}
+.icon-table{
+    background:url('image/table.png') no-repeat center center;
+}
+.icon-binary{
+    background:url('image/binary.png') no-repeat center center;
+}
+.icon-boolean{
+    background:url('image/boolean.png') no-repeat center center;
+}
+.icon-datetime{
+    background:url('image/datetime.png') no-repeat center center;
+}
+.icon-lob{
+    background:url('image/lob.png') no-repeat center center;
+}
+.icon-number{
+    background:url('image/number.png') no-repeat center center;
+}
+.icon-rowid{
+    background:url('image/rowid.png') no-repeat center center;
+}
+.icon-string{
+    background:url('image/string.png') no-repeat center center;
+}
+.icon-text{
+    background:url('image/text.png') no-repeat center center;
+}
+.icon-unknown{
+    background:url('image/unknown.png') no-repeat center center;
+}
+.icon-uuid{
+    background:url('image/uuid.png') no-repeat center center;
+}
+.icon-folderTable{
+    background:url('image/folder_table.png') no-repeat center center;
+}
+.icon-folderView{
+    background:url('image/folder_view.png') no-repeat center center;
+}
+
+
+
+
