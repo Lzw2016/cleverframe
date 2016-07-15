@@ -26,7 +26,7 @@
 <!-- 页面上部 -->
 <div data-options="region:'north',border:false">
     <div class="tabs-header" style="overflow: hidden; height: 50px;">
-        <div class="logo">CleverFrame-Generator</div>
+        <div class="logo">代码生成器</div>
         <div class="topNav">
             当前用户：<a href="javascript:void(0)"><span id="currentUser"></span></a> |
             <a href="javascript:void(0)">个人主页</a> |
