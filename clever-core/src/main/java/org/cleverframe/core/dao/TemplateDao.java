@@ -9,6 +9,7 @@ import org.cleverframe.core.utils.QLScriptUtils;
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.List;
 
 /**
@@ -88,7 +89,7 @@ public class TemplateDao extends BaseDao<Template> {
         Parameter param = new Parameter();
         param.put("name", name);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.TemplateDao.templateNameExists");
-        long count = hibernateDao.getBySql(long.class, sql, param);
-        return count > 0;
+        BigInteger count = hibernateDao.getBySql(null, sql, param);
+        return count.longValue() > 0;
     }
 }

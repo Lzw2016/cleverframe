@@ -11,7 +11,7 @@ import javax.validation.constraints.Pattern;
  * 作者：LiZW <br/>
  * 创建时间：2016-6-21 23:02 <br/>
  */
-public class CodeTemplateAddVo extends BaseRequestVo {
+public class CodeTemplateCodeAddVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -34,13 +34,6 @@ public class CodeTemplateAddVo extends BaseRequestVo {
     private String name;
 
     /**
-     * 节点类型(0:模版分类; 1:代码模版)
-     */
-    @NotNull(message = "节点类型不能为空")
-    @Pattern(regexp = "0|1", message = "节点类型只能是：0(模版分类)、1(代码模版)")
-    private String nodeType;
-
-    /**
      * 模版说明
      */
     @NotBlank(message = "模版说明不能为空")
@@ -61,7 +54,7 @@ public class CodeTemplateAddVo extends BaseRequestVo {
      * 模版内容
      */
     @NotBlank(message = "模版内容不能为空")
-    @Length(max = 2000, message = "模版内容长度不能超过2000个字符")
+    @Length(max = 2000000, message = "模版内容长度不能超过2000000个字符")
     private String content;
 
     /**
@@ -97,14 +90,6 @@ public class CodeTemplateAddVo extends BaseRequestVo {
 
     public void setName(String name) {
         this.name = name;
-    }
-
-    public String getNodeType() {
-        return nodeType;
-    }
-
-    public void setNodeType(String nodeType) {
-        this.nodeType = nodeType;
     }
 
     public String getDescription() {

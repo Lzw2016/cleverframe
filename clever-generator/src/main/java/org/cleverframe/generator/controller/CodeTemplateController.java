@@ -8,7 +8,8 @@ import org.cleverframe.generator.GeneratorBeanNames;
 import org.cleverframe.generator.GeneratorJspUrlPath;
 import org.cleverframe.generator.entity.CodeTemplate;
 import org.cleverframe.generator.service.CodeTemplateService;
-import org.cleverframe.generator.vo.request.CodeTemplateAddVo;
+import org.cleverframe.generator.vo.request.CodeTemplateCategoryAddVo;
+import org.cleverframe.generator.vo.request.CodeTemplateCodeAddVo;
 import org.cleverframe.generator.vo.request.CodeTemplateUpdateVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -41,20 +42,43 @@ public class CodeTemplateController extends BaseController {
     }
 
     /**
-     * 新增代码模版
+     * 新增代码模版-分类
      */
-    @RequestMapping("/addCodeTemplate")
+    @RequestMapping("/addCodeTemplateCategory")
     @ResponseBody
-    public AjaxMessage<String> addCodeTemplate(
+    public AjaxMessage<String> addCodeTemplateCategory(
             HttpServletRequest request,
             HttpServletResponse response,
-            @Valid CodeTemplateAddVo codeTemplateAddVo,
+            @Valid CodeTemplateCategoryAddVo codeTemplateCategoryAddVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "新增代码模版成功", null);
-        CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateAddVo, CodeTemplate.class);
-        Template template = BeanMapper.mapper(codeTemplateAddVo, Template.class);
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "新增代码模版[分类]成功", null);
+        CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateCategoryAddVo, CodeTemplate.class);
+        codeTemplate.setNodeType(CodeTemplate.NodeTypeCategory);
+        codeTemplate.setTemplateRef(null);
+        codeTemplate.setCodeType("Category");
         if (beanValidator(bindingResult, ajaxMessage)) {
-            codeTemplateService.addCodeTemplate(codeTemplate, template, ajaxMessage);
+            codeTemplateService.addCodeTemplateCategory(codeTemplate, ajaxMessage);
+        }
+        return ajaxMessage;
+    }
+
+    /**
+     * 新增代码模版-代码模版
+     */
+    @RequestMapping("/addCodeTemplateCode")
+    @ResponseBody
+    public AjaxMessage<String> addCodeTemplateCode(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid CodeTemplateCodeAddVo codeTemplateCodeAddVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "新增代码模版[代码模版]成功", null);
+        CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateCodeAddVo, CodeTemplate.class);
+        codeTemplate.setNodeType(CodeTemplate.NodeTypeCode);
+        codeTemplate.setTemplateRef(codeTemplate.getName());
+        Template template = BeanMapper.mapper(codeTemplateCodeAddVo, Template.class);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            codeTemplateService.addCodeTemplateCode(codeTemplate, template, ajaxMessage);
         }
         return ajaxMessage;
     }

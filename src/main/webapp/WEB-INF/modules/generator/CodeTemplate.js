@@ -7,7 +7,9 @@ var pageJs = function (globalPath) {
     // 查询地址
     var findUrl = globalPath.mvcPath + "";
     // 新增保存地址
-    var addUrl = globalPath.mvcPath + "/generator/codetemplate/addCodeTemplate.json";
+    var addCategoryUrl = globalPath.mvcPath + "/generator/codetemplate/addCodeTemplateCategory.json";
+    // 新增保存地址
+    var addCodeUrl = globalPath.mvcPath + "/generator/codetemplate/addCodeTemplateCode.json";
     // 编辑保存地址
     var updateUrl = globalPath.mvcPath + "/generator/codetemplate/updateCodeTemplate.json";
     // 删除地址
@@ -249,7 +251,7 @@ var pageJs = function (globalPath) {
      */
     this.addCodeData = function () {
         addCodeForm.form("submit", {
-            url: addUrl,
+            url: addCodeUrl,
             success: function (data) {
                 data = $.parseJSON(data);
                 if (data.success) {
@@ -268,7 +270,7 @@ var pageJs = function (globalPath) {
      */
     this.addCategoryData = function () {
         addCategoryForm.form("submit", {
-            url: addUrl,
+            url: addCategoryUrl,
             success: function (data) {
                 data = $.parseJSON(data);
                 if (data.success) {
