@@ -5,7 +5,10 @@ import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import org.cleverframe.common.tree.ITreeNode;
 
 import java.io.Serializable;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Set;
 
 /**
  * EasyUI Tree节点数据
@@ -52,14 +55,11 @@ public class TreeNodeJson implements ITreeNode {
      * 子节点
      */
     private List<ITreeNode> children;
-    /**
-     * 被添加到节点的自定义属性
-     */
-    private Map<String, String> attributes;
+
     /**
      * 绑定到节点的对象
      */
-    private Serializable object;
+    private Serializable attributes;
 
     public TreeNodeJson() {
 
@@ -107,7 +107,7 @@ public class TreeNodeJson implements ITreeNode {
      * @param children   子节点
      * @param attributes 被添加到节点的自定义属性
      */
-    public TreeNodeJson(Long parentId, Long id, String fullPath, String text, String iconCls, boolean checked, String state, Set<TreeNodeJson> children, Map<String, String> attributes) {
+    public TreeNodeJson(Long parentId, Long id, String fullPath, String text, String iconCls, boolean checked, String state, Set<TreeNodeJson> children, Serializable attributes) {
         this.parentId = parentId;
         this.id = id;
         this.fullPath = fullPath;
@@ -154,7 +154,7 @@ public class TreeNodeJson implements ITreeNode {
     @Deprecated
     public void addChildren(ITreeNode node) {
         if (this.children == null) {
-            this.children = new ArrayList<ITreeNode>();
+            this.children = new ArrayList<>();
         }
         this.children.add(node);
     }
@@ -164,7 +164,7 @@ public class TreeNodeJson implements ITreeNode {
      */
     public TreeNodeJson addChildren(TreeNodeJson node) {
         if (this.children == null) {
-            this.children = new ArrayList<ITreeNode>();
+            this.children = new ArrayList<>();
         }
         this.children.add(node);
         return this;
@@ -175,31 +175,9 @@ public class TreeNodeJson implements ITreeNode {
      */
     public TreeNodeJson addChildren(Collection<TreeNodeJson> nodes) {
         if (this.children == null) {
-            this.children = new ArrayList<ITreeNode>();
+            this.children = new ArrayList<>();
         }
         this.children.addAll(nodes);
-        return this;
-    }
-
-    /**
-     * 增加自定义属性<br>
-     */
-    public TreeNodeJson addAttributes(String name, String value) {
-        if (this.attributes == null) {
-            this.attributes = new HashMap<String, String>();
-        }
-        this.attributes.put(name, value);
-        return this;
-    }
-
-    /**
-     * 增加自定义属性<br>
-     */
-    public TreeNodeJson addAttributes(Map<String, String> attributes) {
-        if (this.attributes == null) {
-            this.attributes = new HashMap<String, String>();
-        }
-        this.attributes.putAll(attributes);
         return this;
     }
 
@@ -242,11 +220,11 @@ public class TreeNodeJson implements ITreeNode {
         this.state = state;
     }
 
-    public Map<String, String> getAttributes() {
+    public Serializable getAttributes() {
         return attributes;
     }
 
-    public void setAttributes(Map<String, String> attributes) {
+    public void setAttributes(Serializable attributes) {
         this.attributes = attributes;
     }
 
@@ -260,13 +238,5 @@ public class TreeNodeJson implements ITreeNode {
 
     public void setChildren(List<ITreeNode> children) {
         this.children = children;
-    }
-
-    public Serializable getObject() {
-        return object;
-    }
-
-    public void setObject(Serializable object) {
-        this.object = object;
     }
 }

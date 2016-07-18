@@ -48,7 +48,7 @@ public class BuildTreeUtils {
         if (noBulidTreeNodeList.size() <= 0) {
             logger.debug("树构建成功！耗时：" + (endTime - startTime) + "ms");
         } else {
-            System.out.println("树构建失败！耗时：" + (endTime - startTime) + "ms");
+            logger.debug("树构建失败！耗时：" + (endTime - startTime) + "ms");
         }
         return rootNodeList;
     }

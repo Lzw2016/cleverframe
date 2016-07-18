@@ -2,6 +2,8 @@ package org.cleverframe.generator.controller;
 
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
+import org.cleverframe.common.tree.BuildTreeUtils;
+import org.cleverframe.common.tree.ITreeNode;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.core.entity.Template;
 import org.cleverframe.generator.GeneratorBeanNames;
@@ -10,7 +12,9 @@ import org.cleverframe.generator.entity.CodeTemplate;
 import org.cleverframe.generator.service.CodeTemplateService;
 import org.cleverframe.generator.vo.request.CodeTemplateCategoryAddVo;
 import org.cleverframe.generator.vo.request.CodeTemplateCodeAddVo;
+import org.cleverframe.generator.vo.request.CodeTemplateDelVo;
 import org.cleverframe.generator.vo.request.CodeTemplateUpdateVo;
+import org.cleverframe.webui.easyui.data.TreeNodeJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -22,6 +26,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 作者：LiZW <br/>
@@ -39,6 +45,35 @@ public class CodeTemplateController extends BaseController {
     @RequestMapping("/CodeTemplate" + VIEW_PAGE_SUFFIX)
     public ModelAndView getCodeTemplateJsp(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView(GeneratorJspUrlPath.CodeTemplate);
+    }
+
+    /**
+     * 查询所有的代码模版，构建代码模版树
+     */
+    @RequestMapping("/findAllCodeTemplate")
+    @ResponseBody
+    public List<ITreeNode> findAllCodeTemplate(HttpServletRequest request, HttpServletResponse response) {
+        List<CodeTemplate> codeTemplateList = codeTemplateService.findAllCodeTemplate();
+        List<ITreeNode> nodes = new ArrayList<>();
+        for (CodeTemplate codeTemplate : codeTemplateList) {
+            String iconCls = null;
+            String state = "open";
+            if (CodeTemplate.NodeTypeCategory.equals(codeTemplate.getNodeType())) {
+                iconCls = "icon-folderPage";
+                state = "closed";
+            } else if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
+                iconCls = "icon-script";
+                state = "open";
+            }
+            TreeNodeJson node = new TreeNodeJson(
+                    codeTemplate.getParentId(),
+                    codeTemplate.getId(),
+                    codeTemplate.getFullPath(),
+                    codeTemplate.getName(), iconCls, false, state);
+            node.setAttributes(codeTemplate);
+            nodes.add(node);
+        }
+        return BuildTreeUtils.bulidTree(nodes);
     }
 
     /**
@@ -93,13 +128,31 @@ public class CodeTemplateController extends BaseController {
             HttpServletResponse response,
             @Valid CodeTemplateUpdateVo codeTemplateUpdateVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "更新代码模版", null);
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "更新代码模版成功", null);
         CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateUpdateVo, CodeTemplate.class);
         Template template = BeanMapper.mapper(codeTemplateUpdateVo, Template.class);
-        template.setName(codeTemplateUpdateVo.getName());
-        template.setId(null);
+        // 设置ID
+        codeTemplate.setId(codeTemplateUpdateVo.getCodeTemplateId());
+        template.setId(codeTemplateUpdateVo.getTemplateId());
         if (beanValidator(bindingResult, ajaxMessage)) {
             codeTemplateService.updateCodeTemplate(codeTemplate, template, ajaxMessage);
+        }
+        return ajaxMessage;
+    }
+
+    /**
+     * 删除代码模版
+     */
+    @RequestMapping("/delCodeTemplate")
+    @ResponseBody
+    public AjaxMessage<String> delCodeTemplate(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid CodeTemplateDelVo codeTemplateDelVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "删除代码模版成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            codeTemplateService.delCodeTemplate(codeTemplateDelVo.getCodeTemplateName(), ajaxMessage);
         }
         return ajaxMessage;
     }

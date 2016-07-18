@@ -46,8 +46,57 @@
     margin-right: 0;
 }
 
+/*编辑表单样式Code*/
+#editCodeForm .row {
+    margin-bottom: 8px;
+    width: inherit;
+}
+
+#editCodeForm .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#editCodeForm .row input, select {
+    width: 160px;
+}
+
+#editCodeForm .row .column {
+    margin-right: 15px;
+}
+
+#editCodeForm .row .columnLast {
+    margin-right: 0;
+}
+
+/*编辑表单样式Category*/
+#editCategoryForm .row {
+    margin-bottom: 8px;
+    width: inherit;
+}
+
+#editCategoryForm .row label {
+    display: inline-block;
+    width: 80px;
+    text-align: right;
+}
+
+#editCategoryForm .row input, select {
+    width: 160px;
+}
+
+#editCategoryForm .row .column {
+    margin-right: 12px;
+}
+
+#editCategoryForm .row .columnLast {
+    margin-right: 0;
+}
+
+
 /* 重写EasyUI样式-面板工具按钮间距增加 */
-.panel-tool a {
+.layout-panel .panel-tool a {
     margin: 0 0 0 10px;
 }
 
@@ -57,4 +106,10 @@
 }
 .icon-scriptAdd{
     background:url('image/script_add.png') no-repeat center center;
+}
+.icon-folderPage{
+    background:url('image/folder_page.png') no-repeat center center;
+}
+.icon-script{
+    background:url('image/script.png') no-repeat center center;
 }

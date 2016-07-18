@@ -8,10 +8,7 @@ import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.CoreJspUrlPath;
 import org.cleverframe.core.entity.Template;
 import org.cleverframe.core.service.EhCacheTemplateService;
-import org.cleverframe.core.vo.request.TemplateAddVo;
-import org.cleverframe.core.vo.request.TemplateDelVo;
-import org.cleverframe.core.vo.request.TemplateQueryVo;
-import org.cleverframe.core.vo.request.TemplateUpdateVo;
+import org.cleverframe.core.vo.request.*;
 import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -122,6 +119,24 @@ public class TemplateController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>(true, "模版数据删除成功", null);
         if (beanValidator(bindingResult, message)) {
             ehCacheTemplateService.deleteTemplate(templateDelVo.getName());
+        }
+        return message;
+    }
+
+    /**
+     * 根据模版名称返回模版数据
+     */
+    @RequestMapping("/getTemplateByName")
+    @ResponseBody
+    public AjaxMessage<Template> getTemplateByName(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid TemplateGetByNameVo templateGetByNameVo,
+            BindingResult bindingResult) {
+        AjaxMessage<Template> message = new AjaxMessage<>(true, "查找成功", null);
+        if (beanValidator(bindingResult, message)) {
+            Template template = ehCacheTemplateService.getTemplateByName(templateGetByNameVo.getName());
+            message.setResult(template);
         }
         return message;
     }

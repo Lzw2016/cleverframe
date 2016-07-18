@@ -14,6 +14,8 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * 作者：LiZW <br/>
  * 创建时间：2016-6-21 22:00 <br/>
@@ -28,6 +30,15 @@ public class CodeTemplateService extends BaseService {
     @Autowired
     @Qualifier(CoreBeanNames.EhCacheTemplateService)
     private ITemplateService templateService;
+
+    /**
+     * 查询所有的代码模版数据
+     *
+     * @return 所有的代码模版数据
+     */
+    public List<CodeTemplate> findAllCodeTemplate() {
+        return codeTemplateDao.findAllCodeTemplate();
+    }
 
     /**
      * 新增代码模版-分类
@@ -147,7 +158,7 @@ public class CodeTemplateService extends BaseService {
             ajaxMessage.setFailMessage("代码模版名称已存在，模版名称[" + codeTemplate.getName() + "]");
             return false;
         }
-        if(templateService.templateNameExists(template.getName())){
+        if (templateService.templateNameExists(template.getName())) {
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("模版名称已存在，模版名称[" + template.getName() + "]");
             return false;
@@ -189,11 +200,11 @@ public class CodeTemplateService extends BaseService {
             ajaxMessage.setFailMessage("更新的数据不存在，ID=[" + codeTemplate.getName() + "]");
             return false;
         }
-
         // 不能修改节点类型
-        if (!oldCodeTemplate.getNodeType().equals(codeTemplate.getNodeType())) {
+        codeTemplate.setNodeType(oldCodeTemplate.getNodeType());
+        if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType()) && template.getId() == null) {
             ajaxMessage.setSuccess(false);
-            ajaxMessage.setFailMessage("不能修改节点类型");
+            ajaxMessage.setFailMessage("更新代码模版,templateId不能为空");
             return false;
         }
 
@@ -222,8 +233,45 @@ public class CodeTemplateService extends BaseService {
 
         // 更新CodeTemplate
         codeTemplateDao.getHibernateDao().getSession().evict(oldCodeTemplate);
-        codeTemplateDao.getHibernateDao().getSession().update(codeTemplate);
-        templateService.updateTemplate(template);
+        codeTemplateDao.getHibernateDao().update(codeTemplate, false, true);
+        if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
+            templateService.updateTemplate(template);
+        }
+        return true;
+    }
+
+    /**
+     * 直接从数据库删除模版</br>
+     * <b>注意不能删除一个非空的模版类别(类别节点下存在子节点)</b>
+     *
+     * @param codeTemplateName 代码模版名称
+     * @return 成功返回true，失败返回false
+     */
+    @Transactional(readOnly = false)
+    public boolean delCodeTemplate(String codeTemplateName, AjaxMessage ajaxMessage) {
+        CodeTemplate codeTemplate = codeTemplateDao.getByName(codeTemplateName);
+        if (codeTemplate == null) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("代码模版不存在");
+            return false;
+        }
+
+        if (CodeTemplate.NodeTypeCategory.equals(codeTemplate.getNodeType())) {
+            long count = codeTemplateDao.countByChildNode(codeTemplate.getFullPath());
+            if (count > 0) {
+                ajaxMessage.setSuccess(false);
+                ajaxMessage.setFailMessage("不能删除非空的模版类别,当前模版类别子节点数:" + count);
+                return false;
+            }
+        }
+
+        // 删除数据
+        codeTemplateDao.getHibernateDao().getSession().evict(codeTemplate);
+        codeTemplateDao.delByName(codeTemplate.getName());
+        if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
+            // 代码模版删除模版
+            templateService.deleteTemplate(codeTemplate.getTemplateRef());
+        }
         return true;
     }
 }

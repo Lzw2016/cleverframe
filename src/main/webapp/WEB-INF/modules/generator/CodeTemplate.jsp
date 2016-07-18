@@ -96,6 +96,58 @@
     <a id="addCodeDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 </div>
 
+<%-- 编辑代码模版对话框 --%>
+<div id="editCodeDialog" style="width: 850px;height: 450px;padding: 5px 10px">
+    <form id="editCodeForm" method="post" style="margin-top: 10px;">
+        <input id="editCodeCodeTemplateId" name="codeTemplateId" type="hidden"/>
+        <input id="editCodeTemplateId" name="templateId" type="hidden"/>
+
+        <div class="row">
+            <span class="column">
+                <label for="editCodeParentId" style="width: 80px;">模版所属分类</label>
+                <input id="editCodeParentId" name="parentId" style="width: 220px;"/>
+            </span>
+            <span class="columnLast">
+                <label for="editCodeName" style="width: 80px;">代码模版名称</label>
+                <input id="editCodeName" name="name" style="width: 220px;"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="column">
+                <label for="editCodeCodeType">代码语言</label>
+                <input id="editCodeCodeType" name="codeType"/>
+            </span>
+            <span class="column">
+                <label for="editCodeLocale">模版语言</label>
+                <input id="editCodeLocale" name="locale"/>
+            </span>
+            <span class="columnLast">
+                <label for="editCodeDelFlag">删除标记</label>
+                <input id="editCodeDelFlag" name="delFlag"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <label for="editCodeDescription">模版说明</label>
+            <input id="editCodeDescription" name="description" style="width: 700px; height: 80px;"/>
+        </div>
+        <div class="row">
+            <label for="editCodeRemarks">备注信息</label>
+            <input id="editCodeRemarks" name="remarks" style="width: 700px; height: 50px;"/>
+        </div>
+        <div class="row" style="margin-top: 15px;width: 100%;height: 100%;">
+            <label for="editCodeContent" style="text-align: left;">模版内容</label>
+            <textarea id="editCodeContent" name="content"></textarea>
+        </div>
+    </form>
+</div>
+<div id="editCodeDialogButtons">
+    <a id="editCodeDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">更新</a>
+    <a id="editCodeDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
+
+
 <%-- 新增模版类别对话框 --%>
 <div id="addCategoryDialog" style="width: 850px;height: 300px;padding: 5px 10px">
     <form id="addCategoryForm" method="post" style="margin-top: 10px;">
@@ -129,6 +181,43 @@
     <a id="addCategoryDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
     <a id="addCategoryDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 </div>
+
+<%-- 编辑模版类别对话框 --%>
+<div id="editCategoryDialog" style="width: 850px;height: 300px;padding: 5px 10px">
+    <form id="editCategoryForm" method="post" style="margin-top: 10px;">
+        <input id="editCategoryCodeTemplateId" name="codeTemplateId" type="hidden"/>
+        <input id="editCategoryTemplateId" name="templateId" type="hidden"/>
+
+        <div class="row">
+            <span class="column">
+                <label for="editCategoryParentId">所属分类</label>
+                <input id="editCategoryParentId" name="parentId"/>
+            </span>
+            <span class="column">
+                <label for="editCategoryName">模版分类名称</label>
+                <input id="editCategoryName" name="name"/>
+            </span>
+            <span class="columnLast">
+                <label for="editCategoryDelFlag">删除标记</label>
+                <input id="editCategoryDelFlag" name="delFlag"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <label for="editCategoryDescription">分类说明</label>
+            <input id="editCategoryDescription" name="description" style="width: 700px; height: 100px;"/>
+        </div>
+        <div class="row">
+            <label for="editCategoryRemarks">备注信息</label>
+            <input id="editCategoryRemarks" name="remarks" style="width: 700px; height: 50px;"/>
+        </div>
+    </form>
+</div>
+<div id="editCategoryDialogButtons">
+    <a id="editCategoryDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">更新</a>
+    <a id="editCategoryDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
+
 
 </body>
 </html>
