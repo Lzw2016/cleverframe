@@ -77,6 +77,7 @@ public class TemplateController extends BaseController {
             HttpServletResponse response,
             @Valid TemplateAddVo templateAddVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> message = new AjaxMessage<>(true, "模版数据保存成功", null);
         Template template = BeanMapper.mapper(templateAddVo, Template.class);
 
@@ -97,6 +98,7 @@ public class TemplateController extends BaseController {
             HttpServletResponse response,
             @Valid TemplateUpdateVo templateUpdateVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> message = new AjaxMessage<>(true, "更新模版数据成功", null);
         Template template = BeanMapper.mapper(templateUpdateVo, Template.class);
         if (beanValidator(bindingResult, message)) {

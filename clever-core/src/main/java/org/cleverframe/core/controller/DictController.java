@@ -81,8 +81,8 @@ public class DictController extends BaseController {
             HttpServletResponse response,
             @Valid DictAddVo dictAddVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> message = new AjaxMessage<>(true, "数据字典保存成功", null);
-        dictAddVo.setRemarks(EncodeDecodeUtils.unescapeHtml(dictAddVo.getRemarks()));// HTML转码
         Dict dict = BeanMapper.mapper(dictAddVo, Dict.class);
         if (beanValidator(bindingResult, message)) {
             dictService.saveDict(dict);
@@ -101,8 +101,8 @@ public class DictController extends BaseController {
             HttpServletResponse response,
             @Valid DictUpdateVo dictUpdateVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> message = new AjaxMessage<>(true, "更新数据字典成功", null);
-        dictUpdateVo.setRemarks(EncodeDecodeUtils.unescapeHtml(dictUpdateVo.getRemarks()));// HTML转码
         Dict dict = BeanMapper.mapper(dictUpdateVo, Dict.class);
         if (beanValidator(bindingResult, message)) {
             dictService.updateDict(dict);

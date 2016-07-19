@@ -6,6 +6,7 @@ import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.common.time.DateTimeUtils;
 import org.cleverframe.common.user.IUserUtils;
+import org.cleverframe.common.utils.HttpServletRequestUtils;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -22,8 +23,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Validator;
 import java.beans.PropertyEditorSupport;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
 
 /**
  * SpringMVC实现的控制器基类<br/>
@@ -51,6 +51,11 @@ public abstract class BaseController {
     protected final static String VIEW_PAGE_SUFFIX = ".html";
 
     /**
+     * 不需要进行XXS攻击处理的请求地址,不对请求参数进行HTML编码
+     */
+    protected final static Set<String> XSS_EXCLUDE_URL = Collections.synchronizedSet(new HashSet<String>());
+
+    /**
      * 用户信息获取接口
      */
     protected static final IUserUtils userUtils;
@@ -73,26 +78,41 @@ public abstract class BaseController {
     protected Validator validator;
 
     /**
-     * 初始化数据绑定 <br/>
+     * 增加不需要进行XXS攻击处理的请求地址,不对请求参数进行HTML编码
+     *
+     * @param request 请求对象
+     */
+    protected void addXSSExcludeUrl(HttpServletRequest request) {
+        // 当前请求URL地址
+        String requestUrl = HttpServletRequestUtils.getRequestURINotSuffix(request);
+        XSS_EXCLUDE_URL.add(requestUrl);
+    }
+
+    /**
+     * 初始化数据绑定,每个请求都会进来这个方法,每次WebDataBinder binder都会是一个新对象<br/>
      * 1.将所有传递进来的String进行HTML编码，防止XSS攻击 <br/>
      * 2.将字段中Date类型转换为String类型<br/>
      */
     @InitBinder
-    protected void initBinder(WebDataBinder binder) {
-        // String类型转换，将所有传递进来的String进行HTML编码，防止XSS攻击
-        binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
-            @Override
-            public void setAsText(String text) {
-                // 可以设置不过滤的url路径，对于某些请求不进行HTML编码
-                setValue(text == null ? null : StringEscapeUtils.escapeHtml4(text.trim()));
-            }
+    protected void initBinder(WebDataBinder binder, HttpServletRequest request, HttpServletResponse response) {
+        // 当前请求URL地址
+        String requestUrl = HttpServletRequestUtils.getRequestURINotSuffix(request);
+        if (!XSS_EXCLUDE_URL.contains(requestUrl)) {
+            // String类型转换，将所有传递进来的String进行HTML编码，防止XSS攻击
+            binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
+                @Override
+                public void setAsText(String text) {
+                    // 可以设置不过滤的url路径，对于某些请求不进行HTML编码
+                    setValue(text == null ? null : StringEscapeUtils.escapeHtml4(text.trim()));
+                }
 
-            @Override
-            public String getAsText() {
-                Object value = getValue();
-                return value != null ? value.toString() : "";
-            }
-        });
+                @Override
+                public String getAsText() {
+                    Object value = getValue();
+                    return value != null ? value.toString() : "";
+                }
+            });
+        }
 
         // Date 类型转换
         binder.registerCustomEditor(Date.class, new PropertyEditorSupport() {

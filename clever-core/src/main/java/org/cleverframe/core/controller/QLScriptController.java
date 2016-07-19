@@ -1,6 +1,5 @@
 package org.cleverframe.core.controller;
 
-import org.cleverframe.common.codec.EncodeDecodeUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;
@@ -87,9 +86,8 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptAddVo qlScriptAddVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> message = new AjaxMessage<>(true, "数据库脚本保存成功", null);
-        String qlStr = EncodeDecodeUtils.unescapeHtml(qlScriptAddVo.getScript());// HTML转码
-        qlScriptAddVo.setScript(qlStr);
         QLScript qLScript = BeanMapper.mapper(qlScriptAddVo, QLScript.class);
         if (beanValidator(bindingResult, message)) {
             qLScriptService.saveQLScript(qLScript);
@@ -108,9 +106,8 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptUpdateVo qlScriptUpdateVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> message = new AjaxMessage<>(true, "数据库脚本保存成功", null);
-        String qlStr = EncodeDecodeUtils.unescapeHtml(qlScriptUpdateVo.getScript());// HTML转码
-        qlScriptUpdateVo.setScript(qlStr);
         QLScript qLScript = BeanMapper.mapper(qlScriptUpdateVo, QLScript.class);
         if (beanValidator(bindingResult, message)) {
             qLScript.setUpdateDate(new Date());

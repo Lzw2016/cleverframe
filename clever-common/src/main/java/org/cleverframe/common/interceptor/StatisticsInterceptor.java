@@ -136,7 +136,7 @@ public class StatisticsInterceptor implements HandlerInterceptor {
             RequestInfo requestInfo = new RequestInfo();
             requestInfo.setLoginName(userUtils.getUserCode());
             requestInfo.setRequestTime(new Date());
-            requestInfo.setRequestUri(HttpServletRequestUtils.getRequestUri(request));
+            requestInfo.setRequestUri(HttpServletRequestUtils.getRequestURL(request));
             requestInfo.setMethod(request.getMethod());
             requestInfo.setParams(HttpServletRequestUtils.getRequestParams(request));
             requestInfo.setProcessTime(System.currentTimeMillis() - requestStatistics.getRequestStartTime(request, response));

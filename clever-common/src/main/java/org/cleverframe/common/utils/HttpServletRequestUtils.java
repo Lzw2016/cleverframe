@@ -35,11 +35,54 @@ public class HttpServletRequestUtils {
      * @param request 请求对象
      * @return 请求的URL地址
      */
-    public static String getRequestUri(HttpServletRequest request) {
+    public static String getRequestURL(HttpServletRequest request) {
         if (request == null) {
             return "";
         } else {
             return request.getRequestURL().toString();
+        }
+    }
+
+    /**
+     * 获取请求的URI地址
+     * <pre>
+     * 示例：
+     * 当前url：http://localhost:8080/CarsiLogCenter_new/idpstat.jsp?action=idp.sptopn
+     * request.getRequestURI() /CarsiLogCenter_new/idpstat.jsp
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return 请求的URL地址
+     */
+    public static String getRequestURI(HttpServletRequest request) {
+        if (request == null) {
+            return "";
+        } else {
+            return request.getRequestURI();
+        }
+    }
+
+    /**
+     * 获取请求的URI地址(不包含后缀,如:.json、.xml、.html、.jsp等)
+     * <pre>
+     * 示例：
+     * 当前url：http://localhost:8080/CarsiLogCenter_new/idpstat.jsp?action=idp.sptopn
+     * request.getRequestURI() /CarsiLogCenter_new/idpstat
+     * </pre>
+     *
+     * @param request 请求对象
+     * @return 请求的URL地址
+     */
+    public static String getRequestURINotSuffix(HttpServletRequest request) {
+        if (request == null) {
+            return "";
+        } else {
+            String requestUrl = request.getRequestURI();
+            int position = requestUrl.lastIndexOf(".");
+            if (position >= 0) {
+                requestUrl = requestUrl.substring(0, position);
+            }
+            return requestUrl;
         }
     }
 
