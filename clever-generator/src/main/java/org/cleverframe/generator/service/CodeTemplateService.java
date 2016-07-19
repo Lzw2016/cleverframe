@@ -94,11 +94,7 @@ public class CodeTemplateService extends BaseService {
         }
 
         // 设置fullPath
-        if (parent == null) {
-            codeTemplate.setFullPath("");
-        } else {
-            codeTemplate.setFullPath(parent.getFullPath());
-        }
+        codeTemplate.setFullPath("");
         // 根据模版名称查询模版是否存在
         if (codeTemplateDao.codeTemplateNameExists(codeTemplate.getName())) {
             ajaxMessage.setSuccess(false);
@@ -108,10 +104,10 @@ public class CodeTemplateService extends BaseService {
         codeTemplateDao.getHibernateDao().save(codeTemplate);
 
         // 更新CodeTemplate fullPath属性
-        if (StringUtils.isBlank(codeTemplate.getFullPath())) {
+        if (parent == null) {
             codeTemplate.setFullPath(codeTemplate.getId().toString());
         } else {
-            codeTemplate.setFullPath(codeTemplate.getFullPath() + CodeTemplate.FULL_PATH_SPLIT + codeTemplate.getId());
+            codeTemplate.setFullPath(parent.getFullPath() + CodeTemplate.FULL_PATH_SPLIT + codeTemplate.getId());
         }
         codeTemplateDao.getHibernateDao().update(codeTemplate);
         return true;
@@ -163,11 +159,7 @@ public class CodeTemplateService extends BaseService {
         }
 
         // 设置fullPath
-        if (parent == null) {
-            codeTemplate.setFullPath("");
-        } else {
-            codeTemplate.setFullPath(parent.getFullPath());
-        }
+        codeTemplate.setFullPath("");
         // 根据模版名称查询模版是否存在
         if (codeTemplateDao.codeTemplateNameExists(codeTemplate.getName())) {
             ajaxMessage.setSuccess(false);
@@ -185,10 +177,10 @@ public class CodeTemplateService extends BaseService {
         codeTemplateDao.getHibernateDao().save(codeTemplate);
 
         // 更新CodeTemplate fullPath属性
-        if (StringUtils.isBlank(codeTemplate.getFullPath())) {
+        if (parent == null) {
             codeTemplate.setFullPath(codeTemplate.getId().toString());
         } else {
-            codeTemplate.setFullPath(codeTemplate.getFullPath() + CodeTemplate.FULL_PATH_SPLIT + codeTemplate.getId());
+            codeTemplate.setFullPath(parent.getFullPath() + CodeTemplate.FULL_PATH_SPLIT + codeTemplate.getId());
         }
         codeTemplateDao.getHibernateDao().update(codeTemplate);
         return true;

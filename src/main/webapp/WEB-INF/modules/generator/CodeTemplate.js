@@ -126,6 +126,9 @@ var pageJs = function (globalPath) {
     // 编辑模版分类对话框-按钮栏 取消
     var editCategoryDialogButtonsCancel = $("#editCategoryDialogButtonsCancel");
 
+    // 代码模版树右键菜单
+    var menuByCodeTemplateTree = $("#menuByCodeTemplateTree");
+
     /**
      * 页面初始化方法
      */
@@ -188,7 +191,34 @@ var pageJs = function (globalPath) {
 
             },
             onContextMenu: function (e, node) {
+                e.preventDefault();
+                codeTemplateTree.tree("select", node.target);
+                menuByCodeTemplateTree.menu('show', {left: e.pageX - 3, top: e.pageY - 3}).data("selectNode", node);
+            }
+        });
 
+        // 代码模版树右键菜单
+        menuByCodeTemplateTree.menu({
+            onClick: function (item) {
+                var selectNode = $(this).data("selectNode");
+
+                switch (item.name) {
+                    case "refresh":
+                        _this.reloadCodeTemplateTree(codeTemplateTree);
+                        break;
+                    case "addCategory" :
+                        addCategoryDialog.dialog("open");
+                        break;
+                    case "addCode":
+                        addCodeDialog.dialog("open");
+                        break;
+                    case "edit":
+                        _this.openEditDialog();
+                        break;
+                    case "delete":
+                        _this.delData();
+                        break;
+                }
             }
         });
 
@@ -594,6 +624,9 @@ var pageJs = function (globalPath) {
                     // 保存成功
                     addCodeDialog.dialog('close');
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+
+                    addCodeForm.form('reset');
+                    _this.reloadCodeTemplateTree(codeTemplateTree);
                 } else {
                     // 保存失败
                 }
@@ -613,6 +646,9 @@ var pageJs = function (globalPath) {
                     // 保存成功
                     addCategoryDialog.dialog('close');
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+
+                    addCategoryForm.form('reset');
+                    _this.reloadCodeTemplateTree(codeTemplateTree);
                 } else {
                     // 保存失败
                 }
@@ -636,6 +672,7 @@ var pageJs = function (globalPath) {
                     // 保存成功
                     editCodeDialog.dialog('close');
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    _this.reloadCodeTemplateTree(codeTemplateTree);
                 } else {
                     // 保存失败
                 }
@@ -644,7 +681,7 @@ var pageJs = function (globalPath) {
     };
 
     /**
-     * 更新代码模版数据
+     * 更新模版类别数据
      */
     this.updateCategoryData = function () {
         editCategoryForm.form("submit", {
@@ -660,6 +697,7 @@ var pageJs = function (globalPath) {
                     // 保存成功
                     editCategoryDialog.dialog('close');
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    _this.reloadCodeTemplateTree(codeTemplateTree);
                 } else {
                     // 保存失败
                 }
@@ -697,7 +735,7 @@ var pageJs = function (globalPath) {
                     if (data.success) {
                         // 删除成功
                         $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-                        // dataTable.datagrid('reload');
+                        _this.reloadCodeTemplateTree(codeTemplateTree);
                     } else {
                         // 删除失败
                     }

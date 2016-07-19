@@ -32,7 +32,17 @@
 
 <!-- 页面左部 -->
 <div data-options="region:'west',title:'代码模版',split:true,border:true,collapsible:false" style="width:240px;">
+    <%--代码模版树--%>
     <ul id="codeTemplateTree"></ul>
+</div>
+
+<!-- 代码模版树右键菜单 -->
+<div id="menuByCodeTemplateTree" class="easyui-menu">
+    <div data-options="name:'refresh',iconCls:'icon-reload'">刷新</div>
+    <div data-options="name:'addCategory',iconCls:'icon-folderAdd'">新增代码模版分类</div>
+    <div data-options="name:'addCode',iconCls:'icon-scriptAdd'">新增代码模版</div>
+    <div data-options="name:'edit',iconCls:'icon-edit'">编辑</div>
+    <div data-options="name:'delete',iconCls:'icon-remove'">删除</div>
 </div>
 
 <!-- 页面中部 -->

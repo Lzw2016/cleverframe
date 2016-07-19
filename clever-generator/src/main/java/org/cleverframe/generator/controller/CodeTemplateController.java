@@ -57,7 +57,7 @@ public class CodeTemplateController extends BaseController {
             String state = "open";
             if (CodeTemplate.NodeTypeCategory.equals(codeTemplate.getNodeType())) {
                 iconCls = "icon-folderPage";
-                state = "closed";
+                state = "open";
             } else if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
                 iconCls = "icon-script";
                 state = "open";
