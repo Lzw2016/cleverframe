@@ -94,6 +94,39 @@
     margin-right: 0;
 }
 
+/*中部叶签样式*/
+.tabsCenterPageTop {
+    margin-top: 8px;
+    margin-left: 15px;
+}
+
+.tabsCenterPageTop .row {
+    margin-bottom: 8px;
+}
+
+.tabsCenterPageTop .row .label {
+    text-align: left;
+    font-size: 14px;
+    font-weight: bold;
+}
+
+.tabsCenterPageTop .row .value {
+    text-align: left;
+    font-size: 14px;
+}
+
+.tabsCenterPageTop .row .column {
+    margin-right: 50px;
+}
+
+.tabsCenterPageTop .row .columnLast {
+    margin-right: 0;
+}
+
+.tabsCenterPageTop .button {
+    float: right;
+    margin-right: 10px;
+}
 
 /* 重写EasyUI样式-面板工具按钮间距增加 */
 .layout-panel .panel-tool a {
@@ -112,4 +145,7 @@
 }
 .icon-script{
     background:url('image/script.png') no-repeat center center;
+}
+.icon-windowClose{
+    background:url('image/window-close-2.png') no-repeat center center;
 }

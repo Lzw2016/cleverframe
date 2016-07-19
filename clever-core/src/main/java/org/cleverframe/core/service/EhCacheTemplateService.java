@@ -95,7 +95,7 @@ public class EhCacheTemplateService extends BaseService implements ITemplateServ
     @Transactional(readOnly = false)
     @Override
     public boolean updateTemplate(Template template) {
-        templateDao.getHibernateDao().update(template, false, true);
+        template = templateDao.getHibernateDao().update(template, false, true);
         if (Template.DEL_FLAG_NORMAL.equals(template.getDelFlag())) {
             Element element = new Element(template.getName(), template);
             templateCache.put(element);

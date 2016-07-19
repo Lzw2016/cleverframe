@@ -46,17 +46,12 @@
 </div>
 
 <!-- 页面中部 -->
-<div data-options="region:'center',border:true,minWidth:800,minHeight:300">
-<%--
-
+<div data-options="region:'center',border:true,fit:false,minWidth:800,minHeight:300">
     <div id="tabsCenter" class="easyui-tabs" data-options="fit:true,border:'false',tools:'#tabsCenterTools'">
     </div>
     <div id="tabsCenterTools">
-        <a id="tabsCenterToolsRefreshTab" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'">刷新</a>
-        <a id="tabsCenterToolsCloseTab" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'ExpandIcon-cross'">关闭</a>
+        <a id="tabsCenterToolsCloseTab" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-windowClose'">关闭</a>
     </div>
---%>
-
 </div>
 
 <%-- 新增代码模版对话框 --%>

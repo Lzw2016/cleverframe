@@ -41,6 +41,9 @@ html, body {
     text-decoration: underline;
     color: blue;
 }
+.icon-windowClose{
+    background:url('image/window-close-2.png') no-repeat center center;
+}
 
 /* 数据库使用图标 ModulesImage */
 .icon-database{
@@ -87,3 +90,9 @@ html, body {
 }
 
 /* 模版使用图标 */
+.icon-folderPage{
+    background:url('image/folder_page.png') no-repeat center center;
+}
+.icon-script{
+    background:url('image/script.png') no-repeat center center;
+}

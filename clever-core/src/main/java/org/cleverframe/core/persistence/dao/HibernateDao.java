@@ -261,22 +261,26 @@ public class HibernateDao<T extends Serializable> {
      * @param updateNullField  是否更新null值字段，对所有字段有效
      * @param updateEmptyField 是否更新空值字段，只对String字段有效
      * @param <E>              实体类泛型
+     * @return 更新之后的数据
      */
-    public <E extends IdEntity> void update(E entity, boolean updateNullField, boolean updateEmptyField) {
+    @SuppressWarnings({"UnusedAssignment", "unchecked"})
+    public <E extends IdEntity> E update(E entity, boolean updateNullField, boolean updateEmptyField) {
         if (updateNullField && updateEmptyField) {
             getSession().update(entity);
-            return;
+            return entity;
         }
 
         IdEntity idEntity = this.getEntity(entity.getClass(), entity.getId());
         if (idEntity == null) {
             logger.debug("### update更新数据不存在");
-            return;
+            return null;
         }
         if (!JavaBeanUtils.copyTo(entity, idEntity, updateNullField, updateEmptyField)) {
             throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
         }
         getSession().update(idEntity);
+        entity = (E) idEntity;
+        return entity;
     }
 
     /**

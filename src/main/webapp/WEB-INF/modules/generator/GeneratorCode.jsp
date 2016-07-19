@@ -61,7 +61,7 @@
     </div>
     <div id="tabsCenterTools">
         <a id="tabsCenterToolsRefreshTab" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'">刷新</a>
-        <a id="tabsCenterToolsCloseTab" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'ExpandIcon-cross'">关闭</a>
+        <a id="tabsCenterToolsCloseTab" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-windowClose'">关闭</a>
     </div>
 </div>
 

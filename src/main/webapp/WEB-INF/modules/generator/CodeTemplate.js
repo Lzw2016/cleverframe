@@ -20,9 +20,17 @@ var pageJs = function (globalPath) {
     var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
     // 根据模版名称返回模版数据
     var getTemplateByNameUrl = globalPath.mvcPath + "/core/template/getTemplateByName.json";
+    // 只更新模版内容地址
+    var onlyUpdateCoreTemplateContentUrl = globalPath.mvcPath + "/core/template/updateTemplate.json";
 
     // 主页面
     var mainPanel = $("#mainPanel");
+    // 页面中部多页签
+    var tabsCenter = $("#tabsCenter");
+    // 页面中部工具栏
+    var tabsCenterTools = $("#tabsCenterTools");
+    // 页面中部工具栏-关闭
+    var tabsCenterToolsCloseTab = $("#tabsCenterToolsCloseTab");
     // 代码模版树
     var codeTemplateTree = $("#codeTemplateTree");
 
@@ -179,7 +187,12 @@ var pageJs = function (globalPath) {
 
             },
             onDblClick: function (node) {
-                _this.openEditDialog();
+                // 节点类型(0:模版分类; 1:代码模版)
+                if (node.attributes.nodeType == '0') {
+                    _this.openEditDialog();
+                } else if (node.attributes.nodeType == '1') {
+                    _this.addTab(node.attributes.name, node.attributes);
+                }
             },
             onBeforeExpand: function (node) {
 
@@ -219,6 +232,15 @@ var pageJs = function (globalPath) {
                         _this.delData();
                         break;
                 }
+            }
+        });
+
+        // 页面中部多页签
+        tabsCenter.tabs({
+            fit: true,
+            border: 'false',
+            tools: '#tabsCenterTools',
+            onContextMenu: function (e, title, index) {
             }
         });
 
@@ -285,6 +307,11 @@ var pageJs = function (globalPath) {
         editCategoryDialogButtonsCancel.click(function () {
             _this.editCategoryDialogButtonsCancel.dialog("close");
         });
+
+        // 关闭中部叶签
+        tabsCenterToolsCloseTab.click(function () {
+            _this.closeTab();
+        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -340,7 +367,7 @@ var pageJs = function (globalPath) {
                 if(addCodeContent != null) {
                     return;
                 }
-                // SQL编辑器-初始化,
+                // Java编辑器-初始化,
                 addCodeContent = CodeMirror.fromTextArea(document.getElementById("addCodeContent"), {
                     mode: "text/x-java",
                     lineNumbers: true,
@@ -412,7 +439,7 @@ var pageJs = function (globalPath) {
                 if(editCodeContent != null) {
                     return;
                 }
-                // SQL编辑器-初始化,
+                // Java编辑器-初始化,
                 editCodeContent = CodeMirror.fromTextArea(document.getElementById("editCodeContent"), {
                     mode: "text/x-java",
                     lineNumbers: true,
@@ -592,7 +619,7 @@ var pageJs = function (globalPath) {
                 type: "POST",
                 dataType: "JSON",
                 url: getTemplateByNameUrl,
-                async: true,
+                async: false,
                 data: param,
                 success: function (data) {
                     var template = data.result;
@@ -743,6 +770,145 @@ var pageJs = function (globalPath) {
             }
         });
     };
+
+    // 多页签中的代码编辑器
+    var tabsCenterEditor = {};
+
+    // 增加代码模版叶签
+    this.addTab = function (tabName, codeTemplate) {
+        if (tabsCenter.tabs("exists", tabName)) {
+            tabsCenter.tabs("select", tabName);
+        } else {
+            var template = null;
+            var param = {};
+            param.name = codeTemplate.templateRef;
+            $.ajax({
+                type: "POST",
+                dataType: "JSON",
+                url: getTemplateByNameUrl,
+                async: false,
+                data: param,
+                success: function (data) {
+                    template = data.result;
+                }
+            });
+            var content = [];
+            content.push('<div id="layout_'+codeTemplate.name+'" class="easyui-layout" data-options="fit:true,border:false">');
+            content.push('    <div data-options="region:\'north\',border:false" style="height:90px;background-color:#E0ECFF;">');
+            content.push('        <div class="tabsCenterPageTop">');
+            content.push('            <div class="row">');
+            content.push('                <span class="column">');
+            content.push('                    <label class="label">代码模版名称:</label>');
+            content.push('                    <label class="value">' + codeTemplate.name + '</label>');
+            content.push('                </span>');
+            content.push('                 <span class="column">');
+            content.push('                    <label class="label">代码语言:</label>');
+            content.push('                    <label class="value">' + codeTemplate.codeType + '</label>');
+            content.push('                </span>');
+            content.push('                 <span class="columnLast">');
+            content.push('                    <label class="label">模版语言:</label>');
+            content.push('                    <label class="value">' + template.locale + '</label>');
+            content.push('                </span>');
+            content.push('            </div>');
+            content.push('            <div class="row">');
+            content.push('                 <span class="columnLast">');
+            content.push('                    <label class="label">模版说明:</label>');
+            content.push('                    <label class="value">' + codeTemplate.description + '</label>');
+            content.push('                </span>');
+            content.push('            </div>');
+            content.push('            <div class="row">');
+            content.push('                 <span class="columnLast">');
+            content.push('                    <label class="label">备注信息:</label>');
+            content.push('                    <label class="value">' + codeTemplate.remarks + '</label>');
+            content.push('                </span>');
+            content.push('                <a id="button_' + codeTemplate.name + '" class="button" href="javascript:void(0)" >保存</a>');
+            content.push('            </div>');
+            content.push('        </div>');
+            content.push('    </div>');
+            content.push('    <div data-options="region:\'center\',border:false,fit:false">');
+            content.push('        <textarea id="codeTemplate_' + codeTemplate.name + '"></textarea>');
+            content.push('    </div>');
+            content.push('</div>');
+            var html = content.join("");
+            tabsCenter.tabs("add", {
+                title: tabName,
+                closable: true,
+                content: html
+            });
+            // 设置布局
+            var layoutByTab = $("#layout_" + codeTemplate.name);
+            layoutByTab.layout({
+                fit: true,
+                border: false
+            });
+            layoutByTab.layout("panel", "north").panel({
+                region: "north",
+                border: false
+            });
+            layoutByTab.layout("panel", "center").panel({
+                region: "center",
+                border: false,
+                fit: false
+            });
+
+            // 设置保存按钮
+            $("#button_" + codeTemplate.name).linkbutton({
+                iconCls: 'icon-save',
+                onClick: function(){
+                    _this.onlyUpdateCoreTemplateContent(template.id, tabName);
+                }
+            });
+            // Java编辑器-初始化,
+            var editor = CodeMirror.fromTextArea(document.getElementById("codeTemplate_" + codeTemplate.name), {
+                mode: "text/x-java",
+                lineNumbers: true,
+                matchBrackets: true,
+                indentUnit: 4,
+                readOnly: false
+            });
+            editor.setSize("auto", "auto");
+            //editor.setSize("height", 800);
+            editor.setOption("theme", "cobalt");
+            if(!template.content || template.content == null){
+                editor.setValue("");
+            } else {
+                editor.setValue(template.content);
+            }
+            tabsCenterEditor[tabName] = editor;
+        }
+    };
+
+    // 关闭页面
+    this.closeTab = function () {
+        var tab = tabsCenter.tabs('getSelected');
+        if (tab) {
+            var index = tabsCenter.tabs('getTabIndex', tab);
+            tabsCenter.tabs('close', index);
+        }
+    };
+
+    // 只更新模版内容
+    this.onlyUpdateCoreTemplateContent = function(id, tabName){
+        var editor = tabsCenterEditor[tabName];
+        var param = {};
+        param.id = id;
+        param.content = editor.getValue();
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: onlyUpdateCoreTemplateContentUrl,
+            async: false,
+            data: param,
+            success: function (data) {
+                if (data.success) {
+                    // 保存成功
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                } else {
+                    // 保存失败
+                }
+            }
+        });
+    }
 };
 
 /**

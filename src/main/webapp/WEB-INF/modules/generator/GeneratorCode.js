@@ -24,6 +24,8 @@ var pageJs = function (globalPath) {
     var getTableSchemaURL = globalPath.mvcPath + "/generator/matedata/getTableSchema.json";
     // 数据库表结构页面
     var tableSchemaHtmlURL = globalPath.mvcPath + "/generator/matedata/TableSchema.html";
+    // 代码模版树数据请求Url
+    var codeTemplateTreeUrl = globalPath.mvcPath + "/generator/codetemplate/findAllCodeTemplate.json";
 
     // 主页面
     var mainPanel = $("#mainPanel");
@@ -82,7 +84,8 @@ var pageJs = function (globalPath) {
             tools: [{
                 iconCls: "icon-reload",
                 handler: function () {
-
+                    // 初始化代码模版树的数据
+                    _this.reloadCodeTemplateTree(codeTemplateTree);
                 }
             }]
         });
@@ -120,6 +123,25 @@ var pageJs = function (globalPath) {
             },
             onContextMenu: function (e, node) {
 
+            }
+        });
+
+        // 初始化代码模版树
+        //noinspection JSUnusedLocalSymbols
+        codeTemplateTree.tree({
+            url: codeTemplateTreeUrl,
+            method: "POST",
+            onClick: function (node) {
+            },
+            onDblClick: function (node) {
+            },
+            onBeforeExpand: function (node) {
+            },
+            onBeforeSelect: function (node) {
+            },
+            onSelect: function (node) {
+            },
+            onContextMenu: function (e, node) {
             }
         });
 
@@ -204,6 +226,20 @@ var pageJs = function (globalPath) {
     };
 
     // ---------------------------------------------------------------------------------------------------------
+    // 初始化代码模版树的数据
+    this.reloadCodeTemplateTree = function (codeTemplateTree) {
+        var codeTemplateData = [];
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: codeTemplateTreeUrl,
+            async: false,
+            success: function (data) {
+                codeTemplateData = data;
+            }
+        });
+        codeTemplateTree.tree("loadData", codeTemplateData);
+    };
 
     // 获取 数据库概要信息
     this.getDataBaseSummary = function (dataBaseTree) {
@@ -414,7 +450,7 @@ var pageJs = function (globalPath) {
             } else {
                 content = "未定义页面路径！";
             }
-            $("#tabsCenter").tabs("add", {
+            tabsCenter.tabs("add", {
                 title : tabName,
                 closable : true,
                 content : content,
