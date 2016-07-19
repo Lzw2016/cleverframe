@@ -84,4 +84,26 @@ public class CodeTemplateDao extends BaseDao<CodeTemplate> {
         BigInteger count = hibernateDao.getBySql(null, sql, param);
         return count.longValue();
     }
+
+    /**
+     * 查询节点的所有子节点，可以排除某个节点和其所有子节点<br/>
+     * <b>参数excludeCodeNode==true时,就排除“代码模版”</b>
+     *
+     * @param fullPath        查询节点路径
+     * @param excludePath     排除节点路径
+     * @param excludeCodeNode 排除代码模版节点
+     * @return 节点集合
+     */
+    public List<CodeTemplate> findChildNode(String fullPath, String excludePath, boolean excludeCodeNode) {
+        Parameter param = new Parameter(CodeTemplate.DEL_FLAG_NORMAL);
+        param.put("fullPath", fullPath + "%");
+        param.put("excludePath", excludePath +"%");
+        if (excludeCodeNode) {
+            param.put("excludeCodeNode", "true");
+        } else {
+            param.put("excludeCodeNode", "");
+        }
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.generator.dao.CodeTemplateDao.findChildNode");
+        return hibernateDao.findBySql(sql, param);
+    }
 }

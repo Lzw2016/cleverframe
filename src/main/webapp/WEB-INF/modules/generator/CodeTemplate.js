@@ -14,6 +14,8 @@ var pageJs = function (globalPath) {
     var updateUrl = globalPath.mvcPath + "/generator/codetemplate/updateCodeTemplate.json";
     // 删除地址
     var delUrl = globalPath.mvcPath + "/generator/codetemplate/delCodeTemplate.json";
+    // 查询子节点树
+    var findChildNodeUrl = globalPath.mvcPath + "/generator/codetemplate/findChildNode.json";
     // 根据字典类别查询字典地址
     var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
     // 根据模版名称返回模版数据
@@ -272,6 +274,24 @@ var pageJs = function (globalPath) {
         codeTemplateTree.tree("loadData", codeTemplateData);
     };
 
+    // 加载所属分类数
+    this.reloadInputCodeTemplateTree = function (parentIdComboTree, fullPath, excludePath) {
+        var param = {};
+        param.fullPath = fullPath;
+        param.excludePath = excludePath;
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: findChildNodeUrl,
+            async: false,
+            data: param,
+            success: function (data) {
+                parentIdComboTree.combotree("clear");
+                parentIdComboTree.combotree("loadData", data);
+            }
+        });
+    };
+
     // 初始化 新增代码模版对话框
     this.initAddCodeDialog = function (){
         addCodeDialog.dialog({
@@ -285,6 +305,8 @@ var pageJs = function (globalPath) {
             modal: true,
             buttons: "#addCodeDialogButtons",
             onOpen: function() {
+                _this.reloadInputCodeTemplateTree(addCodeParentId, "", "excludePath");
+
                 if(addCodeContent != null) {
                     return;
                 }
@@ -301,9 +323,17 @@ var pageJs = function (globalPath) {
                 addCodeContent.setValue('\r\n');
             }
         });
-        addCodeParentId.textbox({
-            required: true,
-            validType: 'length[0,255]'
+        addCodeParentId.combotree({
+            required : true,
+            editable : false,
+            animate : false,
+            checkbox : false,
+            cascadeCheck : true,
+            onlyLeafCheck : false,
+            lines : true,
+            dnd : false,
+            valueField: 'id',
+            textField: 'text'
         });
         addCodeName.textbox({
             required: true,
@@ -365,9 +395,17 @@ var pageJs = function (globalPath) {
                 editCodeContent.setValue('\r\n');
             }
         });
-        editCodeParentId.textbox({
-            required: true,
-            validType: 'length[0,255]'
+        editCodeParentId.combotree({
+            required : true,
+            editable : false,
+            animate : false,
+            checkbox : false,
+            cascadeCheck : true,
+            onlyLeafCheck : false,
+            lines : true,
+            dnd : false,
+            valueField: 'id',
+            textField: 'text'
         });
         editCodeName.textbox({
             required: true,
@@ -419,11 +457,22 @@ var pageJs = function (globalPath) {
             minWidth: 850,
             minHeight: 300,
             modal: true,
-            buttons: "#addCategoryDialogButtons"
+            buttons: "#addCategoryDialogButtons",
+            onOpen: function() {
+                _this.reloadInputCodeTemplateTree(addCategoryParentId, "", "excludePath");
+            }
         });
-        addCategoryParentId.textbox({
-            required: true,
-            validType: 'length[0,255]'
+        addCategoryParentId.combotree({
+            required : true,
+            editable : false,
+            animate : false,
+            checkbox : false,
+            cascadeCheck : true,
+            onlyLeafCheck : false,
+            lines : true,
+            dnd : false,
+            valueField: 'id',
+            textField: 'text'
         });
         addCategoryName.textbox({
             required: true,
@@ -453,9 +502,17 @@ var pageJs = function (globalPath) {
             modal: true,
             buttons: "#editCategoryDialogButtons"
         });
-        editCategoryParentId.textbox({
-            required: true,
-            validType: 'length[0,255]'
+        editCategoryParentId.combotree({
+            required : true,
+            editable : false,
+            animate : false,
+            checkbox : false,
+            cascadeCheck : true,
+            onlyLeafCheck : false,
+            lines : true,
+            dnd : false,
+            valueField: 'id',
+            textField: 'text'
         });
         editCategoryName.textbox({
             required: true,
@@ -489,12 +546,16 @@ var pageJs = function (globalPath) {
         }
         // 节点类型(0:模版分类; 1:代码模版)
         if(node.attributes.nodeType == "0") {
+            _this.reloadInputCodeTemplateTree(editCategoryParentId, "", node.attributes.fullPath);
+
             editCategoryDialog.dialog('open');
             editCategoryForm.form('load', node.attributes);
             editCategoryCodeTemplateId.val(node.attributes.id);
             editCategoryTemplateId.val("-1");
         }
         if (node.attributes.nodeType == "1") {
+            _this.reloadInputCodeTemplateTree(editCodeParentId, "", node.attributes.fullPath);
+
             var param = {};
             param.name = node.attributes.templateRef;
             $.ajax({

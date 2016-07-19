@@ -10,10 +10,7 @@ import org.cleverframe.generator.GeneratorBeanNames;
 import org.cleverframe.generator.GeneratorJspUrlPath;
 import org.cleverframe.generator.entity.CodeTemplate;
 import org.cleverframe.generator.service.CodeTemplateService;
-import org.cleverframe.generator.vo.request.CodeTemplateCategoryAddVo;
-import org.cleverframe.generator.vo.request.CodeTemplateCodeAddVo;
-import org.cleverframe.generator.vo.request.CodeTemplateDelVo;
-import org.cleverframe.generator.vo.request.CodeTemplateUpdateVo;
+import org.cleverframe.generator.vo.request.*;
 import org.cleverframe.webui.easyui.data.TreeNodeJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -70,6 +67,43 @@ public class CodeTemplateController extends BaseController {
                     codeTemplate.getId(),
                     codeTemplate.getFullPath(),
                     codeTemplate.getName(), iconCls, false, state);
+            node.setAttributes(codeTemplate);
+            nodes.add(node);
+        }
+        return BuildTreeUtils.bulidTree(nodes);
+    }
+
+    /**
+     * 查询代码分类的子节点，构建代码模版分类树
+     */
+    @RequestMapping("/findChildNode")
+    @ResponseBody
+    public List<ITreeNode> findChildNode(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid CodeTemplateQueryChildVo codeTemplateQueryChildVo,
+            BindingResult bindingResult) {
+        List<CodeTemplate> codeTemplateList = codeTemplateService.findChildNode(
+                codeTemplateQueryChildVo.getFullPath(),
+                codeTemplateQueryChildVo.getExcludePath(),
+                true);
+        List<ITreeNode> nodes = new ArrayList<>();
+        // 增加根节点
+        TreeNodeJson node = new TreeNodeJson(-1L, -1L, "", "根路径", "icon-folderPage", false, "open");
+        nodes.add(node);
+        // 加载数据库数据
+        for (CodeTemplate codeTemplate : codeTemplateList) {
+            String iconCls = null;
+            if (CodeTemplate.NodeTypeCategory.equals(codeTemplate.getNodeType())) {
+                iconCls = "icon-folderPage";
+            } else if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
+                iconCls = "icon-script";
+            }
+            node = new TreeNodeJson(
+                    codeTemplate.getParentId(),
+                    codeTemplate.getId(),
+                    codeTemplate.getFullPath(),
+                    codeTemplate.getName(), iconCls, false, "open");
             node.setAttributes(codeTemplate);
             nodes.add(node);
         }

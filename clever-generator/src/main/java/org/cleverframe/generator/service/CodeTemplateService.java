@@ -41,6 +41,22 @@ public class CodeTemplateService extends BaseService {
     }
 
     /**
+     * 查询节点的所有子节点，可以排除某个节点和其所有子节点<br/>
+     * <b>参数excludeCodeNode==true时,就排除“代码模版”</b>
+     *
+     * @param fullPath        查询节点路径
+     * @param excludePath     排除节点路径
+     * @param excludeCodeNode 排除代码模版节点
+     * @return 节点集合
+     */
+    public List<CodeTemplate> findChildNode(String fullPath, String excludePath, boolean excludeCodeNode) {
+        if (StringUtils.isBlank(excludePath)) {
+            excludePath = "excludePath";
+        }
+        return codeTemplateDao.findChildNode(fullPath, excludePath, excludeCodeNode);
+    }
+
+    /**
      * 新增代码模版-分类
      * <pre>
      *      1.设置节点类型[模版分类]，设置模版引用为null
