@@ -133,6 +133,18 @@
     margin: 0 0 0 10px;
 }
 
+/*设置树节点样式*/
+.tree-title a {
+    color: #134da5;
+}
+
+.tree-title a:focus, .tree-title a:hover {
+    color: #de2c3b;
+}
+.tree-title a {
+    text-decoration: none;
+}
+
 /*自定义图标*/
 .icon-folderAdd{
     background:url('image/folder_add.png') no-repeat center center;
@@ -148,4 +160,7 @@
 }
 .icon-windowClose{
     background:url('image/window-close-2.png') no-repeat center center;
+}
+.icon-format{
+    background:url('image/format-indent-more-5.png') no-repeat center center;
 }

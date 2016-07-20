@@ -183,6 +183,13 @@ var pageJs = function (globalPath) {
         // 初始化代码模版树
         //noinspection JSUnusedLocalSymbols
         codeTemplateTree.tree({
+            formatter: function (node) {
+                // 节点类型(0:模版分类; 1:代码模版)
+                if (node.attributes.nodeType == '1') {
+                    return '<a href="javascript:void(0)">' + node.text + '</a>';
+                }
+                return node.text;
+            },
             onClick: function (node) {
 
             },
@@ -794,7 +801,7 @@ var pageJs = function (globalPath) {
             });
             var content = [];
             content.push('<div id="layout_'+codeTemplate.name+'" class="easyui-layout" data-options="fit:true,border:false">');
-            content.push('    <div data-options="region:\'north\',border:false" style="height:90px;background-color:#E0ECFF;">');
+            content.push('    <div data-options="region:\'north\',border:false" style="height:110px;background-color:#E0ECFF;">');
             content.push('        <div class="tabsCenterPageTop">');
             content.push('            <div class="row">');
             content.push('                <span class="column">');
@@ -809,6 +816,9 @@ var pageJs = function (globalPath) {
             content.push('                    <label class="label">模版语言:</label>');
             content.push('                    <label class="value">' + template.locale + '</label>');
             content.push('                </span>');
+            content.push('                <a id="button_save' + codeTemplate.name + '" class="button" href="javascript:void(0)" ></a>');//保存
+            content.push('                <a id="button_format' + codeTemplate.name + '" class="button" href="javascript:void(0)" ></a>');//格式化
+            content.push('                <a id="button_refresh' + codeTemplate.name + '" class="button" href="javascript:void(0)" ></a>');// 刷新
             content.push('            </div>');
             content.push('            <div class="row">');
             content.push('                 <span class="columnLast">');
@@ -821,7 +831,6 @@ var pageJs = function (globalPath) {
             content.push('                    <label class="label">备注信息:</label>');
             content.push('                    <label class="value">' + codeTemplate.remarks + '</label>');
             content.push('                </span>');
-            content.push('                <a id="button_' + codeTemplate.name + '" class="button" href="javascript:void(0)" >保存</a>');
             content.push('            </div>');
             content.push('        </div>');
             content.push('    </div>');
@@ -852,12 +861,25 @@ var pageJs = function (globalPath) {
             });
 
             // 设置保存按钮
-            $("#button_" + codeTemplate.name).linkbutton({
+            $("#button_save" + codeTemplate.name).linkbutton({
                 iconCls: 'icon-save',
                 onClick: function(){
                     _this.onlyUpdateCoreTemplateContent(template.id, tabName);
                 }
             });
+            $("#button_refresh" + codeTemplate.name).linkbutton({
+                iconCls: 'icon-reload',
+                onClick: function(){
+
+                }
+            });
+            $("#button_format" + codeTemplate.name).linkbutton({
+                iconCls: 'icon-format',
+                onClick: function(){
+
+                }
+            });
+
             // Java编辑器-初始化,
             var editor = CodeMirror.fromTextArea(document.getElementById("codeTemplate_" + codeTemplate.name), {
                 mode: "text/x-java",
