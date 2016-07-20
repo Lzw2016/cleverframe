@@ -92,6 +92,13 @@ var pageJs = function (globalPath) {
 
         // 数据库表结构树
         dataBaseTree.tree({
+            formatter: function (node) {
+                if (node.attributes.type == Type_Table || node.attributes.type == Type_View) {
+                    return '<a href="javascript:void(0)">' + node.text + '</a>';
+                } else {
+                    return node.text;
+                }
+            },
             onClick: function (node) {
 
             },
@@ -131,6 +138,13 @@ var pageJs = function (globalPath) {
         codeTemplateTree.tree({
             url: codeTemplateTreeUrl,
             method: "POST",
+            formatter: function (node) {
+                // 节点类型(0:模版分类; 1:代码模版)
+                if (node.attributes.nodeType == '1') {
+                    return '<a href="javascript:void(0)">' + node.text + '</a>';
+                }
+                return node.text;
+            },
             onClick: function (node) {
             },
             onDblClick: function (node) {

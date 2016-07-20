@@ -24,7 +24,7 @@
 </head>
 <body id="mainPanel" class="easyui-layout">
 <%-- 页面上部 --%>
-<div data-options="region:'north',border:true,minWidth:800" style="height:40px;background-color:#E0ECFF;">
+<div data-options="region:'north',border:false,minWidth:800" style="height:40px;background-color:#E0ECFF;">
     <div id="dataBaseTableInfoPanel">
         <div class="row">
             <span class="column">

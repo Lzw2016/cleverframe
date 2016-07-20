@@ -45,6 +45,18 @@ html, body {
     background:url('image/window-close-2.png') no-repeat center center;
 }
 
+/*设置树节点样式*/
+.tree-title a {
+    color: #134da5;
+}
+
+.tree-title a:focus, .tree-title a:hover {
+    color: #de2c3b;
+}
+.tree-title a {
+    text-decoration: none;
+}
+
 /* 数据库使用图标 ModulesImage */
 .icon-database{
     background:url('image/database.png') no-repeat center center;
