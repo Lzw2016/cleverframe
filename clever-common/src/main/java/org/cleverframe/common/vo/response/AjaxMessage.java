@@ -17,6 +17,7 @@ import java.util.List;
  */
 @JsonInclude(Include.NON_NULL)
 public class AjaxMessage<T> implements Serializable {
+    private static final long serialVersionUID = 1L;
     /**
      * 下次请求是否需要验证码
      */
@@ -258,8 +259,12 @@ public class AjaxMessage<T> implements Serializable {
      * 设置请求成功返回的消息，置空failMessage
      */
     public void setSuccessMessage(String successMessage) {
-        this.successMessage = successMessage;
-        this.failMessage = null;
+        if (successMessage != null) {
+            this.successMessage = successMessage;
+            this.failMessage = null;
+        } else {
+            this.successMessage = null;
+        }
     }
 
     public String getFailMessage() {
@@ -270,8 +275,12 @@ public class AjaxMessage<T> implements Serializable {
      * 设置请求失败返回的消息，置空successMessage
      */
     public void setFailMessage(String failMessage) {
-        this.failMessage = failMessage;
-        this.successMessage = null;
+        if (failMessage != null) {
+            this.failMessage = failMessage;
+            this.successMessage = null;
+        } else {
+            this.failMessage = null;
+        }
     }
 
     public String getExceptionMessage() {

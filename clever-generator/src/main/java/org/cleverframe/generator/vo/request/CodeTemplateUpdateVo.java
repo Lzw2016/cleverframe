@@ -72,7 +72,7 @@ public class CodeTemplateUpdateVo extends BaseRequestVo {
     /**
      * 模版内容
      */
-    @Length(max = 2000, message = "模版内容长度不能超过2000个字符")
+    @Length(max = 2000000, message = "模版内容长度不能超过2000000个字符")
     private String content;
 
     /**

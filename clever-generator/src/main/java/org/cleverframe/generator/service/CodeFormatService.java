@@ -46,7 +46,6 @@ public class CodeFormatService extends BaseService {
             result = javaCode;
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("格式化失败");
-            ajaxMessage.setSuccessMessage(null);
         }
         return result;
     }

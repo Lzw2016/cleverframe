@@ -64,6 +64,14 @@ CREATE TABLE generator_code_template
 
 
 
+/*
+TODO 
+CodeTemplate 代码刷新、格式化
+TableSchema 选择代码模版 生成代码
+CodeTemplate 选择数据表 生成代码
+
+
+*/
 
 
 

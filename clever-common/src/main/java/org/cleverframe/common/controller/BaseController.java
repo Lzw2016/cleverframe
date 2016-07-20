@@ -89,6 +89,14 @@ public abstract class BaseController {
     }
 
     /**
+     * 增加不需要进行XXS攻击处理的请求地址,不对请求参数进行HTML编码
+     * @param requestUrl 请求地址,不含后缀
+     */
+    protected void addXSSExcludeUrl(String requestUrl) {
+        XSS_EXCLUDE_URL.add(requestUrl);
+    }
+
+    /**
      * 初始化数据绑定,每个请求都会进来这个方法,每次WebDataBinder binder都会是一个新对象<br/>
      * 1.将所有传递进来的String进行HTML编码，防止XSS攻击 <br/>
      * 2.将字段中Date类型转换为String类型<br/>

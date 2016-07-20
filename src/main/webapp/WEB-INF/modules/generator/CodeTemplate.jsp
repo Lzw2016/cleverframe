@@ -20,6 +20,10 @@
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
 
+    <%--代码格式化JS--%>
+    <script src="${applicationScope.staticPath}/CodeFormat/cssbeautify.js"></script>
+    <script src="${applicationScope.staticPath}/CodeFormat/jsbeautify.js"></script>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>

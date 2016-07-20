@@ -22,6 +22,8 @@ var pageJs = function (globalPath) {
     var getTemplateByNameUrl = globalPath.mvcPath + "/core/template/getTemplateByName.json";
     // 只更新模版内容地址
     var onlyUpdateCoreTemplateContentUrl = globalPath.mvcPath + "/core/template/updateTemplate.json";
+    // 代码格式化地址
+    var formatUrl = globalPath.mvcPath + "/generator/codeformat/format.json";
 
     // 主页面
     var mainPanel = $("#mainPanel");
@@ -136,6 +138,8 @@ var pageJs = function (globalPath) {
 
     // 代码模版树右键菜单
     var menuByCodeTemplateTree = $("#menuByCodeTemplateTree");
+    // 多页签中的代码编辑器
+    var tabsCenterEditor = {};
 
     /**
      * 页面初始化方法
@@ -155,11 +159,14 @@ var pageJs = function (globalPath) {
                 iconCls: "icon-folderAdd",
                 handler: function () {
                     addCategoryDialog.dialog("open");
+                    addCategoryForm.form('reset');
                 }
             },{
                 iconCls: "icon-scriptAdd",
                 handler: function () {
                     addCodeDialog.dialog("open");
+                    addCodeForm.form('reset');
+                    addCodeContent.setValue("");
                 }
             }, {
                 iconCls: "icon-edit",
@@ -228,9 +235,12 @@ var pageJs = function (globalPath) {
                         break;
                     case "addCategory" :
                         addCategoryDialog.dialog("open");
+                        addCategoryForm.form('reset');
                         break;
                     case "addCode":
                         addCodeDialog.dialog("open");
+                        addCodeForm.form('reset');
+                        addCodeContent.setValue("");
                         break;
                     case "edit":
                         _this.openEditDialog();
@@ -404,7 +414,7 @@ var pageJs = function (globalPath) {
             validType: 'length[0,255]'
         });
         addCodeCodeType.combobox({
-            required: false,
+            required: true,
             url: findDictTypeUrl + encodeURIComponent("程序语言"),
             editable: false,
             valueField: 'value',
@@ -412,7 +422,7 @@ var pageJs = function (globalPath) {
             panelHeight: 80
         });
         addCodeLocale.combobox({
-            required: false,
+            required: true,
             url: findDictTypeUrl + encodeURIComponent("国际化语言后缀"),
             editable: false,
             valueField: 'value',
@@ -476,7 +486,7 @@ var pageJs = function (globalPath) {
             validType: 'length[0,255]'
         });
         editCodeCodeType.combobox({
-            required: false,
+            required: true,
             url: findDictTypeUrl + encodeURIComponent("程序语言"),
             editable: false,
             valueField: 'value',
@@ -484,7 +494,7 @@ var pageJs = function (globalPath) {
             panelHeight: 80
         });
         editCodeLocale.combobox({
-            required: false,
+            required: true,
             url: findDictTypeUrl + encodeURIComponent("国际化语言后缀"),
             editable: false,
             valueField: 'value',
@@ -659,7 +669,6 @@ var pageJs = function (globalPath) {
                     addCodeDialog.dialog('close');
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
 
-                    addCodeForm.form('reset');
                     _this.reloadCodeTemplateTree(codeTemplateTree);
                 } else {
                     // 保存失败
@@ -681,7 +690,6 @@ var pageJs = function (globalPath) {
                     addCategoryDialog.dialog('close');
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
 
-                    addCategoryForm.form('reset');
                     _this.reloadCodeTemplateTree(codeTemplateTree);
                 } else {
                     // 保存失败
@@ -778,9 +786,6 @@ var pageJs = function (globalPath) {
         });
     };
 
-    // 多页签中的代码编辑器
-    var tabsCenterEditor = {};
-
     // 增加代码模版叶签
     this.addTab = function (tabName, codeTemplate) {
         if (tabsCenter.tabs("exists", tabName)) {
@@ -800,7 +805,7 @@ var pageJs = function (globalPath) {
                 }
             });
             var content = [];
-            content.push('<div id="layout_'+codeTemplate.name+'" class="easyui-layout" data-options="fit:true,border:false">');
+            content.push('<div id="layout_'+codeTemplate.uuid+'" class="easyui-layout" data-options="fit:true,border:false">');
             content.push('    <div data-options="region:\'north\',border:false" style="height:110px;background-color:#E0ECFF;">');
             content.push('        <div class="tabsCenterPageTop">');
             content.push('            <div class="row">');
@@ -816,9 +821,9 @@ var pageJs = function (globalPath) {
             content.push('                    <label class="label">模版语言:</label>');
             content.push('                    <label class="value">' + template.locale + '</label>');
             content.push('                </span>');
-            content.push('                <a id="button_save' + codeTemplate.name + '" class="button" href="javascript:void(0)" ></a>');//保存
-            content.push('                <a id="button_format' + codeTemplate.name + '" class="button" href="javascript:void(0)" ></a>');//格式化
-            content.push('                <a id="button_refresh' + codeTemplate.name + '" class="button" href="javascript:void(0)" ></a>');// 刷新
+            content.push('                <a id="button_save' + codeTemplate.uuid + '" class="button" href="javascript:void(0)" ></a>');//保存
+            content.push('                <a id="button_format' + codeTemplate.uuid + '" class="button" href="javascript:void(0)" ></a>');//格式化
+            content.push('                <a id="button_refresh' + codeTemplate.uuid + '" class="button" href="javascript:void(0)" ></a>');// 刷新
             content.push('            </div>');
             content.push('            <div class="row">');
             content.push('                 <span class="columnLast">');
@@ -835,7 +840,7 @@ var pageJs = function (globalPath) {
             content.push('        </div>');
             content.push('    </div>');
             content.push('    <div data-options="region:\'center\',border:false,fit:false">');
-            content.push('        <textarea id="codeTemplate_' + codeTemplate.name + '"></textarea>');
+            content.push('        <textarea id="codeTemplate_' + codeTemplate.uuid + '"></textarea>');
             content.push('    </div>');
             content.push('</div>');
             var html = content.join("");
@@ -845,7 +850,7 @@ var pageJs = function (globalPath) {
                 content: html
             });
             // 设置布局
-            var layoutByTab = $("#layout_" + codeTemplate.name);
+            var layoutByTab = $("#layout_" + codeTemplate.uuid);
             layoutByTab.layout({
                 fit: true,
                 border: false
@@ -861,27 +866,39 @@ var pageJs = function (globalPath) {
             });
 
             // 设置保存按钮
-            $("#button_save" + codeTemplate.name).linkbutton({
+            $("#button_save" + codeTemplate.uuid).linkbutton({
                 iconCls: 'icon-save',
                 onClick: function(){
                     _this.onlyUpdateCoreTemplateContent(template.id, tabName);
                 }
             });
-            $("#button_refresh" + codeTemplate.name).linkbutton({
+            $("#button_refresh" + codeTemplate.uuid).linkbutton({
                 iconCls: 'icon-reload',
                 onClick: function(){
-
+                    $.ajax({
+                        type: "POST",
+                        dataType: "JSON",
+                        url: getTemplateByNameUrl,
+                        async: false,
+                        data: param,
+                        success: function (data) {
+                            if(data.success){
+                                tabsCenterEditor[tabName].setValue(data.result.content);
+                                $.messager.show({title: '提示',  msg: "刷新成功", timeout: 5000, showType: 'slide'});
+                            }
+                        }
+                    });
                 }
             });
-            $("#button_format" + codeTemplate.name).linkbutton({
+            $("#button_format" + codeTemplate.uuid).linkbutton({
                 iconCls: 'icon-format',
                 onClick: function(){
-
+                    _this.codeFormat(codeTemplate.codeType, tabName);
                 }
             });
 
             // Java编辑器-初始化,
-            var editor = CodeMirror.fromTextArea(document.getElementById("codeTemplate_" + codeTemplate.name), {
+            var editor = CodeMirror.fromTextArea(document.getElementById("codeTemplate_" + codeTemplate.uuid), {
                 mode: "text/x-java",
                 lineNumbers: true,
                 matchBrackets: true,
@@ -891,6 +908,7 @@ var pageJs = function (globalPath) {
             editor.setSize("auto", "auto");
             //editor.setSize("height", 800);
             editor.setOption("theme", "cobalt");
+            //editor.setOption("mode", "text/x-java");
             if(!template.content || template.content == null){
                 editor.setValue("");
             } else {
@@ -930,7 +948,47 @@ var pageJs = function (globalPath) {
                 }
             }
         });
-    }
+    };
+
+    // 格式化代码
+    this.codeFormat = function (codeType, tabName) {
+        var editor = tabsCenterEditor[tabName];
+        var param = {};
+        param.codeType = codeType;
+        param.code = editor.getValue();
+        if (codeType.toLowerCase() == "html" || codeType.toLowerCase() == "java" || codeType.toLowerCase() == "json"
+            || codeType.toLowerCase() == "sql" || codeType.toLowerCase() == "xml") {
+            $.ajax({
+                type: "POST",
+                dataType: "JSON",
+                url: formatUrl,
+                async: false,
+                data: param,
+                success: function (data) {
+                    if (data.success) {
+                        editor.setValue(data.result);
+                        $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    } else {
+                        $.messager.alert("提示", data.failMessage, "error");
+                    }
+                }
+            });
+        } else if (codeType.toLowerCase() == "js" || codeType.toLowerCase() == "javascript") {
+            var code = param.code.replace(/^\s+/, '');
+            if (code.length > 0) {
+                code = js_beautify(code, 4, ' ');
+            }
+            editor.setValue(code);
+            $.messager.show({title: '提示', msg: "JavaScript代码格式化成功", timeout: 5000, showType: 'slide'});
+        } else if (codeType.toLowerCase() == "css") {
+            var options = {indent: '    '};
+            param.code = cssbeautify(param.code, options);
+            editor.setValue(param.code);
+            $.messager.show({title: '提示', msg: "CSS代码格式化成功", timeout: 5000, showType: 'slide'});
+        } else {
+            $.messager.alert("提示", "不支持格式化的程序语言:" + codeType, "info");
+        }
+    };
 };
 
 /**

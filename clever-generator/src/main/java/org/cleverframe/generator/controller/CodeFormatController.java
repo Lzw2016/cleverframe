@@ -40,6 +40,7 @@ public class CodeFormatController extends BaseController {
             HttpServletResponse response,
             @Valid CodeFormatVo codeFormatVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "格式化成功", null);
         String result = null;
         if (beanValidator(bindingResult, ajaxMessage)) {
