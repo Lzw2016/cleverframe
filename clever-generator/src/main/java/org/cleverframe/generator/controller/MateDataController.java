@@ -34,9 +34,9 @@ public class MateDataController extends BaseController {
     @Qualifier(GeneratorBeanNames.MateDataService)
     private MateDataService mateDataService;
 
-    @RequestMapping("/TableSchema" + VIEW_PAGE_SUFFIX)
-    public ModelAndView getTableSchemaJsp(HttpServletRequest request, HttpServletResponse response) {
-        return new ModelAndView(GeneratorJspUrlPath.TableSchema);
+    @RequestMapping("/TableGeneratorCode" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getTableGeneratorCodeJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(GeneratorJspUrlPath.TableGeneratorCode);
     }
 
     /**

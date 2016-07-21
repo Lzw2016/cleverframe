@@ -22,12 +22,17 @@ public class GeneratorJspUrlPath implements IJspUrlPath {
     public static final String GeneratorMain = "generator/GeneratorMain";
 
     /**
-     * 数据库表结构查看页面
-     */
-    public static final String TableSchema = "generator/TableSchema";
-
-    /**
      * 代码模版管理页面
      */
     public static final String CodeTemplate = "generator/CodeTemplate";
+
+    /**
+     * 根据模版选择数据生成代码
+     */
+    public static final String TemplateGeneratorCode = "generator/TemplateGeneratorCode";
+
+    /**
+     * 根据数据表选择模版生成代码
+     */
+    public static final String TableGeneratorCode = "generator/TableGeneratorCode";
 }

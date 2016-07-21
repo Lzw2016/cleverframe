@@ -17,10 +17,10 @@
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
-    <link rel="stylesheet" type="text/css" href="${applicationScope.modulesPath}/generator/TableSchema.css">
-    <script type="text/javascript" src="${applicationScope.modulesPath}/generator/TableSchema.js"></script>
+    <link rel="stylesheet" type="text/css" href="${applicationScope.modulesPath}/generator/TableGeneratorCode.css">
+    <script type="text/javascript" src="${applicationScope.modulesPath}/generator/TableGeneratorCode.js"></script>
     <%-- 页面标题 --%>
-    <title>数据库表结构</title>
+    <title>根据数据表选择模版生成代码</title>
 </head>
 <body id="mainPanel" class="easyui-layout">
 <%-- 页面上部 --%>
