@@ -23,7 +23,7 @@ var pageJs = function (globalPath) {
     // 获取数据库表详细信息
     var getTableSchemaURL = globalPath.mvcPath + "/generator/matedata/getTableSchema.json";
     // 数据库表结构页面
-    var tableSchemaHtmlURL = globalPath.mvcPath + "/generator/matedata/TableSchema.html";
+    var tableGeneratorCodeUrl = globalPath.mvcPath + "/generator/matedata/TableGeneratorCode.html";
     // 代码模版树数据请求Url
     var codeTemplateTreeUrl = globalPath.mvcPath + "/generator/codetemplate/findAllCodeTemplate.json";
 
@@ -107,7 +107,7 @@ var pageJs = function (globalPath) {
                     // 查看表结构页面
                     var tabName, tabUrl;
                     tabName = node.attributes.tableName + "(" + node.attributes.schemaName + ")";
-                    tabUrl = tableSchemaHtmlURL + "?schemaName=" + encodeURIComponent(node.attributes.schemaName) + "&tableName=" + encodeURIComponent(node.attributes.tableName);
+                    tabUrl = tableGeneratorCodeUrl + "?schemaName=" + encodeURIComponent(node.attributes.schemaName) + "&tableName=" + encodeURIComponent(node.attributes.tableName);
                     _this.addTab(tabName, tabUrl);
                 }
             },
