@@ -50,6 +50,7 @@ public class CodeTemplateController extends BaseController {
     @RequestMapping("/findAllCodeTemplate")
     @ResponseBody
     public List<ITreeNode> findAllCodeTemplate(HttpServletRequest request, HttpServletResponse response) {
+        String isClose = request.getParameter("isClose");
         List<CodeTemplate> codeTemplateList = codeTemplateService.findAllCodeTemplate();
         List<ITreeNode> nodes = new ArrayList<>();
         for (CodeTemplate codeTemplate : codeTemplateList) {
@@ -57,7 +58,11 @@ public class CodeTemplateController extends BaseController {
             String state = "open";
             if (CodeTemplate.NodeTypeCategory.equals(codeTemplate.getNodeType())) {
                 iconCls = "icon-folderPage";
-                state = "open";
+                if("true".equalsIgnoreCase(isClose)) {
+                    state = "closed";
+                } else {
+                    state = "open";
+                }
             } else if (CodeTemplate.NodeTypeCode.equals(codeTemplate.getNodeType())) {
                 iconCls = "icon-script";
                 state = "open";

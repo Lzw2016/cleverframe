@@ -27,6 +27,12 @@
     margin-right: 0;
 }
 
+.icon-folderPage{
+    background:url('image/folder_page.png') no-repeat center center;
+}
+.icon-script{
+    background:url('image/script.png') no-repeat center center;
+}
 
 /* 数据库使用图标 ModulesImage */
 .icon-database{

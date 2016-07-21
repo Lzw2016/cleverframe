@@ -7,6 +7,8 @@ var pageJs = function (globalPath) {
 
     // 获取数据库表详细信息
     var getTableSchemaURL = globalPath.mvcPath + "/generator/matedata/getTableSchema.json";
+    // 代码模版树
+    var findAllCodeTemplateUrl = globalPath.mvcPath + "/generator/codetemplate/findAllCodeTemplate.json";
 
     // 数据库名
     var labelSchemaName = $("#labelSchemaName");
@@ -15,10 +17,28 @@ var pageJs = function (globalPath) {
     // 表描述
     var labelDescription = $("#labelDescription");
 
-    // 页面中部
-    var centerPanel = $("#centerPanel");
-    // 数据显示表格
+    // 数据库表-数据显示表格
     var dataTable = $("#dataTable");
+    // 代码模版-数据显示表格
+    var codeTemplateDataTable = $("#codeTemplateDataTable");
+    // 代码模版-添加
+    var codeTemplateDataTableButtonsAdd = $("#codeTemplateDataTableButtonsAdd");
+    // 代码模版-移除
+    var codeTemplateDataTableButtonsDel = $("#codeTemplateDataTableButtonsDel");
+
+    // 选择模版代码对话框
+    var selectCodeTemplateDialog = $("#selectCodeTemplateDialog");
+    // 代码模版选择树
+    var codeTemplateID = $("#codeTemplateID");
+    // 选择模版代码对话框-选择
+    var selectCodeTemplateDialogButtonsOk = $("#selectCodeTemplateDialogButtonsOk");
+    // 选择模版代码对话框-取消
+    var selectCodeTemplateDialogButtonsCancel = $("#selectCodeTemplateDialogButtonsCancel");
+
+    // 查看模版代码对话框
+    var viewCodeTemplateDialog = $("#viewCodeTemplateDialog");
+    // 查看模版代码对话框-关闭
+    var viewCodeTemplateDialogButtonsCancel = $("#viewCodeTemplateDialogButtonsCancel");
 
     var paramSchemaName = null;
     var paramTableName = null;
@@ -38,7 +58,7 @@ var pageJs = function (globalPath) {
             fitColumns: false,
             striped: true,
             rownumbers: true,
-            singleSelect: true,
+            singleSelect: false,
             nowrap: true,
             pagination: false,
             loadMsg: "正在加载，请稍候...",
@@ -47,6 +67,25 @@ var pageJs = function (globalPath) {
             pageList: [10, 20, 30, 50, 100, 150]
         });
 
+        codeTemplateDataTable.datagrid({
+            idField: 'name',
+            fit: true,
+            fitColumns: false,
+            striped: true,
+            rownumbers: true,
+            singleSelect: false,
+            nowrap: true,
+            pagination: false,
+            loadMsg: "正在加载，请稍候...",
+            toolbar: "#codeTemplateDataTableButtons",
+            pageSize: 30,
+            pageList: [10, 20, 30, 50, 100, 150]
+        });
+
+        // 初始化选择模版代码对话框
+        _this.initSelectCodeTemplateDialog();
+        // 初始化查看模版代码对话框
+        _this.initViewCodeTemplateDialog();
         // 页面数据初始化
         _this.dataBind();
         // 界面事件绑定方法
@@ -78,9 +117,73 @@ var pageJs = function (globalPath) {
      * 界面事件绑定方法
      */
     this.eventBind = function () {
+        // 代码模版-添加
+        codeTemplateDataTableButtonsAdd.click(function () {
+            selectCodeTemplateDialog.dialog("open");
+        });
+
+        // 代码模版-移除
+        codeTemplateDataTableButtonsDel.click(function () {
+
+        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
+
+    // 初始化选择模版代码对话框
+    this.initSelectCodeTemplateDialog = function () {
+        selectCodeTemplateDialog.dialog({
+            title: "选择模版代码",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            minWidth: 300,
+            minHeight: 130,
+            modal: true,
+            buttons: "#selectCodeTemplateDialogButtons"
+        });
+
+        codeTemplateID.combotree({
+            required: true,
+            editable: false,
+            animate: false,
+            checkbox: false,
+            cascadeCheck: true,
+            onlyLeafCheck: false,
+            lines: true,
+            dnd: false,
+            valueField: 'text',
+            textField: 'text'
+        });
+
+        var param = {isClose: "true"};
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: findAllCodeTemplateUrl,
+            data: param,
+            async: true,
+            success: function (data) {
+                codeTemplateID.combotree("loadData", data);
+            }
+        });
+    };
+
+    // 初始化查看模版代码对话框
+    this.initViewCodeTemplateDialog = function () {
+        viewCodeTemplateDialog.dialog({
+            title: "查看模版代码",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            minWidth: 850,
+            minHeight: 300,
+            modal: true,
+            buttons: "#viewCodeTemplateDialogButtons"
+        });
+    };
 
     // 获取 数据库表详细信息
     this.getTableSchema = function (schemaName, tableName, dataTable) {
