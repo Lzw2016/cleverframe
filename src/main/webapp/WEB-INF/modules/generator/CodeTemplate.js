@@ -899,16 +899,16 @@ var pageJs = function (globalPath) {
 
             // Java编辑器-初始化,
             var editor = CodeMirror.fromTextArea(document.getElementById("codeTemplate_" + codeTemplate.uuid), {
-                mode: "text/x-java",
                 lineNumbers: true,
                 matchBrackets: true,
                 indentUnit: 4,
                 readOnly: false
             });
+            editor.setOption("mode", _this.getCodeMirrorMode(codeTemplate.codeType));
             editor.setSize("auto", "auto");
             //editor.setSize("height", 800);
             editor.setOption("theme", "cobalt");
-            //editor.setOption("mode", "text/x-java");
+
             if(!template.content || template.content == null){
                 editor.setValue("");
             } else {
@@ -988,6 +988,33 @@ var pageJs = function (globalPath) {
         } else {
             $.messager.alert("提示", "不支持格式化的程序语言:" + codeType, "info");
         }
+    };
+
+    // 根据编程语言获取CodeMirror的Mode属性
+    this.getCodeMirrorMode = function (codeType) {
+        switch (codeType.toLowerCase()) {
+            case "java":
+                return "text/x-java";
+            case "c#":
+                return "text/x-csharp";
+            case "xml":
+                return "application/xml";
+            case "html":
+                return "text/html";
+            case "jsp":
+                return "application/x-jsp";
+            case "css":
+                return "text/css";
+            case "sql":
+                return "text/x-mysql";
+            case "javascript":
+                return "text/javascript";
+            case "js":
+                return "text/javascript";
+            case "json":
+                return "application/json";
+        }
+        return "text/x-java";
     };
 };
 
