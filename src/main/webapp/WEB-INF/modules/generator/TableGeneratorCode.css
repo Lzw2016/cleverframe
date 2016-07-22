@@ -33,6 +33,9 @@
 .icon-script{
     background:url('image/script.png') no-repeat center center;
 }
+.icon-run{
+    background:url('image/run.png') no-repeat center center;
+}
 
 /* 数据库使用图标 ModulesImage */
 .icon-database{

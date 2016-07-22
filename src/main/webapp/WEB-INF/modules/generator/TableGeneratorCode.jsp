@@ -14,6 +14,17 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>
 
+    <%-- CodeMirror --%>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/xml/xml.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/htmlembedded/htmlembedded.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/css/css.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/sql/sql.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/javascript/javascript.js"></script>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
@@ -86,7 +97,7 @@
         <table id="codeTemplateDataTable" data-options="border:false,fit:true">
             <thead>
             <tr>
-                <th data-options="width:210,align:'left',hidden:false,field:'name'">代码模版名称</th>
+                <th data-options="width:210,align:'left',hidden:false,field:'name',formatter:pageJsObject.codeTemplateNameFormatter">代码模版名称</th>
                 <th data-options="width:100,align:'left',hidden:false,field:'nodeType'">节点类型</th>
                 <th data-options="width:100,align:'left',hidden:true,field:'templateRef'">脚本模版引用</th>
                 <th data-options="width:100,align:'left',hidden:false,field:'codeType'">模版代码语言</th>
@@ -98,17 +109,21 @@
         <div id="codeTemplateDataTableButtons">
             <a id="codeTemplateDataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
             <a id="codeTemplateDataTableButtonsDel" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">移除</a>
+            <a id="codeTemplateDataTableButtonsRun" class="easyui-linkbutton" data-options="iconCls:'icon-run',plain:true">生成代码</a>
         </div>
     </div>
 </div>
 
 
 <%-- 选择模版代码对话框 --%>
-<div id="selectCodeTemplateDialog" style="width: 300px;height: 130px;padding: 15px 20px">
+<div id="selectCodeTemplateDialog" style="width: 300px;height: 150px;padding: 15px 20px">
     <span>
         <label for="codeTemplateID">所属分类</label>
         <input id="codeTemplateID"/>
     </span>
+    <div style="text-align: center;margin-top: 8px;">
+        <label id="selectCodeTemplateMsg" style="color: red"></label>
+    </div>
 </div>
 <div id="selectCodeTemplateDialogButtons">
     <a id="selectCodeTemplateDialogButtonsOk" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">选择</a>
@@ -117,7 +132,7 @@
 
 <%-- 查看模版代码对话框 --%>
 <div id="viewCodeTemplateDialog" style="width: 850px;height: 300px;padding: 5px 10px">
-
+    <textarea id="viewCodeTemplateEdit"></textarea>
 </div>
 <div id="viewCodeTemplateDialogButtons">
     <a id="viewCodeTemplateDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">关闭</a>
