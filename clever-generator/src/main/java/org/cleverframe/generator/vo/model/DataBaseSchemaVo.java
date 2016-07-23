@@ -1,6 +1,6 @@
-package org.cleverframe.generator.vo.response;
+package org.cleverframe.generator.vo.model;
 
-import org.cleverframe.common.vo.response.BaseResponseVo;
+import java.io.Serializable;
 
 /**
  * 数据库详细信息，概要信息使用类{@link DataBaseSummaryVo}<br/>
@@ -8,7 +8,7 @@ import org.cleverframe.common.vo.response.BaseResponseVo;
  * 作者：LiZW <br/>
  * 创建时间：2016-6-20 15:13 <br/>
  */
-public class DataBaseSchemaVo extends BaseResponseVo {
+public class DataBaseSchemaVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

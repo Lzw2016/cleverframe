@@ -1,9 +1,9 @@
 package org.cleverframe.generator.vo.request;
 
 import org.cleverframe.common.vo.request.BaseRequestVo;
+import org.hibernate.validator.constraints.NotEmpty;
 
-import java.util.List;
-import java.util.Map;
+import javax.validation.constraints.NotNull;
 
 /**
  * 生成代码请求数据封装
@@ -15,45 +15,75 @@ public class GeneratorCodeVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 模版数据
+     * 模版数据-数据库名
      */
-    private Map<String, Object> templateData;
+    @NotNull(message = "数据库名不能为空")
+    private String schemaName;
 
     /**
-     * 模版名称，用于查找模版
+     * 模版数据-数据库表名称
      */
-    private List<String> templateNames;
+    @NotNull(message = "数据库表名称不能为空")
+    private String tableName;
 
     /**
-     * 自定义模版内容,key=TemplateName,value=TemplateContent
+     * 模版数据-数据库表中包含的列 List<String>
      */
-    private Map<String, String> templateContent;
+    @NotNull(message = "数据库表中包含的列不能为空")
+    private String includeColumn;
+
+    /**
+     * 代码模版 CodeResultVo
+     */
+    @NotNull(message = "代码模版不能为空")
+    private String codeTemplate;
+
+    /**
+     * 生成代码的一些附加数据 Map<String, String>
+     */
+    private String attributes;
 
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
 
-    public Map<String, Object> getTemplateData() {
-        return templateData;
+    public String getSchemaName() {
+        return schemaName;
     }
 
-    public void setTemplateData(Map<String, Object> templateData) {
-        this.templateData = templateData;
+    public void setSchemaName(String schemaName) {
+        this.schemaName = schemaName;
     }
 
-    public List<String> getTemplateNames() {
-        return templateNames;
+    public String getTableName() {
+        return tableName;
     }
 
-    public void setTemplateNames(List<String> templateNames) {
-        this.templateNames = templateNames;
+    public void setTableName(String tableName) {
+        this.tableName = tableName;
     }
 
-    public Map<String, String> getTemplateContent() {
-        return templateContent;
+    public String getIncludeColumn() {
+        return includeColumn;
     }
 
-    public void setTemplateContent(Map<String, String> templateContent) {
-        this.templateContent = templateContent;
+    public void setIncludeColumn(String includeColumn) {
+        this.includeColumn = includeColumn;
+    }
+
+    public String getCodeTemplate() {
+        return codeTemplate;
+    }
+
+    public void setCodeTemplate(String codeTemplate) {
+        this.codeTemplate = codeTemplate;
+    }
+
+    public String getAttributes() {
+        return attributes;
+    }
+
+    public void setAttributes(String attributes) {
+        this.attributes = attributes;
     }
 }

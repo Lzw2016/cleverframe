@@ -131,12 +131,11 @@
 </div>
 
 <%-- 查看模版代码对话框 --%>
-<div id="viewCodeTemplateDialog" style="width: 850px;height: 300px;padding: 5px 10px">
+<div id="viewCodeTemplateDialog" style="width: 700px;height: 450px;">
     <textarea id="viewCodeTemplateEdit"></textarea>
 </div>
-<div id="viewCodeTemplateDialogButtons">
-    <a id="viewCodeTemplateDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">关闭</a>
-</div>
+
+
 
 </body>
 </html>

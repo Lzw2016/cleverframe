@@ -1,7 +1,7 @@
-package org.cleverframe.generator.vo.response;
+package org.cleverframe.generator.vo.model;
 
-import org.cleverframe.common.vo.response.BaseResponseVo;
 
+import java.io.Serializable;
 import java.util.Date;
 import java.util.List;
 
@@ -9,7 +9,7 @@ import java.util.List;
  * 作者：LiZW <br/>
  * 创建时间：2016-6-20 14:26 <br/>
  */
-public class TableSchemaVo extends BaseResponseVo {
+public class TableSchemaVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**

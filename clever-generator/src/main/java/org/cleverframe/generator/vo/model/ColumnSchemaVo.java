@@ -1,14 +1,13 @@
-package org.cleverframe.generator.vo.response;
+package org.cleverframe.generator.vo.model;
 
-import org.cleverframe.common.vo.response.BaseResponseVo;
-
+import java.io.Serializable;
 import java.util.Map;
 
 /**
  * 作者：LiZW <br/>
  * 创建时间：2016-6-20 14:37 <br/>
  */
-public class ColumnSchemaVo extends BaseResponseVo {
+public class ColumnSchemaVo implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
