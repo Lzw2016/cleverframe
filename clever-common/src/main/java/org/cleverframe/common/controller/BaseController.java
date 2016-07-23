@@ -90,6 +90,7 @@ public abstract class BaseController {
 
     /**
      * 增加不需要进行XXS攻击处理的请求地址,不对请求参数进行HTML编码
+     *
      * @param requestUrl 请求地址,不含后缀
      */
     protected void addXSSExcludeUrl(String requestUrl) {
@@ -178,7 +179,9 @@ public abstract class BaseController {
 
         // 如果是ajax请求直接返回响应数据，跳转到对应的错误页面
         if ("true".equals(request.getParameter("ajaxRequest")) || request.getRequestURI().endsWith(".json") || request.getRequestURI().endsWith(".xml")) {
-            modelAndView.getModelMap().put(XML_OR_JSON_ROOT, new AjaxMessage<>(throwable, "服务器异常!"));
+            AjaxMessage<String> ajaxMessage = new AjaxMessage<>(throwable, "服务器异常!");
+            ajaxMessage.setFailMessage("服务器异常!");
+            modelAndView.getModelMap().put(XML_OR_JSON_ROOT, ajaxMessage);
         }
         return modelAndView;
     }

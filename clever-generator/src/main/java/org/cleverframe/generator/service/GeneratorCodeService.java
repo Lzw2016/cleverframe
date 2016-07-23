@@ -39,7 +39,7 @@ public class GeneratorCodeService extends BaseService {
      * @param attributes    生成代码的一些附加数据
      * @return 生成代码集合
      */
-    public CodeResultVo generatorCode(TableSchemaVo tableSchema, List<String> includeColumn, CodeResultVo codeTemplate, Map<String, String> attributes) {
+    public CodeResultVo generatorCode(TableSchemaVo tableSchema, List<String> includeColumn, CodeResultVo codeTemplate, Map<String, String> attributes, AjaxMessage ajaxMessage) {
         List<ColumnSchemaVo> columnList = new ArrayList<>();
         for (ColumnSchemaVo columnSchemaVo : tableSchema.getColumnList()) {
             for (String columnName : includeColumn) {
@@ -52,10 +52,13 @@ public class GeneratorCodeService extends BaseService {
         Map<String, Object> data = new HashMap<>();
         data.put("tableSchema", tableSchema);
         data.put("attributes", attributes);
-        //
-        data.put("GeneratorEntityUtils", new GeneratorEntityUtils());
+        // 增加工具方法类对象
+        data.put("GeneratorEntityUtils", GeneratorEntityUtils.INSTANCE);
         String codeResult = FreeMarkerUtils.templateBindDataByTmp(codeTemplate.getCodeContent(), data);
-
+        if (codeResult == null) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("生成代码失败");
+        }
         CodeResultVo codeResultVo = new CodeResultVo();
         codeResultVo.setCodeType(codeTemplate.getCodeType());
         codeResultVo.setTemplateName(codeTemplate.getTemplateName());

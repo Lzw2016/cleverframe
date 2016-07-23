@@ -170,6 +170,7 @@ public class CodeTemplateController extends BaseController {
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "更新代码模版成功", null);
         CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateUpdateVo, CodeTemplate.class);
         Template template = BeanMapper.mapper(codeTemplateUpdateVo, Template.class);
+        template.setName(codeTemplateUpdateVo.getTemplateRef());
         // 设置ID
         codeTemplate.setId(codeTemplateUpdateVo.getCodeTemplateId());
         template.setId(codeTemplateUpdateVo.getTemplateId());

@@ -77,7 +77,7 @@ public class GeneratorCodeController extends BaseController {
                     attributes = JacksonMapper.nonEmptyMapper().fromJson(generatorCodeVo.getAttributes(), javaType);
                 }
                 // 生成代码
-                CodeResultVo codeResultVo = generatorCodeService.generatorCode(tableSchema, includeColumn, codeTemplate, attributes);
+                CodeResultVo codeResultVo = generatorCodeService.generatorCode(tableSchema, includeColumn, codeTemplate, attributes, ajaxMessage);
                 ajaxMessage.setResult(codeResultVo);
             }
         }
