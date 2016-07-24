@@ -244,7 +244,14 @@ project(':clever-quartz') {
 project(':clever-shiro') {
     dependencies {
         compile project(':clever-common')
-
+        compile project(':clever-core')
+        compile project(':clever-sys')
+        // ##################Apache Shiro权限框架
+        compile('org.apache.shiro:shiro-core:1.2.6')
+        compile('org.apache.shiro:shiro-web:1.2.6')
+        compile('org.apache.shiro:shiro-spring:1.2.6')
+        compile('org.apache.shiro:shiro-ehcache:1.2.6')
+        compile('org.apache.shiro:shiro-quartz:1.2.6')
     }
 }
 
@@ -274,12 +281,7 @@ project(':clever-sys') {
 
 //compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
 //
-//// ##################Apache Shiro权限框架
-//compile('org.apache.shiro:shiro-core:1.2.4')
-//compile('org.apache.shiro:shiro-web:1.2.4')
-//compile('org.apache.shiro:shiro-spring:1.2.4')
-//compile('org.apache.shiro:shiro-ehcache:1.2.4')
-//compile('org.apache.shiro:shiro-quartz:1.2.4')
+
 //
 //// ##################snaker工作流框架
 //compile('com.github.snakerflow:snaker-core:2.5.1')
