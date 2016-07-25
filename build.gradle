@@ -238,6 +238,8 @@ project(':clever-monitor') {
 project(':clever-quartz') {
     dependencies {
         compile project(':clever-common')
+        compile('org.quartz-scheduler:quartz:2.2.3')
+        compile('org.quartz-scheduler:quartz-jobs:2.2.3')
     }
 }
 
