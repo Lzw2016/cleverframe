@@ -14,6 +14,7 @@ dependencies {
     compile project(':clever-common')
     compile project(':clever-core')
     compile project(':clever-generator')
+    compile project(':clever-quartz')
 
     testCompile('junit:junit:4.12')
     testCompile('org.springframework:spring-test:4.2.6.RELEASE')

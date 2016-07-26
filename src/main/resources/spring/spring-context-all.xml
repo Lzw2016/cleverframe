@@ -46,6 +46,11 @@
     -->
     <import resource="spring-context-dozer.xml"/>
 
+    <!--
+        Spring与Quartz整合
+    -->
+    <import resource="spring-context-quartz.xml"/>
+
     <import resource="spring-context-shiro.xml"/>
 
     <import resource="spring-context-snaker.xml"/>
