@@ -8,10 +8,7 @@ import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.quartz.QuartzBeanNames;
 import org.cleverframe.quartz.service.TriggerService;
 import org.cleverframe.quartz.vo.model.QrtzTriggers;
-import org.cleverframe.quartz.vo.request.AddCronTriggerForJobVo;
-import org.cleverframe.quartz.vo.request.AddSimpleTriggerForJobVo;
-import org.cleverframe.quartz.vo.request.JobDetailKeyVo;
-import org.cleverframe.quartz.vo.request.ValidatorCronVo;
+import org.cleverframe.quartz.vo.request.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -93,7 +90,7 @@ public class QuartzTriggerController extends BaseController {
             HttpServletResponse response,
             @Valid AddCronTriggerForJobVo addCronTriggerForJobVo,
             BindingResult bindingResult) {
-        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "给JobDetail增加一个SimpleTrigger成功", null);
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "给JobDetail增加一个CronTrigger成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             Map<String, String> jobData = null;
             if (StringUtils.isNotBlank(addCronTriggerForJobVo.getJobData())) {
@@ -128,6 +125,73 @@ public class QuartzTriggerController extends BaseController {
         if (beanValidator(bindingResult, ajaxMessage)) {
             List<QrtzTriggers> qrtzTriggersList = triggerService.getTriggerByJob(jobDetailKeyVo.getJobName(), jobDetailKeyVo.getJobGroup(), ajaxMessage);
             ajaxMessage.setResult(qrtzTriggersList);
+        }
+        return ajaxMessage;
+    }
+
+    @RequestMapping("/getTriggerGroupNames")
+    @ResponseBody
+    AjaxMessage<List<String>> getTriggerGroupNames(HttpServletRequest request, HttpServletResponse response) {
+        AjaxMessage<List<String>> ajaxMessage = new AjaxMessage<>(true, "获取所有的TriggerGroupName成功", null);
+        ajaxMessage.setResult(triggerService.getTriggerGroupNames(ajaxMessage));
+        return ajaxMessage;
+    }
+
+    @RequestMapping("/deleteTriggerByJob")
+    @ResponseBody
+    public AjaxMessage<String> deleteTriggerByJob(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid JobDetailKeyVo jobDetailKeyVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "删除一个JobDetail的所有Trigger成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            triggerService.deleteTriggerByJob(jobDetailKeyVo.getJobName(), jobDetailKeyVo.getJobGroup(), ajaxMessage);
+        }
+        return ajaxMessage;
+    }
+
+    /**
+     * 暂停而且删除Trigger
+     */
+    @RequestMapping("/deleteTrigger")
+    @ResponseBody
+    public AjaxMessage<String> deleteTrigger(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid TriggerKeyVo triggerKeyVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "删除Trigger成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            triggerService.deleteTrigger(triggerKeyVo.getTriggerName(), triggerKeyVo.getTriggerGroup(), ajaxMessage);
+        }
+        return ajaxMessage;
+    }
+
+    @RequestMapping("/pauseTrigger")
+    @ResponseBody
+    public AjaxMessage<String> pauseTrigger(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid TriggerKeyVo triggerKeyVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "暂停Trigger成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            triggerService.pauseTrigger(triggerKeyVo.getTriggerName(), triggerKeyVo.getTriggerGroup(), ajaxMessage);
+        }
+        return ajaxMessage;
+    }
+
+    @RequestMapping("/resumeTrigger")
+    @ResponseBody
+    public AjaxMessage<String> resumeTrigger(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid TriggerKeyVo triggerKeyVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "取消暂停Trigger成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            triggerService.resumeTrigger(triggerKeyVo.getTriggerName(), triggerKeyVo.getTriggerGroup(), ajaxMessage);
         }
         return ajaxMessage;
     }

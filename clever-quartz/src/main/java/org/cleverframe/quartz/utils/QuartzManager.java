@@ -277,5 +277,4 @@ public class QuartzManager {
         }
         return dateList;
     }
-
 }

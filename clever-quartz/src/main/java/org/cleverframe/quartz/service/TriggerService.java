@@ -1,5 +1,6 @@
 package org.cleverframe.quartz.service;
 
+import org.cleverframe.common.exception.ExceptionUtils;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.time.DateTimeUtils;
 import org.cleverframe.common.vo.response.AjaxMessage;
@@ -370,5 +371,117 @@ public class TriggerService extends BaseService {
             qrtzTriggersList.add(qrtzTriggers);
         }
         return qrtzTriggersList;
+    }
+
+    /**
+     * 获取所有的TriggerGroupName
+     *
+     * @return 失败返回null
+     */
+    public List<String> getTriggerGroupNames(AjaxMessage ajaxMessage) {
+        List<String> triggerGroupNames = QuartzManager.getTriggerGroupNames();
+        if (triggerGroupNames == null) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("获取所有的TriggerGroupName失败");
+        }
+        return triggerGroupNames;
+    }
+
+    /**
+     * 删除一个JobDetail的所有Trigger
+     *
+     * @param jobName  job名称
+     * @param jobGroup job组名称
+     * @return 成功返回true
+     */
+    @Transactional(readOnly = false)
+    public boolean deleteTriggerByJob(String jobName, String jobGroup, AjaxMessage ajaxMessage) {
+        Scheduler scheduler = QuartzManager.getScheduler();
+        List<? extends Trigger> jobTriggers = QuartzManager.getTriggerByJob(jobName, jobGroup);
+        if (jobTriggers == null) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("删除一个JobDetail的所有Trigger失败-获取JobDetail的所有Trigger失败");
+            return false;
+        }
+        try {
+            for (Trigger trigger : jobTriggers) {
+                // 暂停触发器
+                scheduler.pauseTrigger(trigger.getKey());
+                // 移除触发器
+                scheduler.unscheduleJob(trigger.getKey());
+            }
+        } catch (Throwable e) {
+            logger.error("删除一个JobDetail的所有Trigger异常", e);
+            throw ExceptionUtils.unchecked(e);
+        }
+        return true;
+    }
+
+    /**
+     * 暂停而且删除Trigger
+     *
+     * @param triggerName  Trigger名称
+     * @param triggerGroup Trigger组名称
+     * @return 成功返回true
+     */
+    @Transactional(readOnly = false)
+    public boolean deleteTrigger(String triggerName, String triggerGroup, AjaxMessage ajaxMessage) {
+        Scheduler scheduler = QuartzManager.getScheduler();
+        try {
+            // 暂停触发器
+            scheduler.pauseTrigger(TriggerKey.triggerKey(triggerName, triggerGroup));
+            // 移除触发器
+            scheduler.unscheduleJob(TriggerKey.triggerKey(triggerName, triggerGroup));
+        } catch (Throwable e) {
+            logger.error("删除一个Trigger异常", e);
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("删除一个Trigger失败");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 暂停一个 Trigger
+     *
+     * @param triggerName  Trigger名称
+     * @param triggerGroup Trigger组名称
+     * @return 成功返回true
+     */
+    @Transactional(readOnly = false)
+    public boolean pauseTrigger(String triggerName, String triggerGroup, AjaxMessage ajaxMessage) {
+        Scheduler scheduler = QuartzManager.getScheduler();
+        try {
+            // 暂停触发器
+            scheduler.pauseTrigger(TriggerKey.triggerKey(triggerName, triggerGroup));
+        } catch (Throwable e) {
+            logger.error("暂停一个Trigger异常", e);
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("暂停一个Trigger失败");
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * 取消暂停一个 Trigger
+     *
+     * @param triggerName  Trigger名称
+     * @param triggerGroup Trigger组名称
+     * @return 成功返回true
+     */
+    @Transactional(readOnly = false)
+    public boolean resumeTrigger(String triggerName, String triggerGroup, AjaxMessage ajaxMessage) {
+        Scheduler scheduler = QuartzManager.getScheduler();
+        try {
+            // 取消暂停触发器
+            scheduler.resumeTrigger(TriggerKey.triggerKey(triggerName, triggerGroup));
+        } catch (Throwable e) {
+            logger.error("取消暂停一个Trigger异常", e);
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("取消暂停一个Trigger失败");
+            return false;
+        }
+        return true;
     }
 }
