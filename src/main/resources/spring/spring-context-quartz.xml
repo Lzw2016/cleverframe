@@ -17,9 +17,11 @@
 -->
 
     <!-- Quartz集群Scheduler -->
-    <bean id="clusterQuartzScheduler" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
         <!--  quartz配置文件路径-->
         <property name="configLocation" value="classpath:/quartz/quartz.properties" />
+        <!-- 与Spring整合,quartz.properties文件里的org.quartz.scheduler.instanceName配置无用,必须在此处设置设置schedulerName -->
+        <property name="schedulerName" value="QuartzSchedulerCluster"/>
         <!-- 启动时延期3秒开始任务 -->
         <property name="startupDelay" value="3" />
         <property name="autoStartup" value="true" />

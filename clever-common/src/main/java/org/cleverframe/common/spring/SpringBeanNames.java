@@ -72,6 +72,15 @@ public class SpringBeanNames implements IBeanNames {
      */
     public static final String DozerBeanMapper = "dozerBeanMapper";
 
+    // -------------------------------------------------------------------------------------------//
+    // spring-context-quartz.xml配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * Quartz与Spring整合时的SchedulerFactoryBean
+     */
+    public static final String SchedulerFactoryBean = "schedulerFactoryBean";
+
+
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-shiro.xml配置文件的Bean名称
