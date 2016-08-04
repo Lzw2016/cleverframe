@@ -262,6 +262,7 @@ public class HibernateDao<T extends Serializable> {
      * @param updateEmptyField 是否更新空值字段，只对String字段有效
      * @param <E>              实体类泛型
      * @return 更新之后的数据
+     * @see #update(Serializable, Serializable)
      */
     @SuppressWarnings({"UnusedAssignment", "unchecked"})
     public <E extends IdEntity> E update(E entity, boolean updateNullField, boolean updateEmptyField) {
@@ -286,32 +287,35 @@ public class HibernateDao<T extends Serializable> {
     /**
      * 根据ID,更新实体类对象<br/>
      *
-     * @param entityClass 更新的实体类类型,用于确定更新的数据库张
+     * @param entityClass 更新的实体类类型,用于确定更新的数据库表
      * @param id          更新实体类对象的ID
-     * @param entity      需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同的字段值
+     * @param entity      需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同且值不为null的字段值
      * @param <E>         泛型类型
+     * @return 返回更新后的数据，更新失败返回null
      */
-    public <E> void update(Class<T> entityClass, Serializable id, E entity) {
-        Object object = this.getEntity(entityClass, id);
+    public <E extends Serializable> Serializable update(Class<T> entityClass, Serializable id, E entity) {
+        Serializable object = this.getEntity(entityClass, id);
         if (object == null) {
-            logger.debug("### updateById更新数据不存在");
-            return;
+            logger.debug("### update更新数据不存在");
+            return null;
         }
         if (!JavaBeanUtils.copyTo(entity, object, false, true)) {
-            throw new RuntimeException("### updateById异常(动态更新,可以控制不更新空值字段)");
+            throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
         }
         getSession().update(object);
+        return object;
     }
 
     /**
      * 根据ID,更新当前DAO对应的实体类对象<br/>
      *
      * @param id     更新实体类对象的ID
-     * @param entity 需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同的字段值
+     * @param entity 需要更新的数据,可以用任意一个对象,用于更新与实体类字段名相同且值不为null的字段值
      * @param <E>    泛型类型
+     * @return 返回更新后的数据，更新失败返回null
      */
-    public <E> void update(Serializable id, E entity) {
-        update(entityClass, id, entity);
+    public <E extends Serializable> Serializable update(Serializable id, E entity) {
+        return update(entityClass, id, entity);
     }
 
     /**

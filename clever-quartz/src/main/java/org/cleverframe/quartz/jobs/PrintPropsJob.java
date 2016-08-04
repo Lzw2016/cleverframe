@@ -18,7 +18,12 @@ public class PrintPropsJob implements Job {
         // @PersistJobDataAfterExecution 对应 isUpdateData
 
         // JobDataMap data = context.getMergedJobDataMap();
+        try {
+            Thread.sleep(1000 * 5);
+        } catch (Throwable e) {
+            e.printStackTrace();
+        }
+
         logger.info("[PrintPropsJob] ================================= 测试任务");
     }
-
 }

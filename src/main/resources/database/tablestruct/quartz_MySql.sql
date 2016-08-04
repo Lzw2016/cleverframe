@@ -243,3 +243,93 @@ CREATE INDEX IDX_QRTZ_FT_T_G ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,TRIGGER_NAME,TRIG
 CREATE INDEX IDX_QRTZ_FT_TG ON QRTZ_FIRED_TRIGGERS(SCHED_NAME,TRIGGER_GROUP);
 
 
+
+
+
+/* ====================================================================================================================
+    qrtz_job_log -- Job执行日志表
+==================================================================================================================== */
+CREATE TABLE qrtz_job_log 
+(
+    id                      bigint          NOT NULL    auto_increment      COMMENT '编号',
+    listener_name           varchar(120)    NOT NULL                        COMMENT '监听器名称',
+    sched_name              varchar(120)    NOT NULL                        COMMENT 'Scheduler名称',
+    instance_name           varchar(200)    NOT NULL                        COMMENT 'Scheduler实例的唯一标识，配置文件中的Instance Id',
+    job_name                varchar(200)    NOT NULL                        COMMENT 'Job key',
+    job_group               varchar(200)    NOT NULL                        COMMENT 'Job group 名称',
+    job_class_name          varchar(250)    NOT NULL                        COMMENT 'Job类名称',
+    trigger_name            varchar(200)    NOT NULL                        COMMENT 'Trigger key',
+    trigger_group           varchar(200)    NOT NULL                        COMMENT 'Trigger group名称',
+    start_time              datetime        NOT NULL                        COMMENT '开始执行时间',
+    end_time                datetime                                        COMMENT '执行结束时间',
+    process_time            bigint                                          COMMENT '执行用时(ms)',
+    pre_run_time            datetime        NOT NULL                        COMMENT '上一次执行时间',
+    next_run_time           datetime        NOT NULL                        COMMENT '下一次执行时间',
+    run_count               int             NOT NULL                        COMMENT '执行次数',
+    ip_address              varchar(200)    NOT NULL                        COMMENT '执行节点IP,可能有多个(‘;’分隔)',
+    exception_info          mediumtext                                      COMMENT '异常信息',
+    is_veto                 char(1)         NOT NULL                        COMMENT '是否被否决（0：否；1：是）',
+    before_job_data         mediumtext                                      COMMENT '执行前的JobDataMap数据',
+    after_job_data          mediumtext                                      COMMENT '执行后的JobDataMap数据',
+    PRIMARY KEY (id)
+) COMMENT = 'Job执行日志表';
+
+
+
+/* ====================================================================================================================
+    qrtz_trigger_log -- Trigger触发日志表
+==================================================================================================================== */
+CREATE TABLE qrtz_trigger_log 
+(
+    id                          bigint          NOT NULL    auto_increment      COMMENT '编号',
+    listener_name               varchar(120)    NOT NULL                        COMMENT '监听器名称',
+    sched_name                  varchar(120)    NOT NULL                        COMMENT 'Scheduler名称',
+    instance_name               varchar(200)    NOT NULL                        COMMENT 'Scheduler实例的唯一标识，配置文件中的Instance Id',
+    job_name                    varchar(200)    NOT NULL                        COMMENT 'Job key',
+    job_group                   varchar(200)    NOT NULL                        COMMENT 'Job group 名称',
+    job_class_name              varchar(250)    NOT NULL                        COMMENT 'Job类名称',
+    trigger_name                varchar(200)    NOT NULL                        COMMENT 'Trigger key',
+    trigger_group               varchar(200)    NOT NULL                        COMMENT 'Trigger group名称',
+    start_time                  datetime        NOT NULL                        COMMENT '开始触发时间',
+    end_time                    datetime                                        COMMENT '触发完成时间',
+    process_time                bigint                                          COMMENT '用时(ms)',
+    pre_run_time                datetime        NOT NULL                        COMMENT '上一次触发时间',
+    next_run_time               datetime        NOT NULL                        COMMENT '下一次触发时间',
+    run_count                   int             NOT NULL                        COMMENT '触发次数',
+    ip_address                  varchar(200)    NOT NULL                        COMMENT '触发节点IP,可能有多个(‘;’分隔)',
+    mis_fired                   char(1)         NOT NULL                        COMMENT '是否错过了触发（0：否；1：是）',
+    before_job_data             mediumtext                                      COMMENT '执行前的JobDataMap数据',
+    after_job_data              mediumtext                                      COMMENT '执行后的JobDataMap数据',
+    trigger_instruction_code    varchar(10)                                     COMMENT '触发指令码',
+    instr_code                  varchar(100)                                    COMMENT '触发指令码说明',
+    PRIMARY KEY (id)
+) COMMENT = 'Trigger触发日志表';
+
+
+/* ====================================================================================================================
+    qrtz_scheduler_log -- Scheduler调度日志表
+==================================================================================================================== */
+CREATE TABLE qrtz_scheduler_log 
+(
+    id                          bigint          NOT NULL    auto_increment      COMMENT '编号',
+    listener_name               varchar(120)    NOT NULL                        COMMENT '监听器名称',
+    sched_name                  varchar(120)    NOT NULL                        COMMENT 'Scheduler名称',
+    instance_name               varchar(200)    NOT NULL                        COMMENT 'Scheduler实例的唯一标识，配置文件中的Instance Id',
+    method_name                 varchar(120)    NOT NULL                        COMMENT '触发事件调用的方法',
+    log_data                    mediumtext      NOT NULL                        COMMENT '触发事件记录的日志数据',
+    ip_address                  varchar(200)    NOT NULL                        COMMENT '触发节点IP,可能有多个(‘;’分隔)',
+    PRIMARY KEY (id)
+) COMMENT = 'Scheduler调度日志表';
+
+
+
+
+
+
+
+
+
+
+
+
+

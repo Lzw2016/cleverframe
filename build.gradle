@@ -42,10 +42,11 @@ allprojects {
 
     // 配置多个maven源
     repositories {
-        mavenLocal()
-        mavenCentral()
+        // mavenLocal()
+        // mavenCentral()
         // 使用开源中国的maven仓库
-        maven { url 'http://maven.oschina.net/content/groups/public/' }
+        // maven { url 'http://maven.oschina.net/content/groups/public/' }
+        maven { url 'http://repo2.maven.org/maven2/' }
     }
 }
 
@@ -233,12 +234,18 @@ project(':clever-fileupload') {
 project(':clever-monitor') {
     dependencies {
         compile project(':clever-common')
+        // ##################
+        compile('io.dropwizard.metrics:metrics-core:3.1.2')
+        // 获取系统硬件信息(CPU 内存 硬盘 MAC等)
+        compile('org.fusesource:sigar:1.6.4')
     }
 }
 
 project(':clever-quartz') {
     dependencies {
         compile project(':clever-common')
+        compile project(':clever-core')
+
         compile('org.quartz-scheduler:quartz:2.2.3')
         compile('org.quartz-scheduler:quartz-jobs:2.2.3')
     }

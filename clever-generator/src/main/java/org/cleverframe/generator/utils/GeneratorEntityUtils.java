@@ -2,6 +2,8 @@ package org.cleverframe.generator.utils;
 
 import org.apache.commons.lang3.StringUtils;
 
+import java.util.Date;
+
 /**
  * 代码生成时使用的工具类
  * <p/>
@@ -34,7 +36,7 @@ public class GeneratorEntityUtils {
 
     public static final GeneratorEntityUtils INSTANCE = new GeneratorEntityUtils();
 
-    private GeneratorEntityUtils(){
+    private GeneratorEntityUtils() {
     }
 
     /**
@@ -111,7 +113,7 @@ public class GeneratorEntityUtils {
      * @return 实体类字段类型
      */
     public String toFieldType(String dataType) {
-        if(StringUtils.isBlank(dataType)){
+        if (StringUtils.isBlank(dataType)) {
             return STRING;
         }
         switch (dataType.toUpperCase()) {
@@ -228,5 +230,12 @@ public class GeneratorEntityUtils {
         }
         sb.insert(0, "set"); //$NON-NLS-1$
         return sb.toString();
+    }
+
+    /**
+     * 获取当前时间
+     */
+    public Date getCurrentTime() {
+        return new Date();
     }
 }
