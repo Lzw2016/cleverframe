@@ -17,16 +17,18 @@
 -->
 
     <!-- Quartz集群Scheduler -->
-    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean">
+    <bean id="schedulerFactoryBean" class="org.springframework.scheduling.quartz.SchedulerFactoryBean" destroy-method="destroy">
         <!--  quartz配置文件路径-->
         <property name="configLocation" value="classpath:/quartz/quartz.properties" />
         <!-- 与Spring整合,quartz.properties文件里的org.quartz.scheduler.instanceName配置无用,必须在此处设置设置schedulerName -->
         <property name="schedulerName" value="QuartzSchedulerCluster"/>
         <!-- 启动时延期3秒开始任务 -->
-        <property name="startupDelay" value="3" />
         <property name="autoStartup" value="true" />
+        <property name="startupDelay" value="30" />
         <!-- 保存Job数据到数据库所需的数据源 -->
         <property name="dataSource" ref="dataSource" />
+        <!--关闭调度时，是否等待所有的job执行完毕-->
+        <property name="waitForJobsToCompleteOnShutdown" value="false"/>
         <!-- Job接受applicationContext的成员变量名 -->
         <property name="applicationContextSchedulerContextKey" value="applicationContext" />
         <property name="overwriteExistingJobs" value="true" />

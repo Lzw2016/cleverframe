@@ -17,7 +17,7 @@ dependencies {
     compile project(':clever-quartz')
 
     testCompile('junit:junit:4.12')
-    testCompile('org.springframework:spring-test:4.2.6.RELEASE')
+    testCompile('org.springframework:spring-test:4.2.7.RELEASE')
     testCompile('org.mockito:mockito-all:1.10.19')
     testCompile('org.hamcrest:hamcrest-all:1.3')
 }
@@ -55,7 +55,7 @@ subprojects {
     // 公共依赖配置
     dependencies {
         testCompile('junit:junit:4.12')
-        testCompile('org.springframework:spring-test:4.2.6.RELEASE')
+        testCompile('org.springframework:spring-test:4.2.7.RELEASE')
         testCompile('org.mockito:mockito-all:1.10.19')
         testCompile('org.hamcrest:hamcrest-all:1.3')
     }
@@ -147,12 +147,12 @@ project(':clever-common') {
         compile('javax.el:javax.el-api:3.0.0')
 
         // ##################Spring 框架
-        compile('org.springframework:spring-context-support:4.2.6.RELEASE')
-        compile('org.springframework:spring-context:4.2.6.RELEASE')
-        compile('org.springframework:spring-web:4.2.6.RELEASE')
-        compile('org.springframework:spring-webmvc:4.2.6.RELEASE')
-        compile('org.springframework:spring-oxm:4.2.6.RELEASE')
-        compile('org.springframework:spring-orm:4.2.6.RELEASE')
+        compile('org.springframework:spring-context-support:4.2.7.RELEASE')
+        compile('org.springframework:spring-context:4.2.7.RELEASE')
+        compile('org.springframework:spring-web:4.2.7.RELEASE')
+        compile('org.springframework:spring-webmvc:4.2.7.RELEASE')
+        compile('org.springframework:spring-oxm:4.2.7.RELEASE')
+        compile('org.springframework:spring-orm:4.2.7.RELEASE')
     }
 }
 
@@ -219,12 +219,6 @@ project(':clever-webui') {
     }
 }
 
-project(':clever-fastdfs') {
-    dependencies {
-        compile project(':clever-common')
-    }
-}
-
 project(':clever-fileupload') {
     dependencies {
         compile project(':clever-common')
@@ -277,6 +271,33 @@ project(':clever-sys') {
     }
 }
 
+project(':clever-zookeeper') {
+    dependencies {
+        compile project(':clever-common')
+        // ##################
+        compile('org.apache.curator:curator-framework:3.2.0')
+        compile('org.apache.curator:curator-recipes:3.2.0')
+        compile('org.apache.curator:curator-client:3.2.0')
+        compile('org.apache.curator:curator-x-discovery:3.2.0')
+    }
+}
+
+project(':clever-redis') {
+    dependencies {
+        compile project(':clever-common')
+        // ##################
+        compile('redis.clients:jedis:2.9.0')
+    }
+}
+
+project(':clever-fastdfs') {
+    dependencies {
+        compile project(':clever-common')
+        // ##################
+        compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
+    }
+}
+
 //// ##################其他依赖
 
 //compile('net.sf.ehcache:ehcache-web:2.0.4')
@@ -307,13 +328,13 @@ clever-web                      -- 最后的可以运行的WEB项目
     clever-doc                  -- 系统文档：设计文档、操作文档
     clever-webui                -- 前台UI框架模型封装
     clever-common               -- 系统核心组件
-    clever-core                 --
-
-
-
-    clever-freemarker             --
-    clever-freemarker           --
+    clever-core                 -- 系统核心
     clever-generator            -- 代码生成系统
+    clever-quartz               -- 任务调度管理
+    clever-zookeeper            -- ZooKeeper管理监控
+
+
+
     clever-monitor              --
     clever-ehcache              --
     clever-redis                --
@@ -324,7 +345,6 @@ clever-web                      -- 最后的可以运行的WEB项目
     clever-snaker               --
     clever-activity             --
     clever-foxbpm               --
-    clever-quartz               --
     (clever-modules)            --
     clever-sys                  --
     clever-sso                  --

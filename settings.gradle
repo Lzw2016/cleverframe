@@ -11,4 +11,6 @@ include 'clever-sys'
 include 'clever-sso'
 include 'clever-webui'
 include 'clever-doc'
+include 'clever-zookeeper'
+include 'clever-redis'
 
