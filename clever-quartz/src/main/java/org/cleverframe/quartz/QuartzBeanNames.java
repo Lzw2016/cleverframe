@@ -19,6 +19,7 @@ public class QuartzBeanNames implements IBeanNames {
     // -------------------------------------------------------------------------------------------//
     // Service
     // -------------------------------------------------------------------------------------------//
+    public static final String  SchedulerService = "quartz_SchedulerService";
     public static final String  TriggerService = "quartz_TriggerService";
     public static final String  JobDetailService = "quartz_JobDetailService";
 
