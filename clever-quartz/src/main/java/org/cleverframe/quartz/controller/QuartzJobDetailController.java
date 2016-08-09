@@ -153,5 +153,21 @@ public class QuartzJobDetailController extends BaseController {
         return ajaxMessage;
     }
 
+    /**
+     * 立即运行JobDetail
+     */
+    @RequestMapping("/triggerJob")
+    @ResponseBody
+    public AjaxMessage<String> triggerJob(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid JobDetailKeyVo jobDetailKeyVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "立即运行JobDetail成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            jobDetailService.triggerJob(jobDetailKeyVo.getJobName(), jobDetailKeyVo.getJobGroup(), ajaxMessage);
+        }
+        return ajaxMessage;
+    }
 
 }

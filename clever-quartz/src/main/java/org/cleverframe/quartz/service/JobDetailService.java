@@ -217,4 +217,25 @@ public class JobDetailService extends BaseService {
         }
         return true;
     }
+
+    /**
+     * 立即运行JobDetail
+     *
+     * @param jobName  job名称
+     * @param jobGroup job组名称
+     * @return 成功返回true
+     */
+    @Transactional(readOnly = false)
+    public boolean triggerJob(String jobName, String jobGroup, AjaxMessage ajaxMessage) {
+        Scheduler scheduler = QuartzManager.getScheduler();
+        try {
+            scheduler.triggerJob(JobKey.jobKey(jobName, jobGroup));
+        } catch (Throwable e) {
+            logger.error("立即运行JobDetail异常", e);
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("立即运行JobDetail失败");
+            return false;
+        }
+        return true;
+    }
 }
