@@ -3,11 +3,11 @@ package org.cleverframe.quartz.controller;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.quartz.QuartzBeanNames;
+import org.cleverframe.quartz.QuartzJspUrlPath;
 import org.cleverframe.quartz.service.SchedulerService;
 import org.cleverframe.quartz.vo.model.QrtzJobDetails;
 import org.cleverframe.quartz.vo.request.JobDetailKeyVo;
 import org.quartz.JobKey;
-import org.quartz.SchedulerContext;
 import org.quartz.SchedulerMetaData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -15,6 +15,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -34,6 +35,11 @@ public class QuartzSchedulerController extends BaseController {
     @Autowired
     @Qualifier(QuartzBeanNames.SchedulerService)
     private SchedulerService schedulerService;
+
+    @RequestMapping("/Scheduler" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getSchedulerJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(QuartzJspUrlPath.Scheduler);
+    }
 
     @RequestMapping("/standby")
     @ResponseBody

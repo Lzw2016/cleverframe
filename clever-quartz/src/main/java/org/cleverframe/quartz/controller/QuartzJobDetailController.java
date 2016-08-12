@@ -169,5 +169,4 @@ public class QuartzJobDetailController extends BaseController {
         }
         return ajaxMessage;
     }
-
 }

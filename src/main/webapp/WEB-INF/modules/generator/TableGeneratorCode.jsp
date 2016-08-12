@@ -132,6 +132,7 @@
 
 <%-- 查看模版代码对话框 --%>
 <div id="viewCodeTemplateDialog" style="width: 700px;height: 450px;">
+    <%--suppress HtmlFormInputWithoutLabel --%>
     <textarea id="viewCodeTemplateEdit"></textarea>
 </div>
 

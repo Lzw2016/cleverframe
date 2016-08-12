@@ -97,7 +97,7 @@ public class QuartzManager {
      */
     public static boolean start() {
         try {
-            if (!SCHEDULER.isStarted()) {
+            if (!SCHEDULER.isStarted() || SCHEDULER.isInStandbyMode()) {
                 SCHEDULER.start();
             }
         } catch (Throwable e) {
