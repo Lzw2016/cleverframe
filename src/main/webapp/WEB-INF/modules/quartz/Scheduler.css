@@ -40,8 +40,11 @@ pre {
 
 /*自定义图标*/
 .icon-pause{
-    background:url('image/media-playback-pause-7.ico') no-repeat center center;
+    background:url('image/pause-scheduler-16x16.png') no-repeat center center;
 }
 .icon-start{
-    background:url('image/media-playback-start-7.ico') no-repeat center center;
+    background:url('image/start-scheduler-16x16.png') no-repeat center center;
+}
+.icon-interrupt{
+    background:url('image/interrupt-job-16x16.png') no-repeat center center;
 }

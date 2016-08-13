@@ -1,29 +1,42 @@
-package org.cleverframe.quartz.vo.model;
+package org.cleverframe.quartz.entity;
 
+import org.cleverframe.quartz.entity.key.QrtzTriggersKey;
+import org.hibernate.annotations.DynamicInsert;
+import org.hibernate.annotations.DynamicUpdate;
+
+import javax.persistence.*;
 import java.io.Serializable;
-import java.util.Date;
-import java.util.Map;
 
 /**
+ * 实体类，对应表qrtz_triggers(存储已配置的Trigger的信息)<br/>
+ * <p>
  * 作者：LiZW <br/>
- * 创建时间：2016-7-29 14:41 <br/>
+ * 创建时间：2016-08-13 12:48:03 <br/>
  */
+@Entity
+@Table(name = "qrtz_triggers")
+@DynamicInsert
+@DynamicUpdate
+@IdClass(QrtzTriggersKey.class)
 public class QrtzTriggers implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /**
      * Scheduler名称
      */
+    @Id
     private String schedName;
 
     /**
      * Trigger key
      */
+    @Id
     private String triggerName;
 
     /**
      * Trigger group名称
      */
+    @Id
     private String triggerGroup;
 
     /**
@@ -44,12 +57,12 @@ public class QrtzTriggers implements Serializable {
     /**
      * 下一次触发时间
      */
-    private Date nextFireTime;
+    private Long nextFireTime;
 
     /**
      * 上一次触发时间，默认-1
      */
-    private Date prevFireTime;
+    private Long prevFireTime;
 
     /**
      * Trigger 优先级，默认5
@@ -69,12 +82,12 @@ public class QrtzTriggers implements Serializable {
     /**
      * Trigger开始时间
      */
-    private Date startTime;
+    private Long startTime;
 
     /**
      * Trigger结束时间
      */
-    private Date endTime;
+    private Long endTime;
 
     /**
      * Trigger关联的Calendar name
@@ -84,39 +97,14 @@ public class QrtzTriggers implements Serializable {
     /**
      * misfire规则id
      */
-    private Integer misfireInstr;
+    private Short misfireInstr;
 
     /**
      * 存储Trigger的JobDataMap等
      */
-    private Map<String, Object> jobData;
-
-    /*===================== SimpleTrigger =====================*/
-    /**
-     * 需要重复次数
-     */
-    private Integer repeatCount;
-
-    /**
-     * 重复触发时间间隔(毫秒)
-     */
-    private Long repeatInterval;
-
-    /**
-     * 已经触发的次数
-     */
-    private Integer timesTriggered;
-
-    /*===================== CronTrigger =====================*/
-    /**
-     * cron表达式
-     */
-    private String cronEx;
-
-    /**
-     * 时区ID
-     */
-    private String timeZoneId;
+    @Lob
+    @Column(columnDefinition = "BLOB")
+    private Byte[] jobData;
 
     /*--------------------------------------------------------------
      *          getter、setter
@@ -209,28 +197,28 @@ public class QrtzTriggers implements Serializable {
     /**
      * 获取 下一次触发时间
      */
-    public Date getNextFireTime() {
+    public Long getNextFireTime() {
         return nextFireTime;
     }
 
     /**
      * 设置 下一次触发时间
      */
-    public void setNextFireTime(Date nextFireTime) {
+    public void setNextFireTime(Long nextFireTime) {
         this.nextFireTime = nextFireTime;
     }
 
     /**
      * 获取 上一次触发时间，默认-1
      */
-    public Date getPrevFireTime() {
+    public Long getPrevFireTime() {
         return prevFireTime;
     }
 
     /**
      * 设置 上一次触发时间，默认-1
      */
-    public void setPrevFireTime(Date prevFireTime) {
+    public void setPrevFireTime(Long prevFireTime) {
         this.prevFireTime = prevFireTime;
     }
 
@@ -279,28 +267,28 @@ public class QrtzTriggers implements Serializable {
     /**
      * 获取 Trigger开始时间
      */
-    public Date getStartTime() {
+    public Long getStartTime() {
         return startTime;
     }
 
     /**
      * 设置 Trigger开始时间
      */
-    public void setStartTime(Date startTime) {
+    public void setStartTime(Long startTime) {
         this.startTime = startTime;
     }
 
     /**
      * 获取 Trigger结束时间
      */
-    public Date getEndTime() {
+    public Long getEndTime() {
         return endTime;
     }
 
     /**
      * 设置 Trigger结束时间
      */
-    public void setEndTime(Date endTime) {
+    public void setEndTime(Long endTime) {
         this.endTime = endTime;
     }
 
@@ -321,68 +309,28 @@ public class QrtzTriggers implements Serializable {
     /**
      * 获取 misfire规则id
      */
-    public Integer getMisfireInstr() {
+    public Short getMisfireInstr() {
         return misfireInstr;
     }
 
     /**
      * 设置 misfire规则id
      */
-    public void setMisfireInstr(Integer misfireInstr) {
+    public void setMisfireInstr(Short misfireInstr) {
         this.misfireInstr = misfireInstr;
     }
 
     /**
      * 获取 存储Trigger的JobDataMap等
      */
-    public Map<String, Object> getJobData() {
+    public Byte[] getJobData() {
         return jobData;
     }
 
     /**
      * 设置 存储Trigger的JobDataMap等
      */
-    public void setJobData(Map<String, Object> jobData) {
+    public void setJobData(Byte[] jobData) {
         this.jobData = jobData;
-    }
-
-    public Integer getRepeatCount() {
-        return repeatCount;
-    }
-
-    public void setRepeatCount(Integer repeatCount) {
-        this.repeatCount = repeatCount;
-    }
-
-    public Long getRepeatInterval() {
-        return repeatInterval;
-    }
-
-    public void setRepeatInterval(Long repeatInterval) {
-        this.repeatInterval = repeatInterval;
-    }
-
-    public Integer getTimesTriggered() {
-        return timesTriggered;
-    }
-
-    public void setTimesTriggered(Integer timesTriggered) {
-        this.timesTriggered = timesTriggered;
-    }
-
-    public String getCronEx() {
-        return cronEx;
-    }
-
-    public void setCronEx(String cronEx) {
-        this.cronEx = cronEx;
-    }
-
-    public String getTimeZoneId() {
-        return timeZoneId;
-    }
-
-    public void setTimeZoneId(String timeZoneId) {
-        this.timeZoneId = timeZoneId;
     }
 }

@@ -5,7 +5,7 @@ import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.quartz.QuartzBeanNames;
 import org.cleverframe.quartz.utils.QuartzManager;
-import org.cleverframe.quartz.vo.model.QrtzJobDetails;
+import org.cleverframe.quartz.vo.model.QuartzJobDetails;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,8 +42,8 @@ public class JobDetailService extends BaseService {
     /**
      * 获取所有的 JobDetail
      */
-    public List<QrtzJobDetails> getAllJobDetail() {
-        List<QrtzJobDetails> qrtzJobDetailsList = new ArrayList<>();
+    public List<QuartzJobDetails> getAllJobDetail() {
+        List<QuartzJobDetails> qrtzJobDetailsList = new ArrayList<>();
         List<JobDetail> jobDetailList = QuartzManager.getAllJobDetail();
         assert jobDetailList != null;
         String schedName = null;
@@ -53,7 +53,7 @@ public class JobDetailService extends BaseService {
             logger.error("获取SchedulerName失败", e);
         }
         for (JobDetail jobDetail : jobDetailList) {
-            QrtzJobDetails qrtzJobDetails = new QrtzJobDetails();
+            QuartzJobDetails qrtzJobDetails = new QuartzJobDetails();
             qrtzJobDetails.setSchedName(schedName);
             qrtzJobDetails.setJobGroup(jobDetail.getKey().getGroup());
             qrtzJobDetails.setJobName(jobDetail.getKey().getName());

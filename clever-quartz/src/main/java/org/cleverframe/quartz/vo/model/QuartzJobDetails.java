@@ -9,7 +9,7 @@ import java.util.Map;
  * 作者：LiZW <br/>
  * 创建时间：2016-7-29 14:34 <br/>
  */
-public class QrtzJobDetails implements Serializable {
+public class QuartzJobDetails implements Serializable {
     private static final long serialVersionUID = 1L;
 
     /** Scheduler名称 */

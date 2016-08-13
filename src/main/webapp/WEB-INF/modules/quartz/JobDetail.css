@@ -1,0 +1,101 @@
+#simpleTriggerViewTable {
+    color: #333333;
+    width: 100%;
+    margin-top: 12px;
+    background: #DDDDDD;
+    border-spacing: 1px;
+    /*border-radius: 5px;*/
+}
+
+#simpleTriggerViewTable td {
+    background: #FFFFFF;
+}
+
+#simpleTriggerViewTable .row .label {
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    width: 140px;
+    height: 25px;
+    padding-left: 15px;
+    background-color: #E5E5E5;
+}
+
+#simpleTriggerViewTable .row .value {
+    text-align: left;
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+#cronTriggerViewTable {
+    color: #333333;
+    width: 100%;
+    margin-top: 12px;
+    background: #DDDDDD;
+    border-spacing: 1px;
+    /*border-radius: 5px;*/
+}
+
+#cronTriggerViewTable td {
+    background: #FFFFFF;
+}
+
+#cronTriggerViewTable .row .label {
+    text-align: left;
+    font-size: 12px;
+    font-weight: bold;
+    width: 120px;
+    height: 25px;
+    padding-left: 15px;
+    background-color: #E5E5E5;
+}
+
+#cronTriggerViewTable .row .value {
+    text-align: left;
+    font-size: 14px;
+    padding-left: 5px;
+}
+
+/*自定义图标*/
+.icon-pause-job{
+    background:url('image/pause-job-group-16x16.png') no-repeat center center;
+}
+.icon-resume-job{
+    background:url('image/resume-job-group-16x16.png') no-repeat center center;
+}
+.icon-executing-job{
+    background:url('image/executing-jobs-16x16.png') no-repeat center center;
+}
+.icon-pause-all{
+    background:url('image/pause-scheduler-16x16.png') no-repeat center center;
+}
+.icon-resume-all{
+    background:url('image/start-scheduler-16x16.png') no-repeat center center;
+}
+.icon-jobs{
+    background:url('image/jobs-16x16.png') no-repeat center center;
+}
+.icon-triggers{
+    background:url('image/triggers-16x16.png') no-repeat center center;
+}
+.icon-pause-trigger{
+    background:url('image/pause-trigger-16x16.png') no-repeat center center;
+}
+.icon-resume-trigger{
+    background:url('image/resume-trigger-16x16.png') no-repeat center center;
+}
+.icon-trigger-delete{
+    background:url('image/delete.png') no-repeat center center;
+}
+.icon-trigger-add{
+    background:url('image/add.png') no-repeat center center;
+}
+.icon-job-data{
+    background:url('image/job-data-map-16x16.png') no-repeat center center;
+}
+.icon-clock{
+    background:url('image/show-planned-job-executions-16x16.png') no-repeat center center;
+}
+.icon-trigger-delete-all{
+    background:url('image/time_delete.png') no-repeat center center;
+}

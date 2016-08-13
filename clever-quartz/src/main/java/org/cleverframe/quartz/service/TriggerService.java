@@ -5,8 +5,10 @@ import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.time.DateTimeUtils;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.quartz.QuartzBeanNames;
+import org.cleverframe.quartz.dao.QrtzTriggersDao;
+import org.cleverframe.quartz.entity.QrtzTriggers;
 import org.cleverframe.quartz.utils.QuartzManager;
-import org.cleverframe.quartz.vo.model.QrtzTriggers;
+import org.cleverframe.quartz.vo.model.QuartzTriggers;
 import org.quartz.*;
 import org.quartz.impl.triggers.CalendarIntervalTriggerImpl;
 import org.quartz.impl.triggers.CronTriggerImpl;
@@ -14,6 +16,8 @@ import org.quartz.impl.triggers.DailyTimeIntervalTriggerImpl;
 import org.quartz.impl.triggers.SimpleTriggerImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -32,6 +36,10 @@ public class TriggerService extends BaseService {
      * 日志对象
      */
     private final static Logger logger = LoggerFactory.getLogger(TriggerService.class);
+
+    @Autowired
+    @Qualifier(QuartzBeanNames.QrtzTriggersDao)
+    private QrtzTriggersDao qrtzTriggersDao;
 
     /**
      * 验证cron表达式,失败返回null
@@ -311,8 +319,8 @@ public class TriggerService extends BaseService {
      * @param jobGroup job组名称
      * @return 失败返回null
      */
-    public List<QrtzTriggers> getTriggerByJob(String jobName, String jobGroup, AjaxMessage ajaxMessage) {
-        List<QrtzTriggers> qrtzTriggersList = new ArrayList<>();
+    public List<QuartzTriggers> getTriggerByJob(String jobName, String jobGroup, AjaxMessage ajaxMessage) {
+        List<QuartzTriggers> qrtzTriggersList = new ArrayList<>();
         List<? extends Trigger> triggerList = QuartzManager.getTriggerByJob(jobName, jobGroup);
         if (triggerList == null) {
             ajaxMessage.setSuccess(false);
@@ -327,7 +335,7 @@ public class TriggerService extends BaseService {
             logger.error("获取SchedulerName失败", e);
         }
         for (Trigger trigger : triggerList) {
-            QrtzTriggers qrtzTriggers = new QrtzTriggers();
+            QuartzTriggers qrtzTriggers = new QuartzTriggers();
             qrtzTriggers.setSchedName(schedName);
             qrtzTriggers.setTriggerName(trigger.getKey().getName());
             qrtzTriggers.setTriggerGroup(trigger.getKey().getGroup());
@@ -338,9 +346,14 @@ public class TriggerService extends BaseService {
             qrtzTriggers.setPrevFireTime(trigger.getPreviousFireTime());
             qrtzTriggers.setPriority(trigger.getPriority());
             try {
-                qrtzTriggers.setTriggerState(scheduler.getTriggerState(trigger.getKey()).name());
+                QrtzTriggers qrtzTriggersTmp = qrtzTriggersDao.getQrtzTriggers(schedName, qrtzTriggers.getTriggerGroup(), qrtzTriggers.getTriggerName());
+                if(qrtzTriggersTmp == null){
+                    qrtzTriggers.setTriggerState(scheduler.getTriggerState(trigger.getKey()).name());
+                } else {
+                    qrtzTriggers.setTriggerState(qrtzTriggersTmp.getTriggerState());
+                }
             } catch (Throwable e) {
-                logger.error("获取Trigger状态失败");
+                logger.error("获取Trigger状态失败", e);
             }
             qrtzTriggers.setTriggerType(trigger.getClass().getName());
             qrtzTriggers.setStartTime(trigger.getStartTime());

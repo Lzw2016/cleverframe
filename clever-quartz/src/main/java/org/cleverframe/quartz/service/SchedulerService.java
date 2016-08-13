@@ -4,7 +4,7 @@ import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.quartz.QuartzBeanNames;
 import org.cleverframe.quartz.utils.QuartzManager;
-import org.cleverframe.quartz.vo.model.QrtzJobDetails;
+import org.cleverframe.quartz.vo.model.QuartzJobDetails;
 import org.quartz.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -102,8 +102,8 @@ public class SchedulerService extends BaseService {
      *
      * @return 失败返回null
      */
-    public List<QrtzJobDetails> getRunningJobs(AjaxMessage ajaxMessage) {
-        List<QrtzJobDetails> qrtzJobDetailsList;
+    public List<QuartzJobDetails> getRunningJobs(AjaxMessage ajaxMessage) {
+        List<QuartzJobDetails> qrtzJobDetailsList;
         Scheduler scheduler = QuartzManager.getScheduler();
         List<JobExecutionContext> list;
         String schedName;
@@ -119,7 +119,7 @@ public class SchedulerService extends BaseService {
         qrtzJobDetailsList = new ArrayList<>();
         for (JobExecutionContext jobExecutionContext : list) {
             JobDetail jobDetail = jobExecutionContext.getJobDetail();
-            QrtzJobDetails qrtzJobDetails = new QrtzJobDetails();
+            QuartzJobDetails qrtzJobDetails = new QuartzJobDetails();
             qrtzJobDetails.setSchedName(schedName);
             qrtzJobDetails.setJobGroup(jobDetail.getKey().getGroup());
             qrtzJobDetails.setJobName(jobDetail.getKey().getName());

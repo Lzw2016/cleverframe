@@ -172,6 +172,7 @@
         </table>
         <div id="runningJobsDataTableButtons">
             <a id="runningJobsDataTableButtonsReload" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">刷新</a>
+            <a id="runningJobsDataTableButtonsInterrupt" class="easyui-linkbutton" data-options="iconCls:'icon-interrupt',plain:true">中断任务</a>
         </div>
     </div>
 </div>

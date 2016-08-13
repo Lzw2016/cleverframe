@@ -6,8 +6,9 @@ import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.quartz.QuartzBeanNames;
+import org.cleverframe.quartz.QuartzJspUrlPath;
 import org.cleverframe.quartz.service.JobDetailService;
-import org.cleverframe.quartz.vo.model.QrtzJobDetails;
+import org.cleverframe.quartz.vo.model.QuartzJobDetails;
 import org.cleverframe.quartz.vo.request.JobDetailKeyVo;
 import org.cleverframe.quartz.vo.request.SaveJobDetailVo;
 import org.quartz.JobKey;
@@ -17,6 +18,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -37,6 +39,11 @@ public class QuartzJobDetailController extends BaseController {
     @Qualifier(QuartzBeanNames.JobDetailService)
     private JobDetailService jobDetailService;
 
+    @RequestMapping("/JobDetail" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getSchedulerJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(QuartzJspUrlPath.JobDetail);
+    }
+
     @RequestMapping("/getAllJobKey")
     @ResponseBody
     public AjaxMessage<List<JobKey>> getAllJobKey(HttpServletRequest request, HttpServletResponse response) {
@@ -48,9 +55,9 @@ public class QuartzJobDetailController extends BaseController {
 
     @RequestMapping("/getAllJobDetail")
     @ResponseBody
-    public AjaxMessage<List<QrtzJobDetails>> getAllJobDetail(HttpServletRequest request, HttpServletResponse response) {
-        AjaxMessage<List<QrtzJobDetails>> ajaxMessage = new AjaxMessage<>(true, "获取所有的JobDetail成功", null);
-        List<QrtzJobDetails> jobDetailList = jobDetailService.getAllJobDetail();
+    public AjaxMessage<List<QuartzJobDetails>> getAllJobDetail(HttpServletRequest request, HttpServletResponse response) {
+        AjaxMessage<List<QuartzJobDetails>> ajaxMessage = new AjaxMessage<>(true, "获取所有的JobDetail成功", null);
+        List<QuartzJobDetails> jobDetailList = jobDetailService.getAllJobDetail();
         ajaxMessage.setResult(jobDetailList);
         return ajaxMessage;
     }

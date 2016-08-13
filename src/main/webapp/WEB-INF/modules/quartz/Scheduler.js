@@ -14,10 +14,6 @@ var pageJs = function (globalPath) {
     var standbyUrl = globalPath.mvcPath + "/quartz/scheduler/standby.json";
     // 启动调度器
     var startUrl = globalPath.mvcPath + "/quartz/scheduler/start.json";
-    // 暂停所有任务
-    var pauseAllUrl = globalPath.mvcPath + "/quartz/scheduler/pauseAll.json";
-    // 取消暂停所有任务
-    var resumeAllUrl = globalPath.mvcPath + "/quartz/scheduler/resumeAll.json";
     // 中断任务
     var interruptUrl = globalPath.mvcPath + "/quartz/scheduler/interrupt.json";
 
@@ -72,6 +68,8 @@ var pageJs = function (globalPath) {
     var runningJobsDataTable = $("#runningJobsDataTable");
     // 正在运行的任务 - 重新加载
     var runningJobsDataTableButtonsReload = $("#runningJobsDataTableButtonsReload");
+    // 正在运行的任务 - 中断任务
+    var runningJobsDataTableButtonsInterrupt = $("#runningJobsDataTableButtonsInterrupt");
 
     // 参看json数据对话框
     var jsonViewDialog = $("#jsonViewDialog");
@@ -119,7 +117,7 @@ var pageJs = function (globalPath) {
                             //_this.setSchedulerInStandbyMode(!schedulerInStandbyMode);
                             _this.initSchedulerMetaData();
                         } else {
-                            $.messager.alert("提示", data.failMessage, "warn");
+                            $.messager.alert("提示", data.failMessage, "warning");
                         }
                     }
                 });
@@ -223,6 +221,11 @@ var pageJs = function (globalPath) {
         runningJobsDataTableButtonsReload.click(function () {
             _this.initRunningJobsDataTable();
         });
+
+        // 正在运行的任务 - 中断任务
+        runningJobsDataTableButtonsInterrupt.click(function () {
+            _this.interruptJob();
+        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -235,7 +238,7 @@ var pageJs = function (globalPath) {
                 if (data.success) {
                     _this.setSchedulerMetaData(data.result);
                 } else {
-                    $.messager.alert("提示", data.failMessage, "warn");
+                    $.messager.alert("提示", data.failMessage, "warning");
                 }
             }
         });
@@ -291,7 +294,7 @@ var pageJs = function (globalPath) {
                         contextDataTable.datagrid("appendRow", row);
                     }
                 } else {
-                    $.messager.alert("提示", data.failMessage, "warn");
+                    $.messager.alert("提示", data.failMessage, "warning");
                 }
                 contextDataTable.datagrid("loaded");
             }
@@ -311,7 +314,7 @@ var pageJs = function (globalPath) {
                         runningJobsDataTable.datagrid("appendRow", row);
                     });
                 } else {
-                    $.messager.alert("提示", data.failMessage, "warn");
+                    $.messager.alert("提示", data.failMessage, "warning");
                 }
                 runningJobsDataTable.datagrid("loaded");
             }
@@ -377,6 +380,31 @@ var pageJs = function (globalPath) {
             }
         }
         return uuid.join('');
+    };
+
+    // 中断任务
+    this.interruptJob = function () {
+        var selectRow = runningJobsDataTable.datagrid("getSelected");
+        if (selectRow != null) {
+            $.messager.confirm('确认中断任务', '您确定要中断任务:<br/>[' + selectRow.jobGroup + '.' + selectRow.jobName + ']？', function (r) {
+                if (r) {
+                    var param = {"jobName": selectRow.jobName, "jobGroup": selectRow.jobGroup};
+                    $.ajax({
+                        type: "POST", dataType: "JSON", url: interruptUrl, data: param, async: true,
+                        success: function (data) {
+                            if (data.success) {
+                                $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                                _this.initRunningJobsDataTable();
+                            } else {
+                                $.messager.alert("提示", data.failMessage, "warning");
+                            }
+                        }
+                    });
+                }
+            });
+        } else {
+            $.messager.alert('提示', '请选择需要中断的任务！', 'info');
+        }
     };
 };
 

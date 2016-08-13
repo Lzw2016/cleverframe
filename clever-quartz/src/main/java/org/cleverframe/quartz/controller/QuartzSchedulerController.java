@@ -5,7 +5,7 @@ import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.quartz.QuartzBeanNames;
 import org.cleverframe.quartz.QuartzJspUrlPath;
 import org.cleverframe.quartz.service.SchedulerService;
-import org.cleverframe.quartz.vo.model.QrtzJobDetails;
+import org.cleverframe.quartz.vo.model.QuartzJobDetails;
 import org.cleverframe.quartz.vo.request.JobDetailKeyVo;
 import org.quartz.JobKey;
 import org.quartz.SchedulerMetaData;
@@ -75,8 +75,8 @@ public class QuartzSchedulerController extends BaseController {
 
     @RequestMapping("/getRunningJobs")
     @ResponseBody
-    public AjaxMessage<List<QrtzJobDetails>> getRunningJobs(HttpServletRequest request, HttpServletResponse response) {
-        AjaxMessage<List<QrtzJobDetails>> ajaxMessage = new AjaxMessage<>(true, "获取正在运行的Job成功", null);
+    public AjaxMessage<List<QuartzJobDetails>> getRunningJobs(HttpServletRequest request, HttpServletResponse response) {
+        AjaxMessage<List<QuartzJobDetails>> ajaxMessage = new AjaxMessage<>(true, "获取正在运行的Job成功", null);
         ajaxMessage.setResult(schedulerService.getRunningJobs(ajaxMessage));
         return ajaxMessage;
     }
