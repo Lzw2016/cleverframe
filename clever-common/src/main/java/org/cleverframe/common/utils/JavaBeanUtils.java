@@ -1,10 +1,10 @@
 package org.cleverframe.common.utils;
 
 import com.alibaba.fastjson.JSON;
-import org.apache.commons.beanutils.BeanUtils;
 import org.apache.commons.beanutils.ConstructorUtils;
 import org.apache.commons.beanutils.MethodUtils;
 import org.apache.commons.beanutils.PropertyUtils;
+import org.cleverframe.common.mapper.BeanMapConverter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -13,7 +13,7 @@ import java.util.Set;
 
 /**
  * JavaBean工具，支持通过反射对JavaBean各种操作<br/>
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-1 20:36 <br/>
  */
@@ -172,7 +172,7 @@ public class JavaBeanUtils {
                     destinationObjectMap.put(entry.getKey(), entry.getValue());
                 }
             }
-            BeanUtils.populate(destinationObject, destinationObjectMap);
+            BeanMapConverter.toObject(destinationObject, destinationObjectMap);
         } catch (Throwable e) {
             logger.error("把JavaBean对象转换成Map出错", e);
             return false;

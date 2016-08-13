@@ -300,7 +300,7 @@ CREATE TABLE qrtz_trigger_log
     mis_fired                   char(1)         NOT NULL                        COMMENT '是否错过了触发（0：否；1：是）',
     before_job_data             mediumtext                                      COMMENT '执行前的JobDataMap数据',
     after_job_data              mediumtext                                      COMMENT '执行后的JobDataMap数据',
-    trigger_instruction_code    varchar(10)                                     COMMENT '触发指令码',
+    trigger_instruction_code    varchar(100)                                    COMMENT '触发指令码',
     instr_code                  varchar(100)                                    COMMENT '触发指令码说明',
     PRIMARY KEY (id)
 ) COMMENT = 'Trigger触发日志表';
