@@ -23,7 +23,7 @@ public class InterruptJob implements InterruptableJob {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         for (int i = 0; i < 100000; i++) {
             try {
-                Thread.sleep(1000 * 1);
+                Thread.sleep(1000 * 2);
             } catch (Throwable e) {
                 e.printStackTrace();
             }
