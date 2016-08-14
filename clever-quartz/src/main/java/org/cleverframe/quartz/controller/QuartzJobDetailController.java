@@ -90,6 +90,7 @@ public class QuartzJobDetailController extends BaseController {
             HttpServletResponse response,
             @Valid SaveJobDetailVo saveJobDetailVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "保存JobDetail成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             Map<String, String> jobData = null;

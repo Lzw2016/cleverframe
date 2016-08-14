@@ -237,6 +237,7 @@ var pageJs = function (globalPath) {
             success: function (data) {
                 if (data.success) {
                     _this.setSchedulerMetaData(data.result);
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }
@@ -287,7 +288,7 @@ var pageJs = function (globalPath) {
             type: "POST", dataType: "JSON", url: getContextUrl, async: true,
             success: function (data) {
                 if (data.success) {
-                    contextDataTable.datagrid("loadData", {"total": 0, "rows": []});
+                    contextDataTable.datagrid("loadData", {total: 0, rows: []});
                     for (var key in data.result) {
                         //noinspection JSUnfilteredForInLoop
                         var row = {"key": key, "value": data.result[key]};
@@ -308,7 +309,7 @@ var pageJs = function (globalPath) {
             type: "POST", dataType: "JSON", url: getRunningJobsUrl, async: true,
             success: function (data) {
                 if (data.success) {
-                    runningJobsDataTable.datagrid("loadData", {"total": 0, "rows": []});
+                    runningJobsDataTable.datagrid("loadData", {total: 0, rows: []});
                     $(data.result).each(function (index, row) {
                         // row.jobData = JSON.stringify(row.jobData);
                         runningJobsDataTable.datagrid("appendRow", row);

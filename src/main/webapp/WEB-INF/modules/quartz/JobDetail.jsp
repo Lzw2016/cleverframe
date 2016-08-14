@@ -50,14 +50,30 @@
         </thead>
     </table>
     <div id="jobDetailDataTableButtons">
-        <a id="jobDetailDataTableButtonsReload" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true"><%--刷新--%></a>
-        <a id="jobDetailDataTableButtonsPauseAll" class="easyui-linkbutton" data-options="iconCls:'icon-pause-all',plain:true"><%--暂停所有--%></a>
-        <a id="jobDetailDataTableButtonsResumeAll" class="easyui-linkbutton" data-options="iconCls:'icon-resume-all',plain:true"><%--继续所有--%></a>
-        <a id="jobDetailDataTableButtonsPause" class="easyui-linkbutton" style="margin-left: 20px;" data-options="iconCls:'icon-pause-job',plain:true"><%--暂停--%></a>
-        <a id="jobDetailDataTableButtonsResume" class="easyui-linkbutton" data-options="iconCls:'icon-resume-job',plain:true"><%--继续--%></a>
-        <a id="jobDetailDataTableButtonsExecuting" class="easyui-linkbutton" data-options="iconCls:'icon-executing-job',plain:true"><%--立即执行--%></a>
-        <a id="jobDetailDataTableButtonsAdd" class="easyui-linkbutton" style="margin-left: 20px;" data-options="iconCls:'icon-trigger-add',plain:true"><%--新增--%></a>
-        <a id="jobDetailDataTableButtonsDelete" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-delete',plain:true"><%--删除--%></a>
+        <a id="jobDetailDataTableButtonsReload" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:void(0)">
+            <%--刷新--%>
+        </a>
+        <a id="jobDetailDataTableButtonsPauseAll" class="easyui-linkbutton" data-options="iconCls:'icon-pause-all',plain:true" href="javascript:void(0)">
+            <%--暂停所有--%>
+        </a>
+        <a id="jobDetailDataTableButtonsResumeAll" class="easyui-linkbutton" data-options="iconCls:'icon-resume-all',plain:true" href="javascript:void(0)">
+            <%--继续所有--%>
+        </a>
+        <a id="jobDetailDataTableButtonsPause" class="easyui-linkbutton" style="margin-left: 20px;" data-options="iconCls:'icon-pause-job',plain:true" href="javascript:void(0)">
+            <%--暂停--%>
+        </a>
+        <a id="jobDetailDataTableButtonsResume" class="easyui-linkbutton" data-options="iconCls:'icon-resume-job',plain:true" href="javascript:void(0)">
+            <%--继续--%>
+        </a>
+        <a id="jobDetailDataTableButtonsExecuting" class="easyui-linkbutton" data-options="iconCls:'icon-executing-job',plain:true" href="javascript:void(0)">
+            <%--立即执行--%>
+        </a>
+        <a id="jobDetailDataTableButtonsAdd" class="easyui-linkbutton" style="margin-left: 20px;" data-options="iconCls:'icon-trigger-add',plain:true" href="javascript:void(0)">
+            <%--新增--%>
+        </a>
+        <a id="jobDetailDataTableButtonsDelete" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-delete',plain:true" href="javascript:void(0)">
+            <%--删除--%>
+        </a>
     </div>
 </div>
 
@@ -92,12 +108,24 @@
         </thead>
     </table>
     <div id="triggerDataTableButtons">
-        <a id="triggerDataTableButtonsReload" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true"><%--刷新--%></a>
-        <a id="triggerDataTableButtonsPause" class="easyui-linkbutton" data-options="iconCls:'icon-pause-trigger',plain:true"><%--暂停--%></a>
-        <a id="triggerDataTableButtonsResume" class="easyui-linkbutton" data-options="iconCls:'icon-resume-trigger',plain:true"><%--继续--%></a>
-        <a id="triggerDataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-add',plain:true"><%--新增--%></a>
-        <a id="triggerDataTableButtonsDelete" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-delete',plain:true"><%--删除--%></a>
-        <a id="triggerDataTableButtonsDeleteAll" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-delete-all',plain:true"><%--删除所有--%></a>
+        <a id="triggerDataTableButtonsReload" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" href="javascript:void(0)">
+            <%--刷新--%>
+        </a>
+        <a id="triggerDataTableButtonsPause" class="easyui-linkbutton" data-options="iconCls:'icon-pause-trigger',plain:true" href="javascript:void(0)">
+            <%--暂停--%>
+        </a>
+        <a id="triggerDataTableButtonsResume" class="easyui-linkbutton" data-options="iconCls:'icon-resume-trigger',plain:true" href="javascript:void(0)">
+            <%--继续--%>
+        </a>
+        <a id="triggerDataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-add',plain:true" href="javascript:void(0)">
+            <%--新增--%>
+        </a>
+        <a id="triggerDataTableButtonsDelete" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-delete',plain:true" href="javascript:void(0)">
+            <%--删除--%>
+        </a>
+        <a id="triggerDataTableButtonsDeleteAll" class="easyui-linkbutton" data-options="iconCls:'icon-trigger-delete-all',plain:true" href="javascript:void(0)">
+            <%--删除所有--%>
+        </a>
         <span style="margin-left: 50px;margin-top: 5px;">
             <label style="font-weight: bold;">选中定时任务:</label>
             <label id="selectJobDetailText" style="color: red;"></label>
@@ -113,7 +141,7 @@
 </div>
 
 <%-- SimpleTriggerImpl 触发器 处罚规则对话框 --%>
-<div id="simpleTriggerViewDialog" data-options="iconCls:'icon-clock'" style="width: 370px;height: 180px;padding: 5px 10px">
+<div id="simpleTriggerViewDialog" data-options="iconCls:'icon-clock'" style="width: 430px;height: 180px;padding: 5px 10px">
     <table id="simpleTriggerViewTable">
         <tbody>
         <tr class="row">
@@ -163,6 +191,57 @@
         </tbody>
     </table>
 </div>
+
+<%--新增定时任务对话框--%>
+<div id="addJobDetailDialog" data-options="iconCls:'icon-jobs'" style="width: 580px;height: 350px;">
+    <div id="addJobDetailTabs" class="easyui-tabs" data-options="fit:true,border:false">
+        <div title="定时任务属性">
+            <form id="addJobDetailForm" method="post" style="margin-top: 12px;">
+                <div class="row">
+                    <label for="addJobDetailJobGroup">任务分组</label>
+                    <input id="addJobDetailJobGroup" name="jobGroup" style="width: 220px"/>
+                </div>
+                <div class="row">
+                    <label for="addJobDetailJobName">任务名称</label>
+                    <input id="addJobDetailJobName" name="jobName" style="width: 220px"/>
+                </div>
+                <div class="row">
+                    <label for="addJobDetailRequestsRecovery">支持故障恢复</label>
+                    <input id="addJobDetailRequestsRecovery" name="requestsRecovery" style="width: 100px;"/>
+                </div>
+                <div class="row">
+                    <label for="addJobDetailJobClassName">任务实现类</label>
+                    <input id="addJobDetailJobClassName" name="jobClassName" style="width: 450px;"/>
+                </div>
+
+                <div class="row">
+                    <label for="addJobDetailDescription">任务描述</label>
+                    <input id="addJobDetailDescription" name="description" style="width: 450px; height: 100px;"/>
+                </div>
+            </form>
+        </div>
+        <div title="定时任务数据">
+            <table id="addJobDetailJobDataTable" data-options="border:false">
+                <thead>
+                <tr>
+                    <th data-options="width:150,align:'left',hidden:false,field:'key',editor:{type:'textbox',options:{required: true}}">属性名称</th>
+                    <th data-options="width:350,align:'left',hidden:false,field:'value',editor:{type:'textbox',options:{required: true}}">属性值</th>
+                </tr>
+                </thead>
+            </table>
+            <div id="addJobDetailJobDataTableButtons">
+                <a id="addJobDetailJobDataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" href="javascript:void(0)"></a>
+                <a id="addJobDetailJobDataTableButtonsRemove" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" href="javascript:void(0)"></a>
+                <a id="addJobDetailJobDataTableButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" href="javascript:void(0)"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="addJobDetailDialogButtons">
+    <a id="addJobDetailDialogSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)">新增</a>
+    <a id="addJobDetailDialogCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)">取消</a>
+</div>
+
 
 </body>
 </html>

@@ -4,7 +4,8 @@
 var pageJs = function (globalPath) {
     // 当前pageJs对象
     var _this = this;
-
+    // 根据字典类别查询字典地址
+    var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
     // 获取所有的JobDetail
     var getAllJobDetailUrl = globalPath.mvcPath + "/quartz/jobdetail/getAllJobDetail.json";
     // 暂停所有任务
@@ -38,6 +39,11 @@ var pageJs = function (globalPath) {
     var deleteTriggerUrl = globalPath.mvcPath + "/quartz/trigger/deleteTrigger.json";
     // 删除一个定时任务的所有触发器
     var deleteTriggerByJobUrl = globalPath.mvcPath + "/quartz/trigger/deleteTriggerByJob.json";
+
+    // 获取所有的任务分组
+    var getJobGroupNamesUrl = globalPath.mvcPath + "/quartz/jobdetail/getJobGroupNames.json";
+    // 获取所有定时任务实现类名称
+    var getAllJobClassNameUrl = globalPath.mvcPath + "/quartz/jobdetail/getAllJobClassName.json";
 
     // 所有定时任务
     var jobDetailDataTable = $("#jobDetailDataTable");
@@ -100,6 +106,36 @@ var pageJs = function (globalPath) {
     // 预计触发时间
     var cronTriggerNextTime = $("#cronTriggerNextTime");
 
+    // 新增定时任务对话框
+    var addJobDetailDialog = $("#addJobDetailDialog");
+    // 新增定时任务对话框 - 多页签
+    var addJobDetailTabs = $("#addJobDetailTabs");
+    // 新增定时任务对话框 - 新增
+    var addJobDetailDialogSave = $("#addJobDetailDialogSave");
+    // 新增定时任务对话框 - 取消
+    var addJobDetailDialogCancel = $("#addJobDetailDialogCancel");
+    // 新增定时任务对话框 - 表单
+    var addJobDetailForm = $("#addJobDetailForm");
+    // 新增定时任务表单 - 任务名称
+    var addJobDetailJobName = $("#addJobDetailJobName");
+    // 新增定时任务表单 - 任务分组
+    var addJobDetailJobGroup = $("#addJobDetailJobGroup");
+    // 新增定时任务表单 - 任务描述
+    var addJobDetailDescription = $("#addJobDetailDescription");
+    // 新增定时任务表单 - 任务实现类
+    var addJobDetailJobClassName = $("#addJobDetailJobClassName");
+    // 新增定时任务表单 - 支持故障恢复
+    var addJobDetailRequestsRecovery = $("#addJobDetailRequestsRecovery");
+    // 新增定时任务表单 - 任务数据表格
+    var addJobDetailJobDataTable = $("#addJobDetailJobDataTable");
+    // 新增定时任务表单 - 任务数据表格 - 编辑行
+    var addJobDetailEditIndex = undefined;
+    // 新增定时任务表单 - 任务数据表格 - 增加
+    var addJobDetailJobDataTableButtonsAdd = $("#addJobDetailJobDataTableButtonsAdd");
+    // 新增定时任务表单 - 任务数据表格 - 移除
+    var addJobDetailJobDataTableButtonsRemove = $("#addJobDetailJobDataTableButtonsRemove");
+    // 新增定时任务表单 - 任务数据表格 - 保存
+    var addJobDetailJobDataTableButtonsSave = $("#addJobDetailJobDataTableButtonsSave");
     /**
      * 页面初始化方法
      */
@@ -193,7 +229,7 @@ var pageJs = function (globalPath) {
             minimizable: false,
             maximizable: false,
             resizable: false,
-            minWidth: 370,
+            minWidth: 410,
             minHeight: 180,
             modal: true
         });
@@ -209,6 +245,7 @@ var pageJs = function (globalPath) {
             modal: true
         });
 
+        _this.initAddJobDetailDialog();
         _this.dataBind();
         _this.eventBind();
     };
@@ -248,13 +285,25 @@ var pageJs = function (globalPath) {
 
         // 所有定时任务 - 新增定时任务
         jobDetailDataTableButtonsAdd.click(function () {
-            //_this.triggerJob();
+            addJobDetailDialog.dialog("open");
+            addJobDetailTabs.tabs("select", 0);
+            addJobDetailForm.form('reset');
+            addJobDetailJobDataTable.datagrid("loaded", {total: 0, rows: []});
         });
 
         // 所有定时任务 - 删除定时任务
         jobDetailDataTableButtonsDelete.click(function () {
             _this.deleteJobDetail();
         });
+
+        // 保存定时任务
+        addJobDetailDialogSave.click(function () {
+            if (addJobDetailForm.form("validate") == true) {
+                addJobDetailForm.form("submit");
+            }
+        });
+
+        // -------------------------------------------------------------------------------
 
         // 所有定时任务 - 暂停
         jobDetailDataTableButtonsPause.click(function () {
@@ -283,7 +332,7 @@ var pageJs = function (globalPath) {
 
         // 选中定时任务的触发器 - 新增
         triggerDataTableButtonsAdd.click(function () {
-            //_this.triggerJob();
+
         });
 
         // 选中定时任务的触发器 - 删除
@@ -298,6 +347,185 @@ var pageJs = function (globalPath) {
     };
 
     // ---------------------------------------------------------------------------------------------------------
+    // 初始化 新增定时任务 对话框
+    this.initAddJobDetailDialog = function(){
+        addJobDetailDialog.dialog({
+            title: "新增定时任务",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            minWidth: 410,
+            minHeight: 260,
+            modal: true,
+            buttons: "#addJobDetailDialogButtons"
+        });
+
+        addJobDetailTabs.tabs({
+            fit: true,
+            border: false
+        });
+
+        addJobDetailJobGroup.combobox({
+            required: true,
+            validType: 'length[1,200]',
+            editable: true,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 80
+        });
+        $.ajax({
+            type: "POST", dataType: "JSON", url: getJobGroupNamesUrl, async: true,
+            success: function (data) {
+                if (data.success) {
+                    var groupNames = [];
+                    $(data.result).each(function (index, item) {
+                        groupNames.push({"value": item, "text": item});
+                    });
+                    addJobDetailJobGroup.combobox("loadData", groupNames);
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+                jobDetailDataTable.datagrid("loaded");
+            }
+        });
+
+        addJobDetailJobName.textbox({
+            required: true,
+            validType: 'length[1,200]'
+        });
+
+        addJobDetailJobClassName.combobox({
+            required: true,
+            validType: 'length[1,250]',
+            editable: true,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 120
+        });
+        $.ajax({
+            type: "POST", dataType: "JSON", url: getAllJobClassNameUrl, async: true,
+            success: function (data) {
+                if (data.success) {
+                    var groupNames = [];
+                    $(data.result).each(function (index, item) {
+                        groupNames.push({"value": item, "text": item});
+                    });
+                    addJobDetailJobClassName.combobox("loadData", groupNames);
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+                jobDetailDataTable.datagrid("loaded");
+            }
+        });
+
+        addJobDetailRequestsRecovery.combobox({
+            required: true,
+            validType: 'length[1,250]',
+            editable: false,
+            url: findDictTypeUrl + encodeURIComponent("是否"),
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 50
+        });
+
+        addJobDetailDescription.textbox({
+            required: true,
+            validType: 'length[1,250]',
+            multiline: true
+        });
+
+        var endEditing = function () {
+            if (addJobDetailEditIndex == undefined) {
+                return true
+            }
+            if (addJobDetailJobDataTable.datagrid('validateRow', addJobDetailEditIndex)) {
+                addJobDetailJobDataTable.datagrid('endEdit', addJobDetailEditIndex);
+                addJobDetailEditIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        };
+        addJobDetailJobDataTable.datagrid({
+            fit: true,
+            fitColumns: false,
+            striped: true,
+            rownumbers: true,
+            singleSelect: true,
+            nowrap: true,
+            toolbar: "#addJobDetailJobDataTableButtons",
+            pagination: false,
+            onEndEdit: function (index, row) {
+
+            },
+            onClickCell: function (index, field) {
+                if (addJobDetailEditIndex != index) {
+                    if (endEditing()) {
+                        addJobDetailJobDataTable.datagrid('selectRow', index).datagrid('beginEdit', index);
+                        var ed = addJobDetailJobDataTable.datagrid('getEditor', {index: index, field: field});
+                        if (ed) {
+                            ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                        }
+                        addJobDetailEditIndex = index;
+                    } else {
+                        setTimeout(function () {
+                            addJobDetailJobDataTable.datagrid('selectRow', addJobDetailEditIndex);
+                        }, 0);
+                    }
+                }
+            }
+        });
+        // 新增定时任务表单 - 任务数据表格 - 增加
+        addJobDetailJobDataTableButtonsAdd.click(function () {
+            if (endEditing()) {
+                addJobDetailJobDataTable.datagrid('appendRow', {});
+                addJobDetailEditIndex = addJobDetailJobDataTable.datagrid('getRows').length - 1;
+                addJobDetailJobDataTable.datagrid('selectRow', addJobDetailEditIndex).datagrid('beginEdit', addJobDetailEditIndex);
+            }
+        });
+        // 新增定时任务表单 - 任务数据表格 - 移除
+        addJobDetailJobDataTableButtonsRemove.click(function () {
+            if (addJobDetailEditIndex == undefined) {
+                return
+            }
+            addJobDetailJobDataTable.datagrid('cancelEdit', addJobDetailEditIndex).datagrid('deleteRow', addJobDetailEditIndex);
+            addJobDetailEditIndex = undefined;
+        });
+        addJobDetailJobDataTableButtonsSave.click(function () {
+            if (endEditing()){
+                addJobDetailJobDataTable.datagrid('acceptChanges');
+            }
+        });
+
+        addJobDetailForm.form({
+            novalidate: false,
+            url: saveJobDetailUrl,
+            onSubmit: function (param) {
+                var jobData = {};
+                addJobDetailJobDataTable.datagrid('acceptChanges');
+                var rows = addJobDetailJobDataTable.datagrid('getRows');
+                if (rows == null || rows.length <= 0) {
+                    return;
+                }
+                $(rows).each(function (index, item) {
+                    jobData[item.key] = item.value;
+                });
+                param.jobData = JSON.stringify(jobData);
+            },
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.success) {
+                    addJobDetailDialog.dialog("close");
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    _this.initJobDetailDataTable();
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
     // 初始化定时任务
     this.initJobDetailDataTable = function () {
         jobDetailDataTable.datagrid("loading");
@@ -305,7 +533,7 @@ var pageJs = function (globalPath) {
             type: "POST", dataType: "JSON", url: getAllJobDetailUrl, async: true,
             success: function (data) {
                 if (data.success) {
-                    jobDetailDataTable.datagrid("loadData", {"total": data.result.length, "rows": data.result});
+                    jobDetailDataTable.datagrid("loadData", {total: data.result.length, rows: data.result});
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }
@@ -319,7 +547,7 @@ var pageJs = function (globalPath) {
         if(!param){
             var row = jobDetailDataTable.datagrid("getSelected");
             if(row == null){
-                triggerDataTable.datagrid("loadData", {"total": 0, "rows": []});
+                triggerDataTable.datagrid("loadData", {total: 0, rows: []});
                 selectJobDetailText.text("");
                 return;
             }
@@ -331,7 +559,7 @@ var pageJs = function (globalPath) {
             type: "POST", dataType: "JSON", url: getTriggerByJobUrl, data: param, async: true,
             success: function (data) {
                 if (data.success) {
-                    triggerDataTable.datagrid("loadData", {"total": data.result.length, "rows": data.result});
+                    triggerDataTable.datagrid("loadData", {total: data.result.length, rows: data.result});
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }
@@ -605,7 +833,7 @@ var pageJs = function (globalPath) {
     this.openSimpleTriggerViewDialog = function (timesTriggered, repeatCount, repeatInterval) {
         simpleTriggerTimesTriggered.text(timesTriggered + "次");
         simpleTriggerRepeatCount.text(repeatCount + "次");
-        simpleTriggerRepeatInterval.text((repeatInterval / 1000) + "秒");
+        simpleTriggerRepeatInterval.text(_this.getEasyTime(repeatInterval));
         var dateLong = new Date().getTime() + repeatInterval;
         simpleTriggerNextFireTime.text(_this.formatDate(new Date(dateLong)));
         simpleTriggerViewDialog.dialog("open");
@@ -642,7 +870,7 @@ var pageJs = function (globalPath) {
                     rowData.timesTriggered + "," +
                     rowData.repeatCount + "," +
                     rowData.repeatInterval + ")'>详情</a>";
-                return aButton_1 + " " + rowData.timesTriggered + "/" + rowData.repeatCount + " (" + (rowData.repeatInterval / 1000) + "秒) ";
+                return aButton_1 + " " + rowData.timesTriggered + "/" + rowData.repeatCount + "(" + _this.getEasyTime(rowData.repeatInterval) + ")";
                 break;
             case "org.quartz.impl.triggers.CronTriggerImpl":
                 var aButton_2 = "<a href='javascript:void(0)' onclick='pageJsObject.openCronTriggerViewDialog(\"" + rowData.cronEx + "\")'>详情</a>";
@@ -716,6 +944,40 @@ var pageJs = function (globalPath) {
         var minute = dateTime.getMinutes();
         var second = dateTime.getSeconds();
         return year + "年" + month + "月" + date + "日 " + hour + ":" + minute + ":" + second;
+    };
+
+    // 毫秒转可读的时间
+    this.getEasyTime = function (timeMillisecond) {
+        var millisecond = timeMillisecond % 1000;
+        var second = Math.floor(timeMillisecond / 1000) % 60;
+        var minute = Math.floor(timeMillisecond / 1000 / 60) % 60;
+        var hour = Math.floor(timeMillisecond / 1000 / 60 / 60) % 24;
+        var day = Math.floor(timeMillisecond / 1000 / 60 / 60 / 24) % 30;
+        var month = Math.floor(timeMillisecond / 1000 / 60 / 60 / 24 / 30) % 12;
+        var year = Math.floor(timeMillisecond / 1000 / 60 / 60 / 24 / 30 / 12);
+        var result = "";
+        if (year >= 1) {
+            result = year + "年";
+        }
+        if (month >= 1) {
+            result = result + month + "月";
+        }
+        if (day >= 1) {
+            result = result + day + "天";
+        }
+        if (hour >= 1) {
+            result = result + hour + "小时";
+        }
+        if (minute >= 1) {
+            result = result + minute + "分钟";
+        }
+        if (second >= 1) {
+            result = result + second + "秒";
+        }
+        if (millisecond >= 1) {
+            result = result + millisecond + "毫秒";
+        }
+        return result;
     };
 };
 
