@@ -14,14 +14,20 @@ import org.slf4j.LoggerFactory;
 public class InterruptJob implements InterruptableJob {
     private final static Logger logger = LoggerFactory.getLogger(InterruptJob.class);
 
+    private boolean flag = true;
+
     @Override
     public void interrupt() throws UnableToInterruptJobException {
+        flag = false;
         logger.info("################### [InterruptJob] =========== 被中断");
     }
 
     @Override
     public void execute(JobExecutionContext context) throws JobExecutionException {
         for (int i = 0; i < 100000; i++) {
+            if (!flag) {
+                return;
+            }
             try {
                 Thread.sleep(1000 * 2);
             } catch (Throwable e) {
