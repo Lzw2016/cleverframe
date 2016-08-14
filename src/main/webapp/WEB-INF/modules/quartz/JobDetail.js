@@ -693,6 +693,7 @@ var pageJs = function (globalPath) {
             novalidate: false,
             //url: saveJobDetailUrl,
             onSubmit: function (param) {
+                param.interval = getInterval();
                 var jobData = {};
                 addTriggerDataTable.datagrid('acceptChanges');
                 var rows = addTriggerDataTable.datagrid('getRows');
@@ -703,7 +704,6 @@ var pageJs = function (globalPath) {
                     jobData[item.key] = item.value;
                 });
                 param.jobData = JSON.stringify(jobData);
-                param.interval = getInterval();
             },
             success: function (data) {
                 data = JSON.parse(data);
