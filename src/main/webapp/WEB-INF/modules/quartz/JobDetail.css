@@ -56,8 +56,7 @@
     padding-left: 5px;
 }
 
-
-/*编辑表单样式*/
+/*新增任务表单样式*/
 #addJobDetailForm .row {
     margin-bottom: 8px;
     width: inherit;
@@ -70,6 +69,22 @@
 }
 
 #addJobDetailForm .row input {
+    width: 670px;
+}
+
+/*新增触发器表单样式*/
+#addTriggerForm .row {
+    margin-bottom: 8px;
+    width: inherit;
+}
+
+#addTriggerForm .row label {
+    display: inline-block;
+    text-align: right;
+    width: 90px;
+}
+
+#addTriggerForm .row input {
     width: 670px;
 }
 

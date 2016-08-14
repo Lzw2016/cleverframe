@@ -213,7 +213,6 @@
                     <label for="addJobDetailJobClassName">任务实现类</label>
                     <input id="addJobDetailJobClassName" name="jobClassName" style="width: 450px;"/>
                 </div>
-
                 <div class="row">
                     <label for="addJobDetailDescription">任务描述</label>
                     <input id="addJobDetailDescription" name="description" style="width: 450px; height: 100px;"/>
@@ -242,6 +241,101 @@
     <a id="addJobDetailDialogCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)">取消</a>
 </div>
 
+<%--新增触发器对话框--%>
+<div id="addTriggerDialog" data-options="iconCls:'icon-triggers'" style="width: 650px;height: 440px;">
+    <div id="addTriggerTabs" class="easyui-tabs" data-options="fit:true,border:false">
+        <div title="触发器属性">
+            <form id="addTriggerForm" method="post" style="margin-top: 12px;">
+                <div class="row">
+                    <label for="addTriggerJobGroup">任务分组</label>
+                    <input id="addTriggerJobGroup" name="jobGroup" style="width: 200px"/>
 
+                    <label for="addTriggerJobName">任务名称</label>
+                    <input id="addTriggerJobName" name="jobName" style="width: 200px"/>
+                </div>
+                <div class="row">
+                    <label for="addTriggerTriggerGroup">触发器分组</label>
+                    <input id="addTriggerTriggerGroup" name="triggerGroup" style="width: 200px"/>
+
+                    <label for="addTriggerTriggerName">触发器名称</label>
+                    <input id="addTriggerTriggerName" name="triggerName" style="width: 200px"/>
+                </div>
+                <div class="row">
+                    <label for="addTriggerStartTime">开始触发时间</label>
+                    <input id="addTriggerStartTime" name="startTime" style="width: 200px"/>
+
+                    <label for="addTriggerEndTime">结束触发时间</label>
+                    <input id="addTriggerEndTime" name="endTime" style="width: 200px"/>
+                </div>
+                <div class="row">
+                    <label for="addTriggerPriority">优先级</label>
+                    <input id="addTriggerPriority" name="priority" style="width: 200px"/>
+
+                    <label for="addTriggerMisfireInstruction">错过触发规则ID</label>
+                    <input id="addTriggerMisfireInstruction" name="misfireInstruction" style="width: 200px"/>
+                </div>
+                <div class="row">
+                    <label for="addTriggerTriggerType">触发器类型</label>
+                    <input id="addTriggerTriggerType" name="triggerType" style="width: 200px"/>
+                </div>
+                <%-- SimpleTrigger触发器规则 --%>
+                <div id="simpleTriggerRule" style="display: none">
+                    <div class="row">
+                        <label for="addTriggerRepeatCount">触发的次数</label>
+                        <input id="addTriggerRepeatCount" name="repeatCount" style="width: 220px"/>
+                    </div>
+                    <%--<input id="addTriggerInterval" name="interval" type="hidden"/>--%>
+                    <div class="row">
+                        <label>触发的时间间隔</label>
+                        <%--suppress HtmlFormInputWithoutLabel --%>
+                        <input id="addTriggerIntervalYear" name="addTriggerIntervalYear" style="width: 50px;"/>年
+                        <%--suppress HtmlFormInputWithoutLabel --%>
+                        <input id="addTriggerIntervalMonth" name="addTriggerIntervalMonth" style="width: 50px;"/>月
+                        <%--suppress HtmlFormInputWithoutLabel --%>
+                        <input id="addTriggerIntervalDay" name="addTriggerIntervalDay" style="width: 50px;"/>天
+                        <%--suppress HtmlFormInputWithoutLabel --%>
+                        <input id="addTriggerIntervalHour" name="addTriggerIntervalHour" style="width: 50px;"/>小时
+                        <%--suppress HtmlFormInputWithoutLabel --%>
+                        <input id="addTriggerIntervalMinute" name="addTriggerIntervalMinute" style="width: 50px;"/>分钟
+                        <%--suppress HtmlFormInputWithoutLabel --%>
+                        <input id="addTriggerIntervalSecond" name="addTriggerIntervalSecond" style="width: 50px;"/>秒
+                        <a id="simpleTriggerRuleView" href="javascript:void(0)">详情</a>
+                    </div>
+                </div>
+                <%-- CronTrigger触发器规则 --%>
+                <div id="cronTriggerRule" style="display: none">
+                    <div class="row">
+                        <label for="addTriggerCron">Cron表达式</label>
+                        <input id="addTriggerCron" name="cron" style="width: 400px"/>
+                        <a id="cronTriggerRuleView" href="javascript:void(0)">详情</a>
+                    </div>
+                </div>
+                <div class="row">
+                    <label for="addTriggerDescription">触发器描述</label>
+                    <input id="addTriggerDescription" name="description" style="width: 510px; height: 100px;"/>
+                </div>
+            </form>
+        </div>
+        <div title="触发器数据">
+            <table id="addTriggerDataTable" data-options="border:false">
+                <thead>
+                <tr>
+                    <th data-options="width:150,align:'left',hidden:false,field:'key',editor:{type:'textbox',options:{required: true}}">属性名称</th>
+                    <th data-options="width:350,align:'left',hidden:false,field:'value',editor:{type:'textbox',options:{required: true}}">属性值</th>
+                </tr>
+                </thead>
+            </table>
+            <div id="addTriggerDataTableButtons">
+                <a id="addTriggerDataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" href="javascript:void(0)"></a>
+                <a id="addTriggerDataTableButtonsRemove" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" href="javascript:void(0)"></a>
+                <a id="addTriggerDataTableButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" href="javascript:void(0)"></a>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="addTriggerDialogButtons">
+    <a id="addTriggerDialogSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)">新增</a>
+    <a id="addTriggerDialogCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)">取消</a>
+</div>
 </body>
 </html>

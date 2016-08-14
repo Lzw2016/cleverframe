@@ -44,6 +44,8 @@ var pageJs = function (globalPath) {
     var getJobGroupNamesUrl = globalPath.mvcPath + "/quartz/jobdetail/getJobGroupNames.json";
     // 获取所有定时任务实现类名称
     var getAllJobClassNameUrl = globalPath.mvcPath + "/quartz/jobdetail/getAllJobClassName.json";
+    // 获取所有的触发器分组
+    var getTriggerGroupNamesUrl = globalPath.mvcPath + "/quartz/trigger/getTriggerGroupNames.json";
 
     // 所有定时任务
     var jobDetailDataTable = $("#jobDetailDataTable");
@@ -136,6 +138,75 @@ var pageJs = function (globalPath) {
     var addJobDetailJobDataTableButtonsRemove = $("#addJobDetailJobDataTableButtonsRemove");
     // 新增定时任务表单 - 任务数据表格 - 保存
     var addJobDetailJobDataTableButtonsSave = $("#addJobDetailJobDataTableButtonsSave");
+
+    // 新增触发器对话框
+    var addTriggerDialog = $("#addTriggerDialog");
+    // 新增触发器对话框 - 多页签
+    var addTriggerTabs = $("#addTriggerTabs");
+    // 新增触发器对话框 - 新增
+    var addTriggerDialogSave = $("#addTriggerDialogSave");
+    // 新增触发器对话框 - 取消
+    var addTriggerDialogCancel = $("#addTriggerDialogCancel");
+    // 新增触发器对话框 - 表单
+    var addTriggerForm = $("#addTriggerForm");
+    // 新增触发器对话框 - 表单 - 任务分组
+    var addTriggerJobGroup = $("#addTriggerJobGroup");
+    // 新增触发器对话框 - 表单 - 任务名称
+    var addTriggerJobName = $("#addTriggerJobName");
+    // 新增触发器对话框 - 表单 - 触发器分组
+    var addTriggerTriggerGroup = $("#addTriggerTriggerGroup");
+    // 新增触发器对话框 - 表单 - 触发器名称
+    var addTriggerTriggerName = $("#addTriggerTriggerName");
+    // 新增触发器对话框 - 表单 - 开始触发时间
+    var addTriggerStartTime = $("#addTriggerStartTime");
+    // 新增触发器对话框 - 表单 - 结束触发时间
+    var addTriggerEndTime = $("#addTriggerEndTime");
+    // 新增触发器对话框 - 表单 - 优先级
+    var addTriggerPriority = $("#addTriggerPriority");
+    // 新增触发器对话框 - 表单 - 错过触发规则ID
+    var addTriggerMisfireInstruction = $("#addTriggerMisfireInstruction");
+    // 触发器类型
+    var addTriggerTriggerType = $("#addTriggerTriggerType");
+    // CronTrigger触发器规则
+    var cronTriggerRule = $("#cronTriggerRule");
+    // SimpleTrigger触发器规则
+    var simpleTriggerRule = $("#simpleTriggerRule");
+    // 新增触发器对话框 - 表单 - 触发的时间间隔
+    var addTriggerInterval = $("#addTriggerInterval");
+    // 新增触发器对话框 - 表单 - 触发的时间间隔 - 年
+    var addTriggerIntervalYear = $("#addTriggerIntervalYear");
+    // 新增触发器对话框 - 表单 - 触发的时间间隔 - 月
+    var addTriggerIntervalMonth = $("#addTriggerIntervalMonth");
+    // 新增触发器对话框 - 表单 - 触发的时间间隔 - 天
+    var addTriggerIntervalDay = $("#addTriggerIntervalDay");
+    // 新增触发器对话框 - 表单 - 触发的时间间隔 - 小时
+    var addTriggerIntervalHour = $("#addTriggerIntervalHour");
+    // 新增触发器对话框 - 表单 - 触发的时间间隔 - 分钟
+    var addTriggerIntervalMinute = $("#addTriggerIntervalMinute");
+    // 新增触发器对话框 - 表单 - 触发的时间间隔 - 秒
+    var addTriggerIntervalSecond = $("#addTriggerIntervalSecond");
+    // 新增触发器对话框 - 表单 - 触发的次数
+    var addTriggerRepeatCount = $("#addTriggerRepeatCount");
+    // 新增触发器对话框 - 表单 - cron表达式
+    var addTriggerCron = $("#addTriggerCron");
+    // 新增触发器对话框 - 表单 - 触发器描述
+    var addTriggerDescription = $("#addTriggerDescription");
+    // 新增触发器对话框 - 触发器数据表格
+    var addTriggerDataTable = $("#addTriggerDataTable");
+    // 新增定时任务表单 - 任务数据表格 - 编辑行
+    var addTriggerEditIndex = undefined;
+    // 新增触发器对话框 - 触发器数据表格 - 增加
+    var addTriggerDataTableButtonsAdd = $("#addTriggerDataTableButtonsAdd");
+    // 新增触发器对话框 - 触发器数据表格 - 移除
+    var addTriggerDataTableButtonsRemove = $("#addTriggerDataTableButtonsRemove");
+    // 新增触发器对话框 - 触发器数据表格 - 保存
+    var addTriggerDataTableButtonsSave = $("#addTriggerDataTableButtonsSave");
+
+    // SimpleTrigger触发器规则 - 查看
+    var simpleTriggerRuleView = $("#simpleTriggerRuleView");
+    // CronTrigger触发器规则 - 查看
+    var cronTriggerRuleView = $("#cronTriggerRuleView");
+
     /**
      * 页面初始化方法
      */
@@ -246,6 +317,7 @@ var pageJs = function (globalPath) {
         });
 
         _this.initAddJobDetailDialog();
+        _this.initAddTriggerDialog();
         _this.dataBind();
         _this.eventBind();
     };
@@ -288,7 +360,7 @@ var pageJs = function (globalPath) {
             addJobDetailDialog.dialog("open");
             addJobDetailTabs.tabs("select", 0);
             addJobDetailForm.form('reset');
-            addJobDetailJobDataTable.datagrid("loaded", {total: 0, rows: []});
+            addJobDetailJobDataTable.datagrid("loadData", {total: 0, rows: []});
         });
 
         // 所有定时任务 - 删除定时任务
@@ -303,7 +375,12 @@ var pageJs = function (globalPath) {
             }
         });
 
-        // -------------------------------------------------------------------------------
+        // 新增定时任务对话框 - 取消
+        addJobDetailDialogCancel.click(function () {
+            addJobDetailDialog.dialog("close");
+        });
+
+        // -----------------------------------------------
 
         // 所有定时任务 - 暂停
         jobDetailDataTableButtonsPause.click(function () {
@@ -332,7 +409,19 @@ var pageJs = function (globalPath) {
 
         // 选中定时任务的触发器 - 新增
         triggerDataTableButtonsAdd.click(function () {
-
+            var row = jobDetailDataTable.datagrid("getSelected");
+            if(row == null){
+                $.messager.alert("提示", "请先选择定时任务！", "info");
+                return;
+            }
+            addTriggerDialog.dialog("open");
+            addTriggerTabs.tabs("select", 0);
+            addTriggerForm.form('reset');
+            addTriggerTriggerType.combobox("setValue", 'SimpleTrigger');
+            addTriggerDataTable.datagrid("loadData", {total: 0, rows: []});
+            addTriggerStartTime.datetimebox("setValue", _this.formatDate(new Date()));
+            addTriggerJobGroup.textbox("setValue", row.jobGroup);
+            addTriggerJobName.textbox("setValue", row.jobName);
         });
 
         // 选中定时任务的触发器 - 删除
@@ -343,6 +432,30 @@ var pageJs = function (globalPath) {
         // 选中定时任务的触发器 - 删除所有
         triggerDataTableButtonsDeleteAll.click(function () {
             _this.deleteTriggerByJob();
+        });
+
+        // 新增触发器对话框 - 新增
+        addTriggerDialogSave.click(function () {
+            if (addTriggerForm.form("validate") == true) {
+                var triggerType = addTriggerTriggerType.combobox("getValue");
+                switch (triggerType) {
+                    case 'SimpleTrigger':
+                        addTriggerForm.form({url: addSimpleTriggerForJobUrl});
+                        break;
+                    case 'CronTrigger':
+                        addTriggerForm.form({url: addCronTriggerForJobUrl});
+                        break;
+                    default:
+                        $.messager.alert("提示", "未知的触发器类型[" + triggerType + "]", "warning");
+                        break;
+                }
+                addTriggerForm.form("submit");
+            }
+        });
+
+        // 新增触发器对话框 - 取消
+        addTriggerDialogCancel.click(function () {
+            addTriggerDialog.dialog("close");
         });
     };
 
@@ -366,6 +479,33 @@ var pageJs = function (globalPath) {
             border: false
         });
 
+        addJobDetailForm.form({
+            novalidate: false,
+            url: saveJobDetailUrl,
+            onSubmit: function (param) {
+                var jobData = {};
+                addJobDetailJobDataTable.datagrid('acceptChanges');
+                var rows = addJobDetailJobDataTable.datagrid('getRows');
+                if (rows == null || rows.length <= 0) {
+                    return;
+                }
+                $(rows).each(function (index, item) {
+                    jobData[item.key] = item.value;
+                });
+                param.jobData = JSON.stringify(jobData);
+            },
+            success: function (data) {
+                data = JSON.parse(data);
+                if (data.success) {
+                    addJobDetailDialog.dialog("close");
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    _this.initJobDetailDataTable();
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+
         addJobDetailJobGroup.combobox({
             required: true,
             validType: 'length[1,200]',
@@ -386,18 +526,14 @@ var pageJs = function (globalPath) {
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }
-                jobDetailDataTable.datagrid("loaded");
             }
         });
 
-        addJobDetailJobName.textbox({
-            required: true,
-            validType: 'length[1,200]'
-        });
+        addJobDetailJobName.textbox({required: true, validType: 'length[1,200]'});
 
         addJobDetailJobClassName.combobox({
             required: true,
-            validType: 'length[1,250]',
+            validType: 'length[1,200]',
             editable: true,
             valueField: 'value',
             textField: 'text',
@@ -415,7 +551,6 @@ var pageJs = function (globalPath) {
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }
-                jobDetailDataTable.datagrid("loaded");
             }
         });
 
@@ -492,19 +627,75 @@ var pageJs = function (globalPath) {
             addJobDetailJobDataTable.datagrid('cancelEdit', addJobDetailEditIndex).datagrid('deleteRow', addJobDetailEditIndex);
             addJobDetailEditIndex = undefined;
         });
+        // 新增定时任务表单 - 任务数据表格 - 保存
         addJobDetailJobDataTableButtonsSave.click(function () {
             if (endEditing()){
                 addJobDetailJobDataTable.datagrid('acceptChanges');
             }
         });
+    };
 
-        addJobDetailForm.form({
+    // 新增触发器对话框
+    this.initAddTriggerDialog = function () {
+        addTriggerTabs.tabs({fit: true, border: false});
+        addTriggerJobGroup.textbox({required: true, readonly: true, validType: 'length[1,200]', value: ' '});
+        addTriggerJobName.textbox({required: true, readonly: true, validType: 'length[1,200]', value: ' '});
+
+        var getInterval = function(){
+            var year = addTriggerIntervalYear.numberspinner("getValue");
+            if(year == null || year == ""){
+                addTriggerIntervalYear.numberspinner("isValid");
+                return false;
+            }
+            var month = addTriggerIntervalMonth.numberspinner("getValue");
+            if(month == null || month == ""){
+                return false;
+            }
+            var day = addTriggerIntervalDay.numberspinner("getValue");
+            if(day == null || day == ""){
+                return false;
+            }
+            var hour = addTriggerIntervalHour.numberspinner("getValue");
+            if(hour == null || hour == ""){
+                return false;
+            }
+            var minute = addTriggerIntervalMinute.numberspinner("getValue");
+            if(minute == null || minute == ""){
+                return false;
+            }
+            var second = addTriggerIntervalSecond.numberspinner("getValue");
+            if(second == null || second == ""){
+                return false;
+            }
+            return year * 31104000000 + month * 2592000000 + day * 86400000 + hour * 3600000 + minute * 60000 + second * 1000;
+        };
+        simpleTriggerRuleView.tooltip({position:'top', content:'触发的时间间隔信 <span style="color: red;">息填写不完整</span>', showEvent: ''});
+        simpleTriggerRuleView.click(function () {
+            var interval = getInterval();
+            if(interval === false) {
+                simpleTriggerRuleView.tooltip('show');
+            } else {
+                var repeatCount = addTriggerRepeatCount.numberspinner("getValue");
+                repeatCount = (repeatCount == "" ? 0 : repeatCount);
+                _this.openSimpleTriggerViewDialog(0, repeatCount, interval);
+            }
+        });
+        cronTriggerRuleView.tooltip({position:'top', content:'Cron表达式 <span style="color: red;">息填写不完整</span>', showEvent: ''});
+        cronTriggerRuleView.click(function () {
+            var cron = addTriggerCron.textbox('getValue');
+            if($.trim(cron) == "") {
+                cronTriggerRuleView.tooltip('show');
+            } else {
+                _this.openCronTriggerViewDialog(cron);
+            }
+        });
+        addTriggerForm.form({
             novalidate: false,
-            url: saveJobDetailUrl,
+            //url: saveJobDetailUrl,
             onSubmit: function (param) {
                 var jobData = {};
-                addJobDetailJobDataTable.datagrid('acceptChanges');
-                var rows = addJobDetailJobDataTable.datagrid('getRows');
+                addTriggerDataTable.datagrid('acceptChanges');
+                var rows = addTriggerDataTable.datagrid('getRows');
                 if (rows == null || rows.length <= 0) {
                     return;
                 }
@@ -512,16 +703,178 @@ var pageJs = function (globalPath) {
                     jobData[item.key] = item.value;
                 });
                 param.jobData = JSON.stringify(jobData);
+                param.interval = getInterval();
             },
             success: function (data) {
                 data = JSON.parse(data);
                 if (data.success) {
-                    addJobDetailDialog.dialog("close");
+                    addTriggerDialog.dialog("close");
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-                    _this.initJobDetailDataTable();
+                    _this.initTriggerDataTable();
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }
+            }
+        });
+
+        addTriggerTriggerGroup.combobox({
+            required: true,
+            validType: 'length[1,200]',
+            editable: true,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 120
+        });
+        $.ajax({
+            type: "POST", dataType: "JSON", url: getTriggerGroupNamesUrl, async: true,
+            success: function (data) {
+                if (data.success) {
+                    var groupNames = [];
+                    $(data.result).each(function (index, item) {
+                        groupNames.push({"value": item, "text": item});
+                    });
+                    addTriggerTriggerGroup.combobox("loadData", groupNames);
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+
+        addTriggerTriggerName.textbox({required: true, validType: 'length[1,200]'});
+        addTriggerStartTime.datetimebox({required: true, value: _this.formatDate(new Date(), true)});
+        addTriggerEndTime.datetimebox({required: false});
+        addTriggerPriority.numberspinner({required: true, min: 1, max: 10, value: 5});
+        addTriggerMisfireInstruction.numberspinner({required: true, min: 0, max: 10, value: 0});
+        addTriggerRepeatCount.numberspinner({required: true, min: 1, value: 1});
+        addTriggerCron.textbox({required: true, validType: 'length[1,200]'});
+        addTriggerDescription.textbox({required: true, validType: 'length[1,250]', multiline: true});
+
+        addTriggerIntervalYear.numberspinner({required: true, min: 0, max: 50, value: 0});
+        addTriggerIntervalMonth.numberspinner({required: true, min: 0, max: 11, value: 0});
+        addTriggerIntervalDay.numberspinner({required: true, min: 0, max: 29, value: 0});
+        addTriggerIntervalHour.numberspinner({required: true, min: 0, max: 23, value: 0});
+        addTriggerIntervalMinute.numberspinner({required: true, min: 0, max: 59, value: 0});
+        addTriggerIntervalSecond.numberspinner({required: true, min: 0, max: 59, value: 0});
+
+        var selectSimpleTrigger = function () {
+            addTriggerIntervalYear.numberspinner({required: true});
+            addTriggerIntervalMonth.numberspinner({required: true});
+            addTriggerIntervalDay.numberspinner({required: true});
+            addTriggerIntervalHour.numberspinner({required: true});
+            addTriggerIntervalMinute.numberspinner({required: true});
+            addTriggerIntervalSecond.numberspinner({required: true});
+            simpleTriggerRule.show();
+            addTriggerCron.textbox({required: false});
+            cronTriggerRule.hide();
+        };
+        var selectCronTrigger = function () {
+            addTriggerIntervalYear.numberspinner({required: false});
+            addTriggerIntervalMonth.numberspinner({required: false});
+            addTriggerIntervalDay.numberspinner({required: false});
+            addTriggerIntervalHour.numberspinner({required: false});
+            addTriggerIntervalMinute.numberspinner({required: false});
+            addTriggerIntervalSecond.numberspinner({required: false});
+            simpleTriggerRule.hide();
+            addTriggerCron.textbox({required: true});
+            cronTriggerRule.show();
+        };
+        addTriggerTriggerType.combobox({
+            required: true,
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            data: [{text: 'SimpleTrigger - 简单触发器', value: 'SimpleTrigger'}, {text: 'CronTrigger - Cron表达式触发器', value: 'CronTrigger'}],
+            panelHeight: 50,
+            value: 'SimpleTrigger',
+            onChange: function (newValue, oldValue) {
+                switch (newValue) {
+                    case 'SimpleTrigger':
+                        selectSimpleTrigger();
+                        break;
+                    case 'CronTrigger':
+                        selectCronTrigger();
+                        break;
+                }
+            }
+        });
+        selectSimpleTrigger();
+
+        addTriggerDialog.dialog({
+            title: "新增触发器",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            minWidth: 410,
+            minHeight: 260,
+            modal: true,
+            buttons: "#addTriggerDialogButtons",
+            onOpen: function() {
+                selectSimpleTrigger();
+            }
+        });
+
+        var endEditing = function () {
+            if (addTriggerEditIndex == undefined) {
+                return true
+            }
+            if (addTriggerDataTable.datagrid('validateRow', addTriggerEditIndex)) {
+                addTriggerDataTable.datagrid('endEdit', addTriggerEditIndex);
+                addTriggerEditIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        };
+        addTriggerDataTable.datagrid({
+            fit: true,
+            fitColumns: false,
+            striped: true,
+            rownumbers: true,
+            singleSelect: true,
+            nowrap: true,
+            toolbar: "#addTriggerDataTableButtons",
+            pagination: false,
+            onEndEdit: function (index, row) {
+
+            },
+            onClickCell: function (index, field) {
+                if (addTriggerEditIndex != index) {
+                    if (endEditing()) {
+                        addTriggerDataTable.datagrid('selectRow', index).datagrid('beginEdit', index);
+                        var ed = addTriggerDataTable.datagrid('getEditor', {index: index, field: field});
+                        if (ed) {
+                            ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                        }
+                        addTriggerEditIndex = index;
+                    } else {
+                        setTimeout(function () {
+                            addTriggerDataTable.datagrid('selectRow', addTriggerEditIndex);
+                        }, 0);
+                    }
+                }
+            }
+        });
+        // 新增触发器对话框 - 触发器数据表格 - 增加
+        addTriggerDataTableButtonsAdd.click(function () {
+            if (endEditing()) {
+                addTriggerDataTable.datagrid('appendRow', {});
+                addTriggerEditIndex = addTriggerDataTable.datagrid('getRows').length - 1;
+                addTriggerDataTable.datagrid('selectRow', addTriggerEditIndex).datagrid('beginEdit', addTriggerEditIndex);
+            }
+        });
+        // 新增触发器对话框 - 触发器数据表格 - 移除
+        addTriggerDataTableButtonsRemove.click(function () {
+            if (addTriggerEditIndex == undefined) {
+                return
+            }
+            addTriggerDataTable.datagrid('cancelEdit', addTriggerEditIndex).datagrid('deleteRow', addTriggerEditIndex);
+            addTriggerEditIndex = undefined;
+        });
+        // 新增触发器对话框 - 触发器数据表格 - 保存
+        addTriggerDataTableButtonsSave.click(function () {
+            if (endEditing()){
+                addTriggerDataTable.datagrid('acceptChanges');
             }
         });
     };
@@ -943,7 +1296,12 @@ var pageJs = function (globalPath) {
         var hour = dateTime.getHours();
         var minute = dateTime.getMinutes();
         var second = dateTime.getSeconds();
-        return year + "年" + month + "月" + date + "日 " + hour + ":" + minute + ":" + second;
+        return year + '-'
+            + (month < 10 ? ('0' + month) : month) + '-'
+            + (date < 10 ? ('0' + date) : date) + ' '
+            + (hour < 10 ? ('0' + hour) : hour) + ':'
+            + (minute < 10 ? ('0' + minute) : minute) + ":"
+            + (second < 10 ? ('0' + second) : second);
     };
 
     // 毫秒转可读的时间
@@ -976,6 +1334,9 @@ var pageJs = function (globalPath) {
         }
         if (millisecond >= 1) {
             result = result + millisecond + "毫秒";
+        }
+        if(result == ""){
+            result = "0毫秒";
         }
         return result;
     };

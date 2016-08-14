@@ -58,6 +58,7 @@ public class QuartzTriggerController extends BaseController {
             HttpServletResponse response,
             @Valid AddSimpleTriggerForJobVo addSimpleTriggerForJobVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "给JobDetail增加一个SimpleTrigger成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             Map<String, String> jobData = null;
@@ -90,6 +91,7 @@ public class QuartzTriggerController extends BaseController {
             HttpServletResponse response,
             @Valid AddCronTriggerForJobVo addCronTriggerForJobVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "给JobDetail增加一个CronTrigger成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             Map<String, String> jobData = null;
