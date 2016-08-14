@@ -778,6 +778,7 @@ var pageJs = function (globalPath) {
             addTriggerCron.textbox({required: true});
             cronTriggerRule.show();
         };
+        //noinspection JSUnusedLocalSymbols
         addTriggerTriggerType.combobox({
             required: true,
             editable: false,
