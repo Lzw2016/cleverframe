@@ -8,15 +8,17 @@ import org.quartz.impl.matchers.GroupMatcher;
 import org.reflections.Reflections;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.scheduling.quartz.QuartzJobBean;
 
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * Quartz管理类
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-7-29 11:39 <br/>
  */
@@ -25,7 +27,6 @@ public class QuartzManager {
      * 日志对象
      */
     private final static Logger logger = LoggerFactory.getLogger(QuartzManager.class);
-
 
     private final static Scheduler SCHEDULER;
 
@@ -43,6 +44,30 @@ public class QuartzManager {
             logger.error(e.getMessage(), e);
             throw ExceptionUtils.unchecked(e);
         }
+    }
+
+    /**
+     * 返回basePackage包下面所有的Job子类
+     *
+     * @param basePackage 扫描的基础包
+     * @return 所有的Job子类集合
+     */
+    @SuppressWarnings("deprecation")
+    public static List<String> getAllJobClassName(String basePackage) {
+        List<String> JobClassNameList = new ArrayList<>();
+        Reflections reflections = new Reflections(basePackage);
+        Set<Class<? extends Job>> jobClassSet = reflections.getSubTypesOf(Job.class);
+        JobClassNameList.addAll(jobClassSet.stream().map(Class::getName).collect(Collectors.toList()));
+
+        Set<Class<? extends InterruptableJob>> interruptableJobClassSet = reflections.getSubTypesOf(InterruptableJob.class);
+        JobClassNameList.addAll(interruptableJobClassSet.stream().map(Class::getName).collect(Collectors.toList()));
+
+        Set<Class<? extends QuartzJobBean>> quartzJobBeanClassSet = reflections.getSubTypesOf(QuartzJobBean.class);
+        JobClassNameList.addAll(quartzJobBeanClassSet.stream().map(Class::getName).collect(Collectors.toList()));
+
+        Set<Class<? extends StatefulJob>> statefulJobClassSet = reflections.getSubTypesOf(StatefulJob.class);
+        JobClassNameList.addAll(statefulJobClassSet.stream().map(Class::getName).collect(Collectors.toList()));
+        return JobClassNameList;
     }
 
     public static Scheduler getScheduler() {
@@ -72,22 +97,6 @@ public class QuartzManager {
             logger.error("### 获取Job类型失败[" + jobClassName + "]", e);
         }
         return null;
-    }
-
-    /**
-     * 返回basePackage包下面所有的Job子类
-     *
-     * @param basePackage 扫描的基础包
-     * @return 所有的Job子类集合
-     */
-    public static List<String> getAllJobClassName(String basePackage) {
-        List<String> jobClassNameList = new ArrayList<>();
-        Reflections reflections = new Reflections(basePackage);
-        Set<Class<? extends Job>> jobClassSet = reflections.getSubTypesOf(Job.class);
-        for (Class<? extends Job> aClass : jobClassSet) {
-            jobClassNameList.add(aClass.getName());
-        }
-        return jobClassNameList;
     }
 
     /**

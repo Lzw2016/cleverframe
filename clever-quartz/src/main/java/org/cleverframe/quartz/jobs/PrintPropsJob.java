@@ -18,7 +18,6 @@ public class PrintPropsJob implements Job {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         // @DisallowConcurrentExecution 对应 isNonconcurrent 不能并发执行
         // @PersistJobDataAfterExecution 对应 isUpdateData
-
         // JobDataMap data = context.getMergedJobDataMap();
         try {
             Thread.sleep(1000 * 2);
