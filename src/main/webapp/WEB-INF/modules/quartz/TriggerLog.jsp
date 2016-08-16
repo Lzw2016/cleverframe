@@ -89,7 +89,7 @@
             </span>
         </div>
 
-        <div class="row" style="margin-bottom: 0px;">
+        <div class="row" style="margin-bottom: 0;">
             <span class="column">
                 <label for="searchProcessTimeByMin">处理时间-最小值</label>
                 <input id="searchProcessTimeByMin" name="processTimeByMin">
@@ -126,7 +126,7 @@
             <th data-options="width:100,align:'left',hidden:true ,field:'ipAddress'">触发节点IP</th>
             <th data-options="width:100,align:'left',hidden:true ,field:'beforeJobData'">执行前的JobDataMap数据</th>
             <th data-options="width:100,align:'left',hidden:true ,field:'afterJobData'">执行后的JobDataMap数据</th>
-            <th data-options="width:50,align:'left',hidden:false,field:'jobData',formatter:pageJsObject.jobDataFormatter"">JobData</th>
+            <th data-options="width:50,align:'left',hidden:false,field:'jobData',formatter:pageJsObject.jobDataFormatter">JobData</th>
             <th data-options="width:100,align:'left',hidden:true ,field:'triggerInstructionCode'">触发指令码</th>
             <th data-options="width:100,align:'left',hidden:true ,field:'instrCode'">触发指令码说明</th>
         </tr>
