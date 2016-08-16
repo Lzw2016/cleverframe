@@ -4,16 +4,12 @@
 var pageJs = function (globalPath) {
     // 当前pageJs对象
     var _this = this;
-
     // 获取所有的任务分组
     var getJobGroupNamesUrl = globalPath.mvcPath + "/quartz/jobdetail/getJobGroupNames.json";
     // 获取所有定时任务实现类名称
     var getAllJobClassNameUrl = globalPath.mvcPath + "/quartz/jobdetail/getAllJobClassName.json";
-    // 获取所有的触发器分组
-    var getTriggerGroupNamesUrl = globalPath.mvcPath + "/quartz/trigger/getTriggerGroupNames.json";
-
     // 触发器日志分页查询地址
-    var findTriggerLogByPageUrl = globalPath.mvcPath + "/quartz/triggerlog/findTriggerLogByPage.json";
+    var findQrtzJobLogByPageUrl = globalPath.mvcPath + "/quartz/joblog/findQrtzJobLogByPage.json";
 
     // 查询表单
     var searchForm = $("#searchForm");
@@ -21,10 +17,6 @@ var pageJs = function (globalPath) {
     var searchSchedulerName = $("#searchSchedulerName");
     // 调度器ID
     var searchInstanceName = $("#searchInstanceName");
-    // 触发器分组
-    var searchTriggerGroup = $("#searchTriggerGroup");
-    // 触发器名称
-    var searchTriggerName = $("#searchTriggerName");
     // 任务分组
     var searchJobGroup = $("#searchJobGroup");
     // 任务名称
@@ -40,36 +32,26 @@ var pageJs = function (globalPath) {
     // 处理时间-最大值
     var searchProcessTimeByMax = $("#searchProcessTimeByMax");
     // 数据表格
-    var triggerLogDataTable = $("#triggerLogDataTable");
+    var jobDetailLogDataTable = $("#jobDetailLogDataTable");
     // 查询按钮
-    var triggerLogDataTableButtonsSearch = $("#triggerLogDataTableButtonsSearch");
+    var jobDetailLogDataTableButtonsSearch = $("#jobDetailLogDataTableButtonsSearch");
 
     // jobData 数据查看对话框
     var jsonViewDialog = $("#jsonViewDialog");
     // jobData对比编辑器
     var jobDataMergeView = null;
+
+    // 任务执行异常信息查看对话框
+    var exceptionInfoViewDialog = $("#exceptionInfoViewDialog");
+    // 异常信息查看器
+    var viewExceptionInfo = null;
+
     /**
      * 页面初始化方法
      */
     this.init = function () {
         searchSchedulerName.textbox({});
         searchInstanceName.textbox({});
-        searchTriggerGroup.combobox({editable: true, valueField: 'value', textField: 'text', panelHeight: 120});
-        $.ajax({
-            type: "POST", dataType: "JSON", url: getTriggerGroupNamesUrl, async: true,
-            success: function (data) {
-                if (data.success) {
-                    var groupNames = [];
-                    $(data.result).each(function (index, item) {
-                        groupNames.push({"value": item, "text": item});
-                    });
-                    searchTriggerGroup.combobox("loadData", groupNames);
-                } else {
-                    $.messager.alert("提示", data.failMessage, "warning");
-                }
-            }
-        });
-        searchTriggerName.textbox({});
         searchJobGroup.combobox({editable: true, valueField: 'value', textField: 'text', panelHeight: 80});
         $.ajax({
             type: "POST", dataType: "JSON", url: getJobGroupNamesUrl, async: true,
@@ -108,8 +90,8 @@ var pageJs = function (globalPath) {
 
         // 设置数据显示表格
         //noinspection JSUnusedLocalSymbols
-        triggerLogDataTable.datagrid({
-            url: findTriggerLogByPageUrl,
+        jobDetailLogDataTable.datagrid({
+            url: findQrtzJobLogByPageUrl,
             idField: 'id',
             fit: true,
             fitColumns: false,
@@ -119,7 +101,7 @@ var pageJs = function (globalPath) {
             nowrap: true,
             pagination: true,
             loadMsg: "正在加载，请稍候...",
-            toolbar: "#triggerLogDataTableButtons",
+            toolbar: "#jobDetailLogDataTableButtons",
             pageSize: 20,
             pageList: [10, 20, 30, 50, 100, 150],
             onDblClickRow: function (rowIndex, rowData) {
@@ -148,6 +130,7 @@ var pageJs = function (globalPath) {
         });
 
         _this.initJsonViewDialog();
+        _this.initExceptionInfoViewDialog();
         _this.dataBind();
         _this.eventBind();
     };
@@ -164,13 +147,43 @@ var pageJs = function (globalPath) {
      * 界面事件绑定方法
      */
     this.eventBind = function () {
-        // 查询按钮
-        triggerLogDataTableButtonsSearch.click(function () {
-            triggerLogDataTable.datagrid('load');
+         //查询按钮
+        jobDetailLogDataTableButtonsSearch.click(function () {
+            jobDetailLogDataTable.datagrid('load');
         });
     };
 
     // ---------------------------------------------------------------------------------------------------------
+    this.initExceptionInfoViewDialog = function(){
+        exceptionInfoViewDialog.dialog({
+            title: "任务异常日志信息",
+            closed: true,
+            minimizable: false,
+            maximizable: true,
+            resizable: false,
+            minWidth: 850,
+            minHeight: 450,
+            modal: true,
+            //buttons: "#",
+            onOpen: function() {
+                if(viewExceptionInfo != null) {
+                    return;
+                }
+                // Java编辑器-初始化,
+                viewExceptionInfo = CodeMirror.fromTextArea(document.getElementById("viewExceptionInfo"), {
+                    mode: "text/x-java",
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    indentUnit: 4,
+                    readOnly: true
+                });
+                viewExceptionInfo.setSize("auto", "auto");
+                viewExceptionInfo.setOption("theme", "cobalt");
+                viewExceptionInfo.setValue("");
+            }
+        });
+    };
+
     this.initJsonViewDialog = function(){
         var mergeViewHeight = function (mergeView) {
             function editorHeight(editor) {
@@ -254,7 +267,6 @@ var pageJs = function (globalPath) {
         var afterJobData = rowData.afterJobData;
         afterJobData = js_beautify(afterJobData == null ? "" : afterJobData, 4, ' ');
         var uuid = _this.getUUID(32, 16);
-
         var aButton = $("<a id='" + uuid + "' href='javascript:void(0)'>查看</a>");
         $("body").on("click", "#" + uuid, function () {
             _this.openJsonViewDialog(beforeJobData, afterJobData);
@@ -271,7 +283,7 @@ var pageJs = function (globalPath) {
     };
 
     //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
-    this.misFiredFormatter = function (value, rowData, rowIndex) {
+    this.isVetoFormatter = function (value, rowData, rowIndex) {
         switch (value) {
             case "0":
                 return "否";
@@ -283,6 +295,26 @@ var pageJs = function (globalPath) {
                 return "未知";
                 break;
         }
+    };
+
+    // 打开任务执行异常信息查看对话框
+    this.openExceptionInfoViewDialog = function(exceptionInfo){
+        exceptionInfoViewDialog.dialog("open");
+        viewExceptionInfo.setValue("");
+        viewExceptionInfo.setValue(exceptionInfo);
+    };
+
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.exceptionInfoFormatter = function (value, rowData, rowIndex) {
+        if (!value) {
+            return "正常";
+        }
+        var uuid = _this.getUUID(32, 16);
+        var aButton = $("<a id='" + uuid + "' href='javascript:void(0)'>查看</a>");
+        $("body").on("click", "#" + uuid, function () {
+            _this.openExceptionInfoViewDialog(value);
+        });
+        return $("<div></div>").append(aButton).html();
     };
 
     // 毫秒转可读的时间

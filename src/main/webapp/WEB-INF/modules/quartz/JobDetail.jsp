@@ -17,7 +17,7 @@
     <%-- CodeMirror --%>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
-    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
+    <%--<link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">--%>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/javascript/javascript.js"></script>
 
     <%--代码格式化JS--%>
@@ -46,6 +46,7 @@
             <th data-options="width:80,align:'left',hidden:false,field:'requestsRecovery'">支持故障恢复</th>
             <th data-options="width:100,align:'left',hidden:false,field:'jobData',formatter:pageJsObject.jobDataFormatter">JobData</th>
             <th data-options="width:500,align:'left',hidden:false,field:'description'">任务描述</th>
+            <th data-options="width:60,align:'left',hidden:false,field:'log'">执行日志</th>
         </tr>
         </thead>
     </table>
@@ -104,6 +105,7 @@
             <th data-options="width:130,align:'left',hidden:false,field:'rule',formatter:pageJsObject.ruleFormatter">触发器规则</th>
             <th data-options="width:60,align:'left',hidden:false,field:'jobData',formatter:pageJsObject.jobDataFormatter">JobData</th>
             <th data-options="width:200,align:'left',hidden:false,field:'description'">任务描述</th>
+            <th data-options="width:60,align:'left',hidden:false,field:'log'">触发日志</th>
         </tr>
         </thead>
     </table>
@@ -135,7 +137,7 @@
 </div>
 
 <%-- 查看对话框 --%>
-<div id="jsonViewDialog" data-options="iconCls:'icon-job-data'" style="width: 850px;height: 330px;padding: 5px 10px">
+<div id="jsonViewDialog" data-options="iconCls:'icon-job-data'" style="width: 850px;height: 330px;">
     <%--suppress HtmlFormInputWithoutLabel --%>
     <textarea id="jsonViewEdit"></textarea>
 </div>
@@ -336,6 +338,16 @@
 <div id="addTriggerDialogButtons">
     <a id="addTriggerDialogSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)">新增</a>
     <a id="addTriggerDialogCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)">取消</a>
+</div>
+
+<%--定时任务执行日志--%>
+<div id="jobDetailExecutionLog" data-options="iconCls:'icon-triggers'" style="width: 650px;height: 440px;">
+
+</div>
+
+<%--触发器触发日志--%>
+<div id="triggerExecutionLog" data-options="iconCls:'icon-triggers'" style="width: 650px;height: 440px;">
+
 </div>
 </body>
 </html>

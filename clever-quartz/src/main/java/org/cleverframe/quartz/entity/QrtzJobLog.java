@@ -1,5 +1,6 @@
 package org.cleverframe.quartz.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,7 +10,7 @@ import java.util.Date;
 
 /**
  * 实体类，对应表qrtz_job_log(Job执行日志表)<br/>
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-8-3 17:46 <br/>
  */
@@ -70,11 +71,13 @@ public class QrtzJobLog implements Serializable {
     /**
      * 开始执行时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date startTime;
 
     /**
      * 执行结束时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date endTime;
 
     /**
@@ -85,11 +88,13 @@ public class QrtzJobLog implements Serializable {
     /**
      * 上一次执行时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date preRunTime;
 
     /**
      * 下一次执行时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date nextRunTime;
 
     /**

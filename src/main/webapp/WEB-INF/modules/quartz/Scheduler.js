@@ -190,7 +190,7 @@ var pageJs = function (globalPath) {
                     readOnly: true
                 });
                 jsonViewEdit.setSize("auto", "auto");
-                jsonViewEdit.setOption("theme", "cobalt");
+                //jsonViewEdit.setOption("theme", "cobalt");
                 jsonViewEdit.setValue("");
             }
         });

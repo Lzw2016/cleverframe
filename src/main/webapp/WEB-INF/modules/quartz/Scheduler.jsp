@@ -17,7 +17,7 @@
     <%-- CodeMirror --%>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
-    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
+    <%--<link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">--%>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/javascript/javascript.js"></script>
 
     <%--代码格式化JS--%>
@@ -178,7 +178,7 @@
 </div>
 
 <%-- 查看对话框 --%>
-<div id="jsonViewDialog" style="width: 850px;height: 330px;padding: 5px 10px">
+<div id="jsonViewDialog" style="width: 850px;height: 330px;">
     <%--suppress HtmlFormInputWithoutLabel --%>
     <textarea id="jsonViewEdit"></textarea>
 </div>

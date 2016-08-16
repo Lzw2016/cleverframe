@@ -115,9 +115,9 @@
             <th data-options="width:130,align:'left',hidden:false ,field:'triggerName'">触发器名称</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'jobGroup'">任务分组</th>
             <th data-options="width:130,align:'left',hidden:false ,field:'jobName'">任务名称</th>
-            <th data-options="width:130,align:'left',hidden:false ,field:'endTime'">触发完成时间</th>
             <th data-options="width:280,align:'left',hidden:false ,field:'jobClassName'">任务实现类</th>
             <th data-options="width:130,align:'left',hidden:false ,field:'startTime'">开始触发时间</th>
+            <th data-options="width:130,align:'left',hidden:false ,field:'endTime'">触发完成时间</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'processTime',formatter:pageJsObject.processTimeFormatter">用时(ms)</th>
             <th data-options="width:70 ,align:'left',hidden:false ,field:'misFired',formatter:pageJsObject.misFiredFormatter">错过了触发</th>
             <th data-options="width:130,align:'left',hidden:false ,field:'preRunTime'">上一次触发时间</th>

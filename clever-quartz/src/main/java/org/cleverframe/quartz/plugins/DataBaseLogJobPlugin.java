@@ -150,6 +150,7 @@ public class DataBaseLogJobPlugin implements SchedulerPlugin, JobListener {
         qrtzJobLog.setEndTime(new Date());
         qrtzJobLog.setProcessTime(context.getJobRunTime());
         if (jobException != null) {
+            logger.error("任务执行出现异常", jobDetail);
             qrtzJobLog.setExceptionInfo(ExceptionUtils.getStackTraceAsString(jobException));
         }
         qrtzJobLog.setAfterJobData(JacksonMapper.nonEmptyMapper().toJson(jobDetail.getJobDataMap()));

@@ -207,6 +207,11 @@ var pageJs = function (globalPath) {
     // CronTrigger触发器规则 - 查看
     var cronTriggerRuleView = $("#cronTriggerRuleView");
 
+    // 定时任务执行日志
+    var jobDetailExecutionLog = $("#jobDetailExecutionLog");
+    // 触发器触发日志
+    var triggerExecutionLog = $("#triggerExecutionLog");
+
     /**
      * 页面初始化方法
      */
@@ -289,7 +294,7 @@ var pageJs = function (globalPath) {
                     readOnly: true
                 });
                 jsonViewEdit.setSize("auto", "auto");
-                jsonViewEdit.setOption("theme", "cobalt");
+                //jsonViewEdit.setOption("theme", "cobalt");
                 jsonViewEdit.setValue("");
             }
         });
