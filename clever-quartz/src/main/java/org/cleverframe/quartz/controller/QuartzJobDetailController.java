@@ -40,7 +40,7 @@ public class QuartzJobDetailController extends BaseController {
     private JobDetailService jobDetailService;
 
     @RequestMapping("/JobDetail" + VIEW_PAGE_SUFFIX)
-    public ModelAndView getSchedulerJsp(HttpServletRequest request, HttpServletResponse response) {
+    public ModelAndView getJobDetailJsp(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView(QuartzJspUrlPath.JobDetail);
     }
 

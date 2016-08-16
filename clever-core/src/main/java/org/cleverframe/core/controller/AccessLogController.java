@@ -53,7 +53,7 @@ public class AccessLogController extends BaseController {
             BindingResult bindingResult) {
         DataGridJson<AccessLog> json = new DataGridJson<>();
         Page<AccessLog> qLScriptPage = accessLogService.findByPage(
-                new Page<AccessLog>(request, response),
+                new Page<>(request, response),
                 accessLogQueryVo.getLoginName(),
                 accessLogQueryVo.getRequestStartTime(),
                 accessLogQueryVo.getRequestEndTime(),
