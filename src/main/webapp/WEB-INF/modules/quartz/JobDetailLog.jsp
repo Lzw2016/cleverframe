@@ -133,7 +133,7 @@
 <%-- 任务执行异常信息查看对话框 --%>
 <div id="exceptionInfoViewDialog" data-options="iconCls:'icon-job-data'" style="width: 850px;height: 330px;">
     <%--suppress HtmlFormInputWithoutLabel --%>
-    <textarea id="viewExceptionInfo" name="exceptionInfo"></textarea>
+    <textarea id="viewExceptionInfo"></textarea>
 </div>
 </body>
 </html>

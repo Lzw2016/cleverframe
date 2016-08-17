@@ -1,10 +1,12 @@
 package org.cleverframe.quartz.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * 作者：LiZW <br/>
@@ -63,6 +65,11 @@ public class QrtzSchedulerLog implements Serializable {
      */
     private String ipAddress;
 
+    /**
+     * 记录时间
+     */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
+    private Date logTime;
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
@@ -163,5 +170,13 @@ public class QrtzSchedulerLog implements Serializable {
      */
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
+    }
+
+    public Date getLogTime() {
+        return logTime;
+    }
+
+    public void setLogTime(Date logTime) {
+        this.logTime = logTime;
     }
 }

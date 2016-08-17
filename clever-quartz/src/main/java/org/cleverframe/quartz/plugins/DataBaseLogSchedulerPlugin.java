@@ -1,5 +1,7 @@
 package org.cleverframe.quartz.plugins;
 
+import org.cleverframe.common.exception.ExceptionUtils;
+import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.common.utils.IPAddressUtils;
 import org.cleverframe.quartz.QuartzBeanNames;
@@ -10,6 +12,10 @@ import org.quartz.spi.ClassLoadHelper;
 import org.quartz.spi.SchedulerPlugin;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 记录Scheduler日志的插件,日志数据存到数据库<br/>
@@ -46,7 +52,7 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      * @param methodName 触发事件调用的方法
      * @param logData    触发事件记录的日志数据
      */
-    private void saveLog(String methodName, String logData) {
+    private void saveLog(String methodName, Map<String, Object> logData) {
         String schedName = "未知";
         String instanceName = "未知";
         try {
@@ -60,8 +66,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
         qrtzSchedulerLog.setSchedName(schedName);
         qrtzSchedulerLog.setInstanceName(instanceName);
         qrtzSchedulerLog.setMethodName(methodName);
-        qrtzSchedulerLog.setLogData(logData);
+        qrtzSchedulerLog.setLogData(JacksonMapper.nonEmptyMapper().toJson(logData));
         qrtzSchedulerLog.setIpAddress(IPAddressUtils.getInet4AddressStr());
+        qrtzSchedulerLog.setLogTime(new Date());
         qrtzSchedulerLogService.saveQrtzSchedulerLog(qrtzSchedulerLog);
     }
 
@@ -70,7 +77,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobScheduled(Trigger trigger) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", trigger);
         saveLog("jobScheduled", logData);
     }
 
@@ -79,7 +88,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobUnscheduled(TriggerKey triggerKey) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", triggerKey);
         saveLog("jobUnscheduled", logData);
     }
 
@@ -88,7 +99,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void triggerFinalized(Trigger trigger) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", trigger);
         saveLog("triggerFinalized", logData);
     }
 
@@ -97,7 +110,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void triggerPaused(TriggerKey triggerKey) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", triggerKey);
         saveLog("triggerPaused", logData);
     }
 
@@ -106,7 +121,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void triggersPaused(String triggerGroup) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "string");
+        logData.put("data", triggerGroup);
         saveLog("triggersPaused", logData);
     }
 
@@ -115,13 +132,17 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void triggerResumed(TriggerKey triggerKey) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", triggerKey);
         saveLog("triggerResumed", logData);
     }
 
     @Override
     public void triggersResumed(String triggerGroup) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "string");
+        logData.put("data", triggerGroup);
         saveLog("triggersResumed", logData);
     }
 
@@ -130,7 +151,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobAdded(JobDetail jobDetail) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", jobDetail);
         saveLog("jobAdded", logData);
     }
 
@@ -139,7 +162,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobDeleted(JobKey jobKey) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", jobKey);
         saveLog("jobDeleted", logData);
     }
 
@@ -148,7 +173,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobPaused(JobKey jobKey) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", jobKey);
         saveLog("jobPaused", logData);
     }
 
@@ -157,7 +184,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobsPaused(String jobGroup) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "string");
+        logData.put("data", jobGroup);
         saveLog("jobsPaused", logData);
     }
 
@@ -166,7 +195,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobResumed(JobKey jobKey) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "json");
+        logData.put("data", jobKey);
         saveLog("jobResumed", logData);
     }
 
@@ -175,7 +206,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void jobsResumed(String jobGroup) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "string");
+        logData.put("data", jobGroup);
         saveLog("jobsResumed", logData);
     }
 
@@ -184,7 +217,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void schedulerError(String msg, SchedulerException cause) {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "java");
+        logData.put("data", msg + "\r\n" + ExceptionUtils.getStackTraceAsString(cause));
         saveLog("schedulerError", logData);
     }
 
@@ -193,7 +228,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void schedulerInStandbyMode() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("schedulerInStandbyMode", logData);
     }
 
@@ -202,7 +239,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void schedulerStarted() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("schedulerStarted", logData);
     }
 
@@ -211,7 +250,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void schedulerStarting() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("schedulerStarting", logData);
     }
 
@@ -220,7 +261,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void schedulerShutdown() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("schedulerShutdown", logData);
     }
 
@@ -229,7 +272,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void schedulerShuttingdown() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("schedulerShuttingdown", logData);
     }
 
@@ -238,7 +283,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void schedulingDataCleared() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("schedulingDataCleared", logData);
     }
 
@@ -270,7 +317,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void start() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("start", logData);
     }
 
@@ -280,7 +329,9 @@ public class DataBaseLogSchedulerPlugin implements SchedulerPlugin, SchedulerLis
      */
     @Override
     public void shutdown() {
-        String logData = "";
+        Map<String, Object> logData = new HashMap<>();
+        logData.put("dataType", "null");
+        logData.put("data", null);
         saveLog("shutdown", logData);
     }
 }

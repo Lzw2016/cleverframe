@@ -318,6 +318,7 @@ CREATE TABLE qrtz_scheduler_log
     method_name                 varchar(120)    NOT NULL                        COMMENT '触发事件调用的方法',
     log_data                    mediumtext      NOT NULL                        COMMENT '触发事件记录的日志数据',
     ip_address                  varchar(200)    NOT NULL                        COMMENT '触发节点IP,可能有多个(‘;’分隔)',
+    log_time                    datetime        NOT NULL                        COMMENT '记录时间',
     PRIMARY KEY (id)
 ) COMMENT = 'Scheduler调度日志表';
 

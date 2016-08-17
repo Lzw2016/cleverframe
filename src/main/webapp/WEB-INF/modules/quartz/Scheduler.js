@@ -96,7 +96,6 @@ var pageJs = function (globalPath) {
                         _this.initRunningJobsDataTable();
                         break;
                 }
-                console.log(index);
             }
         });
 

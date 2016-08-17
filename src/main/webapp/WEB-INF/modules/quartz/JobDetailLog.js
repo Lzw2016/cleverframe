@@ -8,7 +8,7 @@ var pageJs = function (globalPath) {
     var getJobGroupNamesUrl = globalPath.mvcPath + "/quartz/jobdetail/getJobGroupNames.json";
     // 获取所有定时任务实现类名称
     var getAllJobClassNameUrl = globalPath.mvcPath + "/quartz/jobdetail/getAllJobClassName.json";
-    // 触发器日志分页查询地址
+    // 定时任务日志分页查询地址
     var findQrtzJobLogByPageUrl = globalPath.mvcPath + "/quartz/joblog/findQrtzJobLogByPage.json";
 
     // 查询表单

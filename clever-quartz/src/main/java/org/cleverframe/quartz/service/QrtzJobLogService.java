@@ -36,7 +36,7 @@ public class QrtzJobLogService extends BaseService {
     }
 
     /**
-     * 分页查询所有的触发器日志
+     * 分页查询所有的定时任务日志
      *
      * @param page             分页数据
      * @param schedulerName    调度器名称
