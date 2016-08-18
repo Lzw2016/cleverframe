@@ -1,10 +1,10 @@
 package org.cleverframe.monitor.service;
 
+import com.alibaba.fastjson.JSON;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
 import org.cleverframe.common.ehcache.EhCacheUtils;
-import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.monitor.MonitorBeanNames;
 import org.cleverframe.monitor.vo.response.CacheInfoVo;
 import org.cleverframe.monitor.vo.response.CacheManagerInfoVo;
@@ -60,12 +60,11 @@ public class EhCacheMonitorService {
         cacheManagerInfoVo.setStatus(cacheManager.getStatus().toString());
         cacheManagerInfoVo.setNamed(cacheManager.isNamed());
         cacheManagerInfoVo.setConfigurationXml(cacheManager.getActiveConfigurationText());
-        cacheManagerInfoVo.setConfigurationJson(JacksonMapper.nonEmptyMapper().toJson(cacheManager.getConfiguration()));
-        cacheManagerInfoVo.setDiskStorePathManagerJson(JacksonMapper.nonEmptyMapper().toJson(cacheManager.getDiskStorePathManager()));
-        cacheManagerInfoVo.setOnDiskPoolJson(JacksonMapper.nonEmptyMapper().toJson(cacheManager.getOnDiskPool()));
-        cacheManagerInfoVo.setOnHeapPoolJson(JacksonMapper.nonEmptyMapper().toJson(cacheManager.getOnHeapPool()));
+        cacheManagerInfoVo.setConfigurationJson(JSON.toJSONString(cacheManager.getConfiguration()));
+        cacheManagerInfoVo.setDiskStorePathManagerJson(JSON.toJSONString(cacheManager.getDiskStorePathManager()));
+        cacheManagerInfoVo.setOnDiskPoolJson(JSON.toJSONString(cacheManager.getOnDiskPool()));
+        cacheManagerInfoVo.setOnHeapPoolJson(JSON.toJSONString(cacheManager.getOnHeapPool()));
         return cacheManagerInfoVo;
-
     }
 
     /**
@@ -91,7 +90,7 @@ public class EhCacheMonitorService {
         cacheInfoVo.setDisabled(cache.isDisabled());
         cacheInfoVo.setTerracottaClustered(cache.isTerracottaClustered());
         cacheInfoVo.setConfigurationXml(cacheManager.getActiveConfigurationText(cacheName));
-        cacheInfoVo.setConfigurationJson(JacksonMapper.nonEmptyMapper().toJson(cache.getCacheConfiguration()));
+        cacheInfoVo.setConfigurationJson(JSON.toJSONString(cache.getCacheConfiguration()));
         cacheInfoVo.setCacheHits(cache.getStatistics().cacheHitCount());
         cacheInfoVo.setCacheMisses(cache.getStatistics().cacheMissCount());
         cacheInfoVo.setInMemoryHits(cache.getStatistics().localHeapHitCount());
@@ -203,7 +202,6 @@ public class EhCacheMonitorService {
         cache.remove(key);
         return true;
     }
-
 
 //    public void getCacheData(String cacheName) {
 //        CacheManager cacheManager = EhCacheUtils.getCacheManager();
