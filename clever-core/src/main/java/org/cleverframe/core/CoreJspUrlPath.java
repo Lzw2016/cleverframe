@@ -45,5 +45,10 @@ public class CoreJspUrlPath implements IJspUrlPath {
      */
     public static final String AccessLog = "core/AccessLog";
 
+    /**
+     * 系统资源管理
+     */
+    public static final String Resources = "core/Resources";
+
 
 }

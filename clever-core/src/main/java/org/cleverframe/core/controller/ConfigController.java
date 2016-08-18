@@ -69,7 +69,7 @@ public class ConfigController extends BaseController {
             BindingResult bindingResult) {
         DataGridJson<Config> json = new DataGridJson<>();
         Page<Config> qLScriptPage = ehCacheConfigService.findByPage(
-                new Page<Config>(request, response),
+                new Page<>(request, response),
                 configQueryVo.getConfigKey(),
                 configQueryVo.getConfigValue(),
                 configQueryVo.getConfigGroup(),

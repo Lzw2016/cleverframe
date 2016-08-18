@@ -59,6 +59,8 @@ public class Resources implements Serializable {
     /**
      * 资源说明
      */
+    @Lob
+    @Column(columnDefinition = "MediumText")
     private String description;
 
     /*--------------------------------------------------------------

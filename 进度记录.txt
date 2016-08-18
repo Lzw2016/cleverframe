@@ -1,0 +1,35 @@
+clever-webui
+依赖模块：无
+未完成功能：
+    1.
+    2.
+
+clever-common
+依赖模块：无
+未完成功能：
+    1.
+    2.
+
+clever-core
+依赖模块：clever-common、clever-webui
+未完成功能：
+    1.模块管理主页
+    2.系统资源管理 core_resources
+    3.多级字典管理
+
+clever-generator
+依赖模块：clever-common、clever-core
+未完成功能：
+    1.模块管理主页
+    2.根据模版选择数据生成代码
+    3.直接选择模版和数据生成代码
+    4.代码生成帮助页面
+
+clever-quartz
+依赖模块：clever-common、clever-core
+未完成功能：
+    1.模块管理主页
+    2.触发器监控页面
+    3.定时任务管理页面更新定时任务、更新触发器(目前只能删除、新增)
+
+clever-monitor

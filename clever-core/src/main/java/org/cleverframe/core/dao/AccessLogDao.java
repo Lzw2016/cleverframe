@@ -17,17 +17,6 @@ import java.util.Date;
 @Repository(CoreBeanNames.AccessLogDao)
 public class AccessLogDao extends BaseDao<AccessLog> {
 
-//    login_name      varchar(20)                                         COMMENT '登录名',
-//    request_time    datetime        NOT NULL                            COMMENT '请求时间',
-//    request_uri     varchar(255)    NOT NULL                            COMMENT '请求URI',
-//    method          varchar(20)     NOT NULL                            COMMENT '操作方式',
-//    params          varchar(2000)                                       COMMENT '操作提交的数据',
-//    process_time    bigint          NOT NULL                            COMMENT '请求处理时间',
-//    remote_addr     varchar(30)                                         COMMENT '客户端的IP地址',
-//    user_agent      varchar(100)                                        COMMENT '用户代理',
-//    has_exception   char(1)         NOT NULL    DEFAULT '1'             COMMENT '是否有异常（0：否；1：是）',
-//    exception_info  varchar(2000)                                       COMMENT '异常信息',
-
     /**
      * 模糊查询访问日志，使用分页
      *

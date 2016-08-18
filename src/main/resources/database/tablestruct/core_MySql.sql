@@ -206,7 +206,7 @@ CREATE TABLE core_resources
     resources_url   varchar(255)    NOT NULL    UNIQUE                  COMMENT '资源URL地址',
     permission      varchar(255)    NOT NULL    UNIQUE                  COMMENT '资源访问所需要的权限标识字符串',
     resources_type  char(1)         NOT NULL                            COMMENT '资源类型（1：URL资源；2：UI资源）',
-    description     varchar(1000)   NOT NULL                            COMMENT '资源说明',
+    description     MediumText      NOT NULL                            COMMENT '资源说明',
     PRIMARY KEY (id)
 ) COMMENT = '系统资源(权限)表';
 /*------------------------------------------------------------------------------------------------------------------------

@@ -15,6 +15,7 @@ dependencies {
     compile project(':clever-core')
     compile project(':clever-generator')
     compile project(':clever-quartz')
+    compile project(':clever-monitor')
 
     testCompile('junit:junit:4.12')
     testCompile('org.springframework:spring-test:4.2.7.RELEASE')
@@ -117,7 +118,7 @@ project(':clever-common') {
         // 模版引擎
         compile('org.freemarker:freemarker:2.3.23')
         // Ehcache缓存
-        compile('net.sf.ehcache:ehcache:2.10.1')
+        compile('net.sf.ehcache:ehcache:2.10.2.2.21')
         // SQL解析
         compile('com.github.jsqlparser:jsqlparser:0.9.5')
         // Http客户端
@@ -220,12 +221,14 @@ project(':clever-webui') {
     }
 }
 
+// 文件上传管理监控模块
 project(':clever-fileupload') {
     dependencies {
         compile project(':clever-common')
     }
 }
 
+// 系统监控模块
 project(':clever-monitor') {
     dependencies {
         compile project(':clever-common')
@@ -236,6 +239,7 @@ project(':clever-monitor') {
     }
 }
 
+// 任务调度监控模块
 project(':clever-quartz') {
     dependencies {
         compile project(':clever-common')
@@ -298,6 +302,20 @@ project(':clever-fastdfs') {
         compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
     }
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 //// ##################其他依赖
 
