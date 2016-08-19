@@ -24,6 +24,9 @@
     <%--代码格式化JS--%>
     <script src="${applicationScope.staticPath}/CodeFormat/jsbeautify.js"></script>
 
+    <%--Chart.js--%>
+    <script src="${applicationScope.staticPath}/Chart.js/Chart.js-2.2.1/Chart.min.js"></script>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
@@ -90,12 +93,53 @@
 
     <div title="缓存监控">
         <div id="cacheStatisticsDiv" style="margin-top: 5px;margin-right: 5px;margin-left: 5px;">
-            <%--<div style="width: 500px;height: 400px;float: left;margin-top: 10px;margin-left: 10px; border: 1px solid #DDDDDD;"></div>--%>
         </div>
     </div>
 
-    <div title="缓存内容">
+    <div title="缓存数据查询">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'north'" style="height:50px;">
+                <form id="searchForm" method="post">
+                    <div class="row">
+                        <span class="column">
+                            <label for="searchCacheName">缓存名称</label>
+                            <input id="searchCacheName" name="cacheName">
+                        </span>
 
+                        <span class="columnLast">
+                            <label for="searchKey">缓存键</label>
+                            <input id="searchKey" name="key" style="width: 560px">
+                        </span>
+                    </div>
+                </form>
+            </div>
+            <div data-options="region:'center'">
+                <table id="cacheDataTable" data-options="border:false">
+                    <thead>
+                    <tr>
+                        <th data-options="width:450 ,align:'left',hidden:false ,field:'key'">Key</th>
+                        <th data-options="width:300 ,align:'left',hidden:true ,field:'keyClass'">Key Class</th>
+                        <th data-options="width:150 ,align:'left',hidden:false ,field:'value'">value</th>
+                        <th data-options="width:300 ,align:'left',hidden:false ,field:'valueClass'">Value Class</th>
+                        <th data-options="width:130 ,align:'left',hidden:false ,field:'createTime'">创建时间</th>
+                        <th data-options="width:160 ,align:'left',hidden:false ,field:'expirationTime'">过期时间</th>
+                        <th data-options="width:60 ,align:'left',hidden:false ,field:'hitCount'">命中次数</th>
+                        <th data-options="width:130 ,align:'left',hidden:false ,field:'lastAccessTime'">最后访问时间</th>
+                        <th data-options="width:130 ,align:'left',hidden:false ,field:'lastUpdateTime'">最后更新时间</th>
+                        <th data-options="width:60 ,align:'left',hidden:false ,field:'serializedSize'">元素大小</th>
+                        <th data-options="width:60 ,align:'left',hidden:false ,field:'timeToIdle'">空闲时间</th>
+                        <th data-options="width:60 ,align:'left',hidden:false ,field:'timeToLive'">存储时间</th>
+                        <%--,formatter:pageJsObject.hasExceptionFormatter--%>
+                    </tr>
+                    </thead>
+                </table>
+                <div id="cacheDataTableButtons">
+                    <a id="cacheDataTableSearchAll" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询所有</a>
+                    <a id="cacheDataTableDelete" class="easyui-linkbutton" data-options="iconCls:'icon-delete',plain:true">删除元素</a>
+                    <a id="cacheDataTableClearAll" class="easyui-linkbutton" data-options="iconCls:'icon-clearCache',plain:true">清除所有</a>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 </body>

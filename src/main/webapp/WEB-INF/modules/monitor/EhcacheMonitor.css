@@ -1,8 +1,5 @@
 #cacheManagerDataTable {
     color: #333333;
-}
-
-#cacheManagerDataTable {
     width: 100%;
     background: #DDDDDD;
     border-spacing: 1px;
@@ -31,4 +28,67 @@
 
 #tabsCenterCacheManager .CodeMirror{
     border: 1px solid #DDDDDD;
+}
+
+.cacheStatisticsDivItem table{
+    color: #333333;
+    width: 100%;
+    font-size: 12px;
+    background: #DDDDDD;
+    border-spacing: 1px;
+    /*border-radius: 5px;*/
+}
+
+.cacheStatisticsDivItem table td {
+    background: #FFFFFF;
+}
+
+.cacheStatisticsDivItem table .row .label {
+    text-align: left;
+    font-weight: bold;
+    width: 138px;
+    height: 20px;
+    padding-left: 5px;
+    background-color: #E5E5E5;
+}
+
+.cacheStatisticsDivItem table .row .value {
+    text-align: left;
+    padding-left: 2px;
+}
+
+/*查询表单样式*/
+#searchForm {
+    margin-top: 12px;
+    margin-left: 15px;
+}
+
+#searchForm .row {
+    margin-bottom: 8px;
+}
+
+#searchForm .row label {
+    display: inline-block;
+    width: 55px;
+    text-align: right;
+}
+
+#searchForm .row input, select {
+    width: 200px;
+}
+
+#searchForm .row .column {
+    margin-right: 10px;
+}
+
+#searchForm .row .columnLast {
+    margin-right: 0;
+}
+
+/*自定义图标*/
+.icon-clearCache{
+    background:url('image/edit-clear.png') no-repeat center center;
+}
+.icon-delete{
+    background:url('image/delete.png') no-repeat center center;
 }

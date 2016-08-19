@@ -1,15 +1,18 @@
 package org.cleverframe.monitor.controller;
 
 import org.cleverframe.common.controller.BaseController;
+import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.monitor.MonitorBeanNames;
 import org.cleverframe.monitor.MonitorJspUrlPath;
 import org.cleverframe.monitor.service.EhCacheMonitorService;
+import org.cleverframe.monitor.vo.request.CacheDataQueryVo;
 import org.cleverframe.monitor.vo.request.CacheInfoQueryVo;
 import org.cleverframe.monitor.vo.request.ElementInfoQueryVo;
 import org.cleverframe.monitor.vo.response.CacheInfoVo;
 import org.cleverframe.monitor.vo.response.CacheManagerInfoVo;
 import org.cleverframe.monitor.vo.response.ElementInfoVo;
+import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -69,6 +72,27 @@ public class EhCacheMonitorController extends BaseController {
             ajaxMessage.setResult(ehCacheMonitorService.getCacheInfo(cacheInfoQueryVo.getCacheName()));
         }
         return ajaxMessage;
+    }
+
+    @RequestMapping("/getCacheData")
+    @ResponseBody
+    public Object getCacheData(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid CacheDataQueryVo cacheDataQueryVo,
+            BindingResult bindingResult) {
+        AjaxMessage<ElementInfoVo> ajaxMessage = new AjaxMessage<>(true, "查询缓存数据成功", null);
+        if (!beanValidator(bindingResult, ajaxMessage)) {
+            return ajaxMessage;
+        }
+
+        DataGridJson<ElementInfoVo> json = new DataGridJson<>();
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            Page<ElementInfoVo> page = ehCacheMonitorService.getCacheData(new Page<>(request, response), cacheDataQueryVo.getCacheName(), cacheDataQueryVo.getKey());
+            json.setRows(page.getList());
+            json.setTotal(page.getCount());
+        }
+        return json;
     }
 
     @RequestMapping("/clearCache")

@@ -232,6 +232,7 @@ project(':clever-fileupload') {
 project(':clever-monitor') {
     dependencies {
         compile project(':clever-common')
+        compile project(':clever-webui')
         // ##################
         compile('io.dropwizard.metrics:metrics-core:3.1.2')
         // 获取系统硬件信息(CPU 内存 硬盘 MAC等)

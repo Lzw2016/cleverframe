@@ -4,7 +4,12 @@ import com.alibaba.fastjson.JSON;
 import net.sf.ehcache.Cache;
 import net.sf.ehcache.CacheManager;
 import net.sf.ehcache.Element;
+import net.sf.ehcache.search.Query;
+import net.sf.ehcache.search.Result;
+import net.sf.ehcache.search.Results;
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.ehcache.EhCacheUtils;
+import org.cleverframe.common.persistence.Page;
 import org.cleverframe.monitor.MonitorBeanNames;
 import org.cleverframe.monitor.vo.response.CacheInfoVo;
 import org.cleverframe.monitor.vo.response.CacheManagerInfoVo;
@@ -12,6 +17,7 @@ import org.cleverframe.monitor.vo.response.ElementInfoVo;
 import org.springframework.stereotype.Component;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
@@ -44,6 +50,7 @@ public class EhCacheMonitorService {
     public List<String> getAllEhCacheNames() {
         CacheManager cacheManager = EhCacheUtils.getCacheManager();
         String[] cacheNames = cacheManager.getCacheNames();
+        Arrays.sort(cacheNames);
         return Arrays.asList(cacheNames);
     }
 
@@ -177,7 +184,7 @@ public class EhCacheMonitorService {
      *
      * @param cacheName 缓存名称
      * @param key       缓存键
-     * @return 获取缓存元素信息
+     * @return 获取缓存元素信息, 不存在返回null
      */
     public ElementInfoVo getElementInfo(String cacheName, Serializable key) {
         CacheManager cacheManager = EhCacheUtils.getCacheManager();
@@ -203,18 +210,54 @@ public class EhCacheMonitorService {
         return true;
     }
 
-//    public void getCacheData(String cacheName) {
-//        CacheManager cacheManager = EhCacheUtils.getCacheManager();
-//        Cache cache = cacheManager.getCache(cacheName);
-//        if (cache.isSearchable()) {
-//            // 支持搜索
-//            Query query = cache.createQuery().includeKeys().includeValues();
-//            // query.maxResults(10000000);
-//            Results results = query.execute();
-//            List<Result> resultList = results.range(0,1);
-//            for(Result r : resultList) {
-//                System.out.println(r.getKey() + " = " + r.getValue());
-//            }
-//        }
-//    }
+    /**
+     * 分页获取缓存数据<br/>
+     * <b>注意:生产环境慎用!</b>
+     *
+     * @param page      分页数据
+     * @param cacheName 缓存名称
+     * @param key       缓存键
+     * @return 分页数据
+     */
+    public Page<ElementInfoVo> getCacheData(Page<ElementInfoVo> page, String cacheName, Serializable key) {
+        List<ElementInfoVo> result = new ArrayList<>();
+        // 只查询一个元素
+        if (key != null && StringUtils.isNotBlank(key.toString())) {
+            ElementInfoVo elementInfoVo = getElementInfo(cacheName, key);
+            if (elementInfoVo == null) {
+                page.setCount(0);
+            } else {
+                result.add(elementInfoVo);
+                page.setCount(1);
+                page.setList(result);
+            }
+            return page;
+        }
+
+        // 分页获取缓存数据
+        CacheManager cacheManager = EhCacheUtils.getCacheManager();
+        Cache cache = cacheManager.getCache(cacheName);
+        if (cache.isSearchable()) {
+            // 支持搜索
+            Query query = cache.createQuery().includeKeys();
+            // query.maxResults(10000000);
+            Results results = query.execute();
+            List<Result> resultList = results.range(page.getFirstResult(), page.getPageSize());
+            for (Result item : resultList) {
+                Element element = cache.get(item.getKey());
+                result.add(getElementInfo(element));
+            }
+        } else {
+            List list = cache.getKeys();
+            int lastResult = page.getFirstResult() + page.getPageSize();
+            for (int i = page.getFirstResult(); i < lastResult && i < list.size(); i++) {
+                Object itemKey = list.get(i);
+                Element element = cache.get(itemKey);
+                result.add(getElementInfo(element));
+            }
+        }
+        page.setCount(cache.getSize());
+        page.setList(result);
+        return page;
+    }
 }

@@ -8,12 +8,14 @@ var pageJs = function (globalPath) {
     var getAllEhCacheNamesUrl = globalPath.mvcPath + "/monitor/ehcache/getAllEhCacheNames.json";
     // 获取缓存管理器信息
     var getCacheManagerInfoUrl = globalPath.mvcPath + "/monitor/ehcache/getCacheManagerInfo.json";
+    // 分页查询缓存数据
+    var getCacheDataUrl = globalPath.mvcPath + "/monitor/ehcache/getCacheData.json";
     // 获取缓存信息
     var getCacheInfoUrl = globalPath.mvcPath + "/monitor/ehcache/getCacheInfo.json";
     // 移除缓存元素
     var removeElementUrl = globalPath.mvcPath + "/monitor/ehcache/removeElement.json";
     // 清除缓存数据
-    var clearCacheUrl = globalPath.mvcPath + "/mvc/monitor/ehcache/clearCache.json";
+    var clearCacheUrl = globalPath.mvcPath + "/monitor/ehcache/clearCache.json";
 
     // 名称
     var cacheManagerName = $("#cacheManagerName");
@@ -33,11 +35,30 @@ var pageJs = function (globalPath) {
     // 缓存统计Div
     var cacheStatisticsDiv = $("#cacheStatisticsDiv");
 
+    // 查询表单
+    var searchForm = $("#searchForm");
+    // 缓存名称
+    var searchCacheName = $("#searchCacheName");
+    // 缓存键
+    var searchKey = $("#searchKey");
+    // 所有缓存的名称
+    var cacheNamesData = null;
+
+    // 缓存数据表格
+    var cacheDataTable = $("#cacheDataTable");
+    // 查询所有
+    var cacheDataTableSearchAll = $("#cacheDataTableSearchAll");
+    // 删除元素
+    var cacheDataTableDelete = $("#cacheDataTableDelete");
+    // 清除所有
+    var cacheDataTableClearAll = $("#cacheDataTableClearAll");
+    // 第一次获取 分页查询缓存数据
+    var firstGetCacheData = true;
+
     /**
      * 页面初始化方法
      */
     this.init = function () {
-
         _this.initCacheManager();
         _this.initCacheStatistics();
         _this.initCacheContents();
@@ -50,6 +71,30 @@ var pageJs = function (globalPath) {
      * 页面数据初始化
      */
     this.dataBind = function () {
+        // 查询所有
+        cacheDataTableSearchAll.click(function () {
+            if (!searchForm.form("validate")) {
+                return;
+            }
+            cacheDataTable.datagrid("load");
+        });
+
+        // 删除元素
+        cacheDataTableDelete.click(function () {
+            if (!searchForm.form("validate")) {
+                return;
+            }
+
+            //
+        });
+
+        // 清除所有
+        cacheDataTableClearAll.click(function () {
+            if (!searchForm.form("validate")) {
+                return;
+            }
+            //
+        });
     };
 
     //noinspection JSUnusedGlobalSymbols
@@ -126,18 +171,14 @@ var pageJs = function (globalPath) {
         if (ehCacheNames == null) {
             return;
         }
-
+        cacheNamesData = ehCacheNames;
         $(ehCacheNames).each(function (index, cacheName) {
             var param = {cacheName: cacheName};
             $.ajax({
-                type: "POST", dataType: "JSON", url: getCacheInfoUrl, data: param, async: true,
+                type: "POST", dataType: "JSON", url: getCacheInfoUrl, data: param, async: false,
                 success: function (data) {
                     if (data.success) {
-                        var div = $('<div style="width: 500px;height: 400px;float: left;margin-top: 10px;margin-left: 10px; border: 1px solid #DDDDDD;"></div>');
-                        var p = $("<p></p>");
-                        p.html(JSON.stringify(data.result));
-                        div.append(p);
-                        cacheStatisticsDiv.append(div);
+                        _this.addCacheStatisticsDivItem(data.result);
                     } else {
                         $.messager.alert("提示", data.failMessage, "warning");
                     }
@@ -146,9 +187,406 @@ var pageJs = function (globalPath) {
         });
     };
 
+    // 增加缓存监控 Div
+    this.addCacheStatisticsDivItem = function (cacheInfo) {
+        var uuid = _this.getUUID(32, 16);
+        var html = [];
+        html.push('<div class="cacheStatisticsDivItem" style="width: 600px;height: 375px;float: left;margin-top: 10px;margin-left: 15px;margin-bottom: 10px;">');
+        html.push('    <div id="' + uuid + '">');
+        html.push('        <div title="缓存概要信息">');
+        html.push('            <table>');
+        html.push('                <tbody>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">缓存名称:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsName' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">缓存状态:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsStatus' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">高速缓存唯一ID:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsGuid' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">是否支持搜索:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsSearchable' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">缓存元素个数:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsSize' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">缓存元素数量:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsObjectCount' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">集群支持批量加载:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsClusterBulkLoadEnabled' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">当前节点支持批量加载:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsNodeBulkLoadEnabled' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">是否禁用缓存:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsDisabled' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">是否是Terracotta集群:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsTerracottaClustered' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">缓存命中率(总):</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsCacheHits' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">内存缓存命中率:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsInMemoryHits' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">非堆存储缓存命中率:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsOffHeapHits' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">磁盘存储缓存命中率:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsOnDiskHits' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">缓存占用空间大小:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsSizeInBytes' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                <tr class="row">');
+        html.push('                    <td class="label">准备写入缓的元素数量:</td>');
+        html.push('                    <td class="value">');
+        html.push('                        <label id="cacheStatisticsWriterQueueLength' + uuid + '"></label>');
+        html.push('                    </td>');
+        html.push('                </tr>');
+        html.push('                </tbody>');
+        html.push('            </table>');
+        html.push('        </div>');
+        html.push('        <div title="缓存配置信息">');
+        html.push('            <textarea id="cacheStatisticsConfigurationXml' + uuid + '"></textarea>');
+        html.push('        </div>');
+        html.push('        <div title="缓存属性">');
+        html.push('            <textarea id="cacheStatisticsConfigurationJson' + uuid + '"></textarea>');
+        html.push('        </div>');
+        html.push('        <div title="缓存命中率">');
+        html.push('            <canvas id="cacheStatisticsChart' + uuid + '"></canvas>');
+        html.push('        </div>');
+        html.push('    </div>');
+        html.push('    <div id="tabTools' + uuid + '">');
+        html.push('        <a id="tabToolsReload' + uuid + '" href="javascript:void(0)"></a>');
+        html.push('        <a id="tabToolClear' + uuid + '" href="javascript:void(0)"></a>');
+        html.push('    </div>');
+        html.push('</div>');
+        html = html.join("");
+        cacheStatisticsDiv.append(html);
+
+        var cacheStatisticsConfigurationXml = null;
+        var cacheStatisticsConfigurationJson = null;
+        var cacheStatisticsChart = null;
+        var reloadData = function (cacheInfo) {
+            var tmp;
+            $("#cacheStatisticsName" + uuid).text(cacheInfo.name);
+            $("#cacheStatisticsStatus" + uuid).text(cacheInfo.status);
+            $("#cacheStatisticsGuid" + uuid).text(cacheInfo.guid);
+            $("#cacheStatisticsSearchable" + uuid).text(cacheInfo.searchable);
+            $("#cacheStatisticsSize" + uuid).text(cacheInfo.size);
+            tmp = "总数量:" + cacheInfo.objectCount
+                + " | 内存存储数量:" + cacheInfo.memoryStoreObjectCount
+                + " | 非堆存储数量:" + cacheInfo.offHeapStoreObjectCount
+                + " | 磁盘存储数量:" + cacheInfo.diskStoreObjectCount;
+            $("#cacheStatisticsObjectCount" + uuid).text(tmp);
+            $("#cacheStatisticsClusterBulkLoadEnabled" + uuid).text(cacheInfo.clusterBulkLoadEnabled);
+            $("#cacheStatisticsNodeBulkLoadEnabled" + uuid).text(cacheInfo.nodeBulkLoadEnabled);
+            $("#cacheStatisticsDisabled" + uuid).text(cacheInfo.disabled);
+            $("#cacheStatisticsTerracottaClustered" + uuid).text(cacheInfo.terracottaClustered);
+            tmp = (cacheInfo.cacheHitPercentage * 100).toFixed(2) + "% (未命中率:" + (cacheInfo.cacheMissPercentage * 100).toFixed(2) + "%)"
+                + " | 命中次数:" + cacheInfo.cacheHits
+                + " | 未命中次数:" + cacheInfo.cacheMisses;
+            $("#cacheStatisticsCacheHits" + uuid).text(tmp);
+            tmp = (cacheInfo.inMemoryHitPercentage * 100).toFixed(2)
+                + "% | 命中次数:" + cacheInfo.inMemoryHits
+                + " | 未命中次数:" + cacheInfo.inMemoryMisses;
+            $("#cacheStatisticsInMemoryHits" + uuid).text(tmp);
+            tmp = (cacheInfo.offHeapHitPercentage * 100).toFixed(2)
+                + "% | 命中次数:" + cacheInfo.offHeapHits
+                + " | 未命中次数:" + cacheInfo.offHeapMisses;
+            $("#cacheStatisticsOffHeapHits" + uuid).text(tmp);
+            tmp = (cacheInfo.onDiskHitPercentage * 100).toFixed(2)
+                + "% | 命中次数:" + cacheInfo.onDiskHits
+                + " | 未命中次数:" + cacheInfo.onDiskMisses;
+            $("#cacheStatisticsOnDiskHits" + uuid).text(tmp);
+            tmp = "占用内存:" + _this.getEasyStoreSize(cacheInfo.heapSizeInBytes)
+                + " | 占用非堆存储:" + _this.getEasyStoreSize(cacheInfo.offHeapSizeInBytes)
+                + " | 占用磁盘存储:" + _this.getEasyStoreSize(cacheInfo.diskSizeInBytes);
+            $("#cacheStatisticsSizeInBytes" + uuid).text(tmp);
+            $("#cacheStatisticsWriterQueueLength" + uuid).text(cacheInfo.writerQueueLength + " (最大限制值:" + cacheInfo.writerMaxQueueSize + ")");
+
+            if (cacheStatisticsConfigurationXml != null) {
+                cacheStatisticsConfigurationXml.setValue("");
+                cacheStatisticsConfigurationXml.setValue(cacheInfo.configurationXml);
+            }
+            if (cacheStatisticsConfigurationJson != null) {
+                cacheStatisticsConfigurationJson.setValue("");
+                cacheStatisticsConfigurationJson.setValue(js_beautify(cacheInfo.configurationJson, 4, ' '));
+            }
+        };
+
+        $("#tabToolsReload" + uuid).linkbutton({
+            plain: true, iconCls: 'icon-reload', onClick: function () {
+                // 刷新数据
+                var param = {cacheName: cacheInfo.name};
+                $.ajax({
+                    type: "POST", dataType: "JSON", url: getCacheInfoUrl, data: param, async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            $.messager.show({title: '提示', msg: data.successMessage, timeout: 1000, showType: 'slide'});
+                            cacheInfo = data.result;
+                            reloadData(cacheInfo);
+                        } else {
+                            $.messager.alert("提示", data.failMessage, "warning");
+                        }
+                    }
+                });
+            }
+        });
+        $("#tabToolClear" + uuid).linkbutton({
+            plain: true, iconCls: 'icon-clearCache', onClick: function () {
+                $.messager.confirm("确认清除缓存", "您确认清除[" + cacheInfo.name + "]的所有缓存?", function (r) {
+                    if (r) {
+                        // 清除缓存
+                        var param = {cacheName: cacheInfo.name};
+                        $.ajax({
+                            type: "POST", dataType: "JSON", url: clearCacheUrl, data: param, async: false,
+                            success: function (data) {
+                                if (data.success) {
+                                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 1000, showType: 'slide'});
+                                } else {
+                                    $.messager.alert("提示", data.failMessage, "warning");
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        $("#" + uuid).tabs({
+            fit: true, tools: '#tabTools' + uuid, border: true, pill: false, tabPosition: 'bottom', onSelect: function (title, index) {
+                if (index == 1 && cacheStatisticsConfigurationXml == null) {
+                    cacheStatisticsConfigurationXml = CodeMirror.fromTextArea(document.getElementById("cacheStatisticsConfigurationXml" + uuid), {
+                        mode: 'application/xml',
+                        lineNumbers: true,
+                        matchBrackets: true,
+                        indentUnit: 4,
+                        readOnly: true
+                    });
+                    cacheStatisticsConfigurationXml.setSize("auto", "auto");
+                    cacheStatisticsConfigurationXml.setValue(cacheInfo.configurationXml);
+                }
+                if (index == 2 && cacheStatisticsConfigurationJson == null) {
+                    cacheStatisticsConfigurationJson = CodeMirror.fromTextArea(document.getElementById("cacheStatisticsConfigurationJson" + uuid), {
+                        mode: 'application/json',
+                        lineNumbers: true,
+                        matchBrackets: true,
+                        indentUnit: 4,
+                        readOnly: true
+                    });
+                    cacheStatisticsConfigurationJson.setSize("auto", "auto");
+                    cacheStatisticsConfigurationJson.setValue(js_beautify(cacheInfo.configurationJson, 4, ' '));
+                }
+                if (index == 3 && cacheStatisticsChart == null) {
+                    var cacheStatisticsChartData = {
+                        labels: ["命中", "未命中"],
+                        datasets: [
+                            {
+                                data: [cacheInfo.cacheHitPercentage, 1 - cacheInfo.cacheHitPercentage],
+                                backgroundColor: ["#36A2EB", "#FF6384"],
+                                hoverBackgroundColor: ["#36A2EB", "#FF6384"]
+                            }]
+                    };
+                    cacheStatisticsChart = new Chart(document.getElementById("cacheStatisticsChart" + uuid).getContext("2d"), {
+                        type: 'pie', data: cacheStatisticsChartData, options: {
+                            responsive: true, title: {display: true, text: "缓存命中率分析[" + cacheInfo.name + "]"}, tooltips: {
+                                //mode:'label',
+                                callbacks: {
+                                    label: function (tooltipItem, data) {
+                                        var result = "未知";
+
+                                        if (tooltipItem.index == 0) {
+                                            // 命中提示信息
+                                            result = "命中率:" + (data.datasets[0].data[tooltipItem.index] * 100).toFixed(2) + "%";
+                                        }
+                                        if (tooltipItem.index == 1) {
+                                            // 未命中提示信息
+                                            result = "未命中率:" + (data.datasets[0].data[tooltipItem.index] * 100).toFixed(2) + "%";
+                                        }
+                                        return result;
+                                    }
+                                }
+                            }
+                        }
+                    });
+                }
+            }
+        });
+        reloadData(cacheInfo);
+    };
+
     // 初始化缓存内容搜索
     this.initCacheContents = function () {
+        searchCacheName.combobox({
+            required: true,
+            panelHeight: 150,
+            valueField: 'key',
+            textField: 'value',
+            value: (cacheNamesData != null && cacheNamesData.length >= 1) ? cacheNamesData[0] : null,
+            editable: false
+        });
+        var data = [];
+        $(cacheNamesData).each(function (index, name) {
+            data.push({key: name, value: name});
+        });
+        searchCacheName.combobox("loadData", data);
 
+        searchKey.textbox({
+            icons: [{
+                iconCls: 'icon-search',
+                handler: function (e) {
+                    // 查询数据
+                }
+            }]
+        });
+
+        // 设置数据显示表格
+        //noinspection JSUnusedLocalSymbols
+        cacheDataTable.datagrid({
+            url: getCacheDataUrl,
+            fit: true,
+            fitColumns: false,
+            striped: true,
+            rownumbers: true,
+            singleSelect: true,
+            nowrap: true,
+            pagination: true,
+            loadMsg: "正在加载，请稍候...",
+            toolbar: "#cacheDataTableButtons",
+            pageSize: 30,
+            pageList: [10, 20, 30, 50, 100, 150],
+            onDblClickRow: function (rowIndex, rowData) {
+            },
+            onBeforeLoad: function (param) {
+                if(firstGetCacheData==true){
+                    firstGetCacheData = false;
+                    return false;
+                }
+                // 增加查询参数
+                var paramArray = searchForm.serializeArray();
+                $(paramArray).each(function () {
+                    if (param[this.name]) {
+                        if ($.isArray(param[this.name])) {
+                            param[this.name].push(this.value);
+                        } else {
+                            param[this.name] = [param[this.name], this.value];
+                        }
+                    } else {
+                        param[this.name] = this.value;
+                    }
+                });
+            }
+        });
+    };
+
+    // 获取一个UUID
+    this.getUUID = function (len, radix) {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+        radix = radix || chars.length;
+        if (len) {
+            // Compact form
+            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+        } else {
+            // rfc4122, version 4 form
+            var r;
+            // rfc4122 requires these characters
+            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+            uuid[14] = '4';
+            // Fill in random data.  At i==19 set the high bits of clock sequence as
+            // per rfc4122, sec. 4.1.5
+            for (i = 0; i < 36; i++) {
+                if (!uuid[i]) {
+                    r = 0 | Math.random() * 16;
+                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                }
+            }
+        }
+        return uuid.join('');
+    };
+
+    // 获取容易看的存储大小
+    this.getEasyStoreSize = function (byte) {
+        var result = byte;
+        var tmp = byte / 8;
+        if (tmp < 1) {
+            return result.toFixed(2) + "byte";
+        }
+        result = tmp; // bit
+
+        tmp = tmp / 1024;
+        if (tmp < 1) {
+            return result.toFixed(2) + "bit";
+        }
+        result = tmp; // KB
+
+        tmp = tmp / 1024;
+        if (tmp < 1) {
+            return result.toFixed(2) + "KB";
+        }
+        result = tmp; // MB
+
+        tmp = tmp / 1024;
+        if (tmp < 1) {
+            return result.toFixed(2) + "MB";
+        }
+        result = tmp; // GB
+
+        tmp = tmp / 1024;
+        if (tmp < 1) {
+            return result.toFixed(2) + "GB";
+        }
+        result = tmp; // TB
+        return result.toFixed(2) + "TB";
     };
 };
 
