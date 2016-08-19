@@ -119,17 +119,16 @@
                     <tr>
                         <th data-options="width:450 ,align:'left',hidden:false ,field:'key'">Key</th>
                         <th data-options="width:300 ,align:'left',hidden:true ,field:'keyClass'">Key Class</th>
-                        <th data-options="width:150 ,align:'left',hidden:false ,field:'value'">value</th>
+                        <th data-options="width:50 ,align:'left',hidden:false ,field:'value',formatter:pageJsObject.jobDataFormatter">value</th>
                         <th data-options="width:300 ,align:'left',hidden:false ,field:'valueClass'">Value Class</th>
                         <th data-options="width:130 ,align:'left',hidden:false ,field:'createTime'">创建时间</th>
                         <th data-options="width:160 ,align:'left',hidden:false ,field:'expirationTime'">过期时间</th>
                         <th data-options="width:60 ,align:'left',hidden:false ,field:'hitCount'">命中次数</th>
                         <th data-options="width:130 ,align:'left',hidden:false ,field:'lastAccessTime'">最后访问时间</th>
                         <th data-options="width:130 ,align:'left',hidden:false ,field:'lastUpdateTime'">最后更新时间</th>
-                        <th data-options="width:60 ,align:'left',hidden:false ,field:'serializedSize'">元素大小</th>
-                        <th data-options="width:60 ,align:'left',hidden:false ,field:'timeToIdle'">空闲时间</th>
-                        <th data-options="width:60 ,align:'left',hidden:false ,field:'timeToLive'">存储时间</th>
-                        <%--,formatter:pageJsObject.hasExceptionFormatter--%>
+                        <th data-options="width:70 ,align:'left',hidden:false ,field:'serializedSize',formatter:pageJsObject.serializedSizeFormatter">元素大小</th>
+                        <th data-options="width:60 ,align:'left',hidden:false ,field:'timeToIdle',formatter:pageJsObject.timeFormatter">空闲时间</th>
+                        <th data-options="width:60 ,align:'left',hidden:false ,field:'timeToLive',formatter:pageJsObject.timeFormatter">存储时间</th>
                     </tr>
                     </thead>
                 </table>
@@ -141,6 +140,12 @@
             </div>
         </div>
     </div>
+</div>
+
+<%-- 查看对话框 --%>
+<div id="jsonViewDialog" style="width: 850px;height: 330px;">
+    <%--suppress HtmlFormInputWithoutLabel --%>
+    <textarea id="jsonViewEdit"></textarea>
 </div>
 </body>
 </html>

@@ -55,6 +55,13 @@ var pageJs = function (globalPath) {
     // 第一次获取 分页查询缓存数据
     var firstGetCacheData = true;
 
+    // json数据对话框
+    var jsonViewDialog = $("#jsonViewDialog");
+    // 数据查看高亮控件
+    var jsonViewEdit = null;
+    // 当前查询的缓存名称
+    var queryCacheName = null;
+
     /**
      * 页面初始化方法
      */
@@ -62,6 +69,7 @@ var pageJs = function (globalPath) {
         _this.initCacheManager();
         _this.initCacheStatistics();
         _this.initCacheContents();
+        _this.initJsonViewDialog();
         _this.dataBind();
         _this.eventBind();
     };
@@ -84,8 +92,16 @@ var pageJs = function (globalPath) {
             if (!searchForm.form("validate")) {
                 return;
             }
-
-            //
+            var row = cacheDataTable.datagrid("getSelected");
+            if(row == null){
+                $.messager.alert("提示", "请先选择删除的元素", "info");
+                return;
+            }
+            if (queryCacheName == null || $.trim(queryCacheName) == "") {
+                $.messager.alert("提示", "请先查询缓存数据", "info");
+                return;
+            }
+            _this.removeCacheElement(queryCacheName, row.key);
         });
 
         // 清除所有
@@ -93,7 +109,11 @@ var pageJs = function (globalPath) {
             if (!searchForm.form("validate")) {
                 return;
             }
-            //
+            if (queryCacheName == null || $.trim(queryCacheName) == "") {
+                $.messager.alert("提示", "请先查询缓存数据", "info");
+                return;
+            }
+            _this.clearCacheAll(queryCacheName);
         });
     };
 
@@ -316,6 +336,7 @@ var pageJs = function (globalPath) {
         var cacheStatisticsConfigurationXml = null;
         var cacheStatisticsConfigurationJson = null;
         var cacheStatisticsChart = null;
+        var cacheStatisticsChartData = null;
         var reloadData = function (cacheInfo) {
             var tmp;
             $("#cacheStatisticsName" + uuid).text(cacheInfo.name);
@@ -362,6 +383,14 @@ var pageJs = function (globalPath) {
                 cacheStatisticsConfigurationJson.setValue("");
                 cacheStatisticsConfigurationJson.setValue(js_beautify(cacheInfo.configurationJson, 4, ' '));
             }
+            if (cacheStatisticsChart != null && cacheStatisticsChartData != null) {
+                cacheStatisticsChartData.datasets = [{
+                    data: [cacheInfo.cacheHitPercentage, 1 - cacheInfo.cacheHitPercentage],
+                    backgroundColor: ["#36A2EB", "#FF6384"],
+                    hoverBackgroundColor: ["#36A2EB", "#FF6384"]
+                }];
+                cacheStatisticsChart.update();
+            }
         };
 
         $("#tabToolsReload" + uuid).linkbutton({
@@ -384,22 +413,7 @@ var pageJs = function (globalPath) {
         });
         $("#tabToolClear" + uuid).linkbutton({
             plain: true, iconCls: 'icon-clearCache', onClick: function () {
-                $.messager.confirm("确认清除缓存", "您确认清除[" + cacheInfo.name + "]的所有缓存?", function (r) {
-                    if (r) {
-                        // 清除缓存
-                        var param = {cacheName: cacheInfo.name};
-                        $.ajax({
-                            type: "POST", dataType: "JSON", url: clearCacheUrl, data: param, async: false,
-                            success: function (data) {
-                                if (data.success) {
-                                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 1000, showType: 'slide'});
-                                } else {
-                                    $.messager.alert("提示", data.failMessage, "warning");
-                                }
-                            }
-                        });
-                    }
-                });
+                _this.clearCacheAll(cacheInfo.name);
             }
         });
         $("#" + uuid).tabs({
@@ -427,14 +441,14 @@ var pageJs = function (globalPath) {
                     cacheStatisticsConfigurationJson.setValue(js_beautify(cacheInfo.configurationJson, 4, ' '));
                 }
                 if (index == 3 && cacheStatisticsChart == null) {
-                    var cacheStatisticsChartData = {
+                    Chart.defaults.global.animation.duration = 800;
+                    cacheStatisticsChartData = {
                         labels: ["命中", "未命中"],
-                        datasets: [
-                            {
-                                data: [cacheInfo.cacheHitPercentage, 1 - cacheInfo.cacheHitPercentage],
-                                backgroundColor: ["#36A2EB", "#FF6384"],
-                                hoverBackgroundColor: ["#36A2EB", "#FF6384"]
-                            }]
+                        datasets: [{
+                            data: [cacheInfo.cacheHitPercentage, 1 - cacheInfo.cacheHitPercentage],
+                            backgroundColor: ["#36A2EB", "#FF6384"],
+                            hoverBackgroundColor: ["#36A2EB", "#FF6384"]
+                        }]
                     };
                     cacheStatisticsChart = new Chart(document.getElementById("cacheStatisticsChart" + uuid).getContext("2d"), {
                         type: 'pie', data: cacheStatisticsChartData, options: {
@@ -507,7 +521,7 @@ var pageJs = function (globalPath) {
             onDblClickRow: function (rowIndex, rowData) {
             },
             onBeforeLoad: function (param) {
-                if(firstGetCacheData==true){
+                if (firstGetCacheData == true) {
                     firstGetCacheData = false;
                     return false;
                 }
@@ -524,8 +538,114 @@ var pageJs = function (globalPath) {
                         param[this.name] = this.value;
                     }
                 });
+                queryCacheName = param.cacheName;
             }
         });
+    };
+
+    this.initJsonViewDialog = function () {
+        jsonViewDialog.dialog({
+            title: "查看数据",
+            closed: true,
+            minimizable: false,
+            maximizable: true,
+            resizable: false,
+            minWidth: 850,
+            minHeight: 450,
+            modal: true,
+            //buttons: "#",
+            onOpen: function () {
+                if (jsonViewEdit != null) {
+                    return;
+                }
+                // 编辑器-初始化,
+                jsonViewEdit = CodeMirror.fromTextArea(document.getElementById("jsonViewEdit"), {
+                    mode: "application/json",
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    indentUnit: 4,
+                    readOnly: true
+                });
+                jsonViewEdit.setSize("auto", "auto");
+                //jsonViewEdit.setOption("theme", "cobalt");
+                jsonViewEdit.setValue("");
+            }
+        });
+    };
+
+    // 清除缓存所有数据
+    this.clearCacheAll = function (cacheName) {
+        $.messager.confirm("确认清除缓存", "您确认清除[" + cacheName + "]的所有缓存?", function (r) {
+            if (r) {
+                // 清除缓存
+                var param = {cacheName: cacheName};
+                $.ajax({
+                    type: "POST", dataType: "JSON", url: clearCacheUrl, data: param, async: false,
+                    success: function (data) {
+                        if (data.success) {
+                            $.messager.show({title: '提示', msg: data.successMessage, timeout: 1000, showType: 'slide'});
+                            cacheDataTable.datagrid("reload");
+                        } else {
+                            $.messager.alert("提示", data.failMessage, "warning");
+                        }
+                    }
+                });
+            }
+        });
+    };
+
+    // 清除缓存一个元素
+    this.removeCacheElement = function (cacheName, key) {
+        var param = {cacheName: cacheName, key: key};
+        $.ajax({
+            type: "POST", dataType: "JSON", url: removeElementUrl, data: param, async: false,
+            success: function (data) {
+                if (data.success) {
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 1000, showType: 'slide'});
+                    cacheDataTable.datagrid("reload");
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
+    // 打开查看对话框
+    this.openJsonViewDialog = function (jobData) {
+        jsonViewDialog.dialog("open");
+        jsonViewEdit.setValue(jobData);
+    };
+
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.jobDataFormatter = function (value, rowData, rowIndex) {
+        if (value != "" && value != null) {
+            var jobData = JSON.stringify(value);
+            jobData = js_beautify(jobData, 4, ' ');
+            var uuid = _this.getUUID(32, 16);
+            var aButton = $("<a id='" + uuid + "' href='javascript:void(0)'>查看</a>");
+            $("body").on("click", "#" + uuid, function () {
+                _this.openJsonViewDialog(jobData);
+            });
+            return $("<div></div>").append(aButton).html();
+        } else {
+            return value;
+        }
+    };
+
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.serializedSizeFormatter = function (value, rowData, rowIndex) {
+        if (!value && value != 0) {
+            return "未知";
+        }
+        return _this.getEasyStoreSize(value);
+    };
+
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.timeFormatter = function (value, rowData, rowIndex) {
+        if (!value && value != 0) {
+            return "未知";
+        }
+        return _this.getEasyTime(value);
     };
 
     // 获取一个UUID
@@ -587,6 +707,43 @@ var pageJs = function (globalPath) {
         }
         result = tmp; // TB
         return result.toFixed(2) + "TB";
+    };
+
+    // 毫秒转可读的时间
+    this.getEasyTime = function (timeMillisecond) {
+        var millisecond = timeMillisecond % 1000;
+        var second = Math.floor(timeMillisecond / 1000) % 60;
+        var minute = Math.floor(timeMillisecond / 1000 / 60) % 60;
+        var hour = Math.floor(timeMillisecond / 1000 / 60 / 60) % 24;
+        var day = Math.floor(timeMillisecond / 1000 / 60 / 60 / 24) % 30;
+        var month = Math.floor(timeMillisecond / 1000 / 60 / 60 / 24 / 30) % 12;
+        var year = Math.floor(timeMillisecond / 1000 / 60 / 60 / 24 / 30 / 12);
+        var result = "";
+        if (year >= 1) {
+            result = year + "年";
+        }
+        if (month >= 1) {
+            result = result + month + "月";
+        }
+        if (day >= 1) {
+            result = result + day + "天";
+        }
+        if (hour >= 1) {
+            result = result + hour + "小时";
+        }
+        if (minute >= 1) {
+            result = result + minute + "分钟";
+        }
+        if (second >= 1) {
+            result = result + second + "秒";
+        }
+        if (millisecond >= 1) {
+            result = result + millisecond + "毫秒";
+        }
+        if (result == "") {
+            result = "0毫秒";
+        }
+        return result;
     };
 };
 
