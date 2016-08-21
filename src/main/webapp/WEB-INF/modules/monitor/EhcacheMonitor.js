@@ -494,11 +494,16 @@ var pageJs = function (globalPath) {
         });
         searchCacheName.combobox("loadData", data);
 
+        //noinspection JSUnusedLocalSymbols
         searchKey.textbox({
             icons: [{
                 iconCls: 'icon-search',
                 handler: function (e) {
                     // 查询数据
+                    if (!searchForm.form("validate")) {
+                        return;
+                    }
+                    cacheDataTable.datagrid("load");
                 }
             }]
         });

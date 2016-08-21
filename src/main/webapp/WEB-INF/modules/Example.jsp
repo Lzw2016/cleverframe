@@ -29,6 +29,9 @@
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
 
+    <%--Chart.js--%>
+    <script src="${applicationScope.staticPath}/Chart.js/Chart.js-2.2.1/Chart.min.js"></script>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>

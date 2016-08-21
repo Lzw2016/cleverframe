@@ -11,4 +11,14 @@ public class MonitorJspUrlPath implements IJspUrlPath {
      * Ehcache监控页
      */
     public static final String EhcacheMonitor = "monitor/EhcacheMonitor";
+
+    /**
+     * Spring监控页
+     */
+    public static final String SpringMonitor = "monitor/SpringMonitor";
+
+    /**
+     * 应用服务器监控页
+     */
+    public static final String ServerMonitor = "monitor/ServerMonitor";
 }

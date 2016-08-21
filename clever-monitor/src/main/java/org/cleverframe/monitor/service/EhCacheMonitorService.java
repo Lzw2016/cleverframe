@@ -10,6 +10,7 @@ import net.sf.ehcache.search.Results;
 import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.ehcache.EhCacheUtils;
 import org.cleverframe.common.persistence.Page;
+import org.cleverframe.common.service.BaseService;
 import org.cleverframe.monitor.MonitorBeanNames;
 import org.cleverframe.monitor.vo.response.CacheInfoVo;
 import org.cleverframe.monitor.vo.response.CacheManagerInfoVo;
@@ -27,7 +28,7 @@ import java.util.List;
  * 创建时间：2016-8-17 19:52 <br/>
  */
 @Component(MonitorBeanNames.EhCacheMonitorService)
-public class EhCacheMonitorService {
+public class EhCacheMonitorService extends BaseService {
 //    /**
 //    * 日志对象
 //    */
