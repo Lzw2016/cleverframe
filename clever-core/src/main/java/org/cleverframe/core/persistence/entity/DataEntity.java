@@ -21,7 +21,6 @@ import java.util.Date;
  * 作者：LiZW <br/>
  * 创建时间：2016-5-12 9:35 <br/>
  */
-@SuppressWarnings("unused")
 @MappedSuperclass
 public abstract class DataEntity extends IdEntity {
     private static final long serialVersionUID = 1L;

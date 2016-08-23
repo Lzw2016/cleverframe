@@ -18,7 +18,7 @@ import java.io.StringReader;
 /**
  * 实现freemarker的模版加载器，从数据库加载"数据库脚本"模版<br/>
  * 实现参考：{@link freemarker.cache.StringTemplateLoader}
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-29 10:20 <br/>
  *
@@ -59,13 +59,16 @@ public class QLScriptTemplateLoader implements TemplateLoader {
     /**
      * 返回模版资源最后一次修改的时间
      */
+    @SuppressWarnings("Duplicates")
     @Override
     public long getLastModified(Object templateSource) {
         QLScript qLScript = (QLScript) templateSource;
         if (qLScript.getUpdateDate() != null) {
             return qLScript.getUpdateDate().getTime();
-        } else {
+        } else if (qLScript.getCreateDate() != null) {
             return qLScript.getCreateDate().getTime();
+        } else {
+            return 0L;
         }
     }
 

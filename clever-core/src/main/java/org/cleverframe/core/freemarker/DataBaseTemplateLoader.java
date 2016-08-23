@@ -15,7 +15,7 @@ import java.io.StringReader;
 
 /**
  * 数据库模版加载器实现,从数据库中加载模版<br/>
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-6-18 12:27 <br/>
  */
@@ -45,13 +45,16 @@ public class DataBaseTemplateLoader implements TemplateLoader {
     /**
      * 返回模版资源最后一次修改的时间
      */
+    @SuppressWarnings("Duplicates")
     @Override
     public long getLastModified(Object templateSource) {
         Template template = (Template) templateSource;
         if (template.getUpdateDate() != null) {
             return template.getUpdateDate().getTime();
-        } else {
+        } else if (template.getCreateDate() != null) {
             return template.getCreateDate().getTime();
+        } else {
+            return 0L;
         }
     }
 
