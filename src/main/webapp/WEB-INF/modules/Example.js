@@ -11,16 +11,17 @@ var pageJs = function (globalPath) {
     this.init = function () {
         console.log(globalPath);
         console.log("页面初始化");
+
+        _this.dataBind();
+        _this.eventBind();
     };
 
-    //noinspection JSUnusedGlobalSymbols
     /**
      * 页面数据初始化
      */
     this.dataBind = function () {
     };
 
-    //noinspection JSUnusedGlobalSymbols
     /**
      * 界面事件绑定方法
      */
