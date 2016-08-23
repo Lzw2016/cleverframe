@@ -1,6 +1,6 @@
 package org.cleverframe.generator.entity;
 
-import org.cleverframe.core.persistence.entity.IdEntity;
+import org.cleverframe.core.persistence.entity.DataEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "generator_code_template")
 @DynamicInsert
 @DynamicUpdate
-public class CodeTemplate extends IdEntity {
+public class CodeTemplate extends DataEntity {
     private static final long serialVersionUID = 1L;
 
     /**

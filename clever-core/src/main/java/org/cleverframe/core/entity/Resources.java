@@ -1,14 +1,17 @@
 package org.cleverframe.core.entity;
 
+import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 
 /**
  * 系统资源表
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-7-14 16:33 <br/>
  */
@@ -16,7 +19,7 @@ import java.io.Serializable;
 @Table(name = "core_resources")
 @DynamicInsert
 @DynamicUpdate
-public class Resources implements Serializable {
+public class Resources extends IdEntity {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -28,13 +31,6 @@ public class Resources implements Serializable {
      * UI资源（1：URL资源；2：UI资源）
      */
     public static final Character UI_RESOURCES = '2';
-
-    /**
-     * 编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     /**
      * 资源标题
@@ -66,14 +62,6 @@ public class Resources implements Serializable {
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getTitle() {
         return title;

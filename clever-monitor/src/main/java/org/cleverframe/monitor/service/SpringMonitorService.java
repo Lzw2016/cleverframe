@@ -1,6 +1,5 @@
 package org.cleverframe.monitor.service;
 
-import com.alibaba.fastjson.JSON;
 import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.spring.SpringContextHolder;

@@ -1,11 +1,14 @@
 package org.cleverframe.quartz.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
@@ -18,15 +21,8 @@ import java.util.Date;
 @Table(name = "qrtz_trigger_log")
 @DynamicInsert
 @DynamicUpdate
-public class QrtzTriggerLog implements Serializable {
+public class QrtzTriggerLog extends IdEntity {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     /**
      * 监听器名称
@@ -139,20 +135,6 @@ public class QrtzTriggerLog implements Serializable {
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
-
-    /**
-     * 获取 编号
-     */
-    public Long getId() {
-        return id;
-    }
-
-    /**
-     * 设置 编号
-     */
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     /**
      * 获取 监听器名称

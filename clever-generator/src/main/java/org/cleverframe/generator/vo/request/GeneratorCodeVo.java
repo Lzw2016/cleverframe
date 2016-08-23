@@ -1,7 +1,6 @@
 package org.cleverframe.generator.vo.request;
 
 import org.cleverframe.common.vo.request.BaseRequestVo;
-import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.NotNull;
 

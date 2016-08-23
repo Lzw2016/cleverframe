@@ -1,7 +1,5 @@
 package org.cleverframe.common.configuration;
 
-import org.cleverframe.common.spring.SpringBeanNames;
-import org.cleverframe.common.spring.SpringContextHolder;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.BeansException;
@@ -11,7 +9,6 @@ import org.springframework.beans.factory.config.PropertyPlaceholderConfigurer;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Properties;
-import java.util.Set;
 
 /**
  * 自定义的属性文件配置处理器,处理*.properties文件里的数据<br/>

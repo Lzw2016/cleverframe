@@ -6,7 +6,6 @@ import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.vo.response.AjaxMessage;
-import org.cleverframe.core.CoreBeanNames;
 import org.cleverframe.core.CoreJspUrlPath;
 import org.cleverframe.core.entity.Config;
 import org.cleverframe.core.service.EhCacheConfigService;
@@ -20,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
-import org.springframework.transaction.annotation.Transactional;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -29,8 +27,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.HashMap;
-import java.util.Map;
 
 /**
  * 作者：LiZW <br/>

@@ -17,19 +17,19 @@ import java.util.Date;
 
 /**
  * 含有基本字段的实体类抽象<br/>
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-12 9:35 <br/>
  */
 @SuppressWarnings("unused")
 @MappedSuperclass
-public abstract class DataEntity implements BaseEntity, Lifecycle {
+public abstract class DataEntity extends IdEntity {
     private static final long serialVersionUID = 1L;
 
     /**
      * 日志对象
      */
-    private final static Logger logger = LoggerFactory.getLogger(BaseEntity.class);
+    private final static Logger logger = LoggerFactory.getLogger(DataEntity.class);
 
     /**
      * 用户信息获取接口

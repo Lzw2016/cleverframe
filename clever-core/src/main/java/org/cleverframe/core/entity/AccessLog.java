@@ -1,16 +1,19 @@
 package org.cleverframe.core.entity;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
+import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
-import javax.persistence.*;
-import java.io.Serializable;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.Lob;
+import javax.persistence.Table;
 import java.util.Date;
 
 /**
  * 系统访问日志
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-19 15:19 <br/>
  */
@@ -18,14 +21,8 @@ import java.util.Date;
 @Table(name = "core_access_log")
 @DynamicInsert
 @DynamicUpdate
-public class AccessLog implements Serializable {
+public class AccessLog extends IdEntity {
     private static final long serialVersionUID = 1L;
-    /**
-     * 编号
-     */
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
 
     /**
      * 登录名
@@ -82,14 +79,6 @@ public class AccessLog implements Serializable {
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     public String getLoginName() {
         return loginName;

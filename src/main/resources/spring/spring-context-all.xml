@@ -51,7 +51,7 @@
     -->
     <import resource="spring-context-quartz.xml"/>
 
-    <import resource="spring-context-shiro.xml"/>
+    <!--<import resource="spring-context-shiro.xml"/>-->
 
-    <import resource="spring-context-snaker.xml"/>
+    <!--<import resource="spring-context-snaker.xml"/>-->
 </beans>

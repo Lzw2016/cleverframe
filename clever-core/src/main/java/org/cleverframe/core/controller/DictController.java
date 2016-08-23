@@ -1,6 +1,5 @@
 package org.cleverframe.core.controller;
 
-import org.cleverframe.common.codec.EncodeDecodeUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;

@@ -1,6 +1,6 @@
 package org.cleverframe.core.entity;
 
-import org.cleverframe.core.persistence.entity.IdEntity;
+import org.cleverframe.core.persistence.entity.DataEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -9,7 +9,7 @@ import javax.persistence.Table;
 
 /**
  * 字典
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-19 15:09 <br/>
  */
@@ -17,7 +17,7 @@ import javax.persistence.Table;
 @Table(name = "core_dict")
 @DynamicInsert
 @DynamicUpdate
-public class Dict extends IdEntity {
+public class Dict extends DataEntity {
     private static final long serialVersionUID = 1L;
 
     /**

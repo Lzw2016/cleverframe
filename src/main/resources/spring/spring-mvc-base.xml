@@ -15,6 +15,8 @@
 	<!-- 2.设置静态资源访问规则 -->
 	<!-- 3.系统拦截器配置 -->
 	<!-- 4.配置视图与视图解析器 -->
+
+	<!--下面移走-->
 	<!-- 5.Apache Shiro MVC层配置 -->
 	<!-- 6.SpringMVC其它配置 -->
 	<!-- 7.commons-fileupload 文件上传配置 -->
@@ -170,14 +172,6 @@
 			</bean>
 		</property>
 	</bean>
-
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 5.Apache Shiro MVC层配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-<!--
-	&lt;!&ndash; 支持Shiro对Controller的方法级AOP安全控制 &ndash;&gt;
-	<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
-		<property name="proxyTargetClass" value="true" />
-	</bean>
--->
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 6.SpringMVC其它配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- 初始化系统属性值,在系统启动时调用,加入一些系统级别的属性值 -->

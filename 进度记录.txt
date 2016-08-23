@@ -33,3 +33,7 @@ clever-quartz
     3.定时任务管理页面更新定时任务、更新触发器(目前只能删除、新增)
 
 clever-monitor
+依赖模块：clever-common、clever-webui
+未完成功能：
+    1.服务端JVM监控，Spring监控、Hibernate监控
+    2.监控模块主页

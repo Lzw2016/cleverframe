@@ -11,6 +11,7 @@ import org.cleverframe.common.utils.HqlParserUtils;
 import org.cleverframe.common.utils.JavaBeanUtils;
 import org.cleverframe.common.utils.SqlParserUtils;
 import org.cleverframe.core.persistence.entity.BaseEntity;
+import org.cleverframe.core.persistence.entity.DataEntity;
 import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.Criteria;
 import org.hibernate.Query;
@@ -220,10 +221,10 @@ public class HibernateDao<T extends Serializable> {
      * @param entity 实体类对象,ID必须有值
      * @param <E>    实体类泛型
      */
-    public <E extends IdEntity> void deleteForSoft(E entity) {
-        IdEntity idEntity = this.getEntity(entity.getClass(), entity.getId());
-        idEntity.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
-        getSession().update(idEntity);
+    public <E extends DataEntity> void deleteForSoft(E entity) {
+        DataEntity dataEntity = this.getEntity(entity.getClass(), entity.getId());
+        dataEntity.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
+        getSession().update(dataEntity);
     }
 
     /**
