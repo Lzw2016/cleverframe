@@ -75,8 +75,8 @@ CREATE TABLE sys_user
     del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
-    home_company    bigint          NOT NULL                            COMMENT '归属公司',
-    home_org        bigint          NOT NULL                            COMMENT '直属机构',
+    home_company    varchar(255)    NOT NULL                            COMMENT '归属公司',
+    home_org        varchar(255)    NOT NULL                            COMMENT '直属机构',
     login_name      varchar(20)     NOT NULL    UNIQUE                  COMMENT '登录名，不能修改',
     password        varchar(100)    NOT NULL                            COMMENT '密码',
     job_no          varchar(30)     NOT NULL    UNIQUE                  COMMENT '工号',
@@ -120,6 +120,7 @@ CREATE TABLE sys_role
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     name            varchar(50)     NOT NULL    UNIQUE                  COMMENT '角色名称',
+    description     varchar(2000)   NOT NULL                            COMMENT '角色说明',
     PRIMARY KEY (id)
 ) COMMENT = '角色表';
 CREATE INDEX sys_role_name ON sys_role (name ASC);
@@ -327,7 +328,22 @@ sys_organization_role (sys_role_office) 一个机构可以有多个角色？意�
 
 
 
+/* ====================================================================================================================
+    sys_login_log -- 用户登入日志表
+==================================================================================================================== */
+CREATE TABLE sys_login_log
+(
+    id              bigint          NOT NULL    auto_increment          COMMENT '编号',
+    login_name      varchar(20)     NOT NULL                            COMMENT '登录名',
+    login_time      datetime        NOT NULL                            COMMENT '登录时间',
+    login_ip        varchar(30)                                         COMMENT '登录的IP地址',
+    user_agent      varchar(100)                                        COMMENT '用户代理，客户端信息或浏览器信息',
+    user_info       varchar(5000)                                       COMMENT '用户信息，Json格式数据',
+    PRIMARY KEY (id)
+) COMMENT = '用户登入日志表';
+/*------------------------------------------------------------------------------------------------------------------------
 
+--------------------------------------------------------------------------------------------------------------------------*/
 
 
 
@@ -378,22 +394,7 @@ sys_permission是开发人员使用的表，用户是不能操作的
 
 
 
-/* ====================================================================================================================
-    sys_login_log -- 用户登入日志表
-==================================================================================================================== */
-CREATE TABLE sys_login_log
-(
-    id              bigint          NOT NULL    auto_increment          COMMENT '编号',
-    login_name      varchar(20)     NOT NULL                            COMMENT '登录名',
-    login_time      datetime        NOT NULL                            COMMENT '登录时间',
-    login_ip        varchar(30)                                         COMMENT '登录的IP地址',
-    user_agent      varchar(100)                                        COMMENT '用户代理，客户端信息或浏览器信息',
-    user_info       varchar(1000)                                       COMMENT '用户信息，Json格式数据',
-    PRIMARY KEY (id)
-) COMMENT = '用户登入日志表';
-/*------------------------------------------------------------------------------------------------------------------------
 
---------------------------------------------------------------------------------------------------------------------------*/
 
 
 

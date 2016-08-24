@@ -24,6 +24,8 @@ clever-generator
     2.根据模版选择数据生成代码
     3.直接选择模版和数据生成代码
     4.代码生成帮助页面
+    5.代码模版管理页面(未完成)
+    7.模版关联名称修改BUG -- 页面重做
 
 clever-quartz
 依赖模块：clever-common、clever-core

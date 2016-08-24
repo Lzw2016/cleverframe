@@ -3,8 +3,6 @@ package org.cleverframe.core.persistence.entity;
 import org.hibernate.CallbackException;
 import org.hibernate.Session;
 import org.hibernate.classic.Lifecycle;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -21,11 +19,10 @@ import java.io.Serializable;
 @MappedSuperclass
 public abstract class IdEntity implements BaseEntity, Lifecycle {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 日志对象
-     */
-    private final static Logger logger = LoggerFactory.getLogger(IdEntity.class);
+//    /**
+//     * 日志对象
+//     */
+//    private final static Logger logger = LoggerFactory.getLogger(IdEntity.class);
 
     /**
      * 编号，Entity主键 ，使用统一的主键生成策略

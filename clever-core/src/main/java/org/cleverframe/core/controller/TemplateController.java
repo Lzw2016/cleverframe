@@ -55,7 +55,7 @@ public class TemplateController extends BaseController {
             BindingResult bindingResult) {
         DataGridJson<Template> json = new DataGridJson<>();
         Page<Template> qLScriptPage = ehCacheTemplateService.findByPage(
-                new Page<Template>(request, response),
+                new Page<>(request, response),
                 templateQueryVo.getName(),
                 templateQueryVo.getLocale(),
                 templateQueryVo.getId(),
@@ -80,7 +80,6 @@ public class TemplateController extends BaseController {
         addXSSExcludeUrl(request);
         AjaxMessage<String> message = new AjaxMessage<>(true, "模版数据保存成功", null);
         Template template = BeanMapper.mapper(templateAddVo, Template.class);
-
         if (beanValidator(bindingResult, message)) {
             ehCacheTemplateService.saveTemplate(template);
         }

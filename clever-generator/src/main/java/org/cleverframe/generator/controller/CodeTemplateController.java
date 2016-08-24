@@ -146,6 +146,7 @@ public class CodeTemplateController extends BaseController {
             HttpServletResponse response,
             @Valid CodeTemplateCodeAddVo codeTemplateCodeAddVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "新增代码模版[代码模版]成功", null);
         CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateCodeAddVo, CodeTemplate.class);
         codeTemplate.setNodeType(CodeTemplate.NodeTypeCode);
@@ -167,6 +168,7 @@ public class CodeTemplateController extends BaseController {
             HttpServletResponse response,
             @Valid CodeTemplateUpdateVo codeTemplateUpdateVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "更新代码模版成功", null);
         CodeTemplate codeTemplate = BeanMapper.mapper(codeTemplateUpdateVo, CodeTemplate.class);
         Template template = BeanMapper.mapper(codeTemplateUpdateVo, Template.class);

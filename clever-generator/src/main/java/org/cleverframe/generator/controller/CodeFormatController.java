@@ -3,7 +3,6 @@ package org.cleverframe.generator.controller;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.generator.GeneratorBeanNames;
-import org.cleverframe.generator.format.CodeType;
 import org.cleverframe.generator.service.CodeFormatService;
 import org.cleverframe.generator.vo.request.CodeFormatVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -44,20 +43,7 @@ public class CodeFormatController extends BaseController {
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "格式化成功", null);
         String result = null;
         if (beanValidator(bindingResult, ajaxMessage)) {
-            if (CodeType.HTML.equalsIgnoreCase(codeFormatVo.getCodeType())) {
-                result = codeFormatService.htmlFormat(codeFormatVo.getCode(), ajaxMessage);
-            } else if (CodeType.Java.equalsIgnoreCase(codeFormatVo.getCodeType())) {
-                result = codeFormatService.javaFormat(codeFormatVo.getCode(), ajaxMessage);
-            } else if (CodeType.Json.equalsIgnoreCase(codeFormatVo.getCodeType())) {
-                result = codeFormatService.jsonFormat(codeFormatVo.getCode(), ajaxMessage);
-            } else if (CodeType.SQL.equalsIgnoreCase(codeFormatVo.getCodeType())) {
-                result = codeFormatService.sqlFormat(codeFormatVo.getCode(), ajaxMessage);
-            } else if (CodeType.XML.equalsIgnoreCase(codeFormatVo.getCodeType())) {
-                result = codeFormatService.xmlFormat(codeFormatVo.getCode(), ajaxMessage);
-            } else {
-                ajaxMessage.setSuccess(false);
-                ajaxMessage.setFailMessage("不支持的格式化代码[" + codeFormatVo.getCodeType() + "]");
-            }
+            result = codeFormatService.codeFormat(codeFormatVo.getCodeType(), codeFormatVo.getCode(), ajaxMessage);
         }
         ajaxMessage.setResult(result);
         return ajaxMessage;

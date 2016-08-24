@@ -9,11 +9,12 @@ import java.io.Serializable;
 
 /**
  * Hibernate的拦截器<br/>
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-11 23:11 <br/>
  */
 public class EntityInterceptor extends EmptyInterceptor {
+    private static final long serialVersionUID = 1L;
     /**
      * 日志对象
      */

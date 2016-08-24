@@ -13,6 +13,34 @@ import org.springframework.stereotype.Service;
  */
 @Service(GeneratorBeanNames.CodeFormatService)
 public class CodeFormatService extends BaseService {
+
+    /**
+     * 格式化代码
+     *
+     * @param codeType    代码类型
+     * @param code        代码
+     * @param ajaxMessage 请求响应对象
+     * @return 失败返回原code
+     */
+    public String codeFormat(String codeType, String code, AjaxMessage ajaxMessage) {
+        String result = null;
+        if (CodeType.HTML.equalsIgnoreCase(codeType)) {
+            result = this.htmlFormat(code, ajaxMessage);
+        } else if (CodeType.Java.equalsIgnoreCase(codeType)) {
+            result = this.javaFormat(code, ajaxMessage);
+        } else if (CodeType.Json.equalsIgnoreCase(codeType)) {
+            result = this.jsonFormat(code, ajaxMessage);
+        } else if (CodeType.SQL.equalsIgnoreCase(codeType)) {
+            result = this.sqlFormat(code, ajaxMessage);
+        } else if (CodeType.XML.equalsIgnoreCase(codeType)) {
+            result = this.xmlFormat(code, ajaxMessage);
+        } else {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("不支持的格式化代码[" + codeType + "]");
+        }
+        return result;
+    }
+
     /**
      * 格式化HTML
      *
