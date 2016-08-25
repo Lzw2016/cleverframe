@@ -6,7 +6,6 @@ import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.common.time.DateTimeUtils;
 import org.cleverframe.common.user.IUserUtils;
-import org.cleverframe.common.utils.HttpServletRequestUtils;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -23,7 +22,8 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Validator;
 import java.beans.PropertyEditorSupport;
-import java.util.*;
+import java.util.Date;
+import java.util.List;
 
 /**
  * SpringMVC实现的控制器基类<br/>
@@ -49,11 +49,6 @@ public abstract class BaseController {
      * 视图页面(JSP)的后缀
      */
     protected final static String VIEW_PAGE_SUFFIX = ".html";
-
-    /**
-     * 不需要进行XXS攻击处理的请求地址,不对请求参数进行HTML编码
-     */
-    protected final static Set<String> XSS_EXCLUDE_URL = Collections.synchronizedSet(new HashSet<String>());
 
     /**
      * 用户信息获取接口
@@ -82,10 +77,8 @@ public abstract class BaseController {
      *
      * @param request 请求对象
      */
-    protected void addXSSExcludeUrl(HttpServletRequest request) {
-        // 当前请求URL地址
-        String requestUrl = HttpServletRequestUtils.getRequestURINotSuffix(request);
-        XSS_EXCLUDE_URL.add(requestUrl);
+    protected static void addXSSExcludeUrl(HttpServletRequest request) {
+        XssExcludeUrlUtils.addXSSExcludeUrl(request);
     }
 
     /**
@@ -93,8 +86,8 @@ public abstract class BaseController {
      *
      * @param requestUrl 请求地址,不含后缀
      */
-    protected void addXSSExcludeUrl(String requestUrl) {
-        XSS_EXCLUDE_URL.add(requestUrl);
+    protected static void addXSSExcludeUrl(String requestUrl) {
+        XssExcludeUrlUtils.addXSSExcludeUrl(requestUrl);
     }
 
     /**
@@ -104,9 +97,7 @@ public abstract class BaseController {
      */
     @InitBinder
     protected void initBinder(WebDataBinder binder, HttpServletRequest request, HttpServletResponse response) {
-        // 当前请求URL地址
-        String requestUrl = HttpServletRequestUtils.getRequestURINotSuffix(request);
-        if (!XSS_EXCLUDE_URL.contains(requestUrl)) {
+        if (!XssExcludeUrlUtils.existsUrl(request)) {
             // String类型转换，将所有传递进来的String进行HTML编码，防止XSS攻击
             binder.registerCustomEditor(String.class, new PropertyEditorSupport() {
                 @Override

@@ -3,6 +3,7 @@ package org.cleverframe.common.spring;
 import org.cleverframe.common.attributes.CommonApplicationAttributes;
 import org.cleverframe.common.configuration.CustomPropertyPlaceholderConfigurer;
 import org.cleverframe.common.configuration.IConfig;
+import org.cleverframe.common.controller.XssExcludeUrlUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -18,7 +19,7 @@ import java.util.Set;
 /**
  * Spring容器初始化完毕事件，需要在Spring中注入该Bean<br/>
  * ContextRefreshedEvent 当ApplicationContext初始化或者刷新时触发该事件<br/>
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-9 17:44 <br/>
  */
@@ -131,6 +132,7 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MODULES_PATH + " = " + modulesPath + "\r\n" +
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MVC_PATH + " = " + mvcPath + "\r\n" +
                     "#\t 新增配置数据 " + initPropertiesMap() + "条\r\n" +
+                    "#\t 加载不需要XXS过滤的URL路径 " + XssExcludeUrlUtils.loadXSSExcludeUrl() + " 个\r\n" +
                     "#=======================================================================================================================#\r\n";
             logger.info(tmp);
         }

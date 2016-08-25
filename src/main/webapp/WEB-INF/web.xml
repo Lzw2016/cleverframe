@@ -117,6 +117,13 @@
         <param-name>webAppRootKey</param-name>
         <param-value>cleverframe.root</param-value>
     </context-param>
+    <!--负责将 Web 应用根目录以 webAppRootKey 上下文参数指定的属性名添加到系统参数中-->
+<!--
+    <listener>
+        <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+    </listener>
+-->
+
     <!-- 设置log4j的配置文件位置 -->
     <context-param>
         <param-name>log4jConfigLocation</param-name>

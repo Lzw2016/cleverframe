@@ -1,0 +1,6 @@
+# 更新数据库脚本
+/cleverframe/mvc/core/qlscript/updateQLScript
+# 更新模版
+/cleverframe/mvc/core/template/updateTemplate
+# 新增代码模版
+/cleverframe/mvc/generator/codetemplate/addCodeTemplateCode
