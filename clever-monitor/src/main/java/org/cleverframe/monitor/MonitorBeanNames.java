@@ -14,6 +14,7 @@ public class MonitorBeanNames implements IBeanNames {
     public static final String EhCacheMonitorService = "monitor_EhCacheMonitorService";
     public static final String SpringMonitorService = "monitor_SpringMonitorService";
     public static final String ServerMonitorService = "monitor_ServerMonitorService";
+    public static final String Log4jMonitorService = "monitor_Log4jMonitorService";
 
 
     // -------------------------------------------------------------------------------------------//
