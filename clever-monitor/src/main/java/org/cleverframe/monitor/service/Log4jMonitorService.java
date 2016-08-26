@@ -1,6 +1,8 @@
 package org.cleverframe.monitor.service;
 
 import org.apache.commons.lang3.StringUtils;
+import org.apache.log4j.Level;
+import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger;
 import org.cleverframe.common.log.Log4jManager;
 import org.cleverframe.common.persistence.Page;
@@ -45,37 +47,73 @@ public class Log4jMonitorService extends BaseService {
      * @param loggerName 日志名称
      * @return 分页数据
      */
-    public Page<LoggerInfoVo> getAllLoggerInfoVo(Page<LoggerInfoVo> page, String loggerName) {
+    public Page<LoggerInfoVo> getAllLoggerInfoVo(Page<LoggerInfoVo> page, String loggerName, String level) {
         List<LoggerInfoVo> loggerInfoVoList = new ArrayList<>();
         List<Logger> loggerList = Log4jManager.getAllLogList();
-        if (StringUtils.isBlank(loggerName)) {
-            // 分页查询
-            int firstResult = page.getFirstResult();
-            int lastResult = page.getFirstResult() + page.getPageSize();
-            for (int i = firstResult; (i < lastResult && i < loggerList.size()); i++) {
-                Logger logger = loggerList.get(i);
-                LoggerInfoVo loggerInfoVo = getLoggerInfoVo(logger);
-                if (loggerInfoVo != null) {
-                    loggerInfoVoList.add(loggerInfoVo);
-                }
+        List<Logger> tmp = new ArrayList<>();
+        for (Logger logger : loggerList) {
+            if (StringUtils.isNotBlank(loggerName) && !logger.getName().equals(loggerName)) {
+                continue;
             }
-            page.setCount(loggerList.size());
-        } else {
-            // 单独查询一个
-            for (Logger logger : loggerList) {
-                if (logger.getName().equals(loggerName)) {
-                    LoggerInfoVo loggerInfoVo = getLoggerInfoVo(logger);
-                    if (loggerInfoVo != null) {
-                        loggerInfoVoList.add(loggerInfoVo);
-                    }
-                    break;
-                }
+            if (StringUtils.isNotBlank(level) && !logger.getEffectiveLevel().toString().toUpperCase().equals(level.toUpperCase())) {
+                continue;
             }
-            page.setCount(loggerInfoVoList.size());
+            tmp.add(logger);
         }
+        int firstResult = page.getFirstResult();
+        int lastResult = page.getFirstResult() + page.getPageSize();
+        for (int i = firstResult; (i < lastResult && i < tmp.size()); i++) {
+            Logger logger = tmp.get(i);
+            LoggerInfoVo loggerInfoVo = getLoggerInfoVo(logger);
+            if (loggerInfoVo != null) {
+                loggerInfoVoList.add(loggerInfoVo);
+            }
+        }
+        page.setCount(tmp.size());
         page.setList(loggerInfoVoList);
         return page;
     }
 
-
+    /**
+     * 设置日志记录器日志级别
+     *
+     * @param loggerName 日志记录器名称
+     * @param level      日志级别
+     * @return 成功返回true, 失败返回false
+     */
+    public boolean setLoggerLevel(String loggerName, String level) {
+        if (StringUtils.isBlank(loggerName) || StringUtils.isBlank(level)) {
+            return false;
+        }
+        // ALL|TRACE|DEBUG|INFO|WARN|ERROR|FATAL|OFF
+        switch (level.toUpperCase()) {
+            case "ALL":
+                LogManager.getLogger(loggerName).setLevel(Level.ALL);
+                break;
+            case "TRACE":
+                Log4jManager.enableTrack(loggerName);
+                break;
+            case "DEBUG":
+                Log4jManager.enableDebug(loggerName);
+                break;
+            case "INFO":
+                Log4jManager.enableInfo(loggerName);
+                break;
+            case "WARN":
+                Log4jManager.enableWarn(loggerName);
+                break;
+            case "ERROR":
+                Log4jManager.enableError(loggerName);
+                break;
+            case "FATAL":
+                LogManager.getLogger(loggerName).setLevel(Level.FATAL);
+                break;
+            case "OFF":
+                Log4jManager.enableOff(loggerName);
+                break;
+            default:
+                return false;
+        }
+        return true;
+    }
 }
