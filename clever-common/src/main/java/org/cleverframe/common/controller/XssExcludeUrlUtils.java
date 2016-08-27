@@ -108,6 +108,7 @@ public class XssExcludeUrlUtils {
                 return;
             }
             List<String> lines = new ArrayList<>();
+            lines.add("");
             lines.add(requestUrl);
             try {
                 FileUtils.writeLines(new File(XSS_EXCLUDE_URL_SAVE_FILE), lines, true);
