@@ -58,5 +58,10 @@
     <!--
         Spring与zookeeper整合(Curator)
     -->
-    <import resource="spring-context-zookeeper.xml"/>
+    <!--<import resource="spring-context-zookeeper.xml"/>-->
+
+    <!--
+        Spring与Redis整合(Jedis)
+    -->
+    <import resource="spring-context-jedis.xml"/>
 </beans>

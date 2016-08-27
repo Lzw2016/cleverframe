@@ -5,7 +5,7 @@ import org.cleverframe.common.IBeanNames;
 /**
  * 定义Spring的配置文件中配置的Bean名称，使用静态字符串<br/>
  * TODO 若修改Spring的配置文件，则需要同步此类<br/>
- * <p/>
+ * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-9 17:54 <br/>
  */
@@ -81,7 +81,6 @@ public class SpringBeanNames implements IBeanNames {
     public static final String SchedulerFactoryBean = "schedulerFactoryBean";
 
 
-
     // -------------------------------------------------------------------------------------------//
     // spring-context-shiro.xml配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
@@ -94,14 +93,16 @@ public class SpringBeanNames implements IBeanNames {
      * Redis连接池Bean名称
      */
     public static final String JedisPoolConfig = "jedisPoolConfig";
+
     /**
-     * Redis连接工厂Bean名称
+     * Redis与Spring整合时的 RedisTemplate
+     */
+    public static final String RedisTemplate = "redisTemplate";
+
+    /**
+     * Redis与Spring整合时的 JedisConnectionFactory
      */
     public static final String JedisConnectionFactory = "jedisConnectionFactory";
-    /**
-     * Spring提供的Redis模版Bean名称
-     */
-    public static final String JedisTemplate = "jedisTemplate";
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-memcached.xml配置文件的Bean名称
@@ -123,5 +124,6 @@ public class SpringBeanNames implements IBeanNames {
      * zookeeper与Spring整合时的 RetryPolicy
      */
     public static final String RetryPolicy = "retryPolicy";
+
 
 }

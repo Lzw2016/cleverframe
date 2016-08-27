@@ -19,6 +19,7 @@ dependencies {
     compile project(':clever-sys')
 
     compile project(':clever-zookeeper')
+    compile project(':clever-redis')
 
     testCompile('junit:junit:4.12')
     testCompile('org.springframework:spring-test:4.2.7.RELEASE')
@@ -169,7 +170,6 @@ project(':clever-core') {
         // ##################Web层框架
         // Spring Data
         compile('org.springframework.data:spring-data-jpa:1.9.4.RELEASE')
-        compile('org.springframework.data:spring-data-redis:1.6.4.RELEASE')
         // Hibernate
         compile('org.hibernate:hibernate-core:4.3.11.Final')
         compile('org.hibernate:hibernate-ehcache:4.3.11.Final')
@@ -237,6 +237,7 @@ project(':clever-monitor') {
         compile project(':clever-common')
         compile project(':clever-webui')
         compile project(':clever-zookeeper')
+        compile project(':clever-redis')
         // ##################
         compile('io.dropwizard.metrics:metrics-core:3.1.2')
         // 获取系统硬件信息(CPU 内存 硬盘 MAC等)
@@ -300,7 +301,9 @@ project(':clever-redis') {
     dependencies {
         compile project(':clever-common')
         // ##################
-        compile('redis.clients:jedis:2.9.0')
+        compile('redis.clients:jedis:2.8.1')
+        compile('org.springframework.data:spring-data-redis:1.7.2.RELEASE')
+
     }
 }
 
