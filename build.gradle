@@ -18,6 +18,8 @@ dependencies {
     compile project(':clever-monitor')
     compile project(':clever-sys')
 
+    compile project(':clever-zookeeper')
+
     testCompile('junit:junit:4.12')
     testCompile('org.springframework:spring-test:4.2.7.RELEASE')
     testCompile('org.mockito:mockito-all:1.10.19')
@@ -234,6 +236,7 @@ project(':clever-monitor') {
     dependencies {
         compile project(':clever-common')
         compile project(':clever-webui')
+        compile project(':clever-zookeeper')
         // ##################
         compile('io.dropwizard.metrics:metrics-core:3.1.2')
         // 获取系统硬件信息(CPU 内存 硬盘 MAC等)
@@ -285,10 +288,11 @@ project(':clever-zookeeper') {
     dependencies {
         compile project(':clever-common')
         // ##################
-        compile('org.apache.curator:curator-framework:3.2.0')
-        compile('org.apache.curator:curator-recipes:3.2.0')
-        compile('org.apache.curator:curator-client:3.2.0')
-        compile('org.apache.curator:curator-x-discovery:3.2.0')
+        compile('org.apache.zookeeper:zookeeper:3.4.8')
+        compile('org.apache.curator:curator-framework:2.11.0')
+        compile('org.apache.curator:curator-recipes:2.11.0')
+        compile('org.apache.curator:curator-client:2.11.0')
+        compile('org.apache.curator:curator-x-discovery:2.11.0')
     }
 }
 

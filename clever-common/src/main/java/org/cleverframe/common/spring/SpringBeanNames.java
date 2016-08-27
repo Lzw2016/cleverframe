@@ -110,4 +110,18 @@ public class SpringBeanNames implements IBeanNames {
      * Memcached客户端工厂Bean名称，通过此Bean名称直接得到Memcached客户端对象
      */
     public static final String MemcachedClient = "memcachedClient";
+
+    // -------------------------------------------------------------------------------------------//
+    // spring-context-zookeeper.xml配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * zookeeper与Spring整合时的 CuratorFramework
+     */
+    public static final String CuratorFramework = "curatorFramework";
+
+    /**
+     * zookeeper与Spring整合时的 RetryPolicy
+     */
+    public static final String RetryPolicy = "retryPolicy";
+
 }

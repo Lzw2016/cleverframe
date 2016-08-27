@@ -54,4 +54,9 @@
     <!--<import resource="spring-context-shiro.xml"/>-->
 
     <!--<import resource="spring-context-snaker.xml"/>-->
+
+    <!--
+        Spring与zookeeper整合(Curator)
+    -->
+    <import resource="spring-context-zookeeper.xml"/>
 </beans>

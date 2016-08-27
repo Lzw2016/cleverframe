@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd"
+       default-lazy-init="false">
+
+    <!-- 重连策略 -->
+    <bean id="retryPolicy" class="org.apache.curator.retry.ExponentialBackoffRetry">
+        <!-- 间隔时间基数 -->
+        <constructor-arg type="int" index="0" value="1000"/>
+        <!-- 最大重连次数 -->
+        <constructor-arg type="int" index="1" value="15"/>
+    </bean>
+
+    <!-- CuratorFramework -->
+    <bean id="curatorFramework" class="org.apache.curator.framework.CuratorFrameworkFactory" factory-method="newClient" init-method="start" destroy-method="close">
+        <!--连接字符串-->
+        <constructor-arg type="java.lang.String" index="0" value="${ZooKeeper.connectString}"/>
+        <!-- 会话超时，单位毫秒。默认是60000ms  -->
+        <constructor-arg type="int" index="1" value="${ZooKeeper.sessionTimeoutMs}"/>
+        <!-- 连接超时，单位毫秒.默认15000ms -->
+        <constructor-arg type="int" index="2" value="${ZooKeeper.connectionTimeoutMs}"/>
+        <!-- 重连策略 -->
+        <constructor-arg type="org.apache.curator.RetryPolicy" index="3" ref="retryPolicy"/>
+    </bean>
+
+    <!--
+        &lt;!&ndash;应用场景一：查看当前Client是不是主机&ndash;&gt;
+        <bean id="adShowLeader" class="com.chinaso.common.zookeeper.leader.LeaderDispatch" scope="singleton" init-method="init">
+            <constructor-arg index="0" ref="curatorFramework"/>
+            <constructor-arg index="1" value="${sas.zookeeper.leader}"/>
+        </bean>
+        &lt;!&ndash;应用场景一：监控并同步所有Client的数据&ndash;&gt;
+        <bean id="publishAdFlush" class="com.chinaso.modules.ad.job.PublishAdFlush" scope="singleton" init-method="init">
+            <constructor-arg index="0" ref="curatorFramework"/>
+            <constructor-arg index="1" value="${sas.zookeeper.publish}"/>
+        </bean>
+    -->
+
+</beans>
