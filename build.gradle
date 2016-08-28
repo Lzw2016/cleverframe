@@ -202,7 +202,6 @@ project(':clever-generator') {
         compile('us.fatehi:schemacrawler-mysql:14.08.06') {
             exclude group: 'mysql', module: 'mysql-connector-java'
         }
-
         // ##################代码格式依赖库
         compile('org.jsoup:jsoup:1.9.2')
         compile('jalopy:jalopy:1.5rc3')
@@ -232,21 +231,6 @@ project(':clever-fileupload') {
     }
 }
 
-// 系统监控模块
-project(':clever-monitor') {
-    dependencies {
-        compile project(':clever-common')
-        compile project(':clever-webui')
-        compile project(':clever-zookeeper')
-        compile project(':clever-redis')
-        compile project(':clever-memcached')
-        // ##################
-        compile('io.dropwizard.metrics:metrics-core:3.1.2')
-        // 获取系统硬件信息(CPU 内存 硬盘 MAC等)
-        compile('org.fusesource:sigar:1.6.4')
-    }
-}
-
 // 任务调度监控模块
 project(':clever-quartz') {
     dependencies {
@@ -258,6 +242,7 @@ project(':clever-quartz') {
     }
 }
 
+// 系统基础模块
 project(':clever-sys') {
     dependencies {
         compile project(':clever-common')
@@ -265,6 +250,7 @@ project(':clever-sys') {
 
     }
 }
+
 // 需要删除
 project(':clever-shiro') {
     dependencies {
@@ -287,6 +273,7 @@ project(':clever-sso') {
     }
 }
 
+// Zookeeper 整合模块
 project(':clever-zookeeper') {
     dependencies {
         compile project(':clever-common')
@@ -299,6 +286,7 @@ project(':clever-zookeeper') {
     }
 }
 
+// Redis 整合模块
 project(':clever-redis') {
     dependencies {
         compile project(':clever-common')
@@ -309,6 +297,7 @@ project(':clever-redis') {
     }
 }
 
+// Memcached 整合模块
 project(':clever-memcached') {
     dependencies {
         compile project(':clever-common')
@@ -317,77 +306,54 @@ project(':clever-memcached') {
     }
 }
 
+// FastDFS 整合模块
 project(':clever-fastdfs') {
     dependencies {
         compile project(':clever-common')
         // ##################
-        compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
+        // FastDFS Java客户端需要自己导出jar包
+        // compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
     }
 }
 
+// Snaker 工作流模块
+project(':clever-snaker') {
+    dependencies {
+        compile project(':clever-common')
+        // ##################
+        compile('com.github.snakerflow:snaker-core:2.5.1')
+        compile('com.github.snakerflow:snaker-spring:2.5.1')
+        compile('com.github.snakerflow:snaker-hibernate4:2.5.1')
+        compile('com.github.snakerflow:snaker-quartz:2.5.1')
+        compile('com.github.snakerflow:snaker-ehcache:2.5.1')
+    }
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
+// 系统监控模块
+project(':clever-monitor') {
+    dependencies {
+        compile project(':clever-common')
+        compile project(':clever-webui')
+        compile project(':clever-zookeeper')
+        compile project(':clever-redis')
+        compile project(':clever-memcached')
+        // ##################
+        compile('io.dropwizard.metrics:metrics-core:3.1.2')
+        // 获取系统硬件信息(CPU 内存 硬盘 MAC等)
+        compile('org.fusesource:sigar:1.6.4')
+    }
+}
 
 //// ##################其他依赖
 
 //compile('net.sf.ehcache:ehcache-web:2.0.4')
-
-//compile('redis.clients:jedis:2.8.1')
-//compile('com.googlecode.xmemcached:xmemcached:2.0.0')
-
-//
 //compile('io.netty:netty-all:4.0.36.Final')
 //compile('org.apache.commons:commons-math3:3.6.1') // 数学计算
 //compile('org.apache.commons:commons-pool2:2.4.2') // 资源池
 
-//compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
-//
-
-//
-//// ##################snaker工作流框架
-//compile('com.github.snakerflow:snaker-core:2.5.1')
-//compile('com.github.snakerflow:snaker-spring:2.5.1')
-//compile('com.github.snakerflow:snaker-hibernate4:2.5.1')
-//compile('com.github.snakerflow:snaker-quartz:2.5.1')
-//compile('com.github.snakerflow:snaker-ehcache:2.5.1')
 
 /*
-org.cleverframe
-cleverframe                     --
-clever-web                      -- 最后的可以运行的WEB项目
-    clever-doc                  -- 系统文档：设计文档、操作文档
-    clever-webui                -- 前台UI框架模型封装
-    clever-common               -- 系统核心组件
-    clever-core                 -- 系统核心
-    clever-generator            -- 代码生成系统
-    clever-quartz               -- 任务调度管理
-    clever-zookeeper            -- ZooKeeper管理监控
-
-
-
-    clever-monitor              --
-    clever-ehcache              --
-    clever-redis                --
-    clever-memcached            --
-    clever-fastdfs              --
-    clever-fileupload           --
-    clever-shiro                --
     clever-snaker               --
     clever-activity             --
     clever-foxbpm               --
-    (clever-modules)            --
-    clever-sys                  --
-    clever-sso                  --
-
 */

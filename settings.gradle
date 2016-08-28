@@ -14,4 +14,5 @@ include 'clever-doc'
 include 'clever-zookeeper'
 include 'clever-redis'
 include 'clever-memcached'
+include 'clever-snaker'
 
