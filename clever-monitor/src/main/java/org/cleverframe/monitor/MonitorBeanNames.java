@@ -17,6 +17,7 @@ public class MonitorBeanNames implements IBeanNames {
     public static final String Log4jMonitorService = "monitor_Log4jMonitorService";
     public static final String ZookeeperMonitorService = "monitor_ZookeeperMonitorService";
     public static final String RedisMonitorService = "monitor_RedisMonitorService";
+    public static final String MemcacheMonitorService = "monitor_MemcacheMonitorService";
 
 
     // -------------------------------------------------------------------------------------------//

@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd"
+       default-lazy-init="false">
+
+    <!-- Memcached与Spring整合配置文件 -->
+    <description>Memcached Configuration</description>
+
+    <!-- Memcached客户端工厂配置 -->
+    <bean name="memcachedClient" class="net.rubyeye.xmemcached.utils.XMemcachedClientFactoryBean" destroy-method="shutdown">
+        <!-- Memcached的服务器集群 -->
+        <property name="servers">
+            <!-- <value>host1:port1 host2:port2 host3:port3</value> -->
+            <value>${memcached.host1}</value>
+        </property>
+        <!-- 客户端节点权重设置，对应上面的servers配置 -->
+        <property name="weights">
+            <list>
+                <value>${memcached.host1.weight}</value>
+            </list>
+        </property>
+        <!-- 设置连接池的大小 -->
+        <property name="connectionPoolSize" value="2"/>
+        <!-- 使用二进制协议通讯，默认为TextCommandFactory -->
+        <property name="commandFactory">
+            <bean class="net.rubyeye.xmemcached.command.BinaryCommandFactory"/>
+        </property>
+        <!-- 分布式策略 -->
+        <property name="sessionLocator">
+            <bean class="net.rubyeye.xmemcached.impl.KetamaMemcachedSessionLocator"/>
+        </property>
+        <!-- 序列化转码器 -->
+        <property name="transcoder">
+            <bean class="net.rubyeye.xmemcached.transcoders.SerializingTranscoder"/>
+        </property>
+        <!-- 缓冲区分配器 -->
+<!--
+        <property name="bufferAllocator">
+            <bean class="net.rubyeye.xmemcached.buffer.SimpleBufferAllocator"/>
+        </property>
+-->
+
+        <!-- 设置验证信息 -->
+<!--
+        <property name="authInfoMap">
+            <map>
+                <entry key-ref="server1">
+                    <bean class="net.rubyeye.xmemcached.auth.AuthInfo" factory-method="typical">
+                        <constructor-arg index="0">
+                            <value>index</value>
+                        </constructor-arg>
+                        <constructor-arg index="1">
+                            <value>index-pd</value>
+                        </constructor-arg>
+                    </bean>
+                </entry>
+            </map>
+        </property>
+-->
+    </bean>
+</beans>

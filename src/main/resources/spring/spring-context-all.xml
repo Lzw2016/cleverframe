@@ -63,5 +63,10 @@
     <!--
         Spring与Redis整合(Jedis)
     -->
-    <import resource="spring-context-jedis.xml"/>
+    <!--<import resource="spring-context-jedis.xml"/>-->
+
+    <!--
+        Spring与Memcache整合(Xmemcached)
+    -->
+    <import resource="spring-context-memcached.xml"/>
 </beans>
