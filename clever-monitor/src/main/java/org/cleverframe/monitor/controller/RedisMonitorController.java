@@ -1,5 +1,6 @@
 package org.cleverframe.monitor.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.monitor.MonitorBeanNames;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.util.List;
+import java.util.Set;
 
 /**
  * 作者：LiZW <br/>
@@ -53,101 +55,90 @@ public class RedisMonitorController extends BaseController {
         return ajaxMessage;
     }
 
-//    /**
-//     * 获取Redis配置参数的值<br>
-//     *
-//     * @param parameter 参数名称，可使用“*”匹配，为空返回所有配置
-//     */
-//    @ResponseBody
-//    @RequestMapping("/getConfig")
-//    public AjaxMessage getConfig(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            @RequestParam(value = "parameter", required = false) String parameter) {
-//        AjaxMessage ajaxMessage = new AjaxMessage();
-//        ajaxMessage.setSuccess(true);
-//        ajaxMessage.setObject(redisMonitorService.getConfig(parameter));
-//        return ajaxMessage;
-//    }
+    /**
+     * 获取Redis配置参数的值<br>
+     *
+     * @param parameter 参数名称，可使用“*”匹配，为空返回所有配置
+     */
+    @ResponseBody
+    @RequestMapping("/getConfig")
+    public AjaxMessage<List<String>> getConfig(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(required = false, defaultValue = "*") String parameter) {
+        AjaxMessage<List<String>> ajaxMessage = new AjaxMessage<>(true, "获取Redis配置参数的值成功", null);
+        ajaxMessage.setResult(redisMonitorService.getConfig(parameter));
+        return ajaxMessage;
+    }
 
+    /**
+     * 查询Redis key值
+     */
+    @ResponseBody
+    @RequestMapping("/getKeys")
+    public AjaxMessage<Set<String>> getKeys(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(required = true) String pattern,
+            @RequestParam(required = false, defaultValue = "100") int size) {
+        AjaxMessage<Set<String>> ajaxMessage = new AjaxMessage<>(true, "查询Redis Key成功", null);
+        // pattern 不能是空，或只有“*”
+        if (StringUtils.isBlank(pattern) || StringUtils.isBlank(pattern.replaceAll("\\**", ""))) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("参数pattern非法！(pattern 不能是空，或只有“*”)");
+            return ajaxMessage;
+        }
+        ajaxMessage.setResult(redisMonitorService.getKeys(pattern, size));
+        return ajaxMessage;
+    }
 
-//    /**
-//     * 查询Redis key值
-//     */
-//    @ResponseBody
-//    @RequestMapping("/getKeys")
-//    public AjaxMessage getKeys(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            @RequestParam(value = "pattern") String pattern,
-//            @RequestParam(value = "size", required = false, defaultValue = "100") int size) {
-//        AjaxMessage ajaxMessage = new AjaxMessage();
-//        if (size <= 0) {
-//            size = 100;
-//        }
-//        // pattern 不能是空，或只有“*”
-//        if (StringUtils.isBlank(pattern) || StringUtils.isBlank(pattern.replaceAll("\\**", ""))) {
-//            ajaxMessage.setSuccess(false);
-//            ajaxMessage.setMessage("参数pattern非法！(pattern 不能是空，或只有“*”)");
-//            return ajaxMessage;
-//        }
-//        ajaxMessage.setSuccess(true);
-//        ajaxMessage.setObject(redisMonitorService.getKeys(pattern, size));
-//        return ajaxMessage;
-//    }
+    /**
+     * 获取Key对应的Value，不管其结构
+     */
+    @ResponseBody
+    @RequestMapping("/getValue")
+    public AjaxMessage<Object> getValue(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(required = true) String key) {
+        AjaxMessage<Object> ajaxMessage = new AjaxMessage<>(true, "获取Key对应的Value成功", null);
+        Object object = redisMonitorService.getValue(key);
+        ajaxMessage.setResult(object);
+        if (object == null) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("Key不存在!");
+        }
+        return ajaxMessage;
+    }
 
+    // ----------------------------------------------------------------------------------------------------------------------------
 
-//    /**
-//     * 获取Key对应的Value，不管其结构
-//     *
-//     * @param key
-//     */
-//    @ResponseBody
-//    @RequestMapping("/getValue")
-//    public AjaxMessage getValue(
-//            HttpServletRequest request,
-//            HttpServletResponse response,
-//            @RequestParam(value = "key") String key) {
-//        AjaxMessage ajaxMessage = new AjaxMessage();
-//        Object object = redisMonitorService.getValue(key);
-//        if (object == null) {
-//            ajaxMessage.setSuccess(false);
-//            ajaxMessage.setMessage("key不存在！");
-//        } else {
-//            ajaxMessage.setSuccess(true);
-//            ajaxMessage.setObject(object);
-//        }
-//        return ajaxMessage;
-//    }
+    /**
+     * TODO 测试使用,生产环境删除
+     */
+    private Thread testThread;
 
-
-//    /**
-//     * TODO 测试使用
-//     */
-//    private Thread testThread;
-//
-//    /**
-//     * 随机操作Redis，以便查看监控效果
-//     */
-//    @ResponseBody
-//    @RequestMapping("/startTest")
-//    public AjaxMessage startTest(HttpServletRequest request, HttpServletResponse response) {
-//        // TODO 测试使用
-//        AjaxMessage ajaxMessage = new AjaxMessage();
-//        if (testThread != null && testThread.isAlive()) {
-//            ajaxMessage.setSuccess(false);
-//            ajaxMessage.setMessage("随机操作Redis，已经在运行");
-//        } else {
-//            testThread = new Thread(new Runnable() {
-//                @Override
-//                public void run() {
-//                    redisMonitorService.test();
-//                }
-//            });
-//            testThread.start();
-//            ajaxMessage.setSuccess(true);
-//            ajaxMessage.setMessage("随机操作Redis，启动成功");
-//        }
-//        return ajaxMessage;
-//    }
+    /**
+     * 随机操作Redis，以便查看监控效果<br/>
+     * TODO 测试使用,生产环境删除
+     */
+    @RequestMapping("/startTest")
+    @ResponseBody
+    public AjaxMessage startTest(HttpServletRequest request, HttpServletResponse response) {
+        AjaxMessage ajaxMessage = new AjaxMessage(true, "随机操作Redis，启动成功", null);
+        if (testThread != null && testThread.isAlive()) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("随机操作Redis，已经在运行");
+        } else {
+            //noinspection Convert2Lambda
+            testThread = new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    redisMonitorService.test();
+                }
+            });
+            testThread.start();
+        }
+        return ajaxMessage;
+    }
 }
