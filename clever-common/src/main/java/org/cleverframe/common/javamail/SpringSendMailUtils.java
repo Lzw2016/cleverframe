@@ -139,7 +139,6 @@ public class SpringSendMailUtils {
         return simpleMailMessage;
     }
 
-
     /**
      * 发送一个简单的邮件，不支持html，不支持附件和图片<br/>
      *
