@@ -21,4 +21,9 @@ public class MonitorJspUrlPath implements IJspUrlPath {
      * 应用服务器监控页
      */
     public static final String ServerMonitor = "monitor/ServerMonitor";
+
+    /**
+     * Zookeeper监控页
+     */
+    public static final String ZookeeperMonitor = "monitor/ZookeeperMonitor";
 }
