@@ -35,7 +35,70 @@
 
 <!-- 页面中部 -->
 <div data-options="region:'center',border:true,minWidth:800,minHeight:300">
-
+    <div id="nodeInfoDiv">
+        <table align="center">
+            <tbody>
+            <tr class="row">
+                <td class="label" colspan="2" style="text-align: center">
+                    节点路径:[&nbsp;<label id="zkNodePath" style="color: #2A00FF"></label>&nbsp;]
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点创建时的zxid(czxid):</td>
+                <td class="value"><label id="nodeInfoCzxid"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点最新一次更新发生时的zxid(mzxid):</td>
+                <td class="value"><label id="nodeInfoMzxid"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点创建时的时间戳(ctime):</td>
+                <td class="value"><label id="nodeInfoCtime"></label>
+                </td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点最新一次更新发生时的时间戳(mtime):</td>
+                <td class="value"><label id="nodeInfoMtime"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点数据的更新次数(version):</td>
+                <td class="value"><label id="nodeInfoVersion"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">其子节点的更新次数(cversion):</td>
+                <td class="value"><label id="nodeInfoCversion"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点ACL(授权信息)的更新次数(aclVersion):</td>
+                <td class="value"><label id="nodeInfoAversion"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">ephemeralOwner:</td>
+                <td class="value"><label id="nodeInfoEphemeralOwner"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点数据的字节数(dataLength):</td>
+                <td class="value"><label id="nodeInfoDataLength"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">子节点个数(numChildren):</td>
+                <td class="value"><label id="nodeInfoNumChildren"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">pzxid:</td>
+                <td class="value"><label id="nodeInfoPzxid"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点数据(data):</td>
+                <td class="value"><label id="nodeInfoData"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">节点数据(字符串格式UTF-8):</td>
+                <td class="value"><label id="nodeInfoDataStr"></label></td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 </body>
 </html>

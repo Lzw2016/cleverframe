@@ -13,7 +13,37 @@ var pageJs = function (globalPath) {
     var mainPanel = $("#mainPanel");
     // Zookeeper树结构
     var zookeeperNodeTree = $("#zookeeperNodeTree");
-
+    // 节点信息DIV
+    var nodeInfoDiv = $("#nodeInfoDiv");
+    // 节点路径
+    var zkNodePath = $("#zkNodePath");
+    // 节点创建时的zxid
+    var nodeInfoCzxid = $("#nodeInfoCzxid");
+    // 节点最新一次更新发生时的zxid
+    var nodeInfoMzxid = $("#nodeInfoMzxid");
+    // 节点创建时的时间戳
+    var nodeInfoCtime = $("#nodeInfoCtime");
+    // 节点最新一次更新发生时的时间戳
+    var nodeInfoMtime = $("#nodeInfoMtime");
+    // 节点数据的更新次数
+    var nodeInfoVersion = $("#nodeInfoVersion");
+    // 其子节点的更新次数
+    var nodeInfoCversion = $("#nodeInfoCversion");
+    // 节点ACL(授权信息)的更新次数(aclVersion)
+    var nodeInfoAversion = $("#nodeInfoAversion");
+    // ephemeralOwner
+    var nodeInfoEphemeralOwner = $("#nodeInfoEphemeralOwner");
+    // 节点数据的字节数
+    var nodeInfoDataLength = $("#nodeInfoDataLength");
+    // 子节点个数
+    var nodeInfoNumChildren = $("#nodeInfoNumChildren");
+    // pzxid
+    var nodeInfoPzxid = $("#nodeInfoPzxid");
+    // 节点数据
+    var nodeInfoData = $("#nodeInfoData");
+    // 节点数据(字符串格式)
+    var nodeInfoDataStr = $("#nodeInfoDataStr");
+    
     /**
      * 页面初始化方法
      */
@@ -31,6 +61,8 @@ var pageJs = function (globalPath) {
                 handler: function () {
                     // 刷新 Zookeeper树结构
                     zookeeperNodeTree.tree("reload");
+                    // 设置节点信息
+                    _this.setNodeInfo(false);
                 }
             }]
         });
@@ -45,6 +77,7 @@ var pageJs = function (globalPath) {
                 } else {
                     param.path = param.id;
                 }
+                //noinspection JSUnusedLocalSymbols
                 $.ajax({
                     type: "POST",
                     dataType: "JSON",
@@ -87,7 +120,14 @@ var pageJs = function (globalPath) {
                     data: {"path": node.id},
                     async: true,
                     success: function (data) {
-                        console.log(data);
+                        if(data.success == true && data.result) {
+                            //noinspection JSPrimitiveTypeWrapperUsage
+                            data.result.nodePath = node.id;
+                        } else {
+                            data.result = false;
+                        }
+                        // 设置节点信息
+                        _this.setNodeInfo(data.result);
                     }
                 });
             }
@@ -101,7 +141,8 @@ var pageJs = function (globalPath) {
      * 页面数据初始化
      */
     this.dataBind = function () {
-
+        // 设置节点信息
+        _this.setNodeInfo(false);
     };
 
     /**
@@ -111,7 +152,29 @@ var pageJs = function (globalPath) {
     };
 
     // ---------------------------------------------------------------------------------------------------------
-
+    // 设置节点信息
+    this.setNodeInfo = function (nodeInfo) {
+        if(!nodeInfo) {
+            nodeInfoDiv.css("display", "none");
+        } else {
+            nodeInfoDiv.css("display", "block");
+            zkNodePath.text(nodeInfo.nodePath);
+            nodeInfoCzxid.text(nodeInfo.czxid);
+            nodeInfoMzxid.text(nodeInfo.mzxid);
+            nodeInfoCtime.text(nodeInfo.ctime);
+            nodeInfoMtime.text(nodeInfo.mtime);
+            nodeInfoVersion.text(nodeInfo.version);
+            nodeInfoCversion.text(nodeInfo.cversion);
+            nodeInfoAversion.text(nodeInfo.aclVersion);
+            nodeInfoEphemeralOwner.text(nodeInfo.ephemeralOwner);
+            nodeInfoDataLength.text(nodeInfo.dataLength);
+            nodeInfoNumChildren.text(nodeInfo.numChildren);
+            nodeInfoPzxid.text(nodeInfo.pzxid);
+            nodeInfoData.text(nodeInfo.data);
+            nodeInfoDataStr.text(nodeInfo.dataStr);
+        }
+    }
+    
 };
 
 /**
