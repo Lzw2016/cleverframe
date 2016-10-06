@@ -4,6 +4,7 @@ import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.monitor.MonitorBeanNames;
+import org.cleverframe.monitor.MonitorJspUrlPath;
 import org.cleverframe.monitor.service.Log4jMonitorService;
 import org.cleverframe.monitor.vo.request.LoggerInfoQueryVo;
 import org.cleverframe.monitor.vo.request.SetLoggerLevelVo;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -32,6 +34,11 @@ public class Log4jMonitorController extends BaseController {
     @Autowired
     @Qualifier(MonitorBeanNames.Log4jMonitorService)
     private Log4jMonitorService log4jMonitorService;
+
+    @RequestMapping("/Log4jMonitor" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getLog4jMonitorJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(MonitorJspUrlPath.Log4jMonitor);
+    }
 
     @RequestMapping("/getAllLoggerInfo")
     @ResponseBody

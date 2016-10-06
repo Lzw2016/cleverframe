@@ -52,7 +52,7 @@ public class Log4jMonitorService extends BaseService {
         List<Logger> loggerList = Log4jManager.getAllLogList();
         List<Logger> tmp = new ArrayList<>();
         for (Logger logger : loggerList) {
-            if (StringUtils.isNotBlank(loggerName) && !logger.getName().equals(loggerName)) {
+            if (StringUtils.isNotBlank(loggerName) && !logger.getName().startsWith(loggerName)) {
                 continue;
             }
             if (StringUtils.isNotBlank(level) && !logger.getEffectiveLevel().toString().toUpperCase().equals(level.toUpperCase())) {

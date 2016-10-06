@@ -1,0 +1,55 @@
+/*查询表单样式*/
+#searchForm {
+    margin-top: 12px;
+    margin-left: 15px;
+}
+
+#searchForm .row {
+    margin-bottom: 8px;
+}
+
+#searchForm .row label {
+    display: inline-block;
+    width: 75px;
+    text-align: right;
+}
+
+#searchForm .row input, select {
+    width: 200px;
+}
+
+#searchForm .row .column {
+    margin-right: 10px;
+}
+
+#searchForm .row .columnLast {
+    margin-right: 0;
+}
+
+/*编辑表单样式*/
+#editForm {
+    margin-top: 12px;
+    margin-left: 15px;
+}
+
+#editForm .row {
+    margin-bottom: 8px;
+}
+
+#editForm .row label {
+    display: inline-block;
+    width: 75px;
+    text-align: right;
+}
+
+#editForm .row input, select {
+    width: 200px;
+}
+
+#editForm .row .column {
+    margin-right: 10px;
+}
+
+#editForm .row .columnLast {
+    margin-right: 0;
+}
