@@ -19,8 +19,8 @@
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
-    <link rel="stylesheet" type="text/css" href="${applicationScope.modulesPath}/monitor/Log4jMonitor.css">
-    <script type="text/javascript" src="${applicationScope.modulesPath}/monitor/Log4jMonitor.js"></script>
+    <link rel="stylesheet" type="text/css" href="${applicationScope.modulesPath}/monitor/RedisMonitor.css">
+    <script type="text/javascript" src="${applicationScope.modulesPath}/monitor/RedisMonitor.js"></script>
     <%-- 页面标题 --%>
     <title>Redis监控</title>
 </head>
