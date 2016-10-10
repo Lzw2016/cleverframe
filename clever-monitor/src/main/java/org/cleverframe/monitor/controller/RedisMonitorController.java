@@ -4,6 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.monitor.MonitorBeanNames;
+import org.cleverframe.monitor.MonitorJspUrlPath;
 import org.cleverframe.monitor.service.RedisMonitorService;
 import org.cleverframe.monitor.vo.response.RedisMonitorInfoVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,6 +13,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,6 +32,11 @@ public class RedisMonitorController extends BaseController {
     @Autowired
     @Qualifier(MonitorBeanNames.RedisMonitorService)
     private RedisMonitorService redisMonitorService;
+
+    @RequestMapping("/RedisMonitor" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getRedisMonitorJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(MonitorJspUrlPath.RedisMonitor);
+    }
 
     /**
      * 获取Redis信息

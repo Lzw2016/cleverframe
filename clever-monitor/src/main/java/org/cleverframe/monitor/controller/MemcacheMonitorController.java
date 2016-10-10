@@ -3,6 +3,7 @@ package org.cleverframe.monitor.controller;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.monitor.MonitorBeanNames;
+import org.cleverframe.monitor.MonitorJspUrlPath;
 import org.cleverframe.monitor.service.MemcacheMonitorService;
 import org.cleverframe.monitor.vo.response.MemcachedMonitorStatVo;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -28,6 +30,11 @@ public class MemcacheMonitorController extends BaseController {
     @Autowired
     @Qualifier(MonitorBeanNames.MemcacheMonitorService)
     private MemcacheMonitorService memcacheMonitorService;
+
+    @RequestMapping("/MemcacheMonitor" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getMemcacheMonitorJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(MonitorJspUrlPath.MemcacheMonitor);
+    }
 
     /**
      * 获取Memcached 统计信息<br>

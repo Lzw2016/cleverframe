@@ -58,7 +58,7 @@
     <!--
         Spring与zookeeper整合(Curator)
     -->
-    <import resource="spring-context-zookeeper.xml"/>
+    <!--<import resource="spring-context-zookeeper.xml"/>-->
 
     <!--
         Spring与Redis整合(Jedis)
@@ -68,5 +68,5 @@
     <!--
         Spring与Memcache整合(Xmemcached)
     -->
-    <import resource="spring-context-memcached.xml"/>
+    <!--<import resource="spring-context-memcached.xml"/>-->
 </beans>

@@ -41,6 +41,6 @@ clever-monitor
     2.监控模块主页
     3.Log4jMonitor.jsp - 已完成
     4.JvmMonitor.jsp - 服务端也未完成
-    5.Memcache 监控JSP页面
-    6.Redis 监控JSP页面
+    5.MemcacheMonitor.jsp 监控JSP页面
+    6.RedisMonitor.jsp 监控JSP页面
 

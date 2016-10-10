@@ -31,4 +31,14 @@ public class MonitorJspUrlPath implements IJspUrlPath {
      * Log4j监控页
      */
     public static final String Log4jMonitor = "monitor/Log4jMonitor";
+
+    /**
+     * Redis监控
+     */
+    public static final String RedisMonitor = "monitor/RedisMonitor";
+
+    /**
+     * Memcache监控
+     */
+    public static final String MemcacheMonitor = "monitor/MemcacheMonitor";
 }
