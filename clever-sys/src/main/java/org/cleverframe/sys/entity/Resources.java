@@ -1,4 +1,4 @@
-package org.cleverframe.core.entity;
+package org.cleverframe.sys.entity;
 
 import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.annotations.DynamicInsert;

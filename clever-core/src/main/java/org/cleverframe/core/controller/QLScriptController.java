@@ -64,7 +64,7 @@ public class QLScriptController extends BaseController {
             BindingResult bindingResult) {
         DataGridJson<QLScript> json = new DataGridJson<>();
         Page<QLScript> qLScriptPage = qLScriptService.findAllQLScript(
-                new Page<QLScript>(request, response),
+                new Page<>(request, response),
                 qlScriptQueryVo.getName(),
                 qlScriptQueryVo.getScriptType(),
                 qlScriptQueryVo.getId(),

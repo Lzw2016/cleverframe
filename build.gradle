@@ -22,6 +22,8 @@ dependencies {
     compile project(':clever-redis')
     compile project(':clever-memcached')
 
+    compile project(':clever-shiro') // 需要删除
+
     testCompile('junit:junit:4.12')
     testCompile('org.springframework:spring-test:4.2.7.RELEASE')
     testCompile('org.mockito:mockito-all:1.10.19')
@@ -258,12 +260,12 @@ project(':clever-shiro') {
         compile project(':clever-core')
         compile project(':clever-sys')
         // ##################Apache Shiro权限框架
-        compile('org.apache.shiro:shiro-core:1.3.0')
-        compile('org.apache.shiro:shiro-web:1.3.0')
-        compile('org.apache.shiro:shiro-cas:1.3.0')
-//        compile('org.apache.shiro:shiro-spring:1.3.0')
-//        compile('org.apache.shiro:shiro-ehcache:1.3.0')
-//        compile('org.apache.shiro:shiro-quartz:1.3.0')
+        compile('org.apache.shiro:shiro-core:1.3.2')
+        compile('org.apache.shiro:shiro-web:1.3.2')
+        compile('org.apache.shiro:shiro-cas:1.3.2')
+        compile('org.apache.shiro:shiro-spring:1.3.2')
+        compile('org.apache.shiro:shiro-ehcache:1.3.2')
+        compile('org.apache.shiro:shiro-quartz:1.3.2')
     }
 }
 

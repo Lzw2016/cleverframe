@@ -58,7 +58,7 @@ public class MDictController extends BaseController {
             BindingResult bindingResult) {
         DataGridJson<MDict> json = new DataGridJson<>();
         Page<MDict> qLScriptPage = mDictService.findByPage(
-                new Page<MDict>(request, response),
+                new Page<>(request, response),
                 mDictQueryVo.getMdictKey(),
                 mDictQueryVo.getMdictType(),
                 mDictQueryVo.getId(),

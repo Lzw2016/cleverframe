@@ -18,7 +18,6 @@ public class CoreBeanNames implements IBeanNames {
     public static final String DictDao = "core_DictDao";
     public static final String MDictDao = "core_MDictDao";
     public static final String AccessLogDao = "core_AccessLogDao";
-    public static final String ResourcesDao = "core_ResourcesDao";
 
     // -------------------------------------------------------------------------------------------//
     // Service
@@ -28,7 +27,6 @@ public class CoreBeanNames implements IBeanNames {
     public static final String DictService = "core_DictService";
     public static final String MDictService = "core_MDictService";
     public static final String AccessLogService = "core_AccessLogService";
-    public static final String ResourcesService = "core_ResourcesService";
 
     // -------------------------------------------------------------------------------------------//
     // Other

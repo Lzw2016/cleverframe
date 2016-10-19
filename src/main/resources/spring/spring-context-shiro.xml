@@ -8,7 +8,7 @@
     <!-- Apache Shiro与Spring整合配置文件 -->
     <description>Shiro Configuration</description>
 
-    <!--
+<!--
 	http://{host}:{port}/{appName}/druid/*
 	http://{host}:{port}/{appName}/servlet/validateCodeServlet
 	http://{host}:{port}/{appName}/{static}/{js、css、UI等前端框架}/
@@ -16,9 +16,9 @@
 	http://{host}:{port}/{appName}/{doc}/{系统文档路径}/
 	http://{host}:{port}/{appName}/{mvc}/{MVC框架的请求映射路径}/
 -->
-    <!-- 安全认证过滤器,Shiro的Web过滤器 -->
+    <!-- Shiro权限控制过滤器入口 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
-        <property name="securityManager" ref="securityManager" /><!-- 安全管理器,定义Shiro主要业务对象 -->
+        <property name="securityManager" ref="securityManager" /><!-- Shiro安全管理器 -->
         <property name="loginUrl" value="/${mvcPath}/sys/loginJsp" /><!-- 登入页面，Web服务器启动后会自动跳转到该地址 -->
         <property name="successUrl" value="/${mvcPath}/sys/loginSuccess" /><!-- 登入成功页面 -->
         <property name="unauthorizedUrl" value="/${modulesPath}/error/403.jsp" /><!-- 授权失败跳转路径 -->
@@ -40,17 +40,6 @@
         </property>
     </bean>
 
-    <!-- 基于Form表单的身份验证过滤器，用于用户登入 -->
-    <bean id="formAuthenticationFilter" class="org.cleverframe.shiro.shiro.ShiroFormAuthenticationFilter">
-        <property name="loginUrl" value="/${mvcPath}/sys/login"/><!-- 设置用户登录表单请求的请求地址 -->
-        <property name="usernameParam" value="userName"/><!-- 设置用户登录表单请求的"用户名"参数名 -->
-        <property name="passwordParam" value="password"/><!-- 设置用户登录表单请求的"密码"参数名 -->
-        <property name="captchaParam" value="validateCode"/><!-- 设置用户登录表单请求的"验证码"参数名 -->
-        <property name="rememberMeParam" value="rememberMe"/><!-- 设置用户登录表单请求的"记住我"参数名,boolean类型，true表示rememberMe -->
-        <property name="loginFailedMaxCount" value="3"/><!-- 最多连续登入失败次数，失败次数大于此值就必须使用验证码登入 -->
-        <property name="validateCodeTimeout" value="60000"/><!-- 验证码超时时间，默认值：60秒 -->
-    </bean>
-
     <!-- 安全管理器,定义Shiro主要业务对象 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
         <property name="realm" ref="shiroAuthorizingRealm" /><!-- Realm(AuthorizingRealm)实现 -->
@@ -59,7 +48,7 @@
         <property name="rememberMeManager" ref="rememberMeManager" /><!-- rememberMe管理器 -->
     </bean>
 
-    <!-- Realm(AuthorizingRealm)实现 -->
+    <!-- 安全管理器 - Realm(AuthorizingRealm)实现 -->
     <bean id="shiroAuthorizingRealm" class="org.cleverframe.shiro.shiro.ShiroAuthorizingRealm">
         <property name="cachingEnabled" value="true" /><!-- 启用缓存，默认false -->
         <property name="authenticationCachingEnabled" value="true"/><!-- 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false -->
@@ -70,6 +59,48 @@
         <property name="permissionResolver" ref="permissionResolver"/><!-- 设置权限字符串解析器 -->
         <property name="rolePermissionResolver" ref="rolePermissionResolver"/><!-- 根据角色字符串解析出角色所有的权限 -->
     </bean>
+
+    <!-- 安全管理器 - 缓存管理器,用户授权信息Cache,采用EhCache -->
+    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
+        <property name="cacheManager" ref="cacheManager" />
+    </bean>
+
+    <!-- 安全管理器 - shiro会话管理器 -->
+    <bean id="shiroSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
+        <property name="sessionValidationSchedulerEnabled" value="true" /><!-- 是否开启会话验证器，默认是开启的 -->
+        <property name="globalSessionTimeout" value="1800000" /><!-- 设置全局会话超时时间，默认30分钟，即如果30分钟内没有访问会话将过期-->
+        <property name="deleteInvalidSessions" value="true" /><!-- 是否删除过期的会话,默认是开启的 -->
+        <property name="sessionIdCookieEnabled" value="true" /><!-- 是否启用Session Id Cookie，默认是启用的 -->
+        <property name="sessionDAO" ref="sessionDAO" /><!-- 会话DAO -->
+        <property name="sessionValidationScheduler" ref="sessionValidationScheduler" /><!-- 会话验证调度器 -->
+        <property name="sessionIdCookie" ref="sessionIdCookie" /><!-- 会话Cookie模板 -->
+    </bean>
+
+    <!-- 安全管理器 - rememberMe管理器 -->
+    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
+        <!-- rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位） -->
+        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
+        <!-- 设置rememberMe的Cookie模版 -->
+        <property name="cookie">
+            <bean class="org.apache.shiro.web.servlet.SimpleCookie">
+                <property name="name" value="rememberMe" /><!-- 设置Cookie的名字 -->
+                <property name="httpOnly" value="true" /><!-- 如果设置为true，有助于减少某些类型的跨站点脚本攻击 -->
+                <property name="maxAge" value="2592000" /><!-- 30天 -->
+            </bean>
+        </property>
+    </bean>
+
+    <!-- Shiro权限控制过滤器入口过滤器 - 基于Form表单的身份验证过滤器，用于验证用户身份信息 -->
+    <bean id="formAuthenticationFilter" class="org.cleverframe.shiro.shiro.ShiroFormAuthenticationFilter">
+        <property name="loginUrl" value="/${mvcPath}/sys/login"/><!-- 设置用户登录表单请求的请求地址 -->
+        <property name="usernameParam" value="userName"/><!-- 设置用户登录表单请求的"用户名"参数名 -->
+        <property name="passwordParam" value="password"/><!-- 设置用户登录表单请求的"密码"参数名 -->
+        <property name="captchaParam" value="validateCode"/><!-- 设置用户登录表单请求的"验证码"参数名 -->
+        <property name="rememberMeParam" value="rememberMe"/><!-- 设置用户登录表单请求的"记住我"参数名,boolean类型，true表示rememberMe -->
+        <property name="loginFailedMaxCount" value="3"/><!-- 最多连续登入失败次数，失败次数大于此值就必须使用验证码登入 -->
+        <property name="validateCodeTimeout" value="60000"/><!-- 验证码超时时间，默认值：60秒 -->
+    </bean>
+
 
     <!-- 自定义Shiro权限解析器，把权限字符串解析成Permission对象 -->
     <bean id="permissionResolver" class="org.cleverframe.shiro.shiro.ShiroPermissionResolver"/>
@@ -82,22 +113,6 @@
         <property name="hashAlgorithmName" value="SHA-1"/><!-- 指定散列算法为"SHA-1"，需要和生成密码时的一样 -->
         <property name="hashIterations" value="1024"/><!-- 散列迭代次数，需要和生成密码时的一样 -->
         <property name="storedCredentialsHexEncoded" value="true"/><!-- 表示是否存储散列后的密码为16进制，需要和生成密码时的一样，默认true，false表示Base64编码 -->
-    </bean>
-
-    <!-- 缓存管理器,用户授权信息Cache,采用EhCache -->
-    <bean id="shiroCacheManager" class="org.apache.shiro.cache.ehcache.EhCacheManager">
-        <property name="cacheManager" ref="cacheManager" />
-    </bean>
-
-    <!-- shiro会话管理器 -->
-    <bean id="shiroSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <property name="sessionValidationSchedulerEnabled" value="true" /><!-- 是否开启会话验证器，默认是开启的 -->
-        <property name="globalSessionTimeout" value="1800000" /><!-- 设置全局会话超时时间，默认30分钟，即如果30分钟内没有访问会话将过期-->
-        <property name="deleteInvalidSessions" value="true" /><!-- 是否删除过期的会话,默认是开启的 -->
-        <property name="sessionIdCookieEnabled" value="true" /><!-- 是否启用Session Id Cookie，默认是启用的 -->
-        <property name="sessionDAO" ref="sessionDAO" /><!-- 会话DAO -->
-        <property name="sessionValidationScheduler" ref="sessionValidationScheduler" /><!-- 会话验证调度器 -->
-        <property name="sessionIdCookie" ref="sessionIdCookie" /><!-- 会话Cookie模板 -->
     </bean>
 
     <!-- 会话验证调度器 -->
@@ -123,20 +138,6 @@
         <property name="path" value="" /><!-- 设置Cookie的路径，默认空，即存储在域名根下 -->
         <property name="maxAge" value="-1" /><!-- 设置Cookie的过期时间，秒为单位，默认-1 表示关闭浏览器时过期Cookie -->
         <property name="httpOnly" value="true" /><!-- 如果设置为true，有助于减少某些类型的跨站点脚本攻击 -->
-    </bean>
-
-    <!-- rememberMe管理器 -->
-    <bean id="rememberMeManager" class="org.apache.shiro.web.mgt.CookieRememberMeManager">
-        <!-- rememberMe cookie加密的密钥 建议每个项目都不一样 默认AES算法 密钥长度（128 256 512 位） -->
-        <property name="cipherKey" value="#{T(org.apache.shiro.codec.Base64).decode('4AvVhmFLUs0KTA3Kprsdag==')}" />
-        <!-- 设置rememberMe的Cookie模版 -->
-        <property name="cookie">
-            <bean class="org.apache.shiro.web.servlet.SimpleCookie">
-                <property name="name" value="rememberMe" /><!-- 设置Cookie的名字 -->
-                <property name="httpOnly" value="true" /><!-- 如果设置为true，有助于减少某些类型的跨站点脚本攻击 -->
-                <property name="maxAge" value="2592000" /><!-- 30天 -->
-            </bean>
-        </property>
     </bean>
 
     <!-- Shiro生命周期处理器,保证实现了Shiro内部lifecycle函数的bean执行 -->
