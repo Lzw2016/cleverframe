@@ -14,8 +14,7 @@ clever-core
 依赖模块：clever-common、clever-webui
 未完成功能：
     1.模块管理主页
-    2.系统资源管理 core_resources
-    3.多级字典管理
+    2.多级字典管理
 
 clever-generator
 依赖模块：clever-common、clever-core
@@ -43,6 +42,13 @@ clever-monitor
     4.JvmMonitor.jsp - 服务端也未完成
     5.MemcacheMonitor.jsp 监控JSP页面
     6.RedisMonitor.jsp 监控JSP页面
+
+clever-sys
+依赖模块：clever-common、clever-core
+未完成功能：
+
+
+
 
 
 

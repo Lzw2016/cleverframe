@@ -36,11 +36,6 @@ public class Menu extends DataEntity {
     private Character menuType;
 
     /**
-     * 菜单类别名称
-     */
-    private String categoryName;
-
-    /**
      * 菜单名称
      */
     private String name;
@@ -109,20 +104,6 @@ public class Menu extends DataEntity {
      */
     public void setMenuType(Character menuType) {
         this.menuType = menuType;
-    }
-
-    /**
-     * 获取 菜单类别名称
-     */
-    public String getCategoryName() {
-        return categoryName;
-    }
-
-    /**
-     * 设置 菜单类别名称
-     */
-    public void setCategoryName(String categoryName) {
-        this.categoryName = categoryName;
     }
 
     /**

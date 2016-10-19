@@ -1,10 +1,12 @@
 package org.cleverframe.sys.attributes;
 
+import org.cleverframe.common.attributes.ISessionAttributes;
+
 /**
  * SYS模块的Session属性范围值名称
  * Created by LiZW on 2016-4-24.
  */
-public class SysSessionAttributes {
+public class SysSessionAttributes implements ISessionAttributes {
 
     /**
      * 用户连续登入失败次数,类型:int

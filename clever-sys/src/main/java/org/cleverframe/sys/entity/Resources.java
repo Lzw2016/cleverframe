@@ -16,21 +16,26 @@ import javax.persistence.Table;
  * 创建时间：2016-7-14 16:33 <br/>
  */
 @Entity
-@Table(name = "core_resources")
+@Table(name = "sys_resources")
 @DynamicInsert
 @DynamicUpdate
 public class Resources extends IdEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * URL资源（1：URL资源；2：UI资源）
+     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
      */
-    public static final Character URL_RESOURCES = '1';
+    public static final Character WEB_PAGE = '1';
 
     /**
-     * UI资源（1：URL资源；2：UI资源）
+     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
      */
-    public static final Character UI_RESOURCES = '2';
+    public static final Character DATA_URL = '2';
+
+    /**
+     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
+     */
+    public static final Character UI_ELEMENT = '3';
 
     /**
      * 资源标题
