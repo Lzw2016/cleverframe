@@ -2,6 +2,7 @@ package org.cleverframe.common.persistence;
 
 import org.cleverframe.common.mapper.BeanMapConverter;
 
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Set;
@@ -22,10 +23,23 @@ public class Parameter extends HashMap<String, Object> {
 
     /**
      * 构造类，JavaBean对象的属性名转成key，属性值转成value<br/>
+     * <b>注意: 参数 bean 只能是一个JavaBean,不能是一个基本类型如：int,byte,short等</b><br/>
      *
      * @param bean JavaBean对象
      */
     public Parameter(Object bean) {
+        // 确认 bean 不是基本类型
+        if (bean instanceof Short
+                || bean instanceof Long
+                || bean instanceof Integer
+                || bean instanceof Float
+                || bean instanceof Double
+                || bean instanceof Charset
+                || bean instanceof String
+                || bean instanceof Byte) {
+            put("p1", bean);
+            return;
+        }
         if (bean != null) {
             Map<String, Object> map = BeanMapConverter.toMap(bean);
             if (map != null && map.size() > 0) {
