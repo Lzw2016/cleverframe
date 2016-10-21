@@ -211,8 +211,8 @@ CREATE TABLE sys_user_role
 ==================================================================================================================== */
 CREATE TABLE sys_resources_relation
 (
-    resources_id                bigint          NOT NULL                            COMMENT '系统Web页面资源ID',
-    dependence_resources_id     bigint          NOT NULL                            COMMENT '系统Web页面类依赖的资源ID,如：数据请求URL地址、Web页面UI',
+    resources_id                bigint          NOT NULL                            COMMENT '资源ID',
+    dependence_resources_id     bigint          NOT NULL                            COMMENT '依赖的资源ID,如：数据请求URL地址、Web页面UI',
     PRIMARY KEY (resources_id, dependence_resources_id)
 ) COMMENT = '系统资源关系表';
 /*------------------------------------------------------------------------------------------------------------------------ 

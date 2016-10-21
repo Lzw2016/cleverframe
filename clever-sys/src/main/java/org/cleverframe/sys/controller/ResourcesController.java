@@ -8,10 +8,8 @@ import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.SysJspUrlPath;
 import org.cleverframe.sys.entity.Resources;
 import org.cleverframe.sys.service.ResourcesService;
-import org.cleverframe.sys.vo.request.ResourcesAddVo;
-import org.cleverframe.sys.vo.request.ResourcesDeleteVo;
-import org.cleverframe.sys.vo.request.ResourcesQueryVo;
-import org.cleverframe.sys.vo.request.ResourcesUpdateVo;
+import org.cleverframe.sys.vo.request.*;
+import org.cleverframe.sys.vo.response.ResourcesTreeNodeVo;
 import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * 作者：LiZW <br/>
@@ -122,4 +121,73 @@ public class ResourcesController extends BaseController {
         return message;
     }
 
+    /**
+     * 查询一个页面资源的所有依赖资源(不需要分页)
+     */
+    @RequestMapping("/findDependenceResources")
+    @ResponseBody
+    public AjaxMessage<List<Resources>> findDependenceResources(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid DependenceResourcesQueryVo dependenceResourcesQueryVo,
+            BindingResult bindingResult) {
+        AjaxMessage<List<Resources>> message = new AjaxMessage<>();
+        List<Resources> list = null;
+        if (beanValidator(bindingResult, message)) {
+            list = resourcesService.findDependenceResources(dependenceResourcesQueryVo.getId());
+        }
+        message.setResult(list);
+        return message;
+    }
+
+    /**
+     * 为页面资源增加一个依赖资源
+     */
+    @RequestMapping("/addDependenceResources")
+    @ResponseBody
+    public AjaxMessage<String> addDependenceResources(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid DependenceResourcesAddVo dependenceResourcesAddVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "增加依赖资源成功", null);
+        if (beanValidator(bindingResult, message)) {
+            boolean flag = resourcesService.addDependenceResources(dependenceResourcesAddVo.getResourcesId(), dependenceResourcesAddVo.getDependenceResourcesId());
+            if (!flag) {
+                message.setSuccess(false);
+                message.setFailMessage("增加依赖资源成功失败");
+            }
+        }
+        return message;
+    }
+
+    /**
+     * 为页面资源删除一个依赖资源
+     */
+    @RequestMapping("/deleteDependenceResources")
+    @ResponseBody
+    public AjaxMessage<String> deleteDependenceResources(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid DependenceResourcesDeleteVo dependenceResourcesDeleteVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "删除依赖资源成功", null);
+        if (beanValidator(bindingResult, message)) {
+            boolean flag = resourcesService.addDependenceResources(dependenceResourcesDeleteVo.getResourcesId(), dependenceResourcesDeleteVo.getDependenceResourcesId());
+            if (!flag) {
+                message.setSuccess(false);
+                message.setFailMessage("删除依赖资源成功失败");
+            }
+        }
+        return message;
+    }
+
+    /**
+     * 查询资源依赖树(查询系统所有资源:只分两级，页面资源和后台资源)
+     */
+    @RequestMapping("/findResourcesTree")
+    @ResponseBody
+    public List<ResourcesTreeNodeVo> findResourcesTree(HttpServletRequest request, HttpServletResponse response) {
+        return resourcesService.findResourcesTree();
+    }
 }
