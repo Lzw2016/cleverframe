@@ -10,6 +10,7 @@ public class SysBeanNames implements IBeanNames {
     // -------------------------------------------------------------------------------------------//
     // Dao
     // -------------------------------------------------------------------------------------------//
+    public static final String ResourcesDao = "sys_ResourcesDao";
     public static final String UserDao = "sys_UserDao";
     public static final String RoleDao = "sys_RoleDao";
     public static final String OrganizationDao = "sys_OrganizationDao";
@@ -20,6 +21,7 @@ public class SysBeanNames implements IBeanNames {
     // -------------------------------------------------------------------------------------------//
     // Service
     // -------------------------------------------------------------------------------------------//
+    public static final String ResourcesService = "sys_ResourcesService";
     public static final String UserService = "sys_UserService";
     public static final String RoleService = "sys_RoleService";
     public static final String OrganizationService = "sys_OrganizationService";

@@ -99,7 +99,7 @@ clever-sys
 
 /${mvcPath}/generator/codeformat/format.json
 
-/${mvcPath}/generator/codetemplate//CodeTemplate.html
+/${mvcPath}/generator/codetemplate/CodeTemplate.html
 /${mvcPath}/generator/codetemplate/findAllCodeTemplate.json
 /${mvcPath}/generator/codetemplate/findChildNode.json
 /${mvcPath}/generator/codetemplate/addCodeTemplateCategory.json
@@ -199,3 +199,7 @@ clever-sys
 /${mvcPath}/monitor/zookeeper/ZookeeperMonitor.html
 /${mvcPath}/monitor/zookeeper/getChildren.json
 /${mvcPath}/monitor/zookeeper/getZNodeInfo.json
+
+
+## =========== clever-sys
+/${mvcPath}/sys/resources/Resources.html

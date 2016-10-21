@@ -7,4 +7,8 @@ import org.cleverframe.common.IJspUrlPath;
  * 创建时间：2016-8-23 15:21 <br/>
  */
 public class SysJspUrlPath implements IJspUrlPath {
+    /**
+     * 资源管理页面
+     */
+    public static final String Resources = "sys/Resources";
 }

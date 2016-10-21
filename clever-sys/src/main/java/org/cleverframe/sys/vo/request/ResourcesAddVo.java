@@ -1,67 +1,50 @@
-package org.cleverframe.sys.entity;
+package org.cleverframe.sys.vo.request;
 
-import org.cleverframe.core.persistence.entity.IdEntity;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import org.cleverframe.common.vo.request.BaseRequestVo;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.validation.constraints.Pattern;
 
 /**
- * 系统资源表
- * <p>
  * 作者：LiZW <br/>
- * 创建时间：2016-7-14 16:33 <br/>
+ * 创建时间：2016/10/21 22:25 <br/>
  */
-@Entity
-@Table(name = "sys_resources")
-@DynamicInsert
-@DynamicUpdate
-public class Resources extends IdEntity {
+public class ResourcesAddVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
-
-    /**
-     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
-     */
-    public static final Character WEB_PAGE = '1';
-
-    /**
-     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
-     */
-    public static final Character DATA_URL = '2';
-
-    /**
-     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
-     */
-    public static final Character UI_ELEMENT = '3';
 
     /**
      * 资源标题
      */
+    @NotBlank(message = "资源标题不能为空")
+    @Length(min = 1, max = 255, message = "资源标题值长度不能超过255个字符")
     private String title;
 
     /**
      * 资源URL地址
      */
+    @NotBlank(message = "资源URL地址不能为空")
+    @Length(min = 1, max = 255, message = "资源URL地址值长度不能超过255个字符")
     private String resourcesUrl;
 
     /**
      * 资源访问所需要的权限标识字符串
      */
+    @NotBlank(message = "权限标识不能为空")
+    @Length(min = 1, max = 255, message = "权限标识值长度不能超过255个字符")
     private String permission;
 
     /**
      * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
      */
-    private Character resourcesType;
+    @NotBlank(message = "资源类型不能为空")
+    @Pattern(regexp = "1|2|3", message = "资源类型必须取值(1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源)")
+    private String resourcesType;
 
     /**
      * 资源说明
      */
-    @Lob
-    @Column(columnDefinition = "MediumText")
+    @NotBlank(message = "资源说明不能为空")
     private String description;
 
     /*--------------------------------------------------------------
@@ -92,11 +75,11 @@ public class Resources extends IdEntity {
         this.permission = permission;
     }
 
-    public Character getResourcesType() {
+    public String getResourcesType() {
         return resourcesType;
     }
 
-    public void setResourcesType(Character resourcesType) {
+    public void setResourcesType(String resourcesType) {
         this.resourcesType = resourcesType;
     }
 

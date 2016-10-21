@@ -210,8 +210,8 @@ public class HibernateDao<T extends Serializable> {
      * @return 更新记录数
      */
     public int deleteById(Serializable id) {
-        String updateHql = String.format("delete from %s where id = :p1", entityClass.getSimpleName());
-        return updateByHql(updateHql, new Parameter(id));
+        String updateHql = String.format("delete from %s where id = :id", entityClass.getSimpleName());
+        return updateByHql(updateHql, new Parameter(new Object[][]{{"id", id}}));
     }
 
     /**

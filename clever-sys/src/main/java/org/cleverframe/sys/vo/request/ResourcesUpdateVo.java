@@ -1,41 +1,21 @@
-package org.cleverframe.sys.entity;
+package org.cleverframe.sys.vo.request;
 
-import org.cleverframe.core.persistence.entity.IdEntity;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import org.cleverframe.common.vo.request.BaseRequestVo;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.Lob;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
- * 系统资源表
- * <p>
  * 作者：LiZW <br/>
- * 创建时间：2016-7-14 16:33 <br/>
+ * 创建时间：2016/10/21 22:47 <br/>
  */
-@Entity
-@Table(name = "sys_resources")
-@DynamicInsert
-@DynamicUpdate
-public class Resources extends IdEntity {
+public class ResourcesUpdateVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
+     * 数据ID
      */
-    public static final Character WEB_PAGE = '1';
-
-    /**
-     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
-     */
-    public static final Character DATA_URL = '2';
-
-    /**
-     * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
-     */
-    public static final Character UI_ELEMENT = '3';
+    @NotNull(message = "数据ID不能为空")
+    private Long id;
 
     /**
      * 资源标题
@@ -55,18 +35,24 @@ public class Resources extends IdEntity {
     /**
      * 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
      */
-    private Character resourcesType;
+    private String resourcesType;
 
     /**
      * 资源说明
      */
-    @Lob
-    @Column(columnDefinition = "MediumText")
     private String description;
 
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
 
     public String getTitle() {
         return title;
@@ -92,11 +78,11 @@ public class Resources extends IdEntity {
         this.permission = permission;
     }
 
-    public Character getResourcesType() {
+    public String getResourcesType() {
         return resourcesType;
     }
 
-    public void setResourcesType(Character resourcesType) {
+    public void setResourcesType(String resourcesType) {
         this.resourcesType = resourcesType;
     }
 
