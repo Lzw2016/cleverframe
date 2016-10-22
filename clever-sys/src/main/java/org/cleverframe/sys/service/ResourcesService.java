@@ -109,10 +109,10 @@ public class ResourcesService extends BaseService {
     /**
      * 查询资源依赖树(查询系统所有资源:只分两级，页面资源和后台资源)
      */
+    @SuppressWarnings("Convert2streamapi")
     public List<ResourcesTreeNodeVo> findResourcesTree() {
         List<ResourcesTreeNodeVo> tree = new ArrayList<>();
         List<Resources> resourcesList = resourcesDao.findAllResources();
-        //noinspection Convert2streamapi
         for (Resources resources : resourcesList) {
             if (Resources.WEB_PAGE.equals(resources.getResourcesType())) {
                 ResourcesTreeNodeVo resourcesTreeNodeVo = BeanMapper.mapper(resources, ResourcesTreeNodeVo.class);
@@ -125,14 +125,16 @@ public class ResourcesService extends BaseService {
         for (ResourcesTreeNodeVo resourcesTreeNodeVo : tree) {
             List<Object> dependenceResourcesIdList = new ArrayList<>();
             for (Map<String, Object> map : relationList) {
-                if (resourcesTreeNodeVo.getId().equals(map.get("resources_id"))) {
+                if (resourcesTreeNodeVo.getId() != null
+                        && map.get("resources_id") != null
+                        && resourcesTreeNodeVo.getId().toString().equals(map.get("resources_id").toString())) {
                     dependenceResourcesIdList.add(map.get("dependence_resources_id"));
                 }
             }
             // 增加子节点
             for (Object object : dependenceResourcesIdList) {
                 for (Resources resources : resourcesList) {
-                    if (object.equals(resources.getId())) {
+                    if (object != null && resources.getId() != null && object.toString().equals(resources.getId().toString())) {
                         // 增加依赖资源信息
                         if (resourcesTreeNodeVo.getChildren() == null) {
                             resourcesTreeNodeVo.setChildren(new ArrayList<>());
