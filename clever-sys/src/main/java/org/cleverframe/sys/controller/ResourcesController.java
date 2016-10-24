@@ -42,6 +42,11 @@ public class ResourcesController extends BaseController {
         return new ModelAndView(SysJspUrlPath.Resources);
     }
 
+    @RequestMapping("/DependenceResources" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getDependenceResourcesJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(SysJspUrlPath.DependenceResources);
+    }
+
     /**
      * 分页查询
      */
