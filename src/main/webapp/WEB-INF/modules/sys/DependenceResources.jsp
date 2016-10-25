@@ -28,7 +28,7 @@
 <body class="easyui-layout" data-options="fit:true,border:false">
 
 <%-- 页面上部 --%>
-<div data-options="region:'north',border:true,split:false,collapsible:true,maxHeight:105,minHeight:105" style="width: 100%;">
+<div data-options="region:'north',border:true,split:false,collapsible:true,maxHeight:105,minHeight:105">
     <form id="searchForm" method="post">
         <%--资源类型--%>
         <input id="searchResourcesType" name="resourcesType" type="hidden" value="1">
@@ -55,7 +55,7 @@
 </div>
 
 <%-- 页面中部 --%>
-<div data-options="region:'center',border:true,title:'系统页面资源'" style="height: 65%;width: 100%;">
+<div data-options="region:'center',border:true,title:'系统页面资源'" style="height: 65%;">
     <table id="dataTable_1" data-options="border:false">
         <thead>
         <tr>
@@ -74,7 +74,7 @@
 </div>
 
 <%-- 页面下部 --%>
-<div data-options="region:'south',border:true,title:'依赖资源',split:true,collapsible:true,minHeight:210" style="height:35%;width: 100%;">
+<div data-options="region:'south',border:true,title:'依赖资源',split:true,collapsible:true,minHeight:210" style="height:35%;">
     <table id="dataTable_2" data-options="border:false">
         <thead>
         <tr>
@@ -130,8 +130,33 @@
 </div>
 
 <%--选择依赖资源对话框--%>
-<div id="selectDependenceResourcesDialog" style="width: 630px;height: 180px;padding: 5px 10px">
+<div id="selectDependenceResourcesDialog" style="width: 800px;height: 450px;">
+    <div class="easyui-layout" data-options="fit:true,border:false">
+        <div data-options="region:'north',border:true,split:false,collapsible:true,maxHeight:105,minHeight:105">
 
+        </div>
+        <div data-options="region:'center',border:true">
+            <table id="dataTable_3" data-options="border:false">
+                <thead>
+                <tr>
+                    <th data-options="width:100,align:'left',hidden:true  ,field:'id'">编号</th>
+                    <th data-options="width:230,align:'left',hidden:false ,field:'title'">资源标题</th>
+                    <th data-options="width:650,align:'left',hidden:false ,field:'resourcesUrl'">资源URL</th>
+                    <th data-options="width:200,align:'left',hidden:false ,field:'permission'">权限标识</th>
+                    <th data-options="width:100,align:'left',hidden:false ,field:'resourcesType',formatter:pageJsObject.resourcesTypeFormatter">资源类型</th>
+                    <th data-options="width:200,align:'left',hidden:false ,field:'description'">资源说明</th>
+                </tr>
+                </thead>
+                <div id="dataTableButtons_3">
+                    <a id="dataTableButtonsReload_3" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">查询</a>
+                </div>
+            </table>
+        </div>
+    </div>
+</div>
+<div id="selectDependenceResourcesDialogButtons">
+    <a id="selectDependenceResourcesDialogButtonsOK" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确定</a>
+    <a id="selectDependenceResourcesDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">关闭</a>
 </div>
 
 </body>

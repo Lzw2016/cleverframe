@@ -66,11 +66,23 @@ var pageJs = function (globalPath) {
     // 新增对话框 - 取消
     var addDialogButtonsCancel = $("#addDialogButtonsCancel");
 
+    // 选择依赖资源对话框
+    var selectDependenceResourcesDialog = $("#selectDependenceResourcesDialog");
+    // 选择依赖资源对话框 - 确定
+    var selectDependenceResourcesDialogButtonsOK = $("#selectDependenceResourcesDialogButtonsOK");
+    // 选择依赖资源对话框 - 取消
+    var selectDependenceResourcesDialogButtonsCancel = $("#selectDependenceResourcesDialogButtonsCancel");
+    // 资源选择表格
+    var dataTable_3 = $("#dataTable_3");
+    // 资源选择表格 - 查询
+    var dataTableButtonsReload_3 = $("#dataTableButtonsReload_3");
+
     /**
      * 页面初始化方法
      */
     this.init = function () {
         _this.addDialogInit();
+        _this.selectDependenceResourcesDialogInit();
         _this.dataBind();
         _this.eventBind();
     };
@@ -279,6 +291,36 @@ var pageJs = function (globalPath) {
                 param.resourcesUrl = "";
                 param.permission = "";
             }
+        });
+    };
+
+    // 选择依赖资源对话框 初始化
+    this.selectDependenceResourcesDialogInit = function () {
+        selectDependenceResourcesDialog.dialog({
+            title: "选择依赖资源",
+            closed: false,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            // minWidth: 830,
+            // minHeight: 330,
+            modal: true,
+            buttons: "#selectDependenceResourcesDialogButtons"
+        });
+
+        dataTable_3.datagrid({
+            idField: 'id',
+            fit: true,
+            fitColumns: false,
+            striped: true,
+            rownumbers: true,
+            singleSelect: true,
+            nowrap: true,
+            pagination: true,
+            loadMsg: "正在加载，请稍候...",
+            toolbar: "#dataTableButtons_3",
+            pageSize: 10,
+            pageList: [10, 20, 30, 50, 100, 150]
         });
     };
 
