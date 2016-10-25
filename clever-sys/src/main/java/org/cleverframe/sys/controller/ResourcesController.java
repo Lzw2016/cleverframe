@@ -178,7 +178,7 @@ public class ResourcesController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<String> message = new AjaxMessage<>(true, "删除依赖资源成功", null);
         if (beanValidator(bindingResult, message)) {
-            boolean flag = resourcesService.addDependenceResources(dependenceResourcesDeleteVo.getResourcesId(), dependenceResourcesDeleteVo.getDependenceResourcesId());
+            boolean flag = resourcesService.deleteDependenceResources(dependenceResourcesDeleteVo.getResourcesId(), dependenceResourcesDeleteVo.getDependenceResourcesId());
             if (!flag) {
                 message.setSuccess(false);
                 message.setFailMessage("删除依赖资源成功失败");

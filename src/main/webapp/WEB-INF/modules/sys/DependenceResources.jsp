@@ -87,6 +87,7 @@
         </tr>
         </thead>
         <div id="dataTableButtons_2">
+            <a id="dataTableButtonsReload_2" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">刷新</a>
             <a id="dataTableButtonsAdd_2" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增依赖</a>
             <a id="dataTableButtonsDel_2" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除依赖</a>
             <span style="margin-left: 50px;margin-top: 5px;">
@@ -96,5 +97,42 @@
         </div>
     </table>
 </div>
+
+<%-- 新增对话框 --%>
+<div id="addDialog" style="width: 630px;height: 180px;padding: 5px 10px">
+    <form id="addForm" method="post">
+        <input type="hidden" id="addResourcesId" name="resourcesId"/>
+        <div class="row">
+            <span class="columnLast">
+                <label for="addTitle">资源标题</label>
+                <input id="addTitle" name="title" style="width: 500px"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="columnLast">
+                <label for="addResourcesUrl">资源URL</label>
+                <input id="addResourcesUrl" name="resourcesUrl" style="width: 500px"/>
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="columnLast">
+                <label for="addDependenceResourcesId">依赖资源</label>
+                <select id="addDependenceResourcesId" name="dependenceResourcesId" style="width: 500px"></select>
+            </span>
+        </div>
+    </form>
+</div>
+<div id="addDialogButtons">
+    <a id="addDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
+    <a id="addDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
+
+<%--选择依赖资源对话框--%>
+<div id="selectDependenceResourcesDialog" style="width: 630px;height: 180px;padding: 5px 10px">
+
+</div>
+
 </body>
 </html>

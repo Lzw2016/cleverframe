@@ -37,6 +37,8 @@ var pageJs = function (globalPath) {
 
     // 依赖资源表格
     var dataTable_2 = $("#dataTable_2");
+    // 依赖资源表格 - 刷新
+    var dataTableButtonsReload_2 = $("#dataTableButtonsReload_2");
     // 依赖资源表格 - 新增依赖
     var dataTableButtonsAdd_2 = $("#dataTableButtonsAdd_2");
     // 依赖资源表格 - 删除依赖
@@ -46,10 +48,29 @@ var pageJs = function (globalPath) {
     // 选中页面资源
     var selectPageResources = null;
 
+    // 新增表单
+    var addForm = $("#addForm");
+    // 新增表单 - 资源ID
+    var addResourcesId = $("#addResourcesId");
+    // 新增表单 - 资源标题
+    var addTitle = $("#addTitle");
+    // 新增表单 - 资源URL
+    var addResourcesUrl = $("#addResourcesUrl");
+    // 新增表单 - 依赖资源
+    var addDependenceResourcesId = $("#addDependenceResourcesId");
+
+    // 新增对话框
+    var addDialog = $("#addDialog");
+    // 新增对话框 - 保存
+    var addDialogButtonsSave = $("#addDialogButtonsSave");
+    // 新增对话框 - 取消
+    var addDialogButtonsCancel = $("#addDialogButtonsCancel");
+
     /**
      * 页面初始化方法
      */
     this.init = function () {
+        _this.addDialogInit();
         _this.dataBind();
         _this.eventBind();
     };
@@ -127,6 +148,41 @@ var pageJs = function (globalPath) {
         dataTableButtonsSearch_1.click(function () {
             dataTable_1.datagrid('load');
         });
+
+        // 刷新
+        dataTableButtonsReload_2.click(function () {
+            if (selectPageResources != null) {
+                _this.setDependenceResources(selectPageResources);
+            }
+        });
+
+        // 新增依赖
+        dataTableButtonsAdd_2.click(function () {
+            if (selectPageResources == null) {
+                $.messager.alert("提示", "请选择要增加依赖的页面资源！", "info");
+                return;
+            }
+            addDialog.dialog("open");
+            addResourcesId.val(selectPageResources.id);
+            addTitle.textbox("setValue", selectPageResources.title);
+            addResourcesUrl.textbox("setValue", selectPageResources.resourcesUrl);
+        });
+
+        // 删除依赖
+        dataTableButtonsDel_2.click(function () {
+            _this.deleteDependenceResources();
+        });
+
+        // 保存
+        addDialogButtonsSave.click(function () {
+            _this.addDependenceResources();
+        });
+
+        // 取消
+        addDialogButtonsCancel.click(function () {
+            addDialog.dialog("close");
+            addForm.form('reset');
+        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -134,11 +190,111 @@ var pageJs = function (globalPath) {
     this.setDependenceResources = function (resources) {
         selectPageResources = resources;
         selectPageResourcesText.text(resources.title + "[" + resources.resourcesUrl + "]");
+        dataTable_2.datagrid("loading");
+        //noinspection JSUnusedLocalSymbols
         $.ajax({
             type: "POST", dataType: "JSON", data: {"id": resources.id}, async: true, url: findDependenceResourcesUrl,
             success: function (data) {
                 if (data.success) {
                     dataTable_2.datagrid("loadData", data.result);
+                }
+            },
+            complete: function (xhr, ts) {
+                dataTable_2.datagrid("loaded");
+            }
+        });
+    };
+
+    // 删除依赖
+    this.deleteDependenceResources = function () {
+        var row = dataTable_2.datagrid('getSelected');
+        if (row == null || selectPageResources == null) {
+            $.messager.alert("提示", "请选择要删除的依赖资源！", "info");
+            return;
+        }
+        $.messager.confirm("确认删除", "您确定删除资源依赖关系?<br/>页面资源:" + selectPageResources.title + "<br/>依赖资源:" + row.title, function (r) {
+            if (r) {
+                $.post(deleteDependenceResourcesUrl, {"resourcesId": selectPageResources.id, "dependenceResourcesId": row.id}, function (data) {
+                    if (data.success) {
+                        // 删除成功
+                        $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                        _this.setDependenceResources(selectPageResources);
+                    } else {
+                        // 删除失败
+                    }
+                }, "json");
+            }
+        });
+    };
+
+    // 新增对话框 初始化
+    this.addDialogInit = function () {
+        addDialog.dialog({
+            title: "新增资源依赖关系",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            // minWidth: 830,
+            // minHeight: 330,
+            modal: true,
+            buttons: "#addDialogButtons"
+        });
+
+        addTitle.textbox({
+            required: true,
+            editable: false
+        });
+        addResourcesUrl.textbox({
+            required: true,
+            editable: false
+        });
+        addDependenceResourcesId.combogrid({
+            // editable: false,
+            required: true,
+            panelWidth: 500,
+            loadMsg: "正在加载，请稍候...",
+            // value: '',
+            idField: 'id',
+            textField: 'title',
+            mode: "remote",
+            url: findByPageUrl,
+            columns: [[
+                {field: 'id', title: '编号', width: 60, hidden: true},
+                {field: 'title', title: '资源标题', width: 100},
+                {field: 'resourcesUrl', title: '资源URL', width: 120},
+                {field: 'permission', title: '权限标识', width: 120},
+                {field: 'resourcesType', title: '资源类型', width: 120},
+                {field: 'description', title: '资源说明', width: 120, hidden: true}
+            ]],
+            onHidePanel: function () {
+                var value = addDependenceResourcesId.combogrid("getValue");
+
+                console.log(value);
+            },
+            onBeforeLoad: function (param) {
+                // 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
+                param.resourcesType = "";
+                param.title = param.q;
+                param.resourcesUrl = "";
+                param.permission = "";
+            }
+        });
+    };
+
+    // 增加资源依赖关系
+    this.addDependenceResources = function () {
+        addForm.form("submit", {
+            url: addDependenceResourcesUrl,
+            success: function (data) {
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    addDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    _this.setDependenceResources(selectPageResources);
+                } else {
+                    // 保存失败
                 }
             }
         });
