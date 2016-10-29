@@ -72,10 +72,20 @@ var pageJs = function (globalPath) {
     var selectDependenceResourcesDialogButtonsOK = $("#selectDependenceResourcesDialogButtonsOK");
     // 选择依赖资源对话框 - 取消
     var selectDependenceResourcesDialogButtonsCancel = $("#selectDependenceResourcesDialogButtonsCancel");
+    // 选择查询表单
+    var selectForm = $("#selectForm");
+    // 选择查询表单 - 资源类型
+    var selectResourcesType = $("#selectResourcesType");
+    // 选择查询表单 - 资源类型
+    var selectTitle = $("#selectTitle");
+    // 选择查询表单 - 资源类型
+    var selectResourcesUrl = $("#selectResourcesUrl");
+    // 选择查询表单 - 资源类型
+    var selectPermission = $("#selectPermission");
     // 资源选择表格
     var dataTable_3 = $("#dataTable_3");
     // 资源选择表格 - 查询
-    var dataTableButtonsReload_3 = $("#dataTableButtonsReload_3");
+    var dataTableButtonsSearch_3 = $("#dataTableButtonsSearch_3");
 
     /**
      * 页面初始化方法
@@ -174,6 +184,7 @@ var pageJs = function (globalPath) {
                 $.messager.alert("提示", "请选择要增加依赖的页面资源！", "info");
                 return;
             }
+            addForm.form('reset');
             addDialog.dialog("open");
             addResourcesId.val(selectPageResources.id);
             addTitle.textbox("setValue", selectPageResources.title);
@@ -193,7 +204,25 @@ var pageJs = function (globalPath) {
         // 取消
         addDialogButtonsCancel.click(function () {
             addDialog.dialog("close");
-            addForm.form('reset');
+        });
+
+        dataTableButtonsSearch_3.click(function () {
+            dataTable_3.datagrid('load');
+        });
+
+        selectDependenceResourcesDialogButtonsOK.click(function () {
+            var row = dataTable_3.datagrid("getSelected");
+            if (row == null) {
+                $.messager.show({title: '提示', msg: "请选择依赖资源", timeout: 800, showType: null, style:{right:'', bottom:''}});
+                return;
+            }
+            addDependenceResourcesId.textbox("setValue", row.id);
+            addDependenceResourcesId.textbox("setText", row.title + "[ " + row.resourcesUrl + " ]");
+            selectDependenceResourcesDialog.dialog("close");
+        });
+
+        selectDependenceResourcesDialogButtonsCancel.click(function () {
+            selectDependenceResourcesDialog.dialog("close");
         });
     };
 
@@ -261,36 +290,18 @@ var pageJs = function (globalPath) {
             required: true,
             editable: false
         });
-        addDependenceResourcesId.combogrid({
-            // editable: false,
-            required: true,
-            panelWidth: 500,
-            loadMsg: "正在加载，请稍候...",
-            // value: '',
-            idField: 'id',
-            textField: 'title',
-            mode: "remote",
-            url: findByPageUrl,
-            columns: [[
-                {field: 'id', title: '编号', width: 60, hidden: true},
-                {field: 'title', title: '资源标题', width: 100},
-                {field: 'resourcesUrl', title: '资源URL', width: 120},
-                {field: 'permission', title: '权限标识', width: 120},
-                {field: 'resourcesType', title: '资源类型', width: 120},
-                {field: 'description', title: '资源说明', width: 120, hidden: true}
-            ]],
-            onHidePanel: function () {
-                var value = addDependenceResourcesId.combogrid("getValue");
 
-                console.log(value);
-            },
-            onBeforeLoad: function (param) {
-                // 资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）
-                param.resourcesType = "";
-                param.title = param.q;
-                param.resourcesUrl = "";
-                param.permission = "";
-            }
+        //noinspection JSUnusedLocalSymbols
+        addDependenceResourcesId.textbox({
+            required: true,
+            editable: false,
+            icons: [{
+                iconCls: 'icon-search',
+                handler: function (e) {
+                    selectDependenceResourcesDialog.dialog("open");
+                    // selectForm.form('reset');
+                }
+            }]
         });
     };
 
@@ -298,7 +309,7 @@ var pageJs = function (globalPath) {
     this.selectDependenceResourcesDialogInit = function () {
         selectDependenceResourcesDialog.dialog({
             title: "选择依赖资源",
-            closed: false,
+            closed: true,
             minimizable: false,
             maximizable: false,
             resizable: false,
@@ -309,6 +320,7 @@ var pageJs = function (globalPath) {
         });
 
         dataTable_3.datagrid({
+            url: findByPageUrl,
             idField: 'id',
             fit: true,
             fitColumns: false,
@@ -319,8 +331,28 @@ var pageJs = function (globalPath) {
             pagination: true,
             loadMsg: "正在加载，请稍候...",
             toolbar: "#dataTableButtons_3",
-            pageSize: 10,
-            pageList: [10, 20, 30, 50, 100, 150]
+            pageSize: 20,
+            pageList: [10, 20, 30, 50, 100, 150],
+            onDblClickRow: function (index, row) {
+                addDependenceResourcesId.textbox("setValue", row.id);
+                addDependenceResourcesId.textbox("setText", row.title + "[ " + row.resourcesUrl + " ]");
+                selectDependenceResourcesDialog.dialog("close");
+            },
+            onBeforeLoad: function (param) {
+                // 增加查询参数
+                var paramArray = selectForm.serializeArray();
+                $(paramArray).each(function () {
+                    if (param[this.name]) {
+                        if ($.isArray(param[this.name])) {
+                            param[this.name].push(this.value);
+                        } else {
+                            param[this.name] = [param[this.name], this.value];
+                        }
+                    } else {
+                        param[this.name] = this.value;
+                    }
+                });
+            }
         });
     };
 

@@ -30,7 +30,7 @@
 <%-- 页面上部 --%>
 <div data-options="region:'north',border:true,split:false,collapsible:true,maxHeight:105,minHeight:105">
     <form id="searchForm" method="post">
-        <%--资源类型--%>
+        <%--资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）--%>
         <input id="searchResourcesType" name="resourcesType" type="hidden" value="1">
         <div class="row">
             <span class="columnLast">
@@ -119,7 +119,7 @@
         <div class="row">
             <span class="columnLast">
                 <label for="addDependenceResourcesId">依赖资源</label>
-                <select id="addDependenceResourcesId" name="dependenceResourcesId" style="width: 500px"></select>
+                <input id="addDependenceResourcesId" name="dependenceResourcesId" style="width: 500px;cursor:pointer;"/>
             </span>
         </div>
     </form>
@@ -133,22 +133,43 @@
 <div id="selectDependenceResourcesDialog" style="width: 800px;height: 450px;">
     <div class="easyui-layout" data-options="fit:true,border:false">
         <div data-options="region:'north',border:true,split:false,collapsible:true,maxHeight:105,minHeight:105">
-
+            <form id="selectForm" method="post">
+                <%--资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）--%>
+                <input id="selectResourcesType" name="resourcesType" type="hidden" value="2,3">
+                <div class="row">
+                    <span class="columnLast">
+                        <label for="selectTitle">资源标题</label>
+                        <input id="selectTitle" name="title" class="easyui-textbox" style="width: 650px">
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="columnLast">
+                        <label for="selectResourcesUrl">资源URL</label>
+                        <input id="selectResourcesUrl" name="resourcesUrl" class="easyui-textbox" style="width: 650px">
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="columnLast">
+                        <label for="selectPermission">权限标识</label>
+                        <input id="selectPermission" name="permission" class="easyui-textbox" style="width: 650px">
+                    </span>
+                </div>
+            </form>
         </div>
         <div data-options="region:'center',border:true">
             <table id="dataTable_3" data-options="border:false">
                 <thead>
                 <tr>
                     <th data-options="width:100,align:'left',hidden:true  ,field:'id'">编号</th>
-                    <th data-options="width:230,align:'left',hidden:false ,field:'title'">资源标题</th>
-                    <th data-options="width:650,align:'left',hidden:false ,field:'resourcesUrl'">资源URL</th>
-                    <th data-options="width:200,align:'left',hidden:false ,field:'permission'">权限标识</th>
+                    <th data-options="width:150,align:'left',hidden:false ,field:'title'">资源标题</th>
+                    <th data-options="width:350,align:'left',hidden:false ,field:'resourcesUrl'">资源URL</th>
+                    <th data-options="width:150,align:'left',hidden:false ,field:'permission'">权限标识</th>
                     <th data-options="width:100,align:'left',hidden:false ,field:'resourcesType',formatter:pageJsObject.resourcesTypeFormatter">资源类型</th>
                     <th data-options="width:200,align:'left',hidden:false ,field:'description'">资源说明</th>
                 </tr>
                 </thead>
                 <div id="dataTableButtons_3">
-                    <a id="dataTableButtonsReload_3" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">查询</a>
+                    <a id="dataTableButtonsSearch_3" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询</a>
                 </div>
             </table>
         </div>

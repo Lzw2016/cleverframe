@@ -119,7 +119,8 @@ project(':clever-common') {
         // cglib字节码处理库
         compile('cglib:cglib-nodep:3.2.2')
         // pdf、Excel、world、ppt 文档处理
-        compile('com.itextpdf:itextpdf:5.5.9')
+        compile('com.itextpdf:itextpdf:5.5.10')
+        compile('com.itextpdf.tool:xmlworker:5.5.10')
         compile('org.apache.poi:poi:3.14')
         compile('org.apache.poi:poi-ooxml:3.14')
         // 模版引擎

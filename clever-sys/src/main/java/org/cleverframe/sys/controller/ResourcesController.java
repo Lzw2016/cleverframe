@@ -1,5 +1,6 @@
 package org.cleverframe.sys.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;
@@ -57,6 +58,21 @@ public class ResourcesController extends BaseController {
             HttpServletResponse response,
             @Valid ResourcesQueryVo resourcesQueryVo,
             BindingResult bindingResult) {
+        // 处理包含的资源类型
+        if (StringUtils.isNotBlank(resourcesQueryVo.getResourcesType())) {
+            String[] typeArray = resourcesQueryVo.getResourcesType().split(",");
+            StringBuilder sb = new StringBuilder();
+            for (String type : typeArray) {
+                type = StringUtils.trim(type);
+                if (sb.length() <= 0) {
+                    sb.append("('").append(type).append("'");
+                } else {
+                    sb.append(",'").append(type).append("'");
+                }
+            }
+            sb.append(")");
+            resourcesQueryVo.setResourcesType(sb.toString());
+        }
         DataGridJson<Resources> json = new DataGridJson<>();
         Page<Resources> page = resourcesService.findByPage(
                 new Page<>(request, response),

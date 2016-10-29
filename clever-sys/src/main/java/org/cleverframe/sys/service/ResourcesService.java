@@ -34,7 +34,7 @@ public class ResourcesService extends BaseService {
      * @param title         资源标题
      * @param resourcesUrl  资源URL地址
      * @param permission    资源访问所需要的权限标识字符串
-     * @param resourcesType 资源类型（1：URL资源；2：UI资源）
+     * @param resourcesType 包含的资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源） 如:('2', '3')
      */
     public Page<Resources> findByPage(Page<Resources> page, String title, String resourcesUrl, String permission, String resourcesType) {
         return resourcesDao.findByPage(page, title, resourcesUrl, permission, resourcesType);
