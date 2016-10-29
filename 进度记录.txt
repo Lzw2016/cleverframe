@@ -203,3 +203,12 @@ clever-sys
 
 ## =========== clever-sys
 /${mvcPath}/sys/resources/Resources.html
+/${mvcPath}/sys/resources/DependenceResources.html
+/${mvcPath}/sys/resources/findByPage.json
+/${mvcPath}/sys/resources/addResources.json
+/${mvcPath}/sys/resources/updateResources.json
+/${mvcPath}/sys/resources/deleteResources.json
+/${mvcPath}/sys/resources/findDependenceResources.json
+/${mvcPath}/sys/resources/addDependenceResources.json
+/${mvcPath}/sys/resources/deleteDependenceResources.json
+/${mvcPath}/sys/resources/findResourcesTree.json

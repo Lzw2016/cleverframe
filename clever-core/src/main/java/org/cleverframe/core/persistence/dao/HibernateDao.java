@@ -234,8 +234,8 @@ public class HibernateDao<T extends Serializable> {
      * @return 更新记录数
      */
     public int deleteByIdForSoft(Serializable id) {
-        String updateHql = String.format("update %s set delFlag='%s' where id = :p1", entityClass.getSimpleName(), BaseEntity.DEL_FLAG_DELETE);
-        return updateByHql(updateHql, new Parameter(id));
+        String updateHql = String.format("update %s set delFlag='%s' where id = :id", entityClass.getSimpleName(), BaseEntity.DEL_FLAG_DELETE);
+        return updateByHql(updateHql, new Parameter(new Object[][]{{"id", id}}));
     }
 
     /**

@@ -16,4 +16,9 @@ public class SysJspUrlPath implements IJspUrlPath {
      * 系统资源关系管理
      */
     public static final String DependenceResources = "sys/DependenceResources";
+
+    /**
+     * 角色管理
+     */
+    public static final String Role = "sys/Role";
 }

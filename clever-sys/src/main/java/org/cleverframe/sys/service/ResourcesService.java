@@ -91,6 +91,7 @@ public class ResourcesService extends BaseService {
      */
     @Transactional(readOnly = false)
     public boolean addDependenceResources(Serializable resourcesId, Serializable dependenceResourcesId) {
+        // TODO 验证 resourcesId dependenceResourcesId 存在
         return resourcesDao.addDependenceResources(resourcesId, dependenceResourcesId);
     }
 
