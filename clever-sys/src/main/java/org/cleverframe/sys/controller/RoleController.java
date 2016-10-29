@@ -45,6 +45,11 @@ public class RoleController extends BaseController {
         return new ModelAndView(SysJspUrlPath.Role);
     }
 
+    @RequestMapping("/RoleResources" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getRoleResourcesJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(SysJspUrlPath.RoleResources);
+    }
+
     /**
      * 分页查询
      */
@@ -121,4 +126,7 @@ public class RoleController extends BaseController {
         }
         return message;
     }
+
+    // addRoleResources deleteRoleResources findResourcesByRole
+
 }
