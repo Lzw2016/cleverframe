@@ -26,7 +26,7 @@ public class RoleDao extends BaseDao<Role> {
         Parameter param = new Parameter(delFlag);
         param.put("uuid", uuid);
         param.put("id", id);
-        param.put("name", name);
+        param.put("name", "%" + name + "%");
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.RoleDao.findByPage");
         return hibernateDao.findBySql(page, sql, param);
     }
