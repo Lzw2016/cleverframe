@@ -86,6 +86,8 @@ var pageJs = function (globalPath) {
     var dataTable_3 = $("#dataTable_3");
     // 资源选择表格 - 查询
     var dataTableButtonsSearch_3 = $("#dataTableButtonsSearch_3");
+    // 控制 dataTable_3 初始化时不加载数据
+    var dataTable_3_Load = false;
 
     /**
      * 页面初始化方法
@@ -299,6 +301,7 @@ var pageJs = function (globalPath) {
                 iconCls: 'icon-search',
                 handler: function (e) {
                     selectDependenceResourcesDialog.dialog("open");
+                    dataTable_3.datagrid("load");
                     // selectForm.form('reset');
                 }
             }]
@@ -339,6 +342,11 @@ var pageJs = function (globalPath) {
                 selectDependenceResourcesDialog.dialog("close");
             },
             onBeforeLoad: function (param) {
+                // 初始化时不加载数据
+                if(dataTable_3_Load == false) {
+                    dataTable_3_Load = true;
+                    return false;
+                }
                 // 增加查询参数
                 var paramArray = selectForm.serializeArray();
                 $(paramArray).each(function () {
