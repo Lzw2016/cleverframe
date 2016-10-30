@@ -119,6 +119,7 @@
             <table id="dataTable_3" data-options="border:false">
                 <thead>
                 <tr>
+                    <th data-options="field:'check',checkbox:true">选择</th>
                     <th data-options="width:100,align:'left',hidden:true  ,field:'id'">编号</th>
                     <th data-options="width:150,align:'left',hidden:false ,field:'title'">资源标题</th>
                     <th data-options="width:300,align:'left',hidden:false ,field:'resourcesUrl'">资源URL</th>

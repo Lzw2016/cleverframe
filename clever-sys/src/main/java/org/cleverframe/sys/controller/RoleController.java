@@ -6,12 +6,10 @@ import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.SysJspUrlPath;
+import org.cleverframe.sys.entity.Resources;
 import org.cleverframe.sys.entity.Role;
 import org.cleverframe.sys.service.RoleService;
-import org.cleverframe.sys.vo.request.RoleAddVo;
-import org.cleverframe.sys.vo.request.RoleDeleteVo;
-import org.cleverframe.sys.vo.request.RoleQueryVo;
-import org.cleverframe.sys.vo.request.RoleUpdateVo;
+import org.cleverframe.sys.vo.request.*;
 import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Controller
@@ -127,6 +126,57 @@ public class RoleController extends BaseController {
         return message;
     }
 
-    // addRoleResources deleteRoleResources findResourcesByRole
+    /**
+     * 查询角色资源数据 (不分页)
+     */
+    @RequestMapping("/findResourcesByRole")
+    @ResponseBody
+    public AjaxMessage<List<Resources>> findResourcesByRole(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid RoleResourcesQueryVo roleResourcesQueryVo,
+            BindingResult bindingResult) {
+        AjaxMessage<List<Resources>> message = new AjaxMessage<>(true, "查询角色资源数据成功", null);
+        List<Resources> list = roleService.findResourcesByRole(roleResourcesQueryVo.getId());
+        message.setResult(list);
+        return message;
+    }
 
+    /**
+     * 角色添加资源
+     */
+    @RequestMapping("/addRoleResources")
+    @ResponseBody
+    public AjaxMessage<String> addRoleResources(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid RoleResourcesAddVo roleResourcesAddVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "角色添加资源成功", null);
+        if (beanValidator(bindingResult, message)) {
+            if (!roleService.addRoleResources(roleResourcesAddVo.getRoleId(), roleResourcesAddVo.getResourcesId())) {
+                message.setFailMessage("角色添加资源失败");
+            }
+        }
+        return message;
+    }
+
+    /**
+     * 角色移除资源
+     */
+    @RequestMapping("/deleteRoleResources")
+    @ResponseBody
+    public AjaxMessage<String> deleteRoleResources(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid RoleResourcesDeleteVo roleResourcesDeleteVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "角色移除资源成功", null);
+        if (beanValidator(bindingResult, message)) {
+            if (!roleService.deleteRoleResources(roleResourcesDeleteVo.getRoleId(), roleResourcesDeleteVo.getResourcesId())) {
+                message.setFailMessage("角色移除资源失败");
+            }
+        }
+        return message;
+    }
 }

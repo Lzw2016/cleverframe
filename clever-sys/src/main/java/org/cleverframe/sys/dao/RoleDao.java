@@ -6,6 +6,7 @@ import org.cleverframe.core.persistence.dao.BaseDao;
 import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.entity.Role;
+import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -29,5 +30,37 @@ public class RoleDao extends BaseDao<Role> {
         param.put("name", "%" + name + "%");
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.RoleDao.findByPage");
         return hibernateDao.findBySql(page, sql, param);
+    }
+
+    /**
+     * 角色添加资源
+     *
+     * @param roleId      角色ID
+     * @param resourcesId 资源ID
+     * @return 成功返回 true
+     */
+    public boolean addRoleResources(Long roleId, Long resourcesId) {
+        Parameter param = new Parameter();
+        param.put("roleId", roleId);
+        param.put("resourcesId", resourcesId);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.RoleDao.addRoleResources");
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
+        return sqlQuery.executeUpdate() == 1;
+    }
+
+    /**
+     * 角色移除资源
+     *
+     * @param roleId      角色ID
+     * @param resourcesId 资源ID
+     * @return 成功返回 true
+     */
+    public boolean deleteRoleResources(Long roleId, Long resourcesId) {
+        Parameter param = new Parameter();
+        param.put("roleId", roleId);
+        param.put("resourcesId", resourcesId);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.RoleDao.deleteRoleResources");
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
+        return sqlQuery.executeUpdate() == 1;
     }
 }

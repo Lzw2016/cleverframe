@@ -66,7 +66,7 @@ public class ResourcesDao extends BaseDao<Resources> {
         param.put("dependenceResourcesId", dependenceResourcesId);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.addDependenceResources");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
-        return sqlQuery.executeUpdate() >= 1;
+        return sqlQuery.executeUpdate() == 1;
     }
 
     /**
@@ -82,7 +82,7 @@ public class ResourcesDao extends BaseDao<Resources> {
         param.put("dependenceResourcesId", dependenceResourcesId);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.deleteDependenceResources");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
-        return sqlQuery.executeUpdate() >= 1;
+        return sqlQuery.executeUpdate() == 1;
     }
 
     /**
@@ -103,5 +103,17 @@ public class ResourcesDao extends BaseDao<Resources> {
         //noinspection unchecked,UnnecessaryLocalVariable
         List<Map<String, Object>> list = sqlQuery.list();
         return list;
+    }
+
+    /**
+     * 查询角色拥有的所有资源数据 (不分页)
+     *
+     * @param roleId 角色ID
+     */
+    public List<Resources> findResourcesByRole(Serializable roleId) {
+        Parameter param = new Parameter();
+        param.put("roleId", roleId);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.findResourcesByRole");
+        return hibernateDao.findBySql(sql, param);
     }
 }

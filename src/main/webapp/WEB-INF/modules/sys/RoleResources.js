@@ -10,6 +10,12 @@ var pageJs = function (globalPath) {
     var findByPageUrl = globalPath.mvcPath + "/sys/role/findByPage.json";
     // 分页查询系统资源
     var findByResourcesPageUrl = globalPath.mvcPath + "/sys/resources/findByPage.json";
+    // 查询角色资源数据 (不分页)
+    var findResourcesByRoleUrl = globalPath.mvcPath + "/sys/role/findResourcesByRole.json";
+    // 角色添加资源
+    var addRoleResourcesUrl = globalPath.mvcPath + "/sys/role/addRoleResources.json";
+    // 角色移除资源
+    var deleteRoleResourcesUrl = globalPath.mvcPath + "/sys/role/deleteRoleResources.json";
 
     // 查询表单
     var searchForm = $("#searchForm");
@@ -166,12 +172,15 @@ var pageJs = function (globalPath) {
         });
 
         dataTableButtonsDel_2.click(function () {
+            _this.deleteRoleResources();
         });
 
         selectResourcesDialogButtonsOK.click(function () {
+            _this.addRoleResources();
         });
 
         selectResourcesDialogButtonsCancel.click(function () {
+            selectResourcesDialog.dialog("close");
         });
 
         dataTableButtonsSearch_3.click(function () {
@@ -210,6 +219,7 @@ var pageJs = function (globalPath) {
             pageSize: 20,
             pageList: [10, 20, 30, 50, 100, 150],
             onDblClickRow: function (index, row) {
+                _this.addRoleResources();
             },
             onBeforeLoad: function (param) {
                 // 初始化时不加载数据
@@ -238,7 +248,57 @@ var pageJs = function (globalPath) {
     this.setSelectRole = function (role) {
         selectRole = role;
         selectRoleText.text(selectRole.name);
+        dataTable_2.datagrid("loading");
+        //noinspection JSUnusedLocalSymbols
+        $.ajax({
+            type: "POST", dataType: "JSON", data: {"id": selectRole.id}, async: true, url: findResourcesByRoleUrl,
+            success: function (data) {
+                if (data.success) {
+                    dataTable_2.datagrid("loadData", data.result);
+                }
+            },
+            complete: function (xhr, ts) {
+                dataTable_2.datagrid("loaded");
+            }
+        });
+    };
 
+    // 增加角色资源
+    this.addRoleResources = function () {
+        var row = dataTable_3.datagrid('getSelected');
+        if (selectRole == null || row == null) {
+            $.messager.alert("提示", "请选择角色和资源信息！", "info");
+            return;
+        }
+        $.post(addRoleResourcesUrl, {"resourcesId": row.id, "roleId": selectRole.id}, function (data) {
+            if (data.success) {
+                selectResourcesDialog.dialog("close");
+                $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                _this.setSelectRole(selectRole);
+            }
+        }, "json");
+    };
+
+    // 角色移除资源
+    this.deleteRoleResources = function () {
+        var row = dataTable_2.datagrid('getSelected');
+        if (selectRole == null || row == null) {
+            $.messager.alert("提示", "请选择角色和资源信息！", "info");
+            return;
+        }
+        $.messager.confirm("确认移除", "您确定移除资源?<br/>角色:" + selectRole.name + "<br/>资源:" + row.title, function (r) {
+            if (r) {
+                $.post(deleteRoleResourcesUrl, {"resourcesId": row.id, "roleId": selectRole.id}, function (data) {
+                    if (data.success) {
+                        // 删除成功
+                        $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                        _this.setSelectRole(selectRole);
+                    } else {
+                        // 删除失败
+                    }
+                }, "json");
+            }
+        });
     };
 
     // 删除标记格式化
