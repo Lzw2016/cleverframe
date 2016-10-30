@@ -162,6 +162,8 @@ CREATE TABLE sys_user
     password        varchar(100)    NOT NULL                            COMMENT '密码',
     job_no          varchar(30)     NOT NULL    UNIQUE                  COMMENT '工号',
     name            varchar(100)    NOT NULL                            COMMENT '姓名',
+    sex             char(1)         NOT NULL                            COMMENT '性别（1：男；2：女）',
+    birthday        datetime        NOT NULL                            COMMENT '生日',
     email           varchar(100)                                        COMMENT '邮箱',
     phone           varchar(100)                                        COMMENT '电话',
     mobile          varchar(100)                                        COMMENT '手机',

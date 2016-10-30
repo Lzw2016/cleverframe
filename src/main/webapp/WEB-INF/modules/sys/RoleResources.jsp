@@ -39,7 +39,7 @@
 </div>
 
 <%-- 页面中部 --%>
-<div id="centerPanel" data-options="region:'center',border:false,title:'系统角色信息'">
+<div id="centerPanel" data-options="region:'center',border:false,title:'系统角色信息'" style="height:65%;">
     <table id="dataTable_1" data-options="border:false">
         <thead>
         <tr>
