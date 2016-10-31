@@ -45,6 +45,11 @@ public class UserController extends BaseController {
         return new ModelAndView(SysJspUrlPath.User);
     }
 
+    @RequestMapping("/UserRole" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getUserRoleJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(SysJspUrlPath.UserRole);
+    }
+
     /**
      * 分页查询
      */

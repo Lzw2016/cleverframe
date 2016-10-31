@@ -29,4 +29,8 @@ public class SysJspUrlPath implements IJspUrlPath {
      * 用户管理
      */
     public static final String User = "sys/User";
+    /**
+     * 用户角色管理
+     */
+    public static final String UserRole = "sys/UserRole";
 }
