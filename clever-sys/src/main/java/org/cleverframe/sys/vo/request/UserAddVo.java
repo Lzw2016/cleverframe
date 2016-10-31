@@ -115,6 +115,13 @@ public class UserAddVo extends BaseRequestVo {
     @NotNull(message = "用户状态不能为空")
     private Character userState;
 
+    /**
+     * 备注
+     */
+    @NotBlank(message = "备注不能为空")
+    @Length(min = 1, max = 255, message = "备注值长度不能超过255个字符")
+    private String remarks;
+
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
@@ -245,5 +252,13 @@ public class UserAddVo extends BaseRequestVo {
 
     public void setUserState(Character userState) {
         this.userState = userState;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
     }
 }

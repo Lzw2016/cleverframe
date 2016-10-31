@@ -26,3 +26,53 @@
 #searchForm .row .columnLast {
     margin-right: 0;
 }
+
+/*新增表单样式*/
+#addForm .row {
+    margin-bottom: 8px;
+    margin-top: 5px;
+    width: inherit;
+}
+
+#addForm .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#addForm .row input, select {
+    width: 160px;
+}
+
+#addForm .row .column {
+    margin-right: 30px;
+}
+
+#addForm .row .columnLast {
+    margin-right: 0;
+}
+
+/*编辑表单样式*/
+#editDialog .row {
+    margin-bottom: 8px;
+    margin-top: 5px;
+    width: inherit;
+}
+
+#editDialog .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#editDialog .row input, select {
+    width: 160px;
+}
+
+#editDialog .row .column {
+    margin-right: 30px;
+}
+
+#editDialog .row .columnLast {
+    margin-right: 0;
+}

@@ -9,7 +9,9 @@ import org.cleverframe.sys.SysJspUrlPath;
 import org.cleverframe.sys.entity.User;
 import org.cleverframe.sys.service.UserService;
 import org.cleverframe.sys.vo.request.UserAddVo;
+import org.cleverframe.sys.vo.request.UserDeleteVo;
 import org.cleverframe.sys.vo.request.UserQueryVo;
+import org.cleverframe.sys.vo.request.UserUpdateVo;
 import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -88,10 +90,10 @@ public class UserController extends BaseController {
     public AjaxMessage<String> updateUser(
             HttpServletRequest request,
             HttpServletResponse response,
-            @Valid UserAddVo userAddVo,
+            @Valid UserUpdateVo userUpdateVo,
             BindingResult bindingResult) {
         AjaxMessage<String> message = new AjaxMessage<>(true, "更新用户成功", null);
-        User user = BeanMapper.mapper(userAddVo, User.class);
+        User user = BeanMapper.mapper(userUpdateVo, User.class);
         if (beanValidator(bindingResult, message)) {
             if (!userService.updateUser(user)) {
                 message.setFailMessage("更新用户失败");
@@ -108,10 +110,10 @@ public class UserController extends BaseController {
     public AjaxMessage<String> deleteUser(
             HttpServletRequest request,
             HttpServletResponse response,
-            @Valid UserAddVo userAddVo,
+            @Valid UserDeleteVo userDeleteVo,
             BindingResult bindingResult) {
         AjaxMessage<String> message = new AjaxMessage<>(true, "删除用户成功", null);
-        User user = BeanMapper.mapper(userAddVo, User.class);
+        User user = BeanMapper.mapper(userDeleteVo, User.class);
         if (beanValidator(bindingResult, message)) {
             if (!userService.deleteUser(user)) {
                 message.setFailMessage("删除用户失败");

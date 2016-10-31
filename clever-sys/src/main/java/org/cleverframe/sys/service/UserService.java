@@ -9,6 +9,7 @@ import org.cleverframe.sys.vo.request.UserQueryVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Service，对应表sys_user(用户表)<br/>
@@ -36,6 +37,7 @@ public class UserService extends BaseService {
      * @param user 用户
      * @return 成功返回true
      */
+    @Transactional(readOnly = false)
     public boolean addUser(User user) {
         userDao.getHibernateDao().save(user);
         return true;
@@ -47,6 +49,7 @@ public class UserService extends BaseService {
      * @param user 用户
      * @return 成功返回true
      */
+    @Transactional(readOnly = false)
     public boolean updateUser(User user) {
         userDao.getHibernateDao().update(user, false, true);
         return true;
@@ -58,6 +61,7 @@ public class UserService extends BaseService {
      * @param user 用户
      * @return 成功返回true
      */
+    @Transactional(readOnly = false)
     public boolean deleteUser(User user) {
         userDao.getHibernateDao().deleteForSoft(user);
         return true;

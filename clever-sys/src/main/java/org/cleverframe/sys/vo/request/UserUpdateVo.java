@@ -3,6 +3,7 @@ package org.cleverframe.sys.vo.request;
 import org.cleverframe.common.vo.request.BaseRequestVo;
 import org.hibernate.validator.constraints.Length;
 
+import javax.validation.constraints.NotNull;
 import java.util.Date;
 
 /**
@@ -11,6 +12,24 @@ import java.util.Date;
  */
 public class UserUpdateVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
+
+    /**
+     * 数据ID
+     */
+    @NotNull(message = "数据ID不能为空")
+    private Long id;
+
+    /**
+     * 删除标记（1：正常；2：删除；3：审核）,以字典表sys_dict.dict_key=‘删除标记’为准'
+     */
+    private String delFlag;
+
+    /**
+     * 备注
+     */
+    @Length(min = 1, max = 255, message = "备注值长度不能超过255个字符")
+    private String remarks;
+
 
     /**
      * 归属公司
@@ -84,6 +103,9 @@ public class UserUpdateVo extends BaseRequestVo {
      * 用户状态(1：试用；2：在职；3：离职)
      */
     private Character userState;
+
+    public UserUpdateVo() {
+    }
 
     /*--------------------------------------------------------------
      *          getter、setter
@@ -191,5 +213,29 @@ public class UserUpdateVo extends BaseRequestVo {
 
     public void setUserState(Character userState) {
         this.userState = userState;
+    }
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public String getDelFlag() {
+        return delFlag;
+    }
+
+    public void setDelFlag(String delFlag) {
+        this.delFlag = delFlag;
     }
 }

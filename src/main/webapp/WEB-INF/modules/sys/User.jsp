@@ -79,7 +79,177 @@
     </div>
 </div>
 
+<%-- 新增对话框 --%>
+<div id="addDialog" style="width: 820px;height: 320px;padding: 5px 10px">
+    <form id="addForm" method="post">
+        <div class="row">
+			<span class="column">
+				<label for="addJobNo">工号</label>
+				<input id="addJobNo" name="jobNo">
+			</span>
+            <span class="column">
+				<label for="addHomeCompany">归属公司</label>
+				<input id="addHomeCompany" name="homeCompany">
+			</span>
+            <span class="columnLast">
+				<label for="addHomeOrg">直属机构</label>
+				<input id="addHomeOrg" name="homeOrg">
+			</span>
+        </div>
+        <div class="row">
+            <span class="column">
+				<label for="addLoginName">登录名</label>
+				<input id="addLoginName" name="loginName">
+			</span>
+            <span class="columnLast">
+				<label for="addPassword">密码</label>
+				<input id="addPassword" name="password" style="width: 420px;">
+			</span>
+        </div>
 
+        <div class="row">
+			<span class="column">
+				<label for="addName">用户姓名</label>
+				<input id="addName" name="name">
+			</span>
+			<span class="column">
+				<label for="addSex">性别</label>
+				<input id="addSex" name="sex">
+			</span>
+            <span class="columnLast">
+				<label for="addBirthday">生日</label>
+				<input id="addBirthday" name="birthday">
+			</span>
+        </div>
 
+        <div class="row">
+			<span class="column">
+				<label for="addEmail">邮箱</label>
+				<input id="addEmail" name="email">
+			</span>
+            <span class="column">
+				<label for="addPhone">电话</label>
+				<input id="addPhone" name="phone">
+			</span>
+            <span class="columnLast">
+				<label for="addMobile">手机</label>
+				<input id="addMobile" name="mobile">
+			</span>
+        </div>
+        <div class="row">
+             <span class="column">
+                <label for="addAccountState">帐号状态</label>
+                <input id="addAccountState" name="accountState">
+            </span>
+			<span class="column">
+				<label for="addUserState">用户状态</label>
+				<input id="addUserState" name="userState">
+			</span>
+            <span class="columnLast">
+				<label for="addUserType">用户类型</label>
+				<input id="addUserType" name="userType">
+			</span>
+        </div>
+        <div class="row">
+			<span class="columnLast">
+				<label for="addRemarks">备注信息</label>
+				<input id="addRemarks" name="remarks" style="width:685px;height:65px">
+			</span>
+        </div>
+    </form>
+</div>
+<div id="addDialogButtons">
+    <a id="addDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
+    <a id="addDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
+
+<%-- 编辑对话框 --%>
+<div id="editDialog" style="width: 820px;height: 320px;padding: 5px 10px">
+    <form id="editForm" method="post">
+        <input id="editId" name="id" type="hidden"/>
+        <div class="row">
+			<span class="column">
+				<label for="editJobNo">工号</label>
+				<input id="editJobNo" name="jobNo">
+			</span>
+            <span class="column">
+				<label for="editHomeCompany">归属公司</label>
+				<input id="editHomeCompany" name="homeCompany">
+			</span>
+            <span class="columnLast">
+				<label for="editHomeOrg">直属机构</label>
+				<input id="editHomeOrg" name="homeOrg">
+			</span>
+        </div>
+        <div class="row">
+            <span class="column">
+				<label for="editLoginName">登录名</label>
+				<input id="editLoginName" name="loginName">
+			</span>
+            <span class="column">
+				<label for="editPassword">密码</label>
+				<input id="editPassword" name="password">
+			</span>
+            <span class="columnLast">
+				<label for="editDelFlag">删除标记</label>
+				<input id="editDelFlag" name="delFlag">
+			</span>
+        </div>
+
+        <div class="row">
+			<span class="column">
+				<label for="editName">用户姓名</label>
+				<input id="editName" name="name">
+			</span>
+            <span class="column">
+				<label for="editSex">性别</label>
+				<input id="editSex" name="sex">
+			</span>
+            <span class="columnLast">
+				<label for="editBirthday">生日</label>
+				<input id="editBirthday" name="birthday">
+			</span>
+        </div>
+
+        <div class="row">
+			<span class="column">
+				<label for="editEmail">邮箱</label>
+				<input id="editEmail" name="email">
+			</span>
+            <span class="column">
+				<label for="editPhone">电话</label>
+				<input id="editPhone" name="phone">
+			</span>
+            <span class="columnLast">
+				<label for="editMobile">手机</label>
+				<input id="editMobile" name="mobile">
+			</span>
+        </div>
+        <div class="row">
+             <span class="column">
+                <label for="editAccountState">帐号状态</label>
+                <input id="editAccountState" name="accountState">
+            </span>
+            <span class="column">
+				<label for="editUserState">用户状态</label>
+				<input id="editUserState" name="userState">
+			</span>
+            <span class="columnLast">
+				<label for="editUserType">用户类型</label>
+				<input id="editUserType" name="userType">
+			</span>
+        </div>
+        <div class="row">
+			<span class="columnLast">
+				<label for="editRemarks">备注信息</label>
+				<input id="editRemarks" name="remarks" style="width:685px;height:65px">
+			</span>
+        </div>
+    </form>
+</div>
+<div id="editDialogButtons">
+    <a id="editDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">保存</a>
+    <a id="editDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
 </body>
 </html>

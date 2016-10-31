@@ -1,5 +1,6 @@
 package org.cleverframe.sys.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.cleverframe.core.persistence.entity.DataEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -59,6 +60,7 @@ public class User extends DataEntity {
     /**
      * 生日
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date birthday;
 
     /**
@@ -89,6 +91,7 @@ public class User extends DataEntity {
     /**
      * 最后登陆时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date loginDate;
 
     /**
