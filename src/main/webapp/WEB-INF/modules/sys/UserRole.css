@@ -1,0 +1,85 @@
+/*查询表单样式*/
+#searchForm {
+    margin-top: 8px;
+    margin-left: 15px;
+}
+
+#searchForm .row {
+    margin-bottom: 8px;
+}
+
+#searchForm .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#searchForm .row input, select {
+    width: 160px;
+}
+
+#searchForm .row .column {
+    margin-right: 10px;
+}
+
+#searchForm .row .columnLast {
+    margin-right: 0;
+}
+
+/*查询表单样式*/
+#selectName {
+    margin-top: 8px;
+    margin-left: 15px;
+}
+
+#selectName .row {
+    margin-bottom: 8px;
+}
+
+#selectName .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#selectName .row input, select {
+    width: 160px;
+}
+
+#selectName .row .column {
+    margin-right: 10px;
+}
+
+#selectName .row .columnLast {
+    margin-right: 0;
+}
+
+/*查询表单样式*/
+#selectForm {
+    margin-top: 8px;
+    margin-left: 15px;
+    margin-bottom: 3px;
+}
+
+#selectForm .row {
+    margin-bottom: 8px;
+}
+
+#selectForm .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#selectForm .row input, select {
+    width: 160px;
+}
+
+#selectForm .row .column {
+    margin-right: 10px;
+}
+
+#selectForm .row .columnLast {
+    margin-right: 0;
+}
+

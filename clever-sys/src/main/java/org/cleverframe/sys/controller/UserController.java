@@ -6,12 +6,10 @@ import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.SysJspUrlPath;
+import org.cleverframe.sys.entity.Role;
 import org.cleverframe.sys.entity.User;
 import org.cleverframe.sys.service.UserService;
-import org.cleverframe.sys.vo.request.UserAddVo;
-import org.cleverframe.sys.vo.request.UserDeleteVo;
-import org.cleverframe.sys.vo.request.UserQueryVo;
-import org.cleverframe.sys.vo.request.UserUpdateVo;
+import org.cleverframe.sys.vo.request.*;
 import org.cleverframe.webui.easyui.data.DataGridJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -24,6 +22,7 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.List;
 
 /**
  * Controller
@@ -123,6 +122,57 @@ public class UserController extends BaseController {
             if (!userService.deleteUser(user)) {
                 message.setFailMessage("删除用户失败");
             }
+        }
+        return message;
+    }
+
+    /**
+     * 查询用户的所有数据 (不分页)
+     */
+    @RequestMapping("/findRoleByUser")
+    @ResponseBody
+    public AjaxMessage<List<Role>> findRoleByUser(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid UserRoleQueryVo userRoleQueryVo,
+            BindingResult bindingResult) {
+        AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "查询用户的所有数据成功", null);
+        if (beanValidator(bindingResult, message)) {
+
+        }
+        return message;
+    }
+
+    /**
+     * 为用户增加一个角色
+     */
+    @RequestMapping("/addUserRole")
+    @ResponseBody
+    public AjaxMessage<List<Role>> addUserRole(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid UserRoleAddVo userRoleAddVo,
+            BindingResult bindingResult) {
+        AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "为用户增加一个角色成功", null);
+        if (beanValidator(bindingResult, message)) {
+
+        }
+        return message;
+    }
+
+    /**
+     * 移除用户的角色
+     */
+    @RequestMapping("/deleteUserRole")
+    @ResponseBody
+    public AjaxMessage<List<Role>> deleteUserRole(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid UserRoleDeleteVo userRoleDeleteVo,
+            BindingResult bindingResult) {
+        AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "移除用户的角色成功", null);
+        if (beanValidator(bindingResult, message)) {
+
         }
         return message;
     }

@@ -60,7 +60,12 @@ public class RoleController extends BaseController {
             @Valid RoleQueryVo roleQueryVo,
             BindingResult bindingResult) {
         DataGridJson<Role> json = new DataGridJson<>();
-        Page<Role> page = roleService.findByPage(new Page<>(request, response), roleQueryVo.getUuid(), roleQueryVo.getId(), roleQueryVo.getDelFlag(), roleQueryVo.getName());
+        Page<Role> page = roleService.findByPage(
+                new Page<>(request, response),
+                roleQueryVo.getUuid(),
+                roleQueryVo.getId(),
+                roleQueryVo.getDelFlag(),
+                roleQueryVo.getName());
         json.setRows(page.getList());
         json.setTotal(page.getCount());
         return json;
