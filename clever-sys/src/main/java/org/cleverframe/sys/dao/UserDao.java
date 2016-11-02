@@ -8,7 +8,11 @@ import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.entity.User;
 import org.cleverframe.sys.vo.request.UserQueryVo;
+import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.io.Serializable;
 
 /**
  * DAO，对应表sys_user(用户表)<br/>
@@ -41,5 +45,38 @@ public class UserDao extends BaseDao<User> {
         param.put("userState", userQueryVo.getUserState());
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.UserDao.findByPage");
         return hibernateDao.findBySql(page, sql, param);
+    }
+
+    /**
+     * 为用户添加角色
+     *
+     * @param userId 用户ID
+     * @param roleId 角色ID
+     * @return 成功返回true
+     */
+    public boolean addUserRole(Serializable userId, Serializable roleId) {
+        Parameter param = new Parameter();
+        param.put("userId", userId);
+        param.put("roleId", roleId);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.UserDao.addUserRole");
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
+        return sqlQuery.executeUpdate() == 1;
+    }
+
+    /**
+     * 为用户移除角色
+     *
+     * @param userId 用户ID
+     * @param roleId 角色ID
+     * @return 成功返回true
+     */
+    @Transactional(readOnly = false)
+    public boolean deleteUserRole(Serializable userId, Serializable roleId) {
+        Parameter param = new Parameter();
+        param.put("userId", userId);
+        param.put("roleId", roleId);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.UserDao.deleteUserRole");
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
+        return sqlQuery.executeUpdate() == 1;
     }
 }

@@ -9,6 +9,9 @@ import org.cleverframe.sys.entity.Role;
 import org.hibernate.SQLQuery;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
+import java.util.List;
+
 /**
  * DAO，对应表sys_role(角色表)<br/>
  * <p>
@@ -62,5 +65,18 @@ public class RoleDao extends BaseDao<Role> {
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.RoleDao.deleteRoleResources");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         return sqlQuery.executeUpdate() == 1;
+    }
+
+    /**
+     * 查询用户的所有数据 (不分页)
+     *
+     * @param userId 用户ID
+     * @return 成功返回true
+     */
+    public List<Role> findRoleByUser(Serializable userId) {
+        Parameter param = new Parameter();
+        param.put("userId", userId);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.RoleDao.findRoleByUser");
+        return hibernateDao.findBySql(sql, param);
     }
 }

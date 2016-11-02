@@ -138,7 +138,8 @@ public class UserController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "查询用户的所有数据成功", null);
         if (beanValidator(bindingResult, message)) {
-
+            List<Role> list = userService.findRoleByUser(userRoleQueryVo.getId());
+            message.setResult(list);
         }
         return message;
     }
@@ -155,7 +156,9 @@ public class UserController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "为用户增加一个角色成功", null);
         if (beanValidator(bindingResult, message)) {
-
+            if (!userService.addUserRole(userRoleAddVo.getUserId(), userRoleAddVo.getRoleId())) {
+                message.setFailMessage("为用户增加一个角色失败");
+            }
         }
         return message;
     }
@@ -172,7 +175,9 @@ public class UserController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "移除用户的角色成功", null);
         if (beanValidator(bindingResult, message)) {
-
+            if (!userService.deleteUserRole(userRoleDeleteVo.getUserId(), userRoleDeleteVo.getRoleId())) {
+                message.setFailMessage("移除用户的角色失败");
+            }
         }
         return message;
     }
