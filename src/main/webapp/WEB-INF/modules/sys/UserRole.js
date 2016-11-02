@@ -179,6 +179,7 @@ var pageJs = function (globalPath) {
             buttons: "#selectRoleDialogButtons"
         });
 
+        //noinspection JSUnusedLocalSymbols
         dataTable_3.datagrid({
             url: findRoleByPageUrl,
             idField: 'id',
