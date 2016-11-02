@@ -122,7 +122,7 @@
                 </div>
             </form>
         </div>
-        <div data-options="region:'center',border:true">
+        <div data-options="region:'center',border:false">
             <table id="dataTable_3" data-options="border:true">
                 <thead>
                 <tr>
