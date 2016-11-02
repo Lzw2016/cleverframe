@@ -2,11 +2,16 @@ package org.cleverframe.sys.controller;
 
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.sys.SysBeanNames;
+import org.cleverframe.sys.SysJspUrlPath;
 import org.cleverframe.sys.service.MenuService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.servlet.ModelAndView;
+
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 /**
  * Controller
@@ -22,5 +27,10 @@ public class MenuController extends BaseController {
     @Autowired
     @Qualifier(SysBeanNames.MenuService)
     private MenuService menuService;
+
+    @RequestMapping("/Menu" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getMenuJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(SysJspUrlPath.Menu);
+    }
 
 }

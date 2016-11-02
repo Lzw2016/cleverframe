@@ -33,4 +33,8 @@ public class SysJspUrlPath implements IJspUrlPath {
      * 用户角色管理
      */
     public static final String UserRole = "sys/UserRole";
+    /**
+     * 菜单管理
+     */
+    public static final String Menu = "sys/Menu";
 }
