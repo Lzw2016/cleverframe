@@ -44,7 +44,7 @@
     <table id="dataTable_1" data-options="border:false">
         <thead>
         <tr>
-            <th data-options="width:100,align:'left',hidden:true ,field:'id'">编号</th>
+            <th data-options="width:100,align:'left',hidden:true  ,field:'id'">编号</th>
             <th data-options="width:100,align:'left',hidden:true  ,field:'companyCode'">数据所属公司的机构编码</th>
             <th data-options="width:100,align:'left',hidden:true  ,field:'orgCode'">数据直属机构的编码</th>
             <th data-options="width:100,align:'left',hidden:true  ,field:'createBy'">创建者</th>
@@ -55,7 +55,7 @@
             <th data-options="width:100,align:'left',hidden:false ,field:'homeCompany'">归属公司</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'homeOrg'">直属机构</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'loginName'">登录名</th>
-            <th data-options="width:100,align:'left',hidden:true ,field:'password'">密码</th>
+            <th data-options="width:100,align:'left',hidden:true  ,field:'password'">密码</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'jobNo'">工号</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'name'">姓名</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'sex'">性别</th>
@@ -136,7 +136,7 @@
                     <th data-options="width:100,align:'left',hidden:true  ,field:'updateDate'">更新时间</th>
                     <th data-options="width:100,align:'left',hidden:true  ,field:'uuid'">数据全局标识UUID</th>
                     <th data-options="width:150,align:'left',hidden:false ,field:'name'">角色名称</th>
-                    <th data-options="width:350,align:'left',hidden:false ,field:'description'">角色说明</th>
+                    <th data-options="width:330,align:'left',hidden:false ,field:'description'">角色说明</th>
                     <th data-options="width:150,align:'left',hidden:false ,field:'remarks'">备注信息</th>
                     <th data-options="width:80 ,align:'left',hidden:false ,field:'delFlag',formatter:pageJsObject.delFlagFormatter">删除标记</th>
                 </tr>

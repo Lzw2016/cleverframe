@@ -80,6 +80,7 @@ public class UserController extends BaseController {
         User user = BeanMapper.mapper(userAddVo, User.class);
         if (beanValidator(bindingResult, message)) {
             if (!userService.addUser(user)) {
+                message.setSuccess(false);
                 message.setFailMessage("新增用户失败");
             }
         }
@@ -100,6 +101,7 @@ public class UserController extends BaseController {
         User user = BeanMapper.mapper(userUpdateVo, User.class);
         if (beanValidator(bindingResult, message)) {
             if (!userService.updateUser(user)) {
+                message.setSuccess(false);
                 message.setFailMessage("更新用户失败");
             }
         }
@@ -120,6 +122,7 @@ public class UserController extends BaseController {
         User user = BeanMapper.mapper(userDeleteVo, User.class);
         if (beanValidator(bindingResult, message)) {
             if (!userService.deleteUser(user)) {
+                message.setSuccess(false);
                 message.setFailMessage("删除用户失败");
             }
         }
@@ -157,6 +160,7 @@ public class UserController extends BaseController {
         AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "为用户增加一个角色成功", null);
         if (beanValidator(bindingResult, message)) {
             if (!userService.addUserRole(userRoleAddVo.getUserId(), userRoleAddVo.getRoleId())) {
+                message.setSuccess(false);
                 message.setFailMessage("为用户增加一个角色失败");
             }
         }
@@ -176,6 +180,7 @@ public class UserController extends BaseController {
         AjaxMessage<List<Role>> message = new AjaxMessage<>(true, "移除用户的角色成功", null);
         if (beanValidator(bindingResult, message)) {
             if (!userService.deleteUserRole(userRoleDeleteVo.getUserId(), userRoleDeleteVo.getRoleId())) {
+                message.setSuccess(false);
                 message.setFailMessage("移除用户的角色失败");
             }
         }

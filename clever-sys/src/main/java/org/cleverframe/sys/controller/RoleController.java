@@ -85,6 +85,7 @@ public class RoleController extends BaseController {
         Role role = BeanMapper.mapper(roleAddVo, Role.class);
         if (beanValidator(bindingResult, message)) {
             if (!roleService.saveRole(role)) {
+                message.setSuccess(false);
                 message.setFailMessage("新增角色失败");
             }
         }
@@ -105,6 +106,7 @@ public class RoleController extends BaseController {
         Role role = BeanMapper.mapper(roleUpdateVo, Role.class);
         if (beanValidator(bindingResult, message)) {
             if (!roleService.updateRole(role)) {
+                message.setSuccess(false);
                 message.setFailMessage("更新角色失败");
             }
         }
@@ -125,6 +127,7 @@ public class RoleController extends BaseController {
         Role role = BeanMapper.mapper(reRoleDeleteVo, Role.class);
         if (beanValidator(bindingResult, message)) {
             if (!roleService.deleteRole(role)) {
+                message.setSuccess(false);
                 message.setFailMessage("删除角色失败");
             }
         }
@@ -160,6 +163,7 @@ public class RoleController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>(true, "角色添加资源成功", null);
         if (beanValidator(bindingResult, message)) {
             if (!roleService.addRoleResources(roleResourcesAddVo.getRoleId(), roleResourcesAddVo.getResourcesId())) {
+                message.setSuccess(false);
                 message.setFailMessage("角色添加资源失败");
             }
         }
@@ -179,6 +183,7 @@ public class RoleController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>(true, "角色移除资源成功", null);
         if (beanValidator(bindingResult, message)) {
             if (!roleService.deleteRoleResources(roleResourcesDeleteVo.getRoleId(), roleResourcesDeleteVo.getResourcesId())) {
+                message.setSuccess(false);
                 message.setFailMessage("角色移除资源失败");
             }
         }

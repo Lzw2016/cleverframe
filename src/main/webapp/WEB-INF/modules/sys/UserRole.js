@@ -6,10 +6,16 @@ var pageJs = function (globalPath) {
     var _this = this;
     // 根据字典类别查询字典地址
     var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
-    // 分页查询角色信息
-    var findRoleByPageUrl = globalPath.mvcPath + "/sys/role/findByPage.json";
     // 分页查询用户信息
     var findUserByPageUrl = globalPath.mvcPath + "/sys/user/findByPage.json";
+    // 分页查询角色信息
+    var findRoleByPageUrl = globalPath.mvcPath + "/sys/role/findByPage.json";
+    // 查询用户的所有数据 (不分页)
+    var findRoleByUserUrl = globalPath.mvcPath + "/sys/user/findRoleByUser.json";
+    // 为用户增加一个角色
+    var addUserRoleUrl = globalPath.mvcPath + "/sys/user/addUserRole.json";
+    // 移除用户角色
+    var deleteUserRoleUrl = globalPath.mvcPath + "/sys/user/deleteUserRole.json";
 
     // 查询表单
     var searchForm = $("#searchForm");
@@ -81,8 +87,8 @@ var pageJs = function (globalPath) {
             toolbar: "#dataTableButtons_1",
             pageSize: 30,
             pageList: [10, 20, 30, 50, 100, 150],
-            onDblClickRow: function (rowIndex, rowData) {
-                _this.openEditDialog();
+            onSelect: function (rowIndex, rowData) {
+                _this.setSelectRole(rowData);
             },
             onBeforeLoad: function (param) {
                 // 增加查询参数
@@ -128,21 +134,32 @@ var pageJs = function (globalPath) {
         });
 
         dataTableButtonsSearch_2.click(function () {
+            _this.setSelectRole(selectUser);
         });
 
         dataTableButtonsAdd_2.click(function () {
+            if (selectUser == null) {
+                $.messager.alert("提示", "请先选择用户！", "info");
+                return;
+            }
+            selectRoleDialog.dialog("open");
+            dataTable_3.datagrid("load");
         });
 
         dataTableButtonsDel_2.click(function () {
+            _this.deleteUserRole();
         });
 
         dataTableButtonsSearch_3.click(function () {
+            dataTable_3.datagrid("load");
         });
 
         selectRoleDialogButtonsOK.click(function () {
+            _this.addUserRole();
         });
 
         selectRoleDialogButtonsCancel.click(function () {
+            selectRoleDialog.dialog("close");
         });
     };
 
@@ -152,7 +169,7 @@ var pageJs = function (globalPath) {
     this.selectRoleDialogInit = function () {
         selectRoleDialog.dialog({
             title: "为用户添加角色",
-            closed: false,
+            closed: true,
             minimizable: false,
             maximizable: false,
             resizable: false,
@@ -163,7 +180,7 @@ var pageJs = function (globalPath) {
         });
 
         dataTable_3.datagrid({
-            // url: findByResourcesPageUrl,
+            url: findRoleByPageUrl,
             idField: 'id',
             fit: true,
             fitColumns: false,
@@ -177,7 +194,7 @@ var pageJs = function (globalPath) {
             pageSize: 20,
             pageList: [10, 20, 30, 50, 100, 150],
             onDblClickRow: function (index, row) {
-                _this.addRoleResources();
+                _this.addUserRole();
             },
             onBeforeLoad: function (param) {
                 // 初始化时不加载数据
@@ -200,6 +217,63 @@ var pageJs = function (globalPath) {
                 });
             }
         });
+    };
+
+    // 根据用户名查询角色
+    this.setSelectRole = function (user) {
+        selectUser = user;
+        selectUserText.text(selectUser.loginName);
+        dataTable_2.datagrid("loading");
+        //noinspection JSUnusedLocalSymbols
+        $.ajax({
+            type: "POST", dataType: "JSON", data: {"id": selectUser.id}, async: true, url: findRoleByUserUrl,
+            success: function (data) {
+                if (data.success) {
+                    dataTable_2.datagrid("loadData", data.result);
+                }
+            },
+            complete: function (xhr, ts) {
+                dataTable_2.datagrid("loaded");
+            }
+        });
+    };
+
+    // 角色移除资源
+    this.deleteUserRole = function () {
+        var row = dataTable_2.datagrid('getSelected');
+        if (selectUser == null || row == null) {
+            $.messager.alert("提示", "请选择用户和角色信息！", "info");
+            return;
+        }
+        $.messager.confirm("确认移除", "您确定移除角色?<br/>用户:" + selectUser.loginName + "<br/>角色:" + row.name, function (r) {
+            if (r) {
+                $.post(deleteUserRoleUrl, {"roleId": row.id, "userId": selectUser.id}, function (data) {
+                    if (data.success) {
+                        // 删除成功
+                        $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                        _this.setSelectRole(selectUser);
+                    } else {
+                        // 删除失败
+                    }
+                }, "json");
+            }
+        });
+    };
+
+    // 增加角色资源
+    this.addUserRole = function () {
+        var row = dataTable_3.datagrid('getSelected');
+        if (selectUser == null || row == null) {
+            $.messager.alert("提示", "请选择用户和角色信息！", "info");
+            return;
+        }
+        $.post(addUserRoleUrl, {"roleId": row.id, "userId": selectUser.id}, function (data) {
+            if (data.success) {
+                selectRoleDialog.dialog("close");
+                $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                _this.setSelectRole(selectUser);
+            }
+        }, "json");
     };
 };
 
