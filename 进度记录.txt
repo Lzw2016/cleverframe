@@ -52,7 +52,7 @@ clever-sys
 
 
 
-## ----------------------------------------- 系统资源 ----------------------------------------- ##
+## ----------------------------------------- 系统核心 ----------------------------------------- ##
 ## =========== clever-core
 /${mvcPath}/core/main/CoreMain.html
 
@@ -94,6 +94,7 @@ clever-sys
 /${mvcPath}/core/template/getTemplateByName.json
 
 
+## ----------------------------------------- 代码生成器 ----------------------------------------- ##
 ## =========== clever-generator
 /${mvcPath}/generator/main/GeneratorMain.html
 
@@ -117,6 +118,7 @@ clever-sys
 /${mvcPath}/generator/matedata/getTableSchema.json
 
 
+## ----------------------------------------- 系统定时任务 ----------------------------------------- ##
 ## =========== clever-quartz
 /${mvcPath}/quartz/main
 
@@ -161,6 +163,7 @@ clever-sys
 /${mvcPath}/quartz/trigger/resumeTrigger.json
 
 
+## ----------------------------------------- 系统监控 ----------------------------------------- ##
 ## =========== clever-monitor
 /${mvcPath}/monitor/ehcache/EhcacheMonitor.html
 /${mvcPath}/monitor/ehcache/getAllEhCacheNames.json
@@ -201,6 +204,7 @@ clever-sys
 /${mvcPath}/monitor/zookeeper/getZNodeInfo.json
 
 
+## ----------------------------------------- 系统用户角色权限 ----------------------------------------- ##
 ## =========== clever-sys
 /${mvcPath}/sys/resources/Resources.html
 /${mvcPath}/sys/resources/DependenceResources.html

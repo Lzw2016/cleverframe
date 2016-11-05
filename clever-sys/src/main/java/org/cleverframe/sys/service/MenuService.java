@@ -3,6 +3,7 @@ package org.cleverframe.sys.service;
 
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.service.BaseService;
+import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.dao.MenuDao;
 import org.cleverframe.sys.entity.Menu;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.interceptor.TransactionAspectSupport;
 
 import java.io.Serializable;
 import java.util.List;
@@ -58,9 +60,31 @@ public class MenuService extends BaseService {
      *
      * @return 成功返回true
      */
-    @Transactional(readOnly = true)
-    public boolean saveMenu(Menu menu) {
+    @Transactional(readOnly = false)
+    public boolean saveMenu(AjaxMessage message, Menu menu) {
+        menu.setFullPath("-");
         menuDao.getHibernateDao().save(menu);
+        if (menu.getParentId() <= -1L) {
+            menu.setParentId(-1L);
+            menu.setFullPath(menu.getId() + "");
+        } else {
+            Menu parentMenu = menuDao.getHibernateDao().get(menu.getParentId());
+            if (parentMenu == null || !Menu.DEL_FLAG_NORMAL.equals(parentMenu.getDelFlag())) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                message.setSuccess(false);
+                message.setFailMessage("新增菜单失败-上级菜单不存在");
+                return false;
+            }
+            menu.setFullPath(parentMenu.getFullPath() + Menu.FULL_PATH_SPLIT + menu.getId());
+            if (!parentMenu.getMenuType().equals(menu.getMenuType())) {
+                TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+                message.setSuccess(false);
+                message.setFailMessage("新增菜单失败-菜单类型与上级菜单必须一致");
+                return false;
+            }
+            menu.setMenuType(parentMenu.getMenuType());
+        }
+        menuDao.getHibernateDao().update(menu);
         return true;
     }
 
@@ -69,20 +93,32 @@ public class MenuService extends BaseService {
      *
      * @return 成功返回true
      */
-    @Transactional(readOnly = true)
+    @Transactional(readOnly = false)
     public boolean updateMenu(Menu menu) {
         menuDao.getHibernateDao().update(menu, false, true);
         return true;
     }
 
     /**
-     * 删除菜单数据(软删除)
+     * 删除菜单数据
      *
      * @return 成功返回true
      */
-    @Transactional(readOnly = true)
-    public boolean deleteMenu(Serializable id) {
-        int count = menuDao.getHibernateDao().deleteByIdForSoft(id);
-        return count == 1;
+    @Transactional(readOnly = false)
+    public boolean deleteMenu(AjaxMessage message, Serializable id) {
+        long count = menuDao.findChildMenuCount(id);
+        if (count > 0) {
+            message.setSuccess(false);
+            message.setFailMessage("删除菜单失败-只能删除无子菜单的菜单");
+            return false;
+        }
+        count = menuDao.getHibernateDao().deleteById(id);
+        if (count != 1L) {
+            TransactionAspectSupport.currentTransactionStatus().setRollbackOnly();
+            message.setSuccess(false);
+            message.setFailMessage("删除菜单失败-菜单不存在");
+            return false;
+        }
+        return true;
     }
 }

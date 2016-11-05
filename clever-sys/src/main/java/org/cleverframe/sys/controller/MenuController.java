@@ -107,10 +107,7 @@ public class MenuController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>(true, "新增菜单成功", null);
         if (beanValidator(bindingResult, message)) {
             Menu menu = BeanMapper.mapper(menuAddVo, Menu.class);
-            if (!menuService.saveMenu(menu)) {
-                message.setSuccess(false);
-                message.setFailMessage("新增菜单失败");
-            }
+            menuService.saveMenu(message, menu);
         }
         return message;
     }
@@ -148,10 +145,7 @@ public class MenuController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<String> message = new AjaxMessage<>(true, "删除菜单成功", null);
         if (beanValidator(bindingResult, message)) {
-            if (!menuService.deleteMenu(menuDeleteVoe.getId())) {
-                message.setSuccess(false);
-                message.setFailMessage("删除菜单失败");
-            }
+            menuService.deleteMenu(message, menuDeleteVoe.getId());
         }
         return message;
     }

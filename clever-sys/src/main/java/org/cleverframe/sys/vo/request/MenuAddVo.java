@@ -14,6 +14,12 @@ public class MenuAddVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 备注
+     */
+    @Length(max = 255, message = "备注信息值长度不能超过255个字符")
+    private String remarks;
+
+    /**
      * 父级编号,根节点的父级编号是：-1
      */
     @NotNull(message = "父级编号不能为空")
@@ -59,6 +65,14 @@ public class MenuAddVo extends BaseRequestVo {
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
+
+    public String getRemarks() {
+        return remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
 
     public Long getParentId() {
         return parentId;

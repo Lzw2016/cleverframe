@@ -1,15 +1,18 @@
 package org.cleverframe.sys.dao;
 
+import org.apache.commons.lang.math.NumberUtils;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.persistence.Parameter;
 import org.cleverframe.core.persistence.dao.BaseDao;
 import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.entity.Menu;
+import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.transform.Transformers;
 import org.springframework.stereotype.Repository;
 
+import java.io.Serializable;
 import java.util.List;
 import java.util.Map;
 
@@ -61,5 +64,17 @@ public class MenuDao extends BaseDao<Menu> {
         param.put("menuType", menuType);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.MenuDao.findMenuByType");
         return hibernateDao.findBySql(sql, param);
+    }
+
+    /**
+     * 查询菜单的直接子菜单个数(包含软删除的)
+     */
+    public long findChildMenuCount(Serializable id) {
+        Parameter param = new Parameter();
+        param.put("id", id);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.MenuDao.findChildMenuCount");
+        Query query = hibernateDao.createSqlQuery(sql, param);
+        Object count = query.uniqueResult();
+        return NumberUtils.toLong(count.toString(), 0L);
     }
 }
