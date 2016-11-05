@@ -12,6 +12,8 @@ var pageJs = function (globalPath) {
     var findMenuTreeByTypeUrl = globalPath.mvcPath + "/sys/menu/findMenuTreeByType.json";
     // 增加菜单信息
     var addMenuUrl = globalPath.mvcPath + "/sys/menu/addMenu.json";
+    // 更新菜单信息
+    var updateMenuUrl = globalPath.mvcPath + "/sys/menu/updateMenu.json";
     // 删除菜单
     var deleteMenuUrl = globalPath.mvcPath + "/sys/menu/deleteMenu.json";
 
@@ -82,6 +84,31 @@ var pageJs = function (globalPath) {
     // 新增表单 - 备注
     var addRemarks = $("#addRemarks");
 
+    // 新增对话框
+    var editDialog = $("#editDialog");
+    // 新增对话框 - 保存
+    var editDialogButtonsSave = $("#editDialogButtonsSave");
+    // 新增对话框 - 取消
+    var editDialogButtonsCancel = $("#editDialogButtonsCancel");
+    // 新增表单
+    var editForm = $("#editForm");
+    // 新增表单 - 上级菜单
+    var editParentId = $("#editParentId");
+    // 新增表单 - 菜单类别
+    var editMenuType = $("#editMenuType");
+    // 新增表单 - 菜单名称
+    var editName = $("#editName");
+    // 新增表单 - 菜单图标
+    var editIcon = $("#editIcon");
+    // 新增表单 - 打开方式
+    var editOpenMode = $("#editOpenMode");
+    // 新增表单 - 排序
+    var editSort = $("#editSort");
+    // 新增表单 - 菜单地址
+    var editResourcesId = $("#editResourcesId");
+    // 新增表单 - 备注
+    var editRemarks = $("#editRemarks");
+
     // 当前选择菜单类别 - 显示文本
     var selectMenuTypeText = $("#selectMenuTypeText");
     // 当前选择菜单类别
@@ -94,6 +121,7 @@ var pageJs = function (globalPath) {
     this.init = function () {
         _this.addTypeDialogInit();
         _this.addDialogInit();
+        _this.editDialogInit();
         _this.dataBind();
         _this.eventBind();
     };
@@ -136,7 +164,7 @@ var pageJs = function (globalPath) {
             pageSize: 30,
             pageList: [10, 20, 30, 50, 100, 150],
             onDblClickRow: function (rowIndex, rowData) {
-                // _this.openEditDialog();
+                _this.openEditDialog();
             },
             onBeforeLoad: function (row, param) {
                 if (selectMenuType == null) {
@@ -187,10 +215,7 @@ var pageJs = function (globalPath) {
         });
 
         treeGridButtonsEdit.click(function () {
-            if (selectMenuType == null) {
-                $.messager.alert("提示", "请选择菜单类别！", "info");
-                return;
-            }
+            _this.openEditDialog();
         });
 
         treeGridButtonsDel.click(function () {
@@ -203,6 +228,14 @@ var pageJs = function (globalPath) {
 
         addDialogButtonsCancel.click(function () {
             addDialog.dialog("close");
+        });
+
+        editDialogButtonsSave.click(function () {
+            _this.updateMenu();
+        });
+
+        editDialogButtonsCancel.click(function () {
+            editDialog.dialog("close");
         });
     };
 
@@ -373,6 +406,92 @@ var pageJs = function (globalPath) {
                         // 删除失败
                     }
                 }, "json");
+            }
+        });
+    };
+
+    // 初始化新增对话框
+    this.editDialogInit = function () {
+        editDialog.dialog({
+            title: "新增菜单",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            minWidth: 830,
+            minHeight: 330,
+            modal: true,
+            buttons: "#editDialogButtons"
+        });
+
+        editParentId.textbox({
+            required: true
+        });
+        editMenuType.textbox({
+            readonly: true,
+            required: true,
+            value: "-",
+            validType: 'length[0,255]'
+        });
+        editName.textbox({
+            required: true,
+            validType: 'length[0,50]'
+        });
+        editIcon.textbox({
+            required: true,
+            validType: 'length[0,50]'
+        });
+        editOpenMode.combobox({
+            required: true,
+            url: findDictTypeUrl + encodeURIComponent("菜单打开方式") + "&hasSelectAll=false",
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 80
+        });
+        editSort.numberspinner({
+            required: true,
+            value: 0,
+            editable: true
+        });
+        editResourcesId.textbox({
+            required: true,
+            validType: 'length[0,50]'
+        });
+        editRemarks.textbox({
+            required: true,
+            validType: 'length[0,255]',
+            multiline: true
+        });
+    };
+
+    // 打开编辑对话框
+    this.openEditDialog = function () {
+        var row = treeGrid.treegrid('getSelected');
+        if (row == null) {
+            $.messager.alert("提示", "请选择要编辑的数据！", "info");
+            return;
+        }
+        if (row) {
+            editDialog.dialog('open');
+            editForm.form('load', row);
+        }
+    };
+
+    // 更新菜单类型
+    this.updateMenu = function () {
+        editForm.form("submit", {
+            url: updateMenuUrl,
+            success: function (data) {
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    editDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    treeGrid.treegrid('reload');
+                } else {
+                    // 保存失败
+                }
             }
         });
     };

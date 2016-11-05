@@ -174,5 +174,56 @@
     <a id="addDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 </div>
 
+<%-- 编辑对话框 --%>
+<div id="editDialog" style="width: 830px;height: 330px;padding: 5px 10px">
+    <form id="editForm" method="post">
+        <input id="editId" type="hidden" name="id" />
+        <div class="row">
+            <span class="column">
+               <label for="editMenuType">菜单类别</label>
+                <input id="editMenuType" name="menuType"/>
+            </span>
+            <span class="column">
+                 <label for="editName">菜单名称</label>
+                <input id="editName" name="name"/>
+            </span>
+            <span class="columnLast">
+                <label for="editParentId">上级菜单</label>
+                <input id="editParentId" name="parentId"/>
+            </span>
+        </div>
+        <div class="row">
+            <span class="column">
+                <label for="editIcon">菜单图标</label>
+                <input id="editIcon" name="icon"/>
+            </span>
+            <span class="column">
+                <label for="editOpenMode">打开方式</label>
+                <input id="editOpenMode" name="openMode"/>
+            </span>
+            <span class="columnLast">
+                <label for="editSort">排序</label>
+                <input id="editSort" name="sort"/>
+            </span>
+        </div>
+        <div class="row">
+            <span class="columnLast">
+                <label for="editResourcesId">菜单地址</label>
+                <input id="editResourcesId" name="resourcesId" style="width: 680px;"/>
+            </span>
+        </div>
+        <div class="row">
+            <span class="columnLast">
+                <label for="editRemarks">备注</label>
+                <input id="editRemarks" name="remarks" style="width: 680px;height: 140px;"/>
+            </span>
+        </div>
+    </form>
+</div>
+<div id="editDialogButtons">
+    <a id="editDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
+    <a id="editDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
+
 </body>
 </html>
