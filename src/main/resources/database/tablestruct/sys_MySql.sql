@@ -251,7 +251,7 @@ CREATE TABLE sys_menu
 
     parent_id       bigint          NOT NULL                            COMMENT '父级编号,根节点的父级编号是：-1',
     full_path       varchar(255)    NOT NULL                            COMMENT '树结构的全路径用“-”隔开,包含自己的ID',
-    menu_type       char(1)         NOT NULL    DEFAULT '1'             COMMENT '菜单类型',
+    menu_type       varchar(255)    NOT NULL    DEFAULT '1'             COMMENT '菜单类型',
     name            varchar(50)     NOT NULL                            COMMENT '菜单名称',
     resources_id    bigint                                              COMMENT '资源ID,关联表:sys_resources',
     icon            varchar(50)                                         COMMENT '图标',

@@ -1,43 +1,36 @@
-package org.cleverframe.sys.entity;
+package org.cleverframe.sys.vo.request;
 
-import org.cleverframe.core.persistence.entity.DataEntity;
-import org.hibernate.annotations.DynamicInsert;
-import org.hibernate.annotations.DynamicUpdate;
+import org.cleverframe.common.vo.request.BaseRequestVo;
+import org.hibernate.validator.constraints.Length;
+import org.hibernate.validator.constraints.NotBlank;
 
-import javax.persistence.Entity;
-import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
 
 /**
- * 实体类，对应表sys_menu(菜单表)<br/>
- * <p>
  * 作者：LiZW <br/>
- * 创建时间：2016-08-24 00:11:49 <br/>
+ * 创建时间：2016/11/5 12:56 <br/>
  */
-@Entity
-@Table(name = "sys_menu")
-@DynamicInsert
-@DynamicUpdate
-public class Menu extends DataEntity {
+public class MenuAddVo extends BaseRequestVo {
     private static final long serialVersionUID = 1L;
 
     /**
      * 父级编号,根节点的父级编号是：-1
      */
+    @NotNull(message = "父级编号不能为空")
     private Long parentId;
-
-    /**
-     * 树结构的全路径用“-”隔开,包含自己的ID
-     */
-    private String fullPath;
 
     /**
      * 菜单类型
      */
+    @NotNull(message = "菜单类型不能为空")
+    @Length(min = 1, max = 255, message = "菜单类型值长度不能超过255个字符")
     private String menuType;
 
     /**
      * 菜单名称
      */
+    @NotBlank(message = "菜单名称不能为空")
+    @Length(min = 1, max = 50, message = "菜单名称值长度不能超过50个字符")
     private String name;
 
     /**
@@ -48,132 +41,78 @@ public class Menu extends DataEntity {
     /**
      * 图标
      */
+    @Length(min = 1, max = 50, message = "图标值长度不能超过50个字符")
     private String icon;
 
     /**
      * 菜单打开方式(1:Table叶签, 2:浏览器叶签, 3:浏览器新窗口)
      */
+    @NotNull(message = "菜单打开方式不能为空")
     private Character openMode;
 
     /**
      * 排序(升序)
      */
+    @NotNull(message = "菜单排序不能为空")
     private Integer sort;
 
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
 
-    /**
-     * 获取 父级编号,根节点的父级编号是：-1
-     */
     public Long getParentId() {
         return parentId;
     }
 
-    /**
-     * 设置 父级编号,根节点的父级编号是：-1
-     */
     public void setParentId(Long parentId) {
         this.parentId = parentId;
     }
 
-    /**
-     * 获取 树结构的全路径用“-”隔开,包含自己的ID
-     */
-    public String getFullPath() {
-        return fullPath;
-    }
-
-    /**
-     * 设置 树结构的全路径用“-”隔开,包含自己的ID
-     */
-    public void setFullPath(String fullPath) {
-        this.fullPath = fullPath;
-    }
-
-    /**
-     * 获取 菜单类型
-     */
     public String getMenuType() {
         return menuType;
     }
 
-    /**
-     * 设置 菜单类型（1：系统模块菜单，2：个人快捷菜单）
-     */
     public void setMenuType(String menuType) {
         this.menuType = menuType;
     }
 
-    /**
-     * 获取 菜单名称
-     */
     public String getName() {
         return name;
     }
 
-    /**
-     * 设置 菜单名称
-     */
     public void setName(String name) {
         this.name = name;
     }
 
-    /**
-     * 获取 资源ID,关联表:core_resources
-     */
     public Long getResourcesId() {
         return resourcesId;
     }
 
-    /**
-     * 设置 资源ID,关联表:core_resources
-     */
     public void setResourcesId(Long resourcesId) {
         this.resourcesId = resourcesId;
     }
 
-    /**
-     * 获取 图标
-     */
     public String getIcon() {
         return icon;
     }
 
-    /**
-     * 设置 图标
-     */
     public void setIcon(String icon) {
         this.icon = icon;
     }
 
-    /**
-     * 获取 菜单打开方式(1:Table叶签, 2:浏览器叶签, 3:浏览器新窗口)
-     */
     public Character getOpenMode() {
         return openMode;
     }
 
-    /**
-     * 设置 菜单打开方式(1:Table叶签, 2:浏览器叶签, 3:浏览器新窗口)
-     */
     public void setOpenMode(Character openMode) {
         this.openMode = openMode;
     }
 
-    /**
-     * 获取 排序(升序)
-     */
     public Integer getSort() {
         return sort;
     }
 
-    /**
-     * 设置 排序(升序)
-     */
     public void setSort(Integer sort) {
         this.sort = sort;
     }
-
 }

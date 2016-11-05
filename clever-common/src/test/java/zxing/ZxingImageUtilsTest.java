@@ -21,8 +21,6 @@ public class ZxingImageUtilsTest {
 
     /**
      * 所有测试开始之前运行
-     *
-     * @throws Exception
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -31,8 +29,6 @@ public class ZxingImageUtilsTest {
 
     /**
      * 所有测试结束之后运行
-     *
-     * @throws Exception
      */
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
@@ -41,8 +37,6 @@ public class ZxingImageUtilsTest {
 
     /**
      * 每一个测试方法之前运行
-     *
-     * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
@@ -50,8 +44,6 @@ public class ZxingImageUtilsTest {
 
     /**
      * 每一个测试方法之后运行
-     *
-     * @throws Exception
      */
     @After
     public void tearDown() throws Exception {
@@ -83,7 +75,7 @@ public class ZxingImageUtilsTest {
 
     @Test
     public void testReaderImage() {
-        String contents = ZxingReaderImageUtils.readerImage("F://1.png");
+        String contents = ZxingReaderImageUtils.readerImage("F://downLocal.jpg");
         logger.info(contents);
 
         contents = ZxingReaderImageUtils.readerImage("F://2.png");
