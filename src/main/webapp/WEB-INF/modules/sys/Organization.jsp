@@ -26,6 +26,7 @@
     <title>组织机构管理</title>
 </head>
 <body>
-
+<button id="test001">发消息</button>
+<button id="test002">关闭</button>
 </body>
 </html>

@@ -23,6 +23,7 @@ dependencies {
     compile project(':clever-memcached')
 
     compile project(':clever-shiro') // 需要删除
+    compile project(':clever-sso') // 需要删除
 
     testCompile('junit:junit:4.12')
     testCompile('org.springframework:spring-test:4.2.7.RELEASE')
@@ -163,6 +164,9 @@ project(':clever-common') {
         compile('org.springframework:spring-webmvc:4.2.7.RELEASE')
         compile('org.springframework:spring-oxm:4.2.7.RELEASE')
         compile('org.springframework:spring-orm:4.2.7.RELEASE')
+        compile group: 'org.springframework', name: 'spring-websocket', version: '4.2.7.RELEASE'
+        compile group: 'org.springframework', name: 'spring-messaging', version: '4.2.7.RELEASE'
+        compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
     }
 }
 

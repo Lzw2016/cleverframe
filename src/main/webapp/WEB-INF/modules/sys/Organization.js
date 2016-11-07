@@ -20,6 +20,35 @@ var pageJs = function (globalPath) {
      * 页面数据初始化
      */
     this.dataBind = function () {
+        var websocket = new WebSocket("ws://localhost:8080/cleverframe/myHandler");
+        websocket.onopen = function (evt) {
+            console.log("连接成功");
+
+            doSend("消息 李志伟");
+        };
+        websocket.onclose = function (evt) {
+            console.log("连接断开");
+        };
+        websocket.onmessage = function (evt) {
+            console.log("返回消息:" + evt.data);
+        };
+        websocket.onerror = function (evt) {
+            console.log("发生错误:" + evt.data);
+        };
+
+        function doSend(message) {
+            console.log("发送测试消息:" + message);
+            websocket.send(message);
+        }
+
+        var i = 0;
+        $("#test001").click(function () {
+            doSend("李志伟" + i);
+            i++;
+        });
+        $("#test002").click(function () {
+            websocket.close();
+        });
     };
 
     /**
