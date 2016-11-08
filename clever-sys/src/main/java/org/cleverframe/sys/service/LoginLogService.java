@@ -8,7 +8,7 @@ import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 
 /**
- * Service，对应表sys_login_log(用户登入日志表)<br/>
+ * Service，对应表sys_login_log(用户登录日志表)<br/>
  * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-08-24 22:51:31 <br/>

@@ -19,22 +19,23 @@
     <!-- Shiro权限控制过滤器入口 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager" /><!-- Shiro安全管理器 -->
-        <property name="loginUrl" value="/${mvcPath}/sys/loginJsp" /><!-- 登入页面，Web服务器启动后会自动跳转到该地址 -->
-        <property name="successUrl" value="/${mvcPath}/sys/loginSuccess" /><!-- 登入成功页面 -->
+        <property name="loginUrl" value="/${mvcPath}/sys/login/Login.html" /><!-- 登录页面，Web服务器启动后会自动跳转到该地址 -->
+        <property name="successUrl" value="/${mvcPath}/sys/loginSuccess" /><!-- 登录成功页面 -->
         <property name="unauthorizedUrl" value="/${modulesPath}/error/403.jsp" /><!-- 授权失败跳转路径 -->
         <property name="filters">
             <map>
-                <entry key="authc" value-ref="formAuthenticationFilter" /><!-- 基于Form表单的身份验证过滤器 -->
+                <entry key="authc" value-ref="loginFormAuthenticationFilter" /><!-- 基于Form表单的身份验证过滤器 -->
             </map>
         </property>
         <property name="filterChainDefinitions">
             <!-- url=拦截器[参数]，拦截器[参数] -->
             <value>
-                /servlet/validateCodeServlet = anon
                 /${staticPath}/** = anon
-                /${mvcPath}/sys/loginJsp = anon
-                /${mvcPath}/sys/login = authc
-                /${mvcPath}/sys/logout = logout
+                /${mvcPath}/core/globaljs/globalPath.js = anon
+                /${mvcPath}/sys/login/Validate.png = anon
+                /${mvcPath}/sys/login/Login.html = anon
+                /${mvcPath}/sys/login/userLogin.json = authc
+                /${mvcPath}/sys/login/userLogout.json = logout
                 /** = user
             </value>
         </property>
@@ -42,14 +43,14 @@
 
     <!-- 安全管理器,定义Shiro主要业务对象 -->
     <bean id="securityManager" class="org.apache.shiro.web.mgt.DefaultWebSecurityManager">
-        <property name="realm" ref="shiroAuthorizingRealm" /><!-- Realm(AuthorizingRealm)实现 -->
+        <property name="realm" ref="userAuthorizingRealm" /><!-- Realm(AuthorizingRealm)实现 -->
         <property name="cacheManager" ref="shiroCacheManager" /><!-- 缓存管理器,用户授权信息Cache, 采用EhCache -->
         <property name="sessionManager" ref="shiroSessionManager" /><!-- shiro会话管理器 -->
         <property name="rememberMeManager" ref="rememberMeManager" /><!-- rememberMe管理器 -->
     </bean>
 
     <!-- 安全管理器 - Realm(AuthorizingRealm)实现 -->
-    <bean id="shiroAuthorizingRealm" class="org.cleverframe.shiro.shiro.ShiroAuthorizingRealm">
+    <bean id="userAuthorizingRealm" class="org.cleverframe.sys.shiro.UserAuthorizingRealm">
         <property name="cachingEnabled" value="true" /><!-- 启用缓存，默认false -->
         <property name="authenticationCachingEnabled" value="true"/><!-- 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false -->
         <property name="authenticationCacheName" value="shiroAuthenticationCache"/><!-- 缓存AuthenticationInfo信息的缓存名称 -->
@@ -72,7 +73,7 @@
         <property name="deleteInvalidSessions" value="true" /><!-- 是否删除过期的会话,默认是开启的 -->
         <property name="sessionIdCookieEnabled" value="true" /><!-- 是否启用Session Id Cookie，默认是启用的 -->
         <property name="sessionDAO" ref="sessionDAO" /><!-- 会话DAO -->
-        <property name="sessionValidationScheduler" ref="sessionValidationScheduler" /><!-- 会话验证调度器 -->
+        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />&lt;!&ndash; 会话验证调度器 &ndash;&gt;-->
         <property name="sessionIdCookie" ref="sessionIdCookie" /><!-- 会话Cookie模板 -->
     </bean>
 
@@ -91,16 +92,15 @@
     </bean>
 
     <!-- Shiro权限控制过滤器入口过滤器 - 基于Form表单的身份验证过滤器，用于验证用户身份信息 -->
-    <bean id="formAuthenticationFilter" class="org.cleverframe.shiro.shiro.ShiroFormAuthenticationFilter">
-        <property name="loginUrl" value="/${mvcPath}/sys/login"/><!-- 设置用户登录表单请求的请求地址 -->
+    <bean id="loginFormAuthenticationFilter" class="org.cleverframe.sys.shiro.LoginFormAuthenticationFilter">
+        <property name="loginUrl" value="/${mvcPath}/sys/login/userLogin.json"/><!-- 设置用户登录表单请求的请求地址 -->
         <property name="usernameParam" value="userName"/><!-- 设置用户登录表单请求的"用户名"参数名 -->
         <property name="passwordParam" value="password"/><!-- 设置用户登录表单请求的"密码"参数名 -->
         <property name="captchaParam" value="validateCode"/><!-- 设置用户登录表单请求的"验证码"参数名 -->
         <property name="rememberMeParam" value="rememberMe"/><!-- 设置用户登录表单请求的"记住我"参数名,boolean类型，true表示rememberMe -->
-        <property name="loginFailedMaxCount" value="3"/><!-- 最多连续登入失败次数，失败次数大于此值就必须使用验证码登入 -->
+        <property name="loginFailedMaxCount" value="3"/><!-- 最多连续登录失败次数，失败次数大于此值就必须使用验证码登录 -->
         <property name="validateCodeTimeout" value="60000"/><!-- 验证码超时时间，默认值：60秒 -->
     </bean>
-
 
     <!-- 自定义Shiro权限解析器，把权限字符串解析成Permission对象 -->
     <bean id="permissionResolver" class="org.cleverframe.shiro.shiro.ShiroPermissionResolver"/>
@@ -116,10 +116,10 @@
     </bean>
 
     <!-- 会话验证调度器 -->
-    <bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">
-        <property name="sessionValidationInterval" value="3600000" /><!-- 会话验证的时间间隔，默认60分钟 -->
-        <property name="sessionManager" ref="shiroSessionManager" /><!-- 设置对应的shiro会话管理器 -->
-    </bean>
+    <!--<bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">-->
+        <!--<property name="sessionValidationInterval" value="3600000" />&lt;!&ndash; 会话验证的时间间隔，默认60分钟 &ndash;&gt;-->
+        <!--<property name="sessionManager" ref="shiroSessionManager" />&lt;!&ndash; 设置对应的shiro会话管理器 &ndash;&gt;-->
+    <!--</bean>-->
 
     <!-- 会话DAO，使用Ehcache进行会话存储 -->
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">

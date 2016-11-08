@@ -249,7 +249,7 @@ public class CodeTemplateService extends BaseService {
     }
 
     /**
-     * 直接从数据库删除模版</br>
+     * 直接从数据库删除模版<br/>
      * <b>注意不能删除一个非空的模版类别(类别节点下存在子节点)</b>
      *
      * @param codeTemplateName 代码模版名称

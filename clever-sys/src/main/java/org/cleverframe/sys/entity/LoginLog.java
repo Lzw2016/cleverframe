@@ -9,7 +9,7 @@ import javax.persistence.Table;
 import java.util.Date;
 
 /**
- * 实体类，对应表sys_login_log(用户登入日志表)<br/>
+ * 实体类，对应表sys_login_log(用户登录日志表)<br/>
  * <p>
  * 作者：LiZW <br/>
  * 创建时间：2016-08-24 00:07:05 <br/>

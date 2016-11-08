@@ -41,4 +41,8 @@ public class SysJspUrlPath implements IJspUrlPath {
      * 组织机构管理
      */
     public static final String Organization = "sys/Organization";
+    /**
+     * 用户登录界面
+     */
+    public static final String Login = "sys/Login";
 }

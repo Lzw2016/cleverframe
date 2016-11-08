@@ -7,4 +7,5 @@ import org.cleverframe.common.attributes.IApplicationAttributes;
  * Created by LiZW on 2016-4-24.
  */
 public class SysApplicationAttributes implements IApplicationAttributes {
+
 }

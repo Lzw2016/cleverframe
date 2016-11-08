@@ -23,6 +23,37 @@ public class User extends DataEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 用户帐号状态(1：正常；2：锁定；3：删除)
+     */
+    public final static Character ACCOUNT_STATE_NORMAL = '1';
+
+    /**
+     * 用户帐号状态(1：正常；2：锁定；3：删除)
+     */
+    public final static Character ACCOUNT_STATE_LOCKED = '2';
+
+    /**
+     * 用户帐号状态(1：正常；2：锁定；3：删除)
+     */
+    public final static Character ACCOUNT_STATE_DELETE = '3';
+
+    /**
+     * 用户状态(1：试用；2：在职；3：离职)
+     */
+    public final static Character USER_STATE_TRY = '1';
+
+    /**
+     * 用户状态(1：试用；2：在职；3：离职)
+     */
+    public final static Character USER_STATE_JOB = '2';
+
+    /**
+     * 用户状态(1：试用；2：在职；3：离职)
+     */
+    public final static Character USER_STATE_LEAVE = '3';
+
+
+    /**
      * 归属公司
      */
     private String homeCompany;

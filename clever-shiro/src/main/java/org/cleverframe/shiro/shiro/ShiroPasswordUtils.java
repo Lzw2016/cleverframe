@@ -13,18 +13,18 @@ import org.cleverframe.common.utils.IDCreateUtils;
 public class ShiroPasswordUtils
 {
 	/**
-	 * 用户登入密码解密<br>
+	 * 用户登录密码解密<br>
 	 * @param ciphertext 密文
 	 * @return 明文
 	 * */
 	@Deprecated
 	public static String Decryption(String ciphertext)
 	{
-		throw new RuntimeException("用户登入密码使用了非对称加密方式，不能解密！");
+		throw new RuntimeException("用户登录密码使用了非对称加密方式，不能解密！");
 	}
 
 	/**
-	 * 用户登入密码加密<br>
+	 * 用户登录密码加密<br>
 	 * @param plaintext 明文
 	 * @return 密文
 	 * @see ShiroAuthorizingRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)

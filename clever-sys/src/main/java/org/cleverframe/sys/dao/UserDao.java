@@ -79,4 +79,17 @@ public class UserDao extends BaseDao<User> {
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         return sqlQuery.executeUpdate() == 1;
     }
+
+    /**
+     * 根据用户登录名查询用户信息
+     *
+     * @param loginName 用户登录名
+     * @return 不存在返回null
+     */
+    public User getByLoginName(String loginName) {
+        Parameter param = new Parameter();
+        param.put("loginName", loginName);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.UserDao.getByLoginName");
+        return hibernateDao.getBySql(sql, param);
+    }
 }

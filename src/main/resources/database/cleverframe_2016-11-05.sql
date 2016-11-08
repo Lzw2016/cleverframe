@@ -1929,7 +1929,7 @@ CREATE TABLE `sys_login_log` (
   `user_agent` varchar(100) DEFAULT NULL COMMENT '用户代理，客户端信息或浏览器信息',
   `user_info` varchar(5000) DEFAULT NULL COMMENT '用户信息，Json格式数据',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登入日志表';
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COMMENT='用户登录日志表';
 
 -- ----------------------------
 -- Records of sys_login_log
