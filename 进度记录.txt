@@ -53,6 +53,9 @@ clever-sys
 
 
 ## ----------------------------------------- 系统核心 ----------------------------------------- ##
+## =========== 验证码
+/servlet/validateCode
+
 ## =========== clever-core
 /${mvcPath}/core/main/CoreMain.html
 
@@ -216,3 +219,5 @@ clever-sys
 /${mvcPath}/sys/resources/addDependenceResources.json
 /${mvcPath}/sys/resources/deleteDependenceResources.json
 /${mvcPath}/sys/resources/findResourcesTree.json
+
+

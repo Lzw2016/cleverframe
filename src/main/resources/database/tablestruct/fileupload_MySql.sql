@@ -45,6 +45,7 @@ CREATE TABLE fileupload_fileinfo
     new_name        varchar(255)    NOT NULL                            COMMENT '文件当前名称（UUID + 后缀名）',
     upload_time     bigint          NOT NULL                            COMMENT '文件上传所用时间',
     stored_time     bigint          NOT NULL                            COMMENT '文件存储用时，单位：毫秒（此时间只包含服务器端存储文件所用的时间，不包括文件上传所用的时间）',
+    file_source     varchar(255)    NOT NULL                            COMMENT '文件来源（可以是系统模块名）',
     PRIMARY KEY (id)
 ) COMMENT = '上传文件信息表';
 CREATE INDEX fileupload_fileinfo_digest     ON  fileupload_fileinfo     (digest ASC);
@@ -99,6 +100,67 @@ CREATE TABLE sys_template_file
 删除模板文件：软删除，一同删除关联的"上传文件信息表"数据
 
 --------------------------------------------------------------------------------------------------------------------------*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*
+用户云盘文件
+
+文件引用ID
+
+文件名称
+文件创建人
+文件创建时间
+
+文件路径
+*/
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

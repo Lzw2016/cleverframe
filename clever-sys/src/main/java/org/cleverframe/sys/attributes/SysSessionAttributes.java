@@ -11,21 +11,26 @@ public class SysSessionAttributes implements ISessionAttributes {
     /**
      * 用户连续登入失败次数,类型:int
      */
-    public final static String LOGIN_FAILED_COUNT = "Sys_Login_Failed_Count";
+    public final static String LOGIN_FAILED_COUNT = "sys_login_failed_count";
 
     /**
      * 当前登入的用户,类型:User
      */
-    public final static String LOGIN_USER = "Sys_Login_User";
+    public final static String LOGIN_USER = "sys_login_user";
 
     /**
      * 当前登入用户的所属公司,类型:Organization
      */
-    public final static String CURRENT_COMPANY = "Sys_Current_Company";
+    public final static String CURRENT_COMPANY = "sys_current_company";
 
     /**
      * 当前登入用户的归属机构,类型:Organization
      */
-    public final static String CURRENT_ORG = "Sys_Current_Org";
+    public final static String CURRENT_ORG = "sys_current_org";
+
+    /**
+     * 用户登录验证码
+     */
+    public final static String LOGIN_VALIDATE_CODE = "sys_login_validate_code";
 
 }

@@ -18,6 +18,7 @@ import java.io.IOException;
  * 创建时间：2016-5-17 11:02 <br/>
  */
 public class ImageValidateCodeServlet extends HttpServlet {
+    private static final long serialVersionUID = 1L;
 
     /**
      * 客户端GET请求，返回图片验证码<br>

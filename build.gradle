@@ -156,6 +156,8 @@ project(':clever-common') {
         compile('jstl:jstl:1.2')
         compile('taglibs:standard:1.1.2')
         compile('javax.el:javax.el-api:3.0.0')
+        // WebSocket
+        compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
 
         // ##################Spring 框架
         compile('org.springframework:spring-context-support:4.2.7.RELEASE')
@@ -166,7 +168,6 @@ project(':clever-common') {
         compile('org.springframework:spring-orm:4.2.7.RELEASE')
         compile group: 'org.springframework', name: 'spring-websocket', version: '4.2.7.RELEASE'
         compile group: 'org.springframework', name: 'spring-messaging', version: '4.2.7.RELEASE'
-        compile group: 'javax.websocket', name: 'javax.websocket-api', version: '1.1'
     }
 }
 

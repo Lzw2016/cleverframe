@@ -155,14 +155,14 @@
     </servlet-mapping>
 
     <!-- 随机验证码 -->
-    <servlet>
-        <servlet-name>validateCodeServlet</servlet-name>
-        <servlet-class>org.cleverframe.common.servlet.ImageValidateCodeServlet</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>validateCodeServlet</servlet-name>
-        <url-pattern>/servlet/validateCode</url-pattern>
-    </servlet-mapping>
+    <!--<servlet>-->
+        <!--<servlet-name>validateCodeServlet</servlet-name>-->
+        <!--<servlet-class>org.cleverframe.common.servlet.ImageValidateCodeServlet</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>validateCodeServlet</servlet-name>-->
+        <!--<url-pattern>/servlet/validateCode</url-pattern>-->
+    <!--</servlet-mapping>-->
 
     <!-- Session 配置 -->
     <session-config>
