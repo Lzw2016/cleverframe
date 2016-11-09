@@ -38,7 +38,7 @@ public class ShiroPasswordUtils {
      *
      * @param plaintext 明文
      * @return 密文
-     * @see ShiroAuthorizingRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)
+     * @see UserAuthorizingRealm#doGetAuthenticationInfo(org.apache.shiro.authc.AuthenticationToken)
      */
     public static String encryption(String plaintext) {
         if (plaintext == null) {

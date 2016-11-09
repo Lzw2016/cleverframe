@@ -54,8 +54,8 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      *
      * @param request  htttp请求参数
      * @param response htpp响应参数
-     * @return 返回用户提交的身份信息Toke，ShiroAuthorizingRealm 会使用此Toke验证用户是否合法
-     * @see ShiroAuthorizingRealm
+     * @return 返回用户提交的身份信息Toke，UserAuthorizingRealm 会使用此Toke验证用户是否合法
+     * @see UserAuthorizingRealm
      */
     @Override
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {

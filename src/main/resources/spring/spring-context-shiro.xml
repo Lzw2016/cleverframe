@@ -54,10 +54,10 @@
     <!-- 安全管理器 - Realm(AuthorizingRealm)实现 -->
     <bean id="userAuthorizingRealm" class="org.cleverframe.sys.shiro.UserAuthorizingRealm">
         <property name="cachingEnabled" value="true"/><!-- 启用缓存，默认false -->
-        <property name="authenticationCachingEnabled" value="true"/><!-- 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false -->
-        <property name="authenticationCacheName" value="shiroAuthenticationCache"/><!-- 缓存AuthenticationInfo信息的缓存名称 -->
-        <property name="authorizationCachingEnabled" value="true"/><!-- 启用授权缓存，即缓存AuthorizationInfo信息，默认false -->
-        <property name="authorizationCacheName" value="shiroAuthorizationCache"/><!-- 缓存AuthorizationInfo信息的缓存名称 -->
+        <property name="authenticationCachingEnabled" value="${shiro.authenticationCachingEnabled}"/><!-- 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false -->
+        <property name="authenticationCacheName" value="${shiro.authenticationCacheName}"/><!-- 缓存AuthenticationInfo信息的缓存名称 -->
+        <property name="authorizationCachingEnabled" value="${shiro.authorizationCachingEnabled}"/><!-- 启用授权缓存，即缓存AuthorizationInfo信息，默认false -->
+        <property name="authorizationCacheName" value="${shiro.authorizationCacheName}"/><!-- 缓存AuthorizationInfo信息的缓存名称 -->
         <property name="credentialsMatcher" ref="credentialsMatcher"/><!-- 用于用户名密码加密解密匹配的验证器 -->
         <!--<property name="permissionResolver" ref="permissionResolver"/>&lt;!&ndash; 设置权限字符串解析器 &ndash;&gt;-->
         <!--<property name="rolePermissionResolver" ref="rolePermissionResolver"/>&lt;!&ndash; 根据角色字符串解析出角色所有的权限 &ndash;&gt;-->
@@ -126,7 +126,7 @@
     <!-- 会话DAO，使用Ehcache进行会话存储 -->
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
         <!-- 设置Session缓存名字，默认就是shiro-activeSessionCache -->
-        <property name="activeSessionsCacheName" value="shiro-activeSessionCache"/>
+        <property name="activeSessionsCacheName" value="${shiro.activeSessionsCacheName}"/>
         <!-- 会话ID生成器 -->
         <property name="sessionIdGenerator">
             <bean class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>

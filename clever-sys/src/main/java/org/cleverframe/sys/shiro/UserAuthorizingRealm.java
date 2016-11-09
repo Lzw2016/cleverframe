@@ -1,7 +1,10 @@
 package org.cleverframe.sys.shiro;
 
 import org.apache.commons.lang3.StringUtils;
-import org.apache.shiro.authc.*;
+import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.AuthenticationInfo;
+import org.apache.shiro.authc.AuthenticationToken;
+import org.apache.shiro.authc.SimpleAuthenticationInfo;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
 import org.apache.shiro.realm.AuthorizingRealm;
@@ -49,27 +52,25 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
             return null;
         }
         if (StringUtils.isBlank(userToken.getUsername()) || userToken.getPassword() == null) {
-            throw new UnknownAccountException("用户名、密码不能为空");
+            throw new UserLoginException(UserLoginException.UserName_Password_Is_Empty, "用户名、密码不能为空");
         }
 
         // 获取用户信息，此处不用验证用户名密码是否正确，验证过程由AuthenticationInfo完成
         User user = authorizingRealmService.getUserByLoginName(userToken.getUsername());
         if (user == null) {
-            throw new UnknownAccountException("帐号不存在");
-        } else if (!User.DEL_FLAG_NORMAL.equals(user.getDelFlag())) {
-            throw new LockedAccountException("用户数据不正常(用户可能已被删除)，禁止登录");
+            throw new UserLoginException(UserLoginException.Account_Not_Exists, "帐号不存在");
+        } else if (!User.DEL_FLAG_NORMAL.equals(user.getDelFlag()) || User.ACCOUNT_STATE_DELETE.equals(user.getUserState())) {
+            throw new UserLoginException(UserLoginException.Account_Delete, "此帐号已被删除");
         } else if (User.ACCOUNT_STATE_LOCKED.equals(user.getAccountState())) {
-            throw new LockedAccountException("你的帐号已被锁定");
-        } else if (User.ACCOUNT_STATE_DELETE.equals(user.getUserState())) {
-            throw new LockedAccountException("此帐号已被删除");
+            throw new UserLoginException(UserLoginException.Account_Locked, "你的帐号已被锁定");
         } else if (User.USER_STATE_LEAVE.equals(user.getUserState())) {
-            throw new LockedAccountException("离职员工不能登录");
+            throw new UserLoginException(UserLoginException.User_Leave, "离职员工不能登录");
         }
 
 //        Organization homeCompany = authorizingRealmService.getOrgById(user.getHomeCompany());
 //        Organization homeOrg = authorizingRealmService.getOrgById(user.getHomeOrg());
 
-        // user.getPassword()组成：前16存储密码的salt，16以后存储密码
+        // Password组成：前16存储密码的salt，16以后存储密码
         byte[] salt = EncodeDecodeUtils.decodeHex(user.getPassword().substring(0, 16));
         return new SimpleAuthenticationInfo(
                 new UserPrincipal(null, null, user),// 用户信息
@@ -111,4 +112,7 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
 
         return new SimpleAuthorizationInfo();
     }
+
+    // getCachedAuthenticationInfo
+
 }

@@ -32,6 +32,31 @@ public class UserLoginException extends AuthenticationException {
     public final static String Validate_Code_Error = "103";
 
     /**
+     * 账号不存在
+     */
+    public final static String Account_Not_Exists = "201";
+
+    /**
+     * 用户名、密码为空
+     */
+    public final static String UserName_Password_Is_Empty = "202";
+
+    /**
+     * 帐号被删除
+     */
+    public final static String Account_Delete = "203";
+
+    /**
+     * 你的帐号已被锁定
+     */
+    public final static String Account_Locked = "204";
+
+    /**
+     * 员工离职
+     */
+    public final static String User_Leave = "205";
+
+    /**
      * 登入失败 编码
      */
     private String errorCode;
