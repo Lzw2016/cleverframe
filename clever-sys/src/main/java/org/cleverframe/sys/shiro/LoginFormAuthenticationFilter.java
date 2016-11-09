@@ -77,23 +77,21 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      * 用户登录认证方法，当用户登录时调用<br>
      */
     @Override
-    protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        AuthenticationToken token = createToken(request, response);
-        if (token == null) {
-            throw new IllegalStateException("获取用户登录Token失败");
-        }
-        if (!(token instanceof UserLoginToken)) {
-            logger.error("token转换UserLoginToken失败");
-            throw new AuthenticationException("token转换UserLoginToken失败");
-        }
-        UserLoginToken userToken = (UserLoginToken) token;
-        logger.debug("用户[{}]登录身份验证开始...", userToken.getUsername());
-        // 用户登录认证，参考：super.executeLogin(request, response)
+    protected boolean executeLogin(ServletRequest request, ServletResponse response) {
+        AuthenticationToken token = null;
         try {
-            // 获取请求HttpSession对象
+            token = createToken(request, response);
+            if (token == null) {
+                throw new UserLoginException(UserLoginException.System_Exception, "获取用户登录Token失败");
+            }
+            if (!(token instanceof UserLoginToken)) {
+                throw new UserLoginException(UserLoginException.System_Exception, "Token转换UserLoginToken失败");
+            }
+            UserLoginToken userToken = (UserLoginToken) token;
+            logger.debug("用户[{}]登录身份验证开始...", userToken.getUsername());
+            // 用户登录认证，参考：super.executeLogin(request, response)
             if (!(request instanceof HttpServletRequest)) {
-                logger.error("ServletRequest转换HttpServletRequest失败");
-                throw new AuthenticationException("ServletRequest转换HttpServletRequest失败");
+                throw new UserLoginException(UserLoginException.System_Exception, "ServletRequest转换HttpServletRequest失败");
             }
 
             HttpSession session = ((HttpServletRequest) request).getSession();
@@ -106,24 +104,31 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
 
                 // 判断验证码存在
                 if (captcha == null) {
-                    throw new UserLoginException("连续登录失败次数过多，必须要使用验证码登录");
+                    throw new UserLoginException(UserLoginException.Not_Validate_Code, "连续登录失败次数过多，必须要使用验证码登录");
                 }
 
                 // 判断验证码是否超时
                 if ((System.currentTimeMillis() - captcha.getCreateTime()) > validateCodeTimeout) {
-                    throw new UserLoginException("验证码已超时");
+                    throw new UserLoginException(UserLoginException.Validate_Code_Invalid, "验证码已超时");
                 }
 
                 // 判断验证码是否正确
                 if (userToken.getCaptcha() == null || !userToken.getCaptcha().toUpperCase().equals(captcha.getContent())) {
-                    throw new UserLoginException("验证码输入错误");
+                    throw new UserLoginException(UserLoginException.Validate_Code_Error, "验证码输入错误");
                 }
             }
             Subject subject = getSubject(request, response);
             subject.login(token);
             return onLoginSuccess(token, subject, request, response);
-        } catch (AuthenticationException e) {
-            return onLoginFailure(token, e, request, response);
+        } catch (Exception e) {
+            logger.error("用户登录认证-异常", e);
+            AuthenticationException exception;
+            if (e instanceof AuthenticationException) {
+                exception = (AuthenticationException) e;
+            } else {
+                exception = new AuthenticationException(e);
+            }
+            return onLoginFailure(token, exception, request, response);
         }
     }
 
@@ -134,26 +139,26 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
-        if (!(token instanceof UserLoginToken)) {
-            logger.error("token转换UserLoginToken失败");
-            throw new AuthenticationException("token转换UserLoginToken失败");
+        try {
+            if (!(request instanceof HttpServletRequest)) {
+                throw new UserLoginException(UserLoginException.System_Exception, "ServletRequest转换HttpServletRequest失败");
+            }
+            HttpSession session = ((HttpServletRequest) request).getSession();
+            // Session 属性中用户连续登录失败次数加 1
+            Object temp = session.getAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT);
+            int count = NumberUtils.toInt(temp == null ? null : temp.toString(), 0);
+            count++;
+            session.setAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT, count);
+            // TODO 移除当前请求Session中的用户相关属性
+            session.removeAttribute(SysSessionAttributes.LOGIN_USER);
+            if (!(token instanceof UserLoginToken)) {
+                throw new UserLoginException(UserLoginException.System_Exception, "Token转换UserLoginToken失败");
+            }
+            UserLoginToken userToken = (UserLoginToken) token;
+            logger.debug("用户[{}]登录失败，连续登录失败次数：{} | 失败原因：{}", userToken.getUsername(), count, e.getMessage());
+        } catch (Exception ex) {
+            logger.error("用户登录认证-异常", ex);
         }
-        UserLoginToken userToken = (UserLoginToken) token;
-        // 获取请求HttpSession对象
-        if (!(request instanceof HttpServletRequest)) {
-            logger.error("ServletRequest转换HttpServletRequest失败");
-            throw new AuthenticationException("ServletRequest转换HttpServletRequest失败");
-        }
-        HttpSession session = ((HttpServletRequest) request).getSession();
-        // Session 属性中用户连续登录失败次数加 1
-        Object temp = session.getAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT);
-        int count = NumberUtils.toInt(temp == null ? null : temp.toString(), 0);
-        count++;
-        session.setAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT, count);
-
-        // TODO 移除当前请求Session中的用户相关属性
-        session.removeAttribute(SysSessionAttributes.LOGIN_USER);
-        logger.debug("用户[{}]登录失败，连续登录失败次数：{} | 失败原因：{}", userToken.getUsername(), count, e.getMessage());
         return super.onLoginFailure(token, e, request, response);
     }
 
@@ -165,13 +170,7 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected void setFailureAttribute(ServletRequest request, AuthenticationException ae) {
-        String message;
-        if (ae instanceof UserLoginException) {
-            message = ae.getMessage();
-        } else {
-            message = ae.getClass().getName() + " - " + ae.getMessage();
-        }
-        request.setAttribute(getFailureKeyAttribute(), message);
+        request.setAttribute(getFailureKeyAttribute(), ae);
     }
 
     /**
@@ -182,10 +181,8 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean onLoginSuccess(AuthenticationToken token, Subject subject, ServletRequest request, ServletResponse response) throws Exception {
-        // 获取请求HttpSession对象
         if (!(request instanceof HttpServletRequest)) {
-            logger.error("ServletRequest转换HttpServletRequest失败");
-            throw new AuthenticationException("ServletRequest转换HttpServletRequest失败");
+            throw new UserLoginException(UserLoginException.System_Exception, "ServletRequest转换HttpServletRequest失败");
         }
         HttpSession session = ((HttpServletRequest) request).getSession();
         // Session属性中用户连续登录失败次数清零
@@ -193,14 +190,13 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
         // 把当前用户加入到Session中
         Object object = subject.getPrincipal();
         if (!(object instanceof UserPrincipal)) {
-            logger.error("用户授权信息转换失败(UserPrincipal)");
-            throw new AuthenticationException("用户授权信息转换失败(UserPrincipal)");
+            throw new UserLoginException(UserLoginException.System_Exception, "用户授权信息转换失败(UserPrincipal)");
         }
         UserPrincipal principal = (UserPrincipal) object;
         session.setAttribute(SysSessionAttributes.LOGIN_USER, principal.getUser());
         // TODO 把当前用户相关信息加入到Session中
 
-        logger.debug("登录成功，登录名：" + principal.getUser().getLoginName());
+        logger.debug("[{}]登录成功", principal.getUser().getLoginName());
         return super.onLoginSuccess(token, subject, request, response);
     }
 

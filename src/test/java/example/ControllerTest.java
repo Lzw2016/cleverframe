@@ -26,7 +26,7 @@ public class ControllerTest {
     @Before
     public void setUp() {
         ConfigController configController = new ConfigController();
-        mockMvc = MockMvcBuilders.standaloneSetup(configController).addPlaceHolderValue("mvcPath", "mvc").build();
+        mockMvc = MockMvcBuilders.standaloneSetup(configController).addPlaceholderValue("mvcPath", "mvc").build();
     }
 
     @Test
