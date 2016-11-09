@@ -15,8 +15,6 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
 public class DaoTestBase extends AbstractTransactionalJUnit4SpringContextTests {
     /**
      * 所有测试开始之前运行
-     *
-     * @throws Exception
      */
     @BeforeClass
     public static void setUpBeforeClass() throws Exception {
@@ -25,8 +23,6 @@ public class DaoTestBase extends AbstractTransactionalJUnit4SpringContextTests {
 
     /**
      * 所有测试结束之后运行
-     *
-     * @throws Exception
      */
     @AfterClass
     public static void tearDownAfterClass() throws Exception {
@@ -35,8 +31,6 @@ public class DaoTestBase extends AbstractTransactionalJUnit4SpringContextTests {
 
     /**
      * 每一个测试方法之前运行
-     *
-     * @throws Exception
      */
     @Before
     public void setUp() throws Exception {
@@ -44,8 +38,6 @@ public class DaoTestBase extends AbstractTransactionalJUnit4SpringContextTests {
 
     /**
      * 每一个测试方法之后运行
-     *
-     * @throws Exception
      */
     @After
     public void tearDown() throws Exception {

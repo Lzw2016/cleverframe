@@ -66,7 +66,7 @@ public class LoginController extends BaseController {
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "登入成功", null);
         LoginFormAuthenticationFilter loginFormAuthenticationFilter = SpringContextHolder.getBean(SpringBeanNames.LoginFormAuthenticationFilter);
         if (loginFormAuthenticationFilter == null) {
-            throw new RuntimeException("获取注入Bean失败，BeanName=LoginFormAuthenticationFilter");
+            throw new RuntimeException("获取注入Bean失败，BeanName=" + SpringBeanNames.LoginFormAuthenticationFilter);
         }
 
         // 验证用户已经登录
@@ -98,8 +98,6 @@ public class LoginController extends BaseController {
         }
         return ajaxMessage;
     }
-
-
 
 
 //    /**

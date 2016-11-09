@@ -112,9 +112,9 @@
 
     <!-- Realm的凭证匹配器，用于指定用户名、密码的解密加密算法 -->
     <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
-        <property name="hashAlgorithmName" value="SHA-1"/><!-- 指定散列算法为"SHA-1"，需要和生成密码时的一样 -->
-        <property name="hashIterations" value="1024"/><!-- 散列迭代次数，需要和生成密码时的一样 -->
-        <property name="storedCredentialsHexEncoded" value="true"/><!-- 表示是否存储散列后的密码为16进制，需要和生成密码时的一样，默认true，false表示Base64编码 -->
+        <property name="hashAlgorithmName" value="${shiro.hashAlgorithmName}"/><!-- 指定散列算法为"SHA-1"，需要和生成密码时的一样 -->
+        <property name="hashIterations" value="${shiro.hashIterations}"/><!-- 散列迭代次数，需要和生成密码时的一样 -->
+        <property name="storedCredentialsHexEncoded" value="${shiro.storedCredentialsHexEncoded}"/><!-- 表示是否存储散列后的密码为16进制，需要和生成密码时的一样，默认true，false表示Base64编码 -->
     </bean>
 
     <!-- 会话验证调度器 -->

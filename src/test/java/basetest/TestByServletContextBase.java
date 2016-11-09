@@ -41,6 +41,7 @@ public class TestByServletContextBase extends AbstractJUnit4SpringContextTests {
     @Autowired
     protected WebApplicationContext webApplicationContext;
 
+    @SuppressWarnings("SpringJavaAutowiringInspection")
     @Autowired
     protected ServletContext servletContext;
 

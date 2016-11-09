@@ -88,6 +88,11 @@ public class SpringBeanNames implements IBeanNames {
      * 用户登入验证过滤器
      */
     public static final String LoginFormAuthenticationFilter = "loginFormAuthenticationFilter";
+    /**
+     * Realm的凭证匹配器，用于指定用户名、密码的解密加密算法
+     */
+    public static final String HashedCredentialsMatcher = "credentialsMatcher";
+
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-jedis.xml配置文件的Bean名称
