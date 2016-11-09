@@ -27,5 +27,13 @@
 </head>
 <body>
 
+<form method="post" action="/cleverframe/mvc/sys/login/userLogin.json">
+    <input name="username"/>
+    <input name="password"/>
+    <input name="validateCode"/>
+    <button type="submit">提交</button>
+</form>
+
+
 </body>
 </html>

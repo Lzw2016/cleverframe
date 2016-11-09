@@ -34,6 +34,8 @@
                 /${mvcPath}/core/globaljs/globalPath.js = anon
                 /${mvcPath}/sys/login/Validate.png = anon
                 /${mvcPath}/sys/login/Login.html = anon
+                /${modulesPath}/sys/Login.css = anon
+                /${modulesPath}/sys/Login.js = anon
                 /${mvcPath}/sys/login/userLogin.json = authc
                 /${mvcPath}/sys/login/userLogout.json = logout
                 /** = user
@@ -57,8 +59,8 @@
         <property name="authorizationCachingEnabled" value="true"/><!-- 启用授权缓存，即缓存AuthorizationInfo信息，默认false -->
         <property name="authorizationCacheName" value="shiroAuthorizationCache"/><!-- 缓存AuthorizationInfo信息的缓存名称 -->
         <property name="credentialsMatcher" ref="credentialsMatcher" /><!-- 用于用户名密码加密解密匹配的验证器 -->
-        <property name="permissionResolver" ref="permissionResolver"/><!-- 设置权限字符串解析器 -->
-        <property name="rolePermissionResolver" ref="rolePermissionResolver"/><!-- 根据角色字符串解析出角色所有的权限 -->
+        <!--<property name="permissionResolver" ref="permissionResolver"/>&lt;!&ndash; 设置权限字符串解析器 &ndash;&gt;-->
+        <!--<property name="rolePermissionResolver" ref="rolePermissionResolver"/>&lt;!&ndash; 根据角色字符串解析出角色所有的权限 &ndash;&gt;-->
     </bean>
 
     <!-- 安全管理器 - 缓存管理器,用户授权信息Cache,采用EhCache -->
@@ -91,10 +93,10 @@
         </property>
     </bean>
 
-    <!-- Shiro权限控制过滤器入口过滤器 - 基于Form表单的身份验证过滤器，用于验证用户身份信息 -->
+    <!-- 用户登入验证过滤器 - 基于Form表单的身份验证过滤器，用于验证用户身份信息 -->
     <bean id="loginFormAuthenticationFilter" class="org.cleverframe.sys.shiro.LoginFormAuthenticationFilter">
         <property name="loginUrl" value="/${mvcPath}/sys/login/userLogin.json"/><!-- 设置用户登录表单请求的请求地址 -->
-        <property name="usernameParam" value="userName"/><!-- 设置用户登录表单请求的"用户名"参数名 -->
+        <property name="usernameParam" value="username"/><!-- 设置用户登录表单请求的"用户名"参数名 -->
         <property name="passwordParam" value="password"/><!-- 设置用户登录表单请求的"密码"参数名 -->
         <property name="captchaParam" value="validateCode"/><!-- 设置用户登录表单请求的"验证码"参数名 -->
         <property name="rememberMeParam" value="rememberMe"/><!-- 设置用户登录表单请求的"记住我"参数名,boolean类型，true表示rememberMe -->
@@ -103,10 +105,10 @@
     </bean>
 
     <!-- 自定义Shiro权限解析器，把权限字符串解析成Permission对象 -->
-    <bean id="permissionResolver" class="org.cleverframe.shiro.shiro.ShiroPermissionResolver"/>
+    <!--<bean id="permissionResolver" class="org.cleverframe.shiro.shiro.ShiroPermissionResolver"/>-->
 
     <!-- 根据角色字符串解析出角色所有的权限 -->
-    <bean id="rolePermissionResolver" class="org.cleverframe.shiro.shiro.ShiroRolePermissionResolver"/>
+    <!--<bean id="rolePermissionResolver" class="org.cleverframe.shiro.shiro.ShiroRolePermissionResolver"/>-->
 
     <!-- Realm的凭证匹配器，用于指定用户名、密码的解密加密算法 -->
     <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
@@ -141,15 +143,15 @@
     </bean>
 
     <!-- Shiro生命周期处理器,保证实现了Shiro内部lifecycle函数的bean执行 -->
-    <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
+    <!--<bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>-->
 
     <!-- 开启Shiro注解，使用AOP方法实现  -->
-    <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true" />
-    </bean>
-    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
-        <property name="securityManager" ref="securityManager"/>
-    </bean>
+    <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">-->
+        <!--<property name="proxyTargetClass" value="true" />-->
+    <!--</bean>-->
+    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
+        <!--<property name="securityManager" ref="securityManager"/>-->
+    <!--</bean>-->
 
     <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">

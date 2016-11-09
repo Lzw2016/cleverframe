@@ -53,10 +53,9 @@ public class UserLoginToken extends UsernamePasswordToken {
         return "UserLoginToken{" +
                 "username='" + getUsername() + '\'' +
                 ", password='" + password + '\'' +
-                ", rememberMe='" + isRememberMe() + '\'' +
+                ", rememberMe=" + isRememberMe() +
                 ", host='" + getHost() + '\'' +
                 ", captcha='" + getCaptcha() + '\'' +
-                ", captcha='" + captcha + '\'' +
                 '}';
     }
 }

@@ -33,16 +33,23 @@ public abstract class DataEntity extends IdEntity {
     /**
      * 用户信息获取接口
      */
-    private static final IUserUtils userUtils;
+    private static IUserUtils userUtils;
 
-    static {
-        userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+    /**
+     * 返回用户信息获取接口
+     * @return 获取失败返回null
+     */
+    public static IUserUtils getUserUtils() {
+        if (userUtils == null) {
+            userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+        }
         if (userUtils == null) {
             RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
             logger.error(exception.getMessage(), exception);
         } else {
             logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
         }
+        return userUtils;
     }
 
     /**
@@ -102,11 +109,11 @@ public abstract class DataEntity extends IdEntity {
     @Override
     public boolean onSave(Session session) throws CallbackException {
         logger.debug("DataEntity--onSave");
-        this.companyCode = userUtils.getCompanyCode();
-        this.orgCode = userUtils.getOrgCode();
-        this.createBy = userUtils.getUserCode();
+        this.companyCode = getUserUtils().getCompanyCode();
+        this.orgCode = getUserUtils().getOrgCode();
+        this.createBy = getUserUtils().getUserCode();
         this.createDate = new Date();
-        this.updateBy = userUtils.getUserCode();
+        this.updateBy = getUserUtils().getUserCode();
         this.updateDate = new Date();
         this.uuid = IDCreateUtils.uuid();
         return Lifecycle.NO_VETO;
@@ -120,7 +127,7 @@ public abstract class DataEntity extends IdEntity {
     @Override
     public boolean onUpdate(Session session) throws CallbackException {
         logger.debug("DataEntity--onUpdate");
-        this.updateBy = userUtils.getUserCode();
+        this.updateBy = getUserUtils().getUserCode();
         this.updateDate = new Date();
         return Lifecycle.NO_VETO;
     }

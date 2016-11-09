@@ -1,5 +1,6 @@
 package org.cleverframe.sys.shiro;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.authc.*;
 import org.apache.shiro.authz.AuthorizationInfo;
 import org.apache.shiro.authz.SimpleAuthorizationInfo;
@@ -47,10 +48,14 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
         } else {
             return null;
         }
+        if (StringUtils.isBlank(userToken.getUsername()) || userToken.getPassword() == null) {
+            throw new UnknownAccountException("用户名、密码不能为空");
+        }
+
         // 获取用户信息，此处不用验证用户名密码是否正确，验证过程由AuthenticationInfo完成
         User user = authorizingRealmService.getUserByLoginName(userToken.getUsername());
         if (user == null) {
-            throw new UnknownAccountException("没找到帐号");
+            throw new UnknownAccountException("帐号不存在");
         } else if (!User.DEL_FLAG_NORMAL.equals(user.getDelFlag())) {
             throw new LockedAccountException("用户数据不正常(用户可能已被删除)，禁止登录");
         } else if (User.ACCOUNT_STATE_LOCKED.equals(user.getAccountState())) {

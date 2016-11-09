@@ -11,6 +11,11 @@ import org.apache.shiro.authc.AuthenticationException;
 public class UserLoginException extends AuthenticationException {
     private static final long serialVersionUID = 1L;
 
+    /**
+     * 登入失败 编码
+     */
+    private String errorCode;
+
     public UserLoginException() {
         super();
     }

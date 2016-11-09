@@ -111,7 +111,7 @@ public class QLScriptController extends BaseController {
         QLScript qLScript = BeanMapper.mapper(qlScriptUpdateVo, QLScript.class);
         if (beanValidator(bindingResult, message)) {
             qLScript.setUpdateDate(new Date());
-            qLScript.setUpdateBy(userUtils.getUserCode());
+            qLScript.setUpdateBy(getUserUtils().getUserCode());
             qLScriptService.updateQLScript(qLScript);
             QLScriptUtils.removeTemplateCache(qLScript.getName());
         }

@@ -129,7 +129,7 @@ public class MDictDao extends BaseDao<MDict> {
         Parameter param = new Parameter(MDict.DEL_FLAG_NORMAL);
         param.put("fullPath", parentFullPath);
         param.put("mdictType", mdictType);
-        param.put("updateBy", userUtils.getUserCode());
+        param.put("updateBy", getUserUtils().getUserCode());
         param.put("updateDate", new Date());
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.core.dao.MDictDao.updateChildMDictType");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);

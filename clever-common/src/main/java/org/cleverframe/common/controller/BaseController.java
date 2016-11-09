@@ -53,16 +53,23 @@ public abstract class BaseController {
     /**
      * 用户信息获取接口
      */
-    protected static final IUserUtils userUtils;
+    private static IUserUtils userUtils;
 
-    static {
-        userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+    /**
+     * 返回用户信息获取接口
+     * @return 获取失败返回null
+     */
+    public static IUserUtils getUserUtils() {
+        if (userUtils == null) {
+            userUtils = SpringContextHolder.getBean(SpringBeanNames.UserUtils);
+        }
         if (userUtils == null) {
             RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
             logger.error(exception.getMessage(), exception);
         } else {
             logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
         }
+        return userUtils;
     }
 
     /**

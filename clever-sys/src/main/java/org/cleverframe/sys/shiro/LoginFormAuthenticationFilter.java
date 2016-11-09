@@ -59,8 +59,8 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
     protected AuthenticationToken createToken(ServletRequest request, ServletResponse response) {
         UserLoginToken userToken;
         // 获取用户登录的验证信息
-        String userName = request.getParameter(this.getUsernameParam());
-        String password = request.getParameter(this.getPasswordParam());
+        String userName = getUsername(request);
+        String password = getPassword(request);
         boolean rememberMe = this.isRememberMe(request);
         String host = this.getHost(request);
         String captcha = request.getParameter(this.getCaptchaParam());
@@ -78,11 +78,16 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean executeLogin(ServletRequest request, ServletResponse response) throws Exception {
-        logger.debug("用户登录身份验证开始...");
         AuthenticationToken token = createToken(request, response);
         if (token == null) {
             throw new IllegalStateException("获取用户登录Token失败");
         }
+        if (!(token instanceof UserLoginToken)) {
+            logger.error("token转换UserLoginToken失败");
+            throw new AuthenticationException("token转换UserLoginToken失败");
+        }
+        UserLoginToken userToken = (UserLoginToken) token;
+        logger.debug("用户[{}]登录身份验证开始...", userToken.getUsername());
         // 用户登录认证，参考：super.executeLogin(request, response)
         try {
             // 获取请求HttpSession对象
@@ -90,12 +95,9 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
                 logger.error("ServletRequest转换HttpServletRequest失败");
                 throw new AuthenticationException("ServletRequest转换HttpServletRequest失败");
             }
-            if (!(token instanceof UserLoginToken)) {
-                logger.error("token转换UserLoginToken失败");
-                throw new AuthenticationException("token转换UserLoginToken失败");
-            }
+
             HttpSession session = ((HttpServletRequest) request).getSession();
-            UserLoginToken userToken = (UserLoginToken) token;
+
             // 登录次数过多必须使用验证码 - 验证验证码
             int loginFailedCount = ConversionUtils.converter(session.getAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT), 0);
             if (loginFailedCount >= this.loginFailedMaxCount) {
@@ -132,6 +134,11 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected boolean onLoginFailure(AuthenticationToken token, AuthenticationException e, ServletRequest request, ServletResponse response) {
+        if (!(token instanceof UserLoginToken)) {
+            logger.error("token转换UserLoginToken失败");
+            throw new AuthenticationException("token转换UserLoginToken失败");
+        }
+        UserLoginToken userToken = (UserLoginToken) token;
         // 获取请求HttpSession对象
         if (!(request instanceof HttpServletRequest)) {
             logger.error("ServletRequest转换HttpServletRequest失败");
@@ -146,7 +153,7 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
 
         // TODO 移除当前请求Session中的用户相关属性
         session.removeAttribute(SysSessionAttributes.LOGIN_USER);
-        logger.debug("登录失败，连续登录失败次数：" + count + " | 失败原因：" + e.getMessage());
+        logger.debug("用户[{}]登录失败，连续登录失败次数：{} | 失败原因：{}", userToken.getUsername(), count, e.getMessage());
         return super.onLoginFailure(token, e, request, response);
     }
 

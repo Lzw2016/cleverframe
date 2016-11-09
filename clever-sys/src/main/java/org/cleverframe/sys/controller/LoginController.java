@@ -51,14 +51,17 @@ public class LoginController extends BaseController {
      * 用户登录请求地址
      */
     @RequestMapping("/userLogin")
-    public void userLogin(){
-
+    public void userLogin(HttpServletRequest request, HttpServletResponse response){
+        String username = request.getParameter("username");
+        String password = request.getParameter("password");
+        String validateCode = request.getParameter("validateCode");
+        
     }
-    /**
-     * 用户登出
-     */
-    @RequestMapping("/userLogout")
-    public void userLogout(){
-
-    }
+//    /**
+//     * 用户登出
+//     */
+//    @RequestMapping("/userLogout")
+//    public void userLogout(){
+//
+//    }
 }
