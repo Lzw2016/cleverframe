@@ -205,9 +205,8 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      */
     @Override
     protected void issueSuccessRedirect(ServletRequest request, ServletResponse response) throws Exception {
-        String url = getSuccessUrl();
-        WebUtils.issueRedirect(request, response, url, null, true);
-        // super.issueSuccessRedirect(request, response);
+        // String url = getSuccessUrl();
+        // WebUtils.issueRedirect(request, response, url, null, true);
     }
 
     /*--------------------------------------------------------------

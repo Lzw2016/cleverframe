@@ -84,7 +84,10 @@ public class SpringBeanNames implements IBeanNames {
     // -------------------------------------------------------------------------------------------//
     // spring-context-shiro.xml配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
-
+    /**
+     * 用户登入验证过滤器
+     */
+    public static final String LoginFormAuthenticationFilter = "loginFormAuthenticationFilter";
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-jedis.xml配置文件的Bean名称

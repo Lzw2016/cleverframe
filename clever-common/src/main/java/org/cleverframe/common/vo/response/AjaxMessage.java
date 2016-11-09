@@ -170,12 +170,16 @@ public class AjaxMessage<T> implements Serializable {
     /**
      * 设置异常信息<br/>
      * 1.请求失败 success=false<br/>
-     * 2.给返回的异常堆栈属性赋值(exceptionStack)<br/>
+     * 2.设置 hasException = true
+     * 3.给返回的异常堆栈属性赋值(exceptionStack)<br/>
      *
      * @param e 异常对象
      */
     public void setException(Throwable e) {
-        this.success = false;
+        if (e != null) {
+            this.success = false;
+            this.hasException = true;
+        }
         this.exceptionStack = ExceptionUtils.getStackTraceAsString(e);
     }
 

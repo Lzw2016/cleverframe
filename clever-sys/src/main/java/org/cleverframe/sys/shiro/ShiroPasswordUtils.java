@@ -43,7 +43,7 @@ public class ShiroPasswordUtils {
     }
 
     public static void main(String[] args) {
-        // 123456789012345678889f9965fd00ad021d8770b1cdc2b9ebe7ffe9
-        System.out.println(Encryption("12345678"));
+        // 67b5c58014314cba4eb16079f031f1f8e22ae63de79d4ebef1a71ffd
+        System.out.println(Encryption("123456"));
     }
 }
