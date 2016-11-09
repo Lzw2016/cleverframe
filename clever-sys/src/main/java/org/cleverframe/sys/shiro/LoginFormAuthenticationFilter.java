@@ -6,8 +6,10 @@ import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.apache.shiro.web.util.WebUtils;
+import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.common.utils.ConversionUtils;
 import org.cleverframe.common.vo.ValidateCode;
+import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.sys.attributes.SysSessionAttributes;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -207,6 +209,12 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
     protected void issueSuccessRedirect(ServletRequest request, ServletResponse response) throws Exception {
         // String url = getSuccessUrl();
         // WebUtils.issueRedirect(request, response, url, null, true);
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("application/json; charset=utf-8");
+        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "登入成功", null);
+        ajaxMessage.setSuccessUrl(getSuccessUrl());
+        String json = JacksonMapper.nonEmptyMapper().toJson(ajaxMessage);
+        response.getWriter().print(json);
     }
 
     /*--------------------------------------------------------------

@@ -127,7 +127,7 @@ project(':clever-common') {
         // 模版引擎
         compile('org.freemarker:freemarker:2.3.23')
         // Ehcache缓存
-        compile('net.sf.ehcache:ehcache:2.10.2.2.21')
+        compile('net.sf.ehcache:ehcache:2.10.3')
         // SQL解析
         compile('com.github.jsqlparser:jsqlparser:0.9.5')
         // Http客户端
@@ -184,7 +184,7 @@ project(':clever-core') {
         compile('org.hibernate:hibernate-ehcache:4.3.11.Final')
         compile('org.hibernate:hibernate-entitymanager:4.3.11.Final')
         // Mybatis
-        compile('org.mybatis:mybatis:3.4.0')
+        compile('org.mybatis:mybatis:3.4.1')
         compile('org.mybatis:mybatis-spring:1.3.0')
         compile('org.mybatis:mybatis-ehcache:1.0.0')
         compile('com.github.pagehelper:pagehelper:4.1.3')

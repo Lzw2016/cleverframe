@@ -13,7 +13,16 @@
         <property name="fileEncoding" value="UTF-8" />
         <property name="locations">
             <list>
-                <value>classpath:cleverframe.properties</value>
+                <value>classpath:cleverframe/cleverframe-base.properties</value>
+                <value>classpath:cleverframe/cleverframe-database.properties</value>
+                <value>classpath:cleverframe/cleverframe-ehcache.properties</value>
+                <value>classpath:cleverframe/cleverframe-fileupload.properties</value>
+                <value>classpath:cleverframe/cleverframe-hibernate.properties</value>
+                <value>classpath:cleverframe/cleverframe-memcached.properties</value>
+                <value>classpath:cleverframe/cleverframe-redis.properties</value>
+                <value>classpath:cleverframe/cleverframe-server.properties</value>
+                <value>classpath:cleverframe/cleverframe-shiro.properties</value>
+                <value>classpath:cleverframe/cleverframe-zookeeper.properties</value>
             </list>
         </property>
     </bean>
