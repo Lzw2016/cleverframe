@@ -3,7 +3,7 @@ package org.cleverframe.sys.controller;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
-import org.apache.shiro.authc.AuthenticationException;
+import org.apache.shiro.authc.*;
 import org.apache.shiro.subject.Subject;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.imgvalidate.ImageValidateCageUtils;
@@ -87,7 +87,22 @@ public class LoginController extends BaseController {
             UserLoginException userLoginException = (UserLoginException) authenticationException;
             ajaxMessage.setFailMessage(userLoginException.getMessage());
         } else {
-            ajaxMessage.setFailMessage(authenticationException.getMessage());
+            String error;
+            if (authenticationException instanceof UnknownAccountException) {
+                error = "帐号不存在";
+            } else if (authenticationException instanceof IncorrectCredentialsException) {
+                error = "密码错误";
+            } else if (authenticationException instanceof DisabledAccountException) {
+                error = "禁用的帐号";
+            } else if (authenticationException instanceof ExpiredCredentialsException) {
+                error = "过期的凭证";
+            } else if (authenticationException instanceof ExcessiveAttemptsException) {
+                error = "登录失败次数过多";
+            } else {
+                error = "未知的错误！";
+            }
+            // LockedAccountException - 锁定的帐号
+            ajaxMessage.setFailMessage(error);
         }
 
         // 获取登入失败次数 - 判断是否需要验证码

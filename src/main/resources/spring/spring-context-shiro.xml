@@ -9,13 +9,19 @@
     <description>Shiro Configuration</description>
 
     <!--
-        http://{host}:{port}/{appName}/druid/*
-        http://{host}:{port}/{appName}/servlet/validateCodeServlet
-        http://{host}:{port}/{appName}/{static}/{js、css、UI等前端框架}/
-        http://{host}:{port}/{appName}/{views}/{HTML、Jsp、Freemarker等系统页面}/
-        http://{host}:{port}/{appName}/{doc}/{系统文档路径}/
-        http://{host}:{port}/{appName}/{mvc}/{MVC框架的请求映射路径}/
+        anon                匿名拦截器，即不需要登录即可访问 - org.apache.shiro.web.filter.authc.AnonymousFilter
+        authc               基于表单的拦截器，如果没有登录会跳到相应的登录页面登录 - org.apache.shiro.web.filter.authc.FormAuthenticationFilter
+        authcBasic          Basic HTTP身份验证拦截器 - org.apache.shiro.web.filter.authc.BasicHttpAuthenticationFilter
+        logout              退出拦截器 - org.apache.shiro.web.filter.authc.LogoutFilter
+        noSessionCreation   不创建会话拦截器 - org.apache.shiro.web.filter.session.NoSessionCreationFilter
+        perms               权限授权拦截器，验证用户是否拥有所有权限 - org.apache.shiro.web.filter.authz.PermissionsAuthorizationFilter
+        port                端口拦截器 - org.apache.shiro.web.filter.authz.PortFilter
+        rest                rest风格拦截器 - org.apache.shiro.web.filter.authz.HttpMethodPermissionFilter
+        roles               角色授权拦截器，验证用户是否拥有所有角色 - org.apache.shiro.web.filter.authz.RolesAuthorizationFilter
+        ssl                 SSL拦截器，只有请求协议是https才能通过 - org.apache.shiro.web.filter.authz.SslFilter
+        user                用户登录拦截器(检查用户是否登录)，用户已经登录或使用“记住我”的都可以 - org.apache.shiro.web.filter.authc.UserFilter
     -->
+
     <!-- Shiro权限控制过滤器入口 -->
     <bean id="shiroFilter" class="org.apache.shiro.spring.web.ShiroFilterFactoryBean">
         <property name="securityManager" ref="securityManager"/><!-- Shiro安全管理器 -->
@@ -24,21 +30,31 @@
         <property name="unauthorizedUrl" value="${shiro.unauthorizedUrl}"/><!-- 授权失败跳转路径 -->
         <property name="filters">
             <map>
-                <entry key="authc" value-ref="loginFormAuthenticationFilter"/><!-- 基于Form表单的身份验证过滤器 -->
+                <!-- 基于Form表单的身份验证过滤器 - 用于验证用户登入-->
+                <entry key="authc" value-ref="loginFormAuthenticationFilter"/>
+                <!--用户访问资源授权过滤器，检验权限-->
+                <entry key="perms" value-ref="userPermissionsAuthorizationFilter"/>
             </map>
         </property>
         <property name="filterChainDefinitions">
             <!-- url=拦截器[参数]，拦截器[参数] -->
             <value>
+                <!--允许访问所有的静态资源-->
                 /${staticPath}/** = anon
+                <!--允许访问全局的js文件-->
                 /${mvcPath}/core/globaljs/globalPath.js = anon
+                <!--允许访问登入验证码-->
                 /${mvcPath}/sys/login/Validate.png = anon
+                <!--允许访问登入页面-->
                 /${mvcPath}/sys/login/Login.html = anon
                 /${modulesPath}/sys/Login.css = anon
                 /${modulesPath}/sys/Login.js = anon
+                <!--允许访问登录请求地址-->
                 /${mvcPath}/sys/login/userLogin.json = authc
+                <!--允许访问登出地址-->
                 /${mvcPath}/sys/login/userLogout.json = logout
-                /** = user
+                <!--其他资源需要用户登入而且有相应的权限才能访问-->
+                /** = user,perms
             </value>
         </property>
     </bean>
@@ -51,7 +67,7 @@
         <property name="rememberMeManager" ref="rememberMeManager"/><!-- rememberMe管理器 -->
     </bean>
 
-    <!-- 安全管理器 - Realm(AuthorizingRealm)实现 -->
+    <!-- 安全管理器，用于查询用户信息和用户角色、权限等信息 (Shiro Dao) - Realm(AuthorizingRealm)实现 -->
     <bean id="userAuthorizingRealm" class="org.cleverframe.sys.shiro.UserAuthorizingRealm">
         <property name="cachingEnabled" value="true"/><!-- 启用缓存，默认false -->
         <property name="authenticationCachingEnabled" value="${shiro.authenticationCachingEnabled}"/><!-- 启用身份验证缓存，即缓存AuthenticationInfo信息，默认false -->
@@ -59,8 +75,8 @@
         <property name="authorizationCachingEnabled" value="${shiro.authorizationCachingEnabled}"/><!-- 启用授权缓存，即缓存AuthorizationInfo信息，默认false -->
         <property name="authorizationCacheName" value="${shiro.authorizationCacheName}"/><!-- 缓存AuthorizationInfo信息的缓存名称 -->
         <property name="credentialsMatcher" ref="credentialsMatcher"/><!-- 用于用户名密码加密解密匹配的验证器 -->
-        <!--<property name="permissionResolver" ref="permissionResolver"/>&lt;!&ndash; 设置权限字符串解析器 &ndash;&gt;-->
-        <!--<property name="rolePermissionResolver" ref="rolePermissionResolver"/>&lt;!&ndash; 根据角色字符串解析出角色所有的权限 &ndash;&gt;-->
+        <property name="permissionResolver" ref="permissionResolver"/><!-- 设置权限字符串解析器 -->
+        <property name="rolePermissionResolver" ref="rolePermissionResolver"/><!-- 根据角色字符串解析出角色所有的权限 -->
     </bean>
 
     <!-- 安全管理器 - 缓存管理器,用户授权信息Cache,采用EhCache -->
@@ -70,13 +86,13 @@
 
     <!-- 安全管理器 - shiro会话管理器 -->
     <bean id="shiroSessionManager" class="org.apache.shiro.web.session.mgt.DefaultWebSessionManager">
-        <property name="sessionValidationSchedulerEnabled" value="true"/><!-- 是否开启会话验证器，默认是开启的 -->
-        <property name="globalSessionTimeout" value="1800000"/><!-- 设置全局会话超时时间，默认30分钟，即如果30分钟内没有访问会话将过期-->
-        <property name="deleteInvalidSessions" value="true"/><!-- 是否删除过期的会话,默认是开启的 -->
-        <property name="sessionIdCookieEnabled" value="true"/><!-- 是否启用Session Id Cookie，默认是启用的 -->
+        <property name="sessionValidationSchedulerEnabled" value="${shiro.sessionValidationSchedulerEnabled}"/><!-- 是否开启会话验证器，默认是开启的 -->
+        <property name="globalSessionTimeout" value="${shiro.globalSessionTimeout}"/><!-- 设置全局会话超时时间，默认30分钟，即如果30分钟内没有访问会话将过期-->
+        <property name="deleteInvalidSessions" value="${shiro.deleteInvalidSessions}"/><!-- 是否删除过期的会话,默认是开启的 -->
+        <property name="sessionIdCookieEnabled" value="${shiro.sessionIdCookieEnabled}"/><!-- 是否启用Session Id Cookie，默认是启用的 -->
         <property name="sessionDAO" ref="sessionDAO"/><!-- 会话DAO -->
-        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />&lt;!&ndash; 会话验证调度器 &ndash;&gt;-->
         <property name="sessionIdCookie" ref="sessionIdCookie"/><!-- 会话Cookie模板 -->
+        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />&lt;!&ndash; 会话验证调度器 &ndash;&gt;-->
     </bean>
 
     <!-- 安全管理器 - rememberMe管理器 -->
@@ -86,9 +102,9 @@
         <!-- 设置rememberMe的Cookie模版 -->
         <property name="cookie">
             <bean class="org.apache.shiro.web.servlet.SimpleCookie">
-                <property name="name" value="rememberMe"/><!-- 设置Cookie的名字 -->
-                <property name="httpOnly" value="true"/><!-- 如果设置为true，有助于减少某些类型的跨站点脚本攻击 -->
-                <property name="maxAge" value="2592000"/><!-- 30天 -->
+                <property name="name" value="${shiro.cookie.name}"/><!-- 设置Cookie的名字 -->
+                <property name="httpOnly" value="${shiro.cookie.httpOnly}"/><!-- 如果设置为true，有助于减少某些类型的跨站点脚本攻击 -->
+                <property name="maxAge" value="${shiro.cookie.maxAge}"/><!-- 30天 -->
             </bean>
         </property>
     </bean>
@@ -104,11 +120,14 @@
         <property name="validateCodeTimeout" value="${shiro.validateCodeTimeout}"/><!-- 验证码超时时间，默认值：60秒 -->
     </bean>
 
+    <!--用户访问资源授权过滤器，检验权限-->
+    <bean id="userPermissionsAuthorizationFilter" class="org.cleverframe.sys.shiro.UserPermissionsAuthorizationFilter"/>
+
     <!-- 自定义Shiro权限解析器，把权限字符串解析成Permission对象 -->
-    <!--<bean id="permissionResolver" class="org.cleverframe.shiro.shiro.ShiroPermissionResolver"/>-->
+    <bean id="permissionResolver" class="org.cleverframe.sys.shiro.UserPermissionResolver"/>
 
     <!-- 根据角色字符串解析出角色所有的权限 -->
-    <!--<bean id="rolePermissionResolver" class="org.cleverframe.shiro.shiro.ShiroRolePermissionResolver"/>-->
+    <bean id="rolePermissionResolver" class="org.cleverframe.sys.shiro.UserRolePermissionResolver"/>
 
     <!-- Realm的凭证匹配器，用于指定用户名、密码的解密加密算法 -->
     <bean id="credentialsMatcher" class="org.apache.shiro.authc.credential.HashedCredentialsMatcher">
@@ -116,12 +135,6 @@
         <property name="hashIterations" value="${shiro.hashIterations}"/><!-- 散列迭代次数，需要和生成密码时的一样 -->
         <property name="storedCredentialsHexEncoded" value="${shiro.storedCredentialsHexEncoded}"/><!-- 表示是否存储散列后的密码为16进制，需要和生成密码时的一样，默认true，false表示Base64编码 -->
     </bean>
-
-    <!-- 会话验证调度器 -->
-    <!--<bean id="sessionValidationScheduler" class="org.apache.shiro.session.mgt.quartz.QuartzSessionValidationScheduler">-->
-    <!--<property name="sessionValidationInterval" value="3600000" />&lt;!&ndash; 会话验证的时间间隔，默认60分钟 &ndash;&gt;-->
-    <!--<property name="sessionManager" ref="shiroSessionManager" />&lt;!&ndash; 设置对应的shiro会话管理器 &ndash;&gt;-->
-    <!--</bean>-->
 
     <!-- 会话DAO，使用Ehcache进行会话存储 -->
     <bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">
@@ -145,17 +158,16 @@
     <!-- Shiro生命周期处理器,保证实现了Shiro内部lifecycle函数的bean执行 -->
     <bean id="lifecycleBeanPostProcessor" class="org.apache.shiro.spring.LifecycleBeanPostProcessor"/>
 
-    <!-- 开启Shiro注解，使用AOP方法实现  -->
-    <!--<bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">-->
-    <!--<property name="proxyTargetClass" value="true" />-->
-    <!--</bean>-->
-    <!--<bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">-->
-    <!--<property name="securityManager" ref="securityManager"/>-->
-    <!--</bean>-->
-
     <!-- 相当于调用SecurityUtils.setSecurityManager(securityManager) -->
     <bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean">
         <property name="staticMethod" value="org.apache.shiro.SecurityUtils.setSecurityManager"/>
         <property name="arguments" ref="securityManager"/>
+    </bean>
+
+    <!-- 会话验证调度器 -->
+    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler">
+        <!--<property name="enabled" value="true"/>-->
+        <property name="sessionValidationInterval" value="${shiro.sessionValidationInterval}"/><!-- 会话验证的时间间隔，默认60分钟 -->
+        <property name="sessionManager" ref="shiroSessionManager"/><!-- 设置对应的shiro会话管理器 -->
     </bean>
 </beans>

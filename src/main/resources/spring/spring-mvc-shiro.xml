@@ -8,9 +8,13 @@
     <!-- Apache Shiro与Spring整合配置文件 -->
     <description>Shiro Configuration</description>
 
-    <!-- 支持Shiro对Controller的方法级AOP安全控制 -->
+    <!-- 开启Shiro注解，使用AOP方法实现，支持Shiro对Controller的方法级AOP安全控制 -->
     <bean class="org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator" depends-on="lifecycleBeanPostProcessor">
-        <property name="proxyTargetClass" value="true" />
+        <property name="proxyTargetClass" value="true"/>
+    </bean>
+
+    <bean class="org.apache.shiro.spring.security.interceptor.AuthorizationAttributeSourceAdvisor">
+        <property name="securityManager" ref="securityManager"/>
     </bean>
 
     <bean class="org.springframework.web.servlet.handler.SimpleMappingExceptionResolver">

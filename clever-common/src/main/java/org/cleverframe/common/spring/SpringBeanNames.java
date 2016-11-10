@@ -85,13 +85,79 @@ public class SpringBeanNames implements IBeanNames {
     // spring-context-shiro.xml配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
     /**
-     * 用户登入验证过滤器
+     * Shiro权限控制过滤器入口
+     */
+    public static final String ShiroFilterFactoryBean = "shiroFilter";
+
+    /**
+     * 安全管理器,定义Shiro主要业务对象
+     */
+    public static final String DefaultWebSecurityManager = "securityManager";
+
+    /**
+     * 安全管理器，用于查询用户信息和用户角色、权限等信息 (Shiro Dao)
+     */
+    public static final String UserAuthorizingRealm = "userAuthorizingRealm";
+
+    /**
+     * 缓存管理器,缓存用户授权信息Cache, 采用EhCache
+     */
+    public static final String ShiroCacheManager = "shiroCacheManager";
+
+    /**
+     * shiro会话管理器
+     */
+    public static final String DefaultWebSessionManager = "shiroSessionManager";
+
+    /**
+     * RememberMe Cookie管理器
+     */
+    public static final String CookieRememberMeManager = "rememberMeManager";
+
+    /**
+     * 用户登录验证过滤器
      */
     public static final String LoginFormAuthenticationFilter = "loginFormAuthenticationFilter";
+
+    /**
+     * 用户访问资源授权过滤器，检验权限
+     */
+    public static final String UserPermissionsAuthorizationFilter = "userPermissionsAuthorizationFilter";
+
+    /**
+     * 自定义Shiro权限解析器，把权限字符串解析成Permission对象
+     */
+    public static final String UserPermissionResolver = "permissionResolver";
+
+    /**
+     * 根据角色字符串解析出角色所有的权限
+     */
+    public static final String UserRolePermissionResolver = "rolePermissionResolver";
+
     /**
      * Realm的凭证匹配器，用于指定用户名、密码的解密加密算法
      */
     public static final String HashedCredentialsMatcher = "credentialsMatcher";
+
+    /**
+     * 会话DAO，使用Ehcache进行会话存储
+     */
+    public static final String EnterpriseCacheSessionDAO = "sessionDAO";
+
+    /**
+     * 会话Cookie模板
+     */
+    public static final String SimpleCookie = "sessionIdCookie";
+
+    /**
+     * Shiro生命周期处理器,保证实现了Shiro内部lifecycle函数的bean执行
+     */
+    public static final String LifecycleBeanPostProcessor = "lifecycleBeanPostProcessor";
+
+    /**
+     * 会话验证调度器
+     */
+    public static final String QuartzSessionValidationScheduler = "sessionValidationScheduler";
 
 
     // -------------------------------------------------------------------------------------------//

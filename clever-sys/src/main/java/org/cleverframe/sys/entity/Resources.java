@@ -58,6 +58,11 @@ public class Resources extends IdEntity {
     private Character resourcesType;
 
     /**
+     * 需要授权才允许访问（1：需要；2：不需要）
+     */
+    private Character needAuthorization;
+
+    /**
      * 资源说明
      */
     @Lob
@@ -98,6 +103,14 @@ public class Resources extends IdEntity {
 
     public void setResourcesType(Character resourcesType) {
         this.resourcesType = resourcesType;
+    }
+
+    public Character getNeedAuthorization() {
+        return needAuthorization;
+    }
+
+    public void setNeedAuthorization(Character needAuthorization) {
+        this.needAuthorization = needAuthorization;
     }
 
     public String getDescription() {

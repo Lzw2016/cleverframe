@@ -66,6 +66,9 @@ public class SaltByteSource implements ByteSource, Serializable {
     }
 
     public void setBytes(byte[] bytes) {
+        if (this.bytes != null) {
+            throw new RuntimeException("SaltByteSource对象的值不允许修改");
+        }
         this.bytes = bytes;
         this.cachedHex = null;
         this.cachedBase64 = null;
