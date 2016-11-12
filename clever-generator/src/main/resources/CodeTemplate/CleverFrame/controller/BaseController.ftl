@@ -18,7 +18,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${r'${mvcPath}'}/xxxx/${entityName?lower_case}")
+@RequestMapping(value = "/${r'${base.mvcPath}'}/xxxx/${entityName?lower_case}")
 public class ${controllerClassName} extends BaseController {
     
     @Autowired

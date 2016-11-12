@@ -28,7 +28,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/monitor/log4j")
+@RequestMapping(value = "/${base.mvcPath}/monitor/log4j")
 public class Log4jMonitorController extends BaseController {
 
     @Autowired

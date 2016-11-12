@@ -13,6 +13,7 @@
         <!-- Memcached的服务器集群 -->
         <property name="servers">
             <!-- <value>host1:port1 host2:port2 host3:port3</value> -->
+            <!--suppress SpringInjectionValueStyleInspection -->
             <value>${memcached.host1}</value>
         </property>
         <!-- 客户端节点权重设置，对应上面的servers配置 -->

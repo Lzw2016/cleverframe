@@ -35,8 +35,6 @@ public abstract class BaseService {
         if (userUtils == null) {
             RuntimeException exception = new RuntimeException("### IUserUtils注入失败,BeanName=[" + SpringBeanNames.UserUtils + "]");
             logger.error(exception.getMessage(), exception);
-        } else {
-            logger.debug("### IUserUtils注入成功,BeanName=[" + SpringBeanNames.UserUtils + "]");
         }
         return userUtils;
     }

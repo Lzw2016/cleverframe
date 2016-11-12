@@ -21,7 +21,7 @@ import java.util.Map;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping("/${mvcPath}/core/globaljs")
+@RequestMapping("/${base.mvcPath}/core/globaljs")
 public class GlobalJsFileController extends BaseController {
 
     /**

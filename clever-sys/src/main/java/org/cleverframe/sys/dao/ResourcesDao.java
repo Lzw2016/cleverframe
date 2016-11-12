@@ -96,13 +96,12 @@ public class ResourcesDao extends BaseDao<Resources> {
     /**
      * 查询所有的资源关系信息
      */
+    @SuppressWarnings("unchecked")
     public List<Map<String, Object>> findAllResourcesRelation() {
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.findAllResourcesRelation");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, null);
         sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-        //noinspection unchecked,UnnecessaryLocalVariable
-        List<Map<String, Object>> list = sqlQuery.list();
-        return list;
+        return (List<Map<String, Object>>) sqlQuery.list();
     }
 
     /**

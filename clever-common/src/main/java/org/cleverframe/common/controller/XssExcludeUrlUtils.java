@@ -2,7 +2,7 @@ package org.cleverframe.common.controller;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.lang3.StringUtils;
-import org.cleverframe.common.configuration.BaseConfigNames;
+import org.cleverframe.common.configuration.FileUploadConfigNames;
 import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.spring.SpringContextHolder;
@@ -43,7 +43,7 @@ public class XssExcludeUrlUtils {
             RuntimeException exception = new RuntimeException("未注入Bean:[" + SpringBeanNames.Config + "]");
             logger.error(exception.getMessage(), exception);
         } else {
-            XSS_EXCLUDE_URL_SAVE_FILE = config.getConfig(BaseConfigNames.WEB_FILE_STORAGE_PATH) + File.separator + "XssExcludeUrlSaveFile.txt";
+            XSS_EXCLUDE_URL_SAVE_FILE = config.getConfig(FileUploadConfigNames.FILE_STORAGE_PATH) + File.separator + "XssExcludeUrlSaveFile.txt";
             File file = new File(XSS_EXCLUDE_URL_SAVE_FILE);
             if (!file.exists()) {
                 boolean flag = false;
@@ -54,7 +54,7 @@ public class XssExcludeUrlUtils {
                     logger.error("### 创建文件失败:[" + XSS_EXCLUDE_URL_SAVE_FILE + "]", e);
                 }
                 if (!flag) {
-                    String tmp = "### 创建文件失败:[" + XSS_EXCLUDE_URL_SAVE_FILE + "]. 请配置cleverframe.properties文件的值: [" + BaseConfigNames.WEB_FILE_STORAGE_PATH + "]";
+                    String tmp = "### 创建文件失败:[" + XSS_EXCLUDE_URL_SAVE_FILE + "]. 请配置cleverframe.properties文件的值: [" + FileUploadConfigNames.FILE_STORAGE_PATH + "]";
                     RuntimeException exception = new RuntimeException(tmp);
                     logger.error(exception.getMessage(), exception);
                 }
@@ -70,7 +70,7 @@ public class XssExcludeUrlUtils {
      */
     public static int loadXSSExcludeUrl() {
         if (StringUtils.isBlank(XSS_EXCLUDE_URL_SAVE_FILE)) {
-            logger.error("请配置cleverframe.properties文件的值: [" + BaseConfigNames.WEB_FILE_STORAGE_PATH + "]");
+            logger.error("请配置cleverframe.properties文件的值: [" + FileUploadConfigNames.FILE_STORAGE_PATH + "]");
             return 0;
         }
         List<String> lineArray = null;
@@ -104,7 +104,7 @@ public class XssExcludeUrlUtils {
         boolean flag = XSS_EXCLUDE_URL.add(requestUrl);
         if (flag && StringUtils.isNotBlank(requestUrl)) {
             if (StringUtils.isBlank(XSS_EXCLUDE_URL_SAVE_FILE)) {
-                logger.error("请配置cleverframe.properties文件的值: [" + BaseConfigNames.WEB_FILE_STORAGE_PATH + "]");
+                logger.error("请配置cleverframe.properties文件的值: [" + FileUploadConfigNames.FILE_STORAGE_PATH + "]");
                 return;
             }
             List<String> lines = new ArrayList<>();

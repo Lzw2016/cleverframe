@@ -1,17 +1,26 @@
 package org.cleverframe.sys.service;
 
+import net.sf.ehcache.Cache;
+import org.cleverframe.common.configuration.BaseConfigNames;
+import org.cleverframe.common.configuration.IConfig;
+import org.cleverframe.common.ehcache.EhCacheNames;
+import org.cleverframe.common.ehcache.EhCacheUtils;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.service.BaseService;
+import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.dao.ResourcesDao;
 import org.cleverframe.sys.entity.Resources;
 import org.cleverframe.sys.vo.response.ResourcesTreeNodeVo;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import javax.annotation.PostConstruct;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
@@ -21,23 +30,62 @@ import java.util.Map;
  * 作者：LiZW <br/>
  * 创建时间：2016/10/21 17:40 <br/>
  */
-@Service(SysBeanNames.ResourcesService)
-public class ResourcesService extends BaseService {
+@DependsOn({SpringBeanNames.CacheManager, SpringBeanNames.SpringContextHolder})
+@Service(SysBeanNames.EhCacheResourcesService)
+public class EhCacheResourcesService extends BaseService implements IUserPermissionsService {
 
     @Autowired
     @Qualifier(SysBeanNames.ResourcesDao)
     private ResourcesDao resourcesDao;
 
     /**
-     * 分页查询数据
-     *
-     * @param title         资源标题
-     * @param resourcesUrl  资源URL地址
-     * @param permission    资源访问所需要的权限标识字符串
-     * @param resourcesType 包含的资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源） 如:('2', '3')
+     * 静态资源基路径：static
      */
-    public Page<Resources> findByPage(Page<Resources> page, String title, String resourcesUrl, String permission, String resourcesType) {
-        return resourcesDao.findByPage(page, title, resourcesUrl, permission, resourcesType);
+    private String staticPath;
+
+    /**
+     * MVC框架的请求映射基路径：mvc
+     */
+    private String mvcPath;
+
+    /**
+     * modules
+     */
+    private String modulesPath;
+
+    /**
+     * 系统文档基路径：doc
+     */
+    private String docPath;
+
+    /**
+     * 系统配置缓存<br/>
+     * <b>注意：不缓存软删除了的数据</b>
+     */
+    private Cache resourcesCache = EhCacheUtils.createCache(EhCacheNames.ResourcesCache);
+
+    @PostConstruct
+    public void init() {
+        IConfig config = SpringContextHolder.getBean(SpringBeanNames.Config);
+        if (config == null) {
+            throw new RuntimeException("### IConfig对象注入失败");
+        }
+        staticPath = config.getConfig(BaseConfigNames.STATIC_PATH);
+        mvcPath = config.getConfig(BaseConfigNames.MVC_PATH);
+        modulesPath = config.getConfig(BaseConfigNames.MODULES_PATH);
+        docPath = config.getConfig(BaseConfigNames.DOC_PATH);
+    }
+
+    @Override
+    public boolean reloadResources() {
+
+        return false;
+    }
+
+    @Override
+    public Resources getResources(String resourcesKey) {
+
+        return null;
     }
 
     /**
@@ -46,6 +94,7 @@ public class ResourcesService extends BaseService {
      * @return 成功返回true
      */
     @Transactional(readOnly = false)
+    @Override
     public boolean addResources(Resources resources) {
         resourcesDao.getHibernateDao().save(resources);
         return true;
@@ -57,6 +106,7 @@ public class ResourcesService extends BaseService {
      * @return 成功返回true
      */
     @Transactional(readOnly = false)
+    @Override
     public boolean updateResources(Resources resources) {
         resourcesDao.getHibernateDao().update(resources, false, true);
         return true;
@@ -68,9 +118,22 @@ public class ResourcesService extends BaseService {
      * @return 成功返回true
      */
     @Transactional(readOnly = false)
+    @Override
     public boolean deleteResources(Serializable resourcesId) {
         // TODO 验证当前资源有没有被其他资源所依赖，若有则不能删除
         return resourcesDao.getHibernateDao().deleteById(resourcesId) >= 1;
+    }
+
+    /**
+     * 分页查询数据
+     *
+     * @param title         资源标题
+     * @param resourcesUrl  资源URL地址
+     * @param permission    资源访问所需要的权限标识字符串
+     * @param resourcesType 包含的资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源） 如:('2', '3')
+     */
+    public Page<Resources> findByPage(Page<Resources> page, String title, String resourcesUrl, String permission, String resourcesType) {
+        return resourcesDao.findByPage(page, title, resourcesUrl, permission, resourcesType);
     }
 
     /**

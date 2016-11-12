@@ -26,7 +26,7 @@ import java.util.Set;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/monitor/redis")
+@RequestMapping(value = "/${base.mvcPath}/monitor/redis")
 public class RedisMonitorController extends BaseController {
 
     @Autowired

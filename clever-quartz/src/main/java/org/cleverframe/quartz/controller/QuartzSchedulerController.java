@@ -29,7 +29,7 @@ import java.util.Map;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/quartz/scheduler")
+@RequestMapping(value = "/${base.mvcPath}/quartz/scheduler")
 public class QuartzSchedulerController extends BaseController {
 
     @Autowired

@@ -33,7 +33,7 @@ import java.util.Map;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/sys/menu")
+@RequestMapping(value = "/${base.mvcPath}/sys/menu")
 public class MenuController extends BaseController {
 
     @Autowired

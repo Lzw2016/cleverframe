@@ -8,7 +8,7 @@ import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.SysJspUrlPath;
 import org.cleverframe.sys.entity.Resources;
-import org.cleverframe.sys.service.ResourcesService;
+import org.cleverframe.sys.service.EhCacheResourcesService;
 import org.cleverframe.sys.vo.request.*;
 import org.cleverframe.sys.vo.response.ResourcesTreeNodeVo;
 import org.cleverframe.webui.easyui.data.DataGridJson;
@@ -31,12 +31,12 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/sys/resources")
+@RequestMapping(value = "/${base.mvcPath}/sys/resources")
 public class ResourcesController extends BaseController {
 
     @Autowired
-    @Qualifier(SysBeanNames.ResourcesService)
-    private ResourcesService resourcesService;
+    @Qualifier(SysBeanNames.EhCacheResourcesService)
+    private EhCacheResourcesService ehCacheResourcesService;
 
     @RequestMapping("/Resources" + VIEW_PAGE_SUFFIX)
     public ModelAndView getResourcesJsp(HttpServletRequest request, HttpServletResponse response) {
@@ -74,7 +74,7 @@ public class ResourcesController extends BaseController {
             resourcesQueryVo.setResourcesType(sb.toString());
         }
         DataGridJson<Resources> json = new DataGridJson<>();
-        Page<Resources> page = resourcesService.findByPage(
+        Page<Resources> page = ehCacheResourcesService.findByPage(
                 new Page<>(request, response),
                 resourcesQueryVo.getTitle(),
                 resourcesQueryVo.getResourcesUrl(),
@@ -98,7 +98,7 @@ public class ResourcesController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>(true, "资源信息保存成功", null);
         Resources resources = BeanMapper.mapper(resourcesAddVo, Resources.class);
         if (beanValidator(bindingResult, message)) {
-            resourcesService.addResources(resources);
+            ehCacheResourcesService.addResources(resources);
         }
         return message;
     }
@@ -116,7 +116,7 @@ public class ResourcesController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>(true, "资源信息更新成功", null);
         Resources resources = BeanMapper.mapper(resourcesUpdateVo, Resources.class);
         if (beanValidator(bindingResult, message)) {
-            resourcesService.updateResources(resources);
+            ehCacheResourcesService.updateResources(resources);
         }
         return message;
     }
@@ -133,7 +133,7 @@ public class ResourcesController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<String> message = new AjaxMessage<>(true, "资源信息删除成功", null);
         if (beanValidator(bindingResult, message)) {
-            boolean flag = resourcesService.deleteResources(resourcesDeleteVo.getId());
+            boolean flag = ehCacheResourcesService.deleteResources(resourcesDeleteVo.getId());
             if (!flag) {
                 message.setSuccess(false);
                 message.setFailMessage("资源信息删除失败");
@@ -155,7 +155,7 @@ public class ResourcesController extends BaseController {
         AjaxMessage<List<Resources>> message = new AjaxMessage<>();
         List<Resources> list = null;
         if (beanValidator(bindingResult, message)) {
-            list = resourcesService.findDependenceResources(dependenceResourcesQueryVo.getId());
+            list = ehCacheResourcesService.findDependenceResources(dependenceResourcesQueryVo.getId());
         }
         message.setResult(list);
         return message;
@@ -173,7 +173,7 @@ public class ResourcesController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<String> message = new AjaxMessage<>(true, "增加依赖资源成功", null);
         if (beanValidator(bindingResult, message)) {
-            boolean flag = resourcesService.addDependenceResources(dependenceResourcesAddVo.getResourcesId(), dependenceResourcesAddVo.getDependenceResourcesId());
+            boolean flag = ehCacheResourcesService.addDependenceResources(dependenceResourcesAddVo.getResourcesId(), dependenceResourcesAddVo.getDependenceResourcesId());
             if (!flag) {
                 message.setSuccess(false);
                 message.setFailMessage("增加依赖资源成功失败");
@@ -194,7 +194,7 @@ public class ResourcesController extends BaseController {
             BindingResult bindingResult) {
         AjaxMessage<String> message = new AjaxMessage<>(true, "删除依赖资源成功", null);
         if (beanValidator(bindingResult, message)) {
-            boolean flag = resourcesService.deleteDependenceResources(dependenceResourcesDeleteVo.getResourcesId(), dependenceResourcesDeleteVo.getDependenceResourcesId());
+            boolean flag = ehCacheResourcesService.deleteDependenceResources(dependenceResourcesDeleteVo.getResourcesId(), dependenceResourcesDeleteVo.getDependenceResourcesId());
             if (!flag) {
                 message.setSuccess(false);
                 message.setFailMessage("删除依赖资源成功失败");
@@ -209,6 +209,6 @@ public class ResourcesController extends BaseController {
     @RequestMapping("/findResourcesTree")
     @ResponseBody
     public List<ResourcesTreeNodeVo> findResourcesTree(HttpServletRequest request, HttpServletResponse response) {
-        return resourcesService.findResourcesTree();
+        return ehCacheResourcesService.findResourcesTree();
     }
 }

@@ -32,7 +32,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/sys/role")
+@RequestMapping(value = "/${base.mvcPath}/sys/role")
 public class RoleController extends BaseController {
 
     @Autowired

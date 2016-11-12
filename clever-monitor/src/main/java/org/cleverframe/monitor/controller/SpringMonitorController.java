@@ -24,7 +24,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/monitor/spring")
+@RequestMapping(value = "/${base.mvcPath}/monitor/spring")
 public class SpringMonitorController extends BaseController {
 
     @Autowired

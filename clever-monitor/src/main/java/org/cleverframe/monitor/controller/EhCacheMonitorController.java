@@ -32,7 +32,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/monitor/ehcache")
+@RequestMapping(value = "/${base.mvcPath}/monitor/ehcache")
 public class EhCacheMonitorController extends BaseController {
 
     @Autowired

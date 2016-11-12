@@ -1,8 +1,12 @@
 package org.cleverframe.sys.shiro;
 
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
+import org.cleverframe.sys.SysBeanNames;
+import org.cleverframe.sys.service.IUserPermissionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -20,6 +24,10 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
      * 日志记录器
      */
     private final static Logger logger = LoggerFactory.getLogger(UserPermissionsAuthorizationFilter.class);
+
+    @Autowired
+    @Qualifier(SysBeanNames.EhCacheResourcesService)
+    private IUserPermissionsService userPermissionsService;
 
     /**
      * 验证用户是否有权访问<br/>

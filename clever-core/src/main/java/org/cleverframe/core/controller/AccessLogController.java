@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/core/accesslog")
+@RequestMapping(value = "/${base.mvcPath}/core/accesslog")
 public class AccessLogController extends BaseController {
 
     @Autowired

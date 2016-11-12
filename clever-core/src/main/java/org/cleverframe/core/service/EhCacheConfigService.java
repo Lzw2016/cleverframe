@@ -38,7 +38,7 @@ public class EhCacheConfigService extends BaseService implements IConfig {
      * 系统配置缓存<br/>
      * <b>注意：不缓存软删除了的数据</b>
      */
-    private Cache configCache = EhCacheUtils.createCache(EhCacheNames.ConfigCache);
+    private Cache configCache = EhCacheUtils.createCache(EhCacheNames.ResourcesCache);
 
     /**
      * 根据 配置键 查询配置对象<br/>

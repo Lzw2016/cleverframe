@@ -24,7 +24,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/monitor/zookeeper")
+@RequestMapping(value = "/${base.mvcPath}/monitor/zookeeper")
 public class ZookeeperMonitorController extends BaseController {
 
     @Autowired

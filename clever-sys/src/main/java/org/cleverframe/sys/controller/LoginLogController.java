@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/sys/loginlog")
+@RequestMapping(value = "/${base.mvcPath}/sys/loginlog")
 public class LoginLogController extends BaseController {
 
     @Autowired

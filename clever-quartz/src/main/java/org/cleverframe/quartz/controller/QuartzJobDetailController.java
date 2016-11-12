@@ -32,7 +32,7 @@ import java.util.Map;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/quartz/jobdetail")
+@RequestMapping(value = "/${base.mvcPath}/quartz/jobdetail")
 public class QuartzJobDetailController extends BaseController {
 
     @Autowired

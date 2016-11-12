@@ -33,7 +33,7 @@ import java.util.Date;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping("/${mvcPath}/core/qlscript")
+@RequestMapping("/${base.mvcPath}/core/qlscript")
 public class QLScriptController extends BaseController {
 
     @Autowired

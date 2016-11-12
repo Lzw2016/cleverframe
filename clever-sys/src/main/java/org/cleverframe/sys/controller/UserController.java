@@ -32,7 +32,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/sys/user")
+@RequestMapping(value = "/${base.mvcPath}/sys/user")
 public class UserController extends BaseController {
 
     @Autowired

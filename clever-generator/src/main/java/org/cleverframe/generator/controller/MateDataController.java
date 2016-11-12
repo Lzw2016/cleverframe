@@ -27,7 +27,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/generator/matedata")
+@RequestMapping(value = "/${base.mvcPath}/generator/matedata")
 public class MateDataController extends BaseController {
 
     @Autowired

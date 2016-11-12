@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/quartz/schedulerlog")
+@RequestMapping(value = "/${base.mvcPath}/quartz/schedulerlog")
 public class QrtzSchedulerLogController extends BaseController {
 
     @Autowired

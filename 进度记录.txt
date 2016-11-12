@@ -57,167 +57,167 @@ clever-sys
 /servlet/validateCode
 
 ## =========== clever-core
-/${mvcPath}/core/main/CoreMain.html
+/${base.mvcPath}/core/main/CoreMain.html
 
-/${mvcPath}/core/accesslog/AccessLog.html
-/${mvcPath}/core/accesslog/findAccessLogByPage.json
+/${base.mvcPath}/core/accesslog/AccessLog.html
+/${base.mvcPath}/core/accesslog/findAccessLogByPage.json
 
-/${mvcPath}/core/config/Config.html
-/${mvcPath}/core/config/findConfigByPage.json
-/${mvcPath}/core/config/addConfig.json
-/${mvcPath}/core/config/updateConfig.json
-/${mvcPath}/core/config/deleteConfig.json
+/${base.mvcPath}/core/config/Config.html
+/${base.mvcPath}/core/config/findConfigByPage.json
+/${base.mvcPath}/core/config/addConfig.json
+/${base.mvcPath}/core/config/updateConfig.json
+/${base.mvcPath}/core/config/deleteConfig.json
 
-/${mvcPath}/core/dict/Dict.html
-/${mvcPath}/core/dict/findDictByPage.json
-/${mvcPath}/core/dict/addDict.json
-/${mvcPath}/core/dict/updateDict.json
-/${mvcPath}/core/dict/deleteDict.json
-/${mvcPath}/core/dict/findDictByType.json
+/${base.mvcPath}/core/dict/Dict.html
+/${base.mvcPath}/core/dict/findDictByPage.json
+/${base.mvcPath}/core/dict/addDict.json
+/${base.mvcPath}/core/dict/updateDict.json
+/${base.mvcPath}/core/dict/deleteDict.json
+/${base.mvcPath}/core/dict/findDictByType.json
 
-/${mvcPath}/core/globaljs/globalPath.js
+/${base.mvcPath}/core/globaljs/globalPath.js
 
-/${mvcPath}/core/mdict/MDict.html
-/${mvcPath}/core/mdict/findMDictByPage.json
-/${mvcPath}/core/mdict/addMDict.json
-/${mvcPath}/core/mdict/updateMDict.json
-/${mvcPath}/core/mdict/deleteMDict.json
+/${base.mvcPath}/core/mdict/MDict.html
+/${base.mvcPath}/core/mdict/findMDictByPage.json
+/${base.mvcPath}/core/mdict/addMDict.json
+/${base.mvcPath}/core/mdict/updateMDict.json
+/${base.mvcPath}/core/mdict/deleteMDict.json
 
-/${mvcPath}/core/qlscript/QLScript.html
-/${mvcPath}/core/qlscript/findQLScriptByPage.json
-/${mvcPath}/core/qlscript/addQLScript.json
-/${mvcPath}/core/qlscript/updateQLScript.json
-/${mvcPath}/core/qlscript/deleteQLScript.json
+/${base.mvcPath}/core/qlscript/QLScript.html
+/${base.mvcPath}/core/qlscript/findQLScriptByPage.json
+/${base.mvcPath}/core/qlscript/addQLScript.json
+/${base.mvcPath}/core/qlscript/updateQLScript.json
+/${base.mvcPath}/core/qlscript/deleteQLScript.json
 
-/${mvcPath}/core/template/Template.html
-/${mvcPath}/core/template/findTemplateByPage.json
-/${mvcPath}/core/template/addTemplate.json
-/${mvcPath}/core/template/updateTemplate.json
-/${mvcPath}/core/template/deleteTemplate.json
-/${mvcPath}/core/template/getTemplateByName.json
+/${base.mvcPath}/core/template/Template.html
+/${base.mvcPath}/core/template/findTemplateByPage.json
+/${base.mvcPath}/core/template/addTemplate.json
+/${base.mvcPath}/core/template/updateTemplate.json
+/${base.mvcPath}/core/template/deleteTemplate.json
+/${base.mvcPath}/core/template/getTemplateByName.json
 
 
 ## ----------------------------------------- 代码生成器 ----------------------------------------- ##
 ## =========== clever-generator
-/${mvcPath}/generator/main/GeneratorMain.html
+/${base.mvcPath}/generator/main/GeneratorMain.html
 
-/${mvcPath}/generator/codeformat/format.json
+/${base.mvcPath}/generator/codeformat/format.json
 
-/${mvcPath}/generator/codetemplate/CodeTemplate.html
-/${mvcPath}/generator/codetemplate/findAllCodeTemplate.json
-/${mvcPath}/generator/codetemplate/findChildNode.json
-/${mvcPath}/generator/codetemplate/addCodeTemplateCategory.json
-/${mvcPath}/generator/codetemplate/addCodeTemplateCode.json
-/${mvcPath}/generator/codetemplate/updateCodeTemplate.json
-/${mvcPath}/generator/codetemplate/delCodeTemplate.json
+/${base.mvcPath}/generator/codetemplate/CodeTemplate.html
+/${base.mvcPath}/generator/codetemplate/findAllCodeTemplate.json
+/${base.mvcPath}/generator/codetemplate/findChildNode.json
+/${base.mvcPath}/generator/codetemplate/addCodeTemplateCategory.json
+/${base.mvcPath}/generator/codetemplate/addCodeTemplateCode.json
+/${base.mvcPath}/generator/codetemplate/updateCodeTemplate.json
+/${base.mvcPath}/generator/codetemplate/delCodeTemplate.json
 
-/${mvcPath}/generator/generatorcode/GeneratorCode.html
-/${mvcPath}/generator/generatorcode/generatorCode.json
+/${base.mvcPath}/generator/generatorcode/GeneratorCode.html
+/${base.mvcPath}/generator/generatorcode/generatorCode.json
 
-/${mvcPath}/generator/generatorcode/generatorCode.json
+/${base.mvcPath}/generator/generatorcode/generatorCode.json
 
-/${mvcPath}/generator/matedata/TableGeneratorCode.html
-/${mvcPath}/generator/matedata/findAllDataBaseSummary.json
-/${mvcPath}/generator/matedata/getTableSchema.json
+/${base.mvcPath}/generator/matedata/TableGeneratorCode.html
+/${base.mvcPath}/generator/matedata/findAllDataBaseSummary.json
+/${base.mvcPath}/generator/matedata/getTableSchema.json
 
 
 ## ----------------------------------------- 系统定时任务 ----------------------------------------- ##
 ## =========== clever-quartz
-/${mvcPath}/quartz/main
+/${base.mvcPath}/quartz/main
 
-/${mvcPath}/quartz/joblog/JobDetailLog.html
-/${mvcPath}/quartz/joblog/findQrtzJobLogByPage.html
+/${base.mvcPath}/quartz/joblog/JobDetailLog.html
+/${base.mvcPath}/quartz/joblog/findQrtzJobLogByPage.html
 
-/${mvcPath}/quartz/schedulerlog/SchedulerLog.html
-/${mvcPath}/quartz/schedulerlog/findSchedulerLogByPage.json
+/${base.mvcPath}/quartz/schedulerlog/SchedulerLog.html
+/${base.mvcPath}/quartz/schedulerlog/findSchedulerLogByPage.json
 
-/${mvcPath}/quartz/triggerlog/TriggerLog.html
-/${mvcPath}/quartz/triggerlog/findTriggerLogByPage.json
+/${base.mvcPath}/quartz/triggerlog/TriggerLog.html
+/${base.mvcPath}/quartz/triggerlog/findTriggerLogByPage.json
 
-/${mvcPath}/quartz/jobdetail/JobDetail.html
-/${mvcPath}/quartz/jobdetail/getAllJobKey.json
-/${mvcPath}/quartz/jobdetail/getAllJobDetail.json
-/${mvcPath}/quartz/jobdetail/getAllJobClassName.json
-/${mvcPath}/quartz/jobdetail/getJobGroupNames.json
-/${mvcPath}/quartz/jobdetail/saveJobDetail.json
-/${mvcPath}/quartz/jobdetail/deleteJobDetail.json
-/${mvcPath}/quartz/jobdetail/pauseJob.json
-/${mvcPath}/quartz/jobdetail/resumeJob.json
-/${mvcPath}/quartz/jobdetail/triggerJob.json
+/${base.mvcPath}/quartz/jobdetail/JobDetail.html
+/${base.mvcPath}/quartz/jobdetail/getAllJobKey.json
+/${base.mvcPath}/quartz/jobdetail/getAllJobDetail.json
+/${base.mvcPath}/quartz/jobdetail/getAllJobClassName.json
+/${base.mvcPath}/quartz/jobdetail/getJobGroupNames.json
+/${base.mvcPath}/quartz/jobdetail/saveJobDetail.json
+/${base.mvcPath}/quartz/jobdetail/deleteJobDetail.json
+/${base.mvcPath}/quartz/jobdetail/pauseJob.json
+/${base.mvcPath}/quartz/jobdetail/resumeJob.json
+/${base.mvcPath}/quartz/jobdetail/triggerJob.json
 
-/${mvcPath}/quartz/scheduler/Scheduler.html
-/${mvcPath}/quartz/scheduler/standby.json
-/${mvcPath}/quartz/scheduler/start.json
-/${mvcPath}/quartz/scheduler/pauseAll.json
-/${mvcPath}/quartz/scheduler/resumeAll.json
-/${mvcPath}/quartz/scheduler/getRunningJobs.json
-/${mvcPath}/quartz/scheduler/interrupt.json
-/${mvcPath}/quartz/scheduler/getMetaData.json
-/${mvcPath}/quartz/scheduler/getContext.json
+/${base.mvcPath}/quartz/scheduler/Scheduler.html
+/${base.mvcPath}/quartz/scheduler/standby.json
+/${base.mvcPath}/quartz/scheduler/start.json
+/${base.mvcPath}/quartz/scheduler/pauseAll.json
+/${base.mvcPath}/quartz/scheduler/resumeAll.json
+/${base.mvcPath}/quartz/scheduler/getRunningJobs.json
+/${base.mvcPath}/quartz/scheduler/interrupt.json
+/${base.mvcPath}/quartz/scheduler/getMetaData.json
+/${base.mvcPath}/quartz/scheduler/getContext.json
 
-/${mvcPath}/quartz/trigger/validatorCron.json
-/${mvcPath}/quartz/trigger/addSimpleTriggerForJob.json
-/${mvcPath}/quartz/trigger/addCronTriggerForJob.json
-/${mvcPath}/quartz/trigger/getTriggerByJob.json
-/${mvcPath}/quartz/trigger/getTriggerGroupNames.json
-/${mvcPath}/quartz/trigger/deleteTriggerByJob.json
-/${mvcPath}/quartz/trigger/deleteTrigger.json
-/${mvcPath}/quartz/trigger/pauseTrigger.json
-/${mvcPath}/quartz/trigger/resumeTrigger.json
+/${base.mvcPath}/quartz/trigger/validatorCron.json
+/${base.mvcPath}/quartz/trigger/addSimpleTriggerForJob.json
+/${base.mvcPath}/quartz/trigger/addCronTriggerForJob.json
+/${base.mvcPath}/quartz/trigger/getTriggerByJob.json
+/${base.mvcPath}/quartz/trigger/getTriggerGroupNames.json
+/${base.mvcPath}/quartz/trigger/deleteTriggerByJob.json
+/${base.mvcPath}/quartz/trigger/deleteTrigger.json
+/${base.mvcPath}/quartz/trigger/pauseTrigger.json
+/${base.mvcPath}/quartz/trigger/resumeTrigger.json
 
 
 ## ----------------------------------------- 系统监控 ----------------------------------------- ##
 ## =========== clever-monitor
-/${mvcPath}/monitor/ehcache/EhcacheMonitor.html
-/${mvcPath}/monitor/ehcache/getAllEhCacheNames.json
-/${mvcPath}/monitor/ehcache/getCacheManagerInfo.json
-/${mvcPath}/monitor/ehcache/getCacheInfo.json
-/${mvcPath}/monitor/ehcache/getCacheData.json
-/${mvcPath}/monitor/ehcache/clearCache.json
-/${mvcPath}/monitor/ehcache/getElementInfo.json
-/${mvcPath}/monitor/ehcache/removeElement.json
+/${base.mvcPath}/monitor/ehcache/EhcacheMonitor.html
+/${base.mvcPath}/monitor/ehcache/getAllEhCacheNames.json
+/${base.mvcPath}/monitor/ehcache/getCacheManagerInfo.json
+/${base.mvcPath}/monitor/ehcache/getCacheInfo.json
+/${base.mvcPath}/monitor/ehcache/getCacheData.json
+/${base.mvcPath}/monitor/ehcache/clearCache.json
+/${base.mvcPath}/monitor/ehcache/getElementInfo.json
+/${base.mvcPath}/monitor/ehcache/removeElement.json
 
-/${mvcPath}/monitor/log4j/Log4jMonitor.html
-/${mvcPath}/monitor/log4j/getAllLoggerInfo.json
-/${mvcPath}/monitor/log4j/setLoggerLevel.json
+/${base.mvcPath}/monitor/log4j/Log4jMonitor.html
+/${base.mvcPath}/monitor/log4j/getAllLoggerInfo.json
+/${base.mvcPath}/monitor/log4j/setLoggerLevel.json
 
-/${mvcPath}/monitor/memcache/MemcacheMonitor.html
-/${mvcPath}/monitor/memcache/getStats.json
-/${mvcPath}/monitor/memcache/startTest.json
+/${base.mvcPath}/monitor/memcache/MemcacheMonitor.html
+/${base.mvcPath}/monitor/memcache/getStats.json
+/${base.mvcPath}/monitor/memcache/startTest.json
 
-/${mvcPath}/monitor/redis/RedisMonitor.html
-/${mvcPath}/monitor/redis/getRedisInfo.json
-/${mvcPath}/monitor/redis/getKeyCount.json
-/${mvcPath}/monitor/redis/getConfig.json
-/${mvcPath}/monitor/redis/getKeys.json
-/${mvcPath}/monitor/redis/getValue.json
-/${mvcPath}/monitor/redis/startTest.json
+/${base.mvcPath}/monitor/redis/RedisMonitor.html
+/${base.mvcPath}/monitor/redis/getRedisInfo.json
+/${base.mvcPath}/monitor/redis/getKeyCount.json
+/${base.mvcPath}/monitor/redis/getConfig.json
+/${base.mvcPath}/monitor/redis/getKeys.json
+/${base.mvcPath}/monitor/redis/getValue.json
+/${base.mvcPath}/monitor/redis/startTest.json
 
-/${mvcPath}/monitor/server/ServerMonitor.html
-/${mvcPath}/monitor/server/getApplicationAttribute.json
-/${mvcPath}/monitor/server/getSessionAttribute.json
-/${mvcPath}/monitor/server/removeSessionAttribute.json
-/${mvcPath}/monitor/server/removeApplicationAttribute.json
+/${base.mvcPath}/monitor/server/ServerMonitor.html
+/${base.mvcPath}/monitor/server/getApplicationAttribute.json
+/${base.mvcPath}/monitor/server/getSessionAttribute.json
+/${base.mvcPath}/monitor/server/removeSessionAttribute.json
+/${base.mvcPath}/monitor/server/removeApplicationAttribute.json
 
-/${mvcPath}/monitor/spring/SpringMonitor.html
-/${mvcPath}/monitor/spring/getSpringBeans.json
+/${base.mvcPath}/monitor/spring/SpringMonitor.html
+/${base.mvcPath}/monitor/spring/getSpringBeans.json
 
-/${mvcPath}/monitor/zookeeper/ZookeeperMonitor.html
-/${mvcPath}/monitor/zookeeper/getChildren.json
-/${mvcPath}/monitor/zookeeper/getZNodeInfo.json
+/${base.mvcPath}/monitor/zookeeper/ZookeeperMonitor.html
+/${base.mvcPath}/monitor/zookeeper/getChildren.json
+/${base.mvcPath}/monitor/zookeeper/getZNodeInfo.json
 
 
 ## ----------------------------------------- 系统用户角色权限 ----------------------------------------- ##
 ## =========== clever-sys
-/${mvcPath}/sys/resources/Resources.html
-/${mvcPath}/sys/resources/DependenceResources.html
-/${mvcPath}/sys/resources/findByPage.json
-/${mvcPath}/sys/resources/addResources.json
-/${mvcPath}/sys/resources/updateResources.json
-/${mvcPath}/sys/resources/deleteResources.json
-/${mvcPath}/sys/resources/findDependenceResources.json
-/${mvcPath}/sys/resources/addDependenceResources.json
-/${mvcPath}/sys/resources/deleteDependenceResources.json
-/${mvcPath}/sys/resources/findResourcesTree.json
+/${base.mvcPath}/sys/resources/Resources.html
+/${base.mvcPath}/sys/resources/DependenceResources.html
+/${base.mvcPath}/sys/resources/findByPage.json
+/${base.mvcPath}/sys/resources/addResources.json
+/${base.mvcPath}/sys/resources/updateResources.json
+/${base.mvcPath}/sys/resources/deleteResources.json
+/${base.mvcPath}/sys/resources/findDependenceResources.json
+/${base.mvcPath}/sys/resources/addDependenceResources.json
+/${base.mvcPath}/sys/resources/deleteDependenceResources.json
+/${base.mvcPath}/sys/resources/findResourcesTree.json
 
 

@@ -9,9 +9,9 @@
 
     <!-- 邮件服务发送 -->
     <bean id="javaMailSender" class="org.springframework.mail.javamail.JavaMailSenderImpl">
-        <property name="host" value="${JavaMailSender.host}"/>
-        <property name="username" value="${JavaMailSender.username}"/>
-        <property name="password" value="${JavaMailSender.password}"/>
+        <property name="host" value="${base.JavaMailSender.host}"/>
+        <property name="username" value="${base.JavaMailSender.username}"/>
+        <property name="password" value="${base.JavaMailSender.password}"/>
         <property name="defaultEncoding" value="UTF-8"/>
 
         <property name="javaMailProperties">

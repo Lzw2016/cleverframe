@@ -21,7 +21,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/sys/organization")
+@RequestMapping(value = "/${base.mvcPath}/sys/organization")
 public class OrganizationController extends BaseController {
 
     @Autowired

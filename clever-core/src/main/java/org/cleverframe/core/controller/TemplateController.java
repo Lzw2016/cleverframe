@@ -28,7 +28,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping("/${mvcPath}/core/template")
+@RequestMapping("/${base.mvcPath}/core/template")
 public class TemplateController extends BaseController {
 
     @Autowired

@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/generator/main")
+@RequestMapping(value = "/${base.mvcPath}/generator/main")
 public class GeneratorMainController extends BaseController {
 
     @RequestMapping("/GeneratorMain" + VIEW_PAGE_SUFFIX)

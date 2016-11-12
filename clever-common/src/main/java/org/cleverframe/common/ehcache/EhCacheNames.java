@@ -31,6 +31,11 @@ public class EhCacheNames {
      */
     public static final String TemplateCache = "TemplateCache";
 
+    /**
+     * 系统资源缓存名称
+     */
+    public static final String ResourcesCache = "ResourcesCache";
+
     // -------------------------------------------------------------------------------------------//
     // Shiro的缓存配置名称
     // -------------------------------------------------------------------------------------------//

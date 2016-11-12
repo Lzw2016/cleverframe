@@ -34,7 +34,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/core/config")
+@RequestMapping(value = "/${base.mvcPath}/core/config")
 public class ConfigController extends BaseController {
     /**
      * 日志对象

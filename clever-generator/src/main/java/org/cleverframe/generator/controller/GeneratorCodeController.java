@@ -33,7 +33,7 @@ import java.util.Map;
 
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/generator/generatorcode")
+@RequestMapping(value = "/${base.mvcPath}/generator/generatorcode")
 public class GeneratorCodeController extends BaseController {
 
     @Autowired

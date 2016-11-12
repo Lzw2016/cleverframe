@@ -31,7 +31,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/core/dict")
+@RequestMapping(value = "/${base.mvcPath}/core/dict")
 public class DictController extends BaseController {
 
     @Autowired

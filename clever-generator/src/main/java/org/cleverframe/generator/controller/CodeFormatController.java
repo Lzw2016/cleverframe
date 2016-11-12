@@ -22,7 +22,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/generator/codeformat")
+@RequestMapping(value = "/${base.mvcPath}/generator/codeformat")
 public class CodeFormatController extends BaseController {
 
     @Autowired

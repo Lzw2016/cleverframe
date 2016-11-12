@@ -4,5 +4,5 @@ globalPath.appPath = '${appPath}';
 globalPath.staticPath = '${staticPath}';
 globalPath.docPath = '${docPath}';
 globalPath.modulesPath = '${modulesPath}';
-globalPath.mvcPath = '${mvcPath}';
+globalPath.mvcPath = '${base.mvcPath}';
 

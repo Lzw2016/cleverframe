@@ -40,19 +40,19 @@
             <!-- url=拦截器[参数]，拦截器[参数] -->
             <value>
                 <!--允许访问所有的静态资源-->
-                /${staticPath}/** = anon
+                /${base.staticPath}/** = anon
                 <!--允许访问全局的js文件-->
-                /${mvcPath}/core/globaljs/globalPath.js = anon
+                /${base.mvcPath}/core/globaljs/globalPath.js = anon
                 <!--允许访问登入验证码-->
-                /${mvcPath}/sys/login/Validate.png = anon
+                /${base.mvcPath}/sys/login/Validate.png = anon
                 <!--允许访问登入页面-->
-                /${mvcPath}/sys/login/Login.html = anon
-                /${modulesPath}/sys/Login.css = anon
-                /${modulesPath}/sys/Login.js = anon
+                /${base.mvcPath}/sys/login/Login.html = anon
+                /${base.modulesPath}/sys/Login.css = anon
+                /${base.modulesPath}/sys/Login.js = anon
                 <!--允许访问登录请求地址-->
-                /${mvcPath}/sys/login/userLogin.json = authc
+                /${base.mvcPath}/sys/login/userLogin.json = authc
                 <!--允许访问登出地址-->
-                /${mvcPath}/sys/login/userLogout.json = logout
+                /${base.mvcPath}/sys/login/userLogout.json = logout
                 <!--其他资源需要用户登入而且有相应的权限才能访问-->
                 /** = user,perms
             </value>

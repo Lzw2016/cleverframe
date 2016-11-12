@@ -28,7 +28,7 @@ import java.util.Map;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/quartz/trigger")
+@RequestMapping(value = "/${base.mvcPath}/quartz/trigger")
 public class QuartzTriggerController extends BaseController {
 
     @Autowired

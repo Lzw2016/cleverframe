@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/core/main")
+@RequestMapping(value = "/${base.mvcPath}/core/main")
 public class CoreMainController extends BaseController {
 
     @RequestMapping("/CoreMain" + VIEW_PAGE_SUFFIX)

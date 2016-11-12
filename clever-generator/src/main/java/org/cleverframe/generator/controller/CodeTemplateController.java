@@ -32,7 +32,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/generator/codetemplate")
+@RequestMapping(value = "/${base.mvcPath}/generator/codetemplate")
 public class CodeTemplateController extends BaseController {
 
     @Autowired

@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/quartz/main")
+@RequestMapping(value = "/${base.mvcPath}/quartz/main")
 public class QuartzMainController extends BaseController {
 
 

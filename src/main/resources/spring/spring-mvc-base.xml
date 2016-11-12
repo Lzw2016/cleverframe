@@ -31,8 +31,8 @@
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2.设置静态资源访问规则 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- 对静态资源文件的访问, 将无法mapping到Controller的path交给default servlet handler处理 -->
 	<!-- <mvc:default-servlet-handler/> -->
-	<mvc:resources mapping="/${staticPath}/**" location="/WEB-INF/static/" order="1" cache-period="31536000"/>
-	<mvc:resources mapping="/${modulesPath}/**" location="/WEB-INF/modules/" order="2" cache-period="31536000"/>
+	<mvc:resources mapping="/${base.staticPath}/**" location="/WEB-INF/static/" order="1" cache-period="31536000"/>
+	<mvc:resources mapping="/${base.modulesPath}/**" location="/WEB-INF/modules/" order="2" cache-period="31536000"/>
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 3.系统拦截器配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 <!--
@@ -126,8 +126,8 @@
 		<!-- 设置成优先级最低的视图解析器 -->
 		<property name="order" value="100"/>
 		<property name="viewClass" value="org.springframework.web.servlet.view.JstlView"/>
-		<property name="prefix" value="${jsp.view.prefix}"/>
-		<property name="suffix" value="${jsp.view.suffix}"/>
+		<property name="prefix" value="${base.jsp.view.prefix}"/>
+		<property name="suffix" value="${base.jsp.view.suffix}"/>
 	</bean>
 
 	<!-- Json视图,Jackson实现 -->
@@ -206,22 +206,22 @@
 	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
 		<property name="defaultEncoding" value="UTF-8" />
 		<property name="maxInMemorySize" value="10240" />
-		<property name="maxUploadSize" value="${web.maxUploadSize}" />
+		<property name="maxUploadSize" value="${fileupload.web.maxUploadSize}" />
 		<!-- true：延迟解析上传的文件,先执行Controller里面的代码(默认为false) -->
 		<property name="resolveLazily" value="true"/>
 		<!-- 文件上传使用的临时目录 -->
 		<property name="uploadTempDir">
 			<bean class="org.springframework.core.io.FileSystemResource">
-				<constructor-arg type="java.lang.String" value="${web.fileStoragePath}/temp"/>
+				<constructor-arg type="java.lang.String" value="${fileupload.web.fileStoragePath}/temp"/>
 			</bean>
 		</property>
 	</bean>
 
     <!-- Spring MVC Context 容器初始化完成之后的处理类 -->
 	<bean id="springContextRefreshedListener" class="org.cleverframe.common.spring.SpringContextRefreshedListener">
-		<property name="docPath" value="${docPath}"/>
-		<property name="mvcPath" value="${mvcPath}"/>
-		<property name="staticPath" value="${staticPath}"/>
-		<property name="modulesPath" value="${modulesPath}"/>
+		<property name="docPath" value="${base.docPath}"/>
+		<property name="mvcPath" value="${base.mvcPath}"/>
+		<property name="staticPath" value="${base.staticPath}"/>
+		<property name="modulesPath" value="${base.modulesPath}"/>
 	</bean>
 </beans>

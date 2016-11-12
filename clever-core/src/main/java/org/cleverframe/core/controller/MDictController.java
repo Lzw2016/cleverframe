@@ -31,7 +31,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping("/${mvcPath}/core/mdict")
+@RequestMapping("/${base.mvcPath}/core/mdict")
 public class MDictController extends BaseController {
 
     @Autowired

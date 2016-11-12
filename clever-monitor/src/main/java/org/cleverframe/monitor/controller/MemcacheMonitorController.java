@@ -24,7 +24,7 @@ import java.util.List;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/monitor/memcache")
+@RequestMapping(value = "/${base.mvcPath}/monitor/memcache")
 public class MemcacheMonitorController extends BaseController {
 
     @Autowired

@@ -30,7 +30,7 @@ import java.io.IOException;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${mvcPath}/sys/login")
+@RequestMapping(value = "/${base.mvcPath}/sys/login")
 public class LoginController extends BaseController {
 
     @RequestMapping("/Login" + VIEW_PAGE_SUFFIX)
