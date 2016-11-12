@@ -34,6 +34,24 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
     private IUserPermissionsService userPermissionsService;
 
     /**
+     * 移除Url后缀(如：.css、.js、.html、.json、.xml等)
+     *
+     * @param url 带有后缀的Url
+     * @return 无后缀的Url
+     */
+    public String removeUrlSuffix(String url) {
+        if (StringUtils.isBlank(url)) {
+            return url;
+        }
+        int positionBySeparator = url.lastIndexOf("/");
+        int positionPoint = url.lastIndexOf(".");
+        if (positionPoint > positionBySeparator && positionPoint >= 0) {
+            url = url.substring(0, positionPoint);
+        }
+        return url.trim();
+    }
+
+    /**
      * 验证用户是否有权访问<br/>
      *
      * @return 有权访问返回true，无权访问返回false
@@ -48,6 +66,8 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         String contextPath = httpRequest.getContextPath();
         String url = httpRequest.getRequestURI();
         url = StringUtils.removeStart(url, contextPath);
+        String urlNoSuffix = removeUrlSuffix(url);
+
         // 获取当前登录用户信息
         Subject subject = getSubject(request, response);
         Object object = subject.getPrincipal();
@@ -60,24 +80,26 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
             logger.warn("请求地址[{}],授权失败，原因:获取用户登录信息为空", url);
             return false;
         }
+
         // 获取当前url在数据库里配置的授权信息 - 验证授权
-//        Resources resources = userPermissionsService.getResources(url);
-//        if (resources == null) {
-//            logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源未配置在资源表里", user.getLoginName(), url);
-//            return false;
-//        }
-//        if (Resources.NO_NEED.equals(resources.getNeedAuthorization())) {
-//            logger.warn("请求用户[{}],请求地址[{}],授权成功允许访问，原因:资源不需要验证权限", user.getLoginName(), url);
-//            return true;
-//        }
-//        String resourcesUrl = userPermissionsService.getResourcesKey(resources.getResourcesUrl());
-//        if (resourcesUrl == null || !url.equals(resourcesUrl.trim())) {
-//            logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源表里的资源地址不正确({})", user.getLoginName(), url, resourcesUrl);
-//            return false;
-//        }
+        Resources resources = userPermissionsService.getResources(url);
+        if (resources == null) {
+            resources = userPermissionsService.getResources(urlNoSuffix);
+            if (resources == null) {
+                logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源未配置在资源表里", user.getLoginName(), url);
+                return false;
+            }
+        }
+        if (Resources.NO_NEED.equals(resources.getNeedAuthorization())) {
+            logger.warn("请求用户[{}],请求地址[{}],授权成功允许访问，原因:资源不需要验证权限", user.getLoginName(), url);
+            return true;
+        }
+        String resourcesUrl = userPermissionsService.getResourcesKey(resources.getResourcesUrl());
+        if (resourcesUrl == null || !urlNoSuffix.equals(removeUrlSuffix(resourcesUrl))) {
+            logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源表里的资源地址不正确({})", user.getLoginName(), url, resourcesUrl);
+            return false;
+        }
         // 验证授权
-
-
 
 
         logger.debug("请求用户[{}],请求地址[{}],授权成功允许访问", user.getLoginName(), url);

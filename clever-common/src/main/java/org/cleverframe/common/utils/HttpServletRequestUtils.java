@@ -78,9 +78,10 @@ public class HttpServletRequestUtils {
             return "";
         } else {
             String requestUrl = request.getRequestURI();
-            int position = requestUrl.lastIndexOf(".");
-            if (position >= 0) {
-                requestUrl = requestUrl.substring(0, position);
+            int positionBySeparator = requestUrl.lastIndexOf("/");
+            int positionPoint = requestUrl.lastIndexOf(".");
+            if (positionPoint > positionBySeparator && positionPoint >= 0) {
+                requestUrl = requestUrl.substring(0, positionPoint);
             }
             return requestUrl;
         }
