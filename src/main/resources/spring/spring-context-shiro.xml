@@ -41,6 +41,8 @@
             <value>
                 <!--允许访问所有的静态资源-->
                 /${base.staticPath}/** = anon
+                <!--允许访问系统错误页面-->
+                /${base.mvcPath}/error/** = anon
                 <!--允许访问全局的js文件-->
                 /${base.mvcPath}/core/globaljs/globalPath.js = anon
                 <!--允许访问登入验证码-->

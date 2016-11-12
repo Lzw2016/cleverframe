@@ -38,6 +38,16 @@ public class Resources extends IdEntity {
     public static final Character UI_ELEMENT = '3';
 
     /**
+     * 需要授权才允许访问（1：需要；2：不需要）
+     */
+    public static final Character NEED = '1';
+
+    /**
+     * 需要授权才允许访问（1：需要；2：不需要）
+     */
+    public static final Character NO_NEED = '2';
+
+    /**
      * 资源标题
      */
     private String title;

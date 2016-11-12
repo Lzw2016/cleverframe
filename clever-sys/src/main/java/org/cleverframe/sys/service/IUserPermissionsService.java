@@ -13,6 +13,13 @@ import java.io.Serializable;
 public interface IUserPermissionsService {
 
     /**
+     * 根据带有变量的Url获取实际的Url地址
+     * @param resourcesUrl 数据库保存的含有变量的Url
+     * @return 实际的Url地址
+     */
+    String getResourcesKey(String resourcesUrl);
+
+    /**
      * 重新加载(缓存)全部资源，当资源更新后调用此方法
      *
      * @return 成功返回true

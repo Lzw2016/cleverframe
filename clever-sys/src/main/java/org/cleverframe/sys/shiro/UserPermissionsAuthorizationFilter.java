@@ -1,7 +1,9 @@
 package org.cleverframe.sys.shiro;
 
+import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
 import org.cleverframe.sys.SysBeanNames;
+import org.cleverframe.sys.entity.Resources;
 import org.cleverframe.sys.service.IUserPermissionsService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -43,11 +45,24 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         }
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         String contextPath = httpRequest.getContextPath();
-        String url = httpRequest.getRequestURI().replace(contextPath, "");
+        String url = httpRequest.getRequestURI();
+        url = StringUtils.removeStart(url, contextPath);
+        Resources resources = userPermissionsService.getResources(url);
+        if (resources == null) {
+            logger.warn("请求用户[],请求地址[{}],授权失败，原因:资源未配置在资源表里", url);
+            return false;
+        }
+        if (Resources.NO_NEED.equals(resources.getNeedAuthorization())) {
+            logger.warn("请求用户[],请求地址[{}],授权成功允许访问，原因:资源不需要验证权限", url);
+            return true;
+        }
+        String resourcesUrl = userPermissionsService.getResourcesKey(resources.getResourcesUrl());
+        if (resourcesUrl == null || !url.equals(resourcesUrl.trim())) {
+            logger.warn("请求用户[],请求地址[{}],授权失败，原因:资源表里的资源地址不正确({})", url, resourcesUrl);
+            return false;
+        }
 
-
-
-
+        // 验证授权
 
         logger.debug("请求用户[],请求地址[{}],授权成功允许访问", url);
         return true;

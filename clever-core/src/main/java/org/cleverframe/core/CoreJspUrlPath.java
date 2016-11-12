@@ -11,6 +11,28 @@ import org.cleverframe.common.IJspUrlPath;
  */
 public class CoreJspUrlPath implements IJspUrlPath {
     /**
+     * 服务器拒绝请求
+     */
+    public static final String Error403 = "error/403";
+
+    /**
+     * 服务器找不到请求的网页
+     */
+    public static final String Error404 = "error/404";
+
+    /**
+     * 服务器内部错误
+     */
+    public static final String Error500 = "error/500";
+
+    /**
+     * 服务不可用
+     */
+    public static final String Error503 = "error/503";
+
+    // =======================================================================================================================================
+
+    /**
      * core模块主页
      */
     public static final String CoreMain = "core/CoreMain";

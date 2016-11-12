@@ -1,6 +1,8 @@
 package org.cleverframe.sys.service;
 
 import net.sf.ehcache.Cache;
+import net.sf.ehcache.Element;
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.configuration.BaseConfigNames;
 import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.ehcache.EhCacheNames;
@@ -65,7 +67,7 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     private Cache resourcesCache = EhCacheUtils.createCache(EhCacheNames.ResourcesCache);
 
     @PostConstruct
-    public void init() {
+    private void init() {
         IConfig config = SpringContextHolder.getBean(SpringBeanNames.Config);
         if (config == null) {
             throw new RuntimeException("### IConfig对象注入失败");
@@ -76,16 +78,49 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
         docPath = config.getConfig(BaseConfigNames.DOC_PATH);
     }
 
+    /**
+     * 字符串变量替换，如： 123${name}456 - [name='qwe'] => 123qwe456
+     *
+     * @param str           原字符串
+     * @param variableName  变量名称
+     * @param variableValue 变量值
+     * @return 替换后的字符串
+     */
+    private String replaceVariable(String str, String variableName, String variableValue) {
+        if (StringUtils.isBlank(str)) {
+            return str;
+        }
+        str = str.replace("${" + variableName + "}", variableValue);
+        return str;
+    }
+
+    @Override
+    public String getResourcesKey(String resourcesUrl) {
+        if (StringUtils.isBlank(resourcesUrl)) {
+            return "";
+        }
+        String result = replaceVariable(resourcesUrl, "staticPath", staticPath);
+        result = replaceVariable(result, "mvcPath", mvcPath);
+        result = replaceVariable(result, "modulesPath", modulesPath);
+        result = replaceVariable(result, "docPath", docPath);
+        return result;
+    }
+
     @Override
     public boolean reloadResources() {
-
-        return false;
+        resourcesCache.removeAll();
+        List<Resources> resourcesList = resourcesDao.findAllResources();
+        for (Resources resources : resourcesList) {
+            Element element = new Element(getResourcesKey(resources.getResourcesUrl()), resources);
+            resourcesCache.put(element);
+        }
+        return true;
     }
 
     @Override
     public Resources getResources(String resourcesKey) {
-
-        return null;
+        Element element = resourcesCache.get(resourcesKey);
+        return element == null ? null : (Resources) element.getObjectValue();
     }
 
     /**
@@ -97,6 +132,8 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     @Override
     public boolean addResources(Resources resources) {
         resourcesDao.getHibernateDao().save(resources);
+        Element element = new Element(getResourcesKey(resources.getResourcesUrl()), resources);
+        resourcesCache.put(element);
         return true;
     }
 
@@ -108,7 +145,11 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     @Transactional(readOnly = false)
     @Override
     public boolean updateResources(Resources resources) {
-        resourcesDao.getHibernateDao().update(resources, false, true);
+        Resources oldResources1 = resourcesDao.getHibernateDao().get(resources.getId());
+        resourcesCache.remove(getResourcesKey(oldResources1.getResourcesUrl()));
+        resources = resourcesDao.getHibernateDao().update(resources, false, true);
+        Element element = new Element(getResourcesKey(resources.getResourcesUrl()), resources);
+        resourcesCache.put(element);
         return true;
     }
 
@@ -121,6 +162,8 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     @Override
     public boolean deleteResources(Serializable resourcesId) {
         // TODO 验证当前资源有没有被其他资源所依赖，若有则不能删除
+        Resources oldResources1 = resourcesDao.getHibernateDao().get(resourcesId);
+        resourcesCache.remove(getResourcesKey(oldResources1.getResourcesUrl()));
         return resourcesDao.getHibernateDao().deleteById(resourcesId) >= 1;
     }
 
