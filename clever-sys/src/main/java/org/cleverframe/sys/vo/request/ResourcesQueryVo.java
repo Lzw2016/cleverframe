@@ -15,6 +15,11 @@ public class ResourcesQueryVo extends BaseRequestVo {
     private String title;
 
     /**
+     * 需要授权才允许访问（1：需要；2：不需要）
+     */
+    private Character needAuthorization;
+
+    /**
      * 资源URL地址
      */
     private String resourcesUrl;
@@ -39,6 +44,14 @@ public class ResourcesQueryVo extends BaseRequestVo {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public Character getNeedAuthorization() {
+        return needAuthorization;
+    }
+
+    public void setNeedAuthorization(Character needAuthorization) {
+        this.needAuthorization = needAuthorization;
     }
 
     public String getResourcesUrl() {

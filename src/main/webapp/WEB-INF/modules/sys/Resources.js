@@ -40,6 +40,8 @@ var pageJs = function (globalPath) {
     var addForm = $("#addForm");
     // 资源标题
     var addTitle = $("#addTitle");
+    // 需要授权才允许访问
+    var addNeedAuthorization = $("#addNeedAuthorization");
     // 资源URL
     var addResourcesUrl = $("#addResourcesUrl");
     // 权限标识
@@ -59,6 +61,8 @@ var pageJs = function (globalPath) {
     var editForm = $("#editForm");
     // 资源标题
     var editTitle = $("#editTitle");
+    // 需要授权才允许访问
+    var editNeedAuthorization = $("#editNeedAuthorization");
     // 资源URL
     var editResourcesUrl = $("#editResourcesUrl");
     // 权限标识
@@ -193,6 +197,15 @@ var pageJs = function (globalPath) {
             buttons: "#addDialogButtons"
         });
 
+        // 需要授权
+        addNeedAuthorization.combobox({
+            required: true,
+            url: findDictTypeUrl + encodeURIComponent("资源需要授权"),
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 100
+        });
         addTitle.textbox({
             required: true,
             validType: 'length[0,255]'
@@ -252,6 +265,15 @@ var pageJs = function (globalPath) {
             buttons: "#editDialogButtons"
         });
 
+        // 需要授权
+        editNeedAuthorization.combobox({
+            required: true,
+            url: findDictTypeUrl + encodeURIComponent("资源需要授权"),
+            editable: false,
+            valueField: 'value',
+            textField: 'text',
+            panelHeight: 100
+        });
         editTitle.textbox({
             required: true,
             validType: 'length[0,255]'

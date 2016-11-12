@@ -5,7 +5,6 @@ import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
-import org.apache.shiro.web.util.WebUtils;
 import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.common.utils.ConversionUtils;
 import org.cleverframe.common.vo.ValidateCode;

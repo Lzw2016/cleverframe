@@ -57,6 +57,7 @@
         <tr>
             <th data-options="width:100,align:'left',hidden:true  ,field:'id'">编号</th>
             <th data-options="width:230,align:'left',hidden:false ,field:'title'">资源标题</th>
+            <th data-options="width:230,align:'left',hidden:false ,field:'needAuthorization'">需要授权</th>
             <th data-options="width:650,align:'left',hidden:false ,field:'resourcesUrl'">资源URL</th>
             <th data-options="width:200,align:'left',hidden:false ,field:'permission'">权限标识</th>
             <th data-options="width:100,align:'left',hidden:false ,field:'resourcesType',formatter:pageJsObject.resourcesTypeFormatter">资源类型</th>
@@ -76,9 +77,14 @@
 <div id="addDialog" style="width: 830px;height: 330px;padding: 5px 10px">
     <form id="addForm" method="post">
         <div class="row">
-            <span class="columnLast">
+
+            <span class="column">
                 <label for="addTitle">资源标题</label>
-                <input id="addTitle" name="title" style="width: 700px"/>
+                <input id="addTitle" name="title" style="width: 435px"/>
+            </span>
+            <span class="columnLast">
+                <label for="addTitle">需要授权</label>
+                <input id="addNeedAuthorization" name="needAuthorization"/>
             </span>
         </div>
 
@@ -120,7 +126,11 @@
         <div class="row">
             <span class="columnLast">
                 <label for="editTitle">资源标题</label>
-                <input id="editTitle" name="title" style="width: 700px"/>
+                <input id="editTitle" name="title" style="width: 435px"/>
+            </span>
+            <span class="columnLast">
+                <label for="addTitle">需要授权</label>
+                <input id="editNeedAuthorization" name="needAuthorization"/>
             </span>
         </div>
 
