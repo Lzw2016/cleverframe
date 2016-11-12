@@ -2,6 +2,8 @@ package org.cleverframe.sys.job;
 
 import org.apache.shiro.session.mgt.SessionValidationScheduler;
 import org.apache.shiro.session.mgt.ValidatingSessionManager;
+import org.cleverframe.common.spring.SpringBeanNames;
+import org.cleverframe.common.spring.SpringContextHolder;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
 import org.slf4j.Logger;
@@ -25,13 +27,12 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
     |             C O N S T A N T S             |
     ============================================*/
     /**
-     * The default interval at which sessions will be validated (1 hour);
-     * This can be overridden by calling {@link #setSessionValidationInterval(int)}
+     * 默认会话验证的时间间隔，参考 {@link #setSessionValidationInterval(int)}
      */
     public static final int DEFAULT_SESSION_VALIDATION_INTERVAL = 1000 * 60 * 60;
 
     /**
-     * The name assigned to the quartz job.
+     * 定时任务名称
      */
     private static final String JOB_NAME = "SessionValidationJob";
 
@@ -41,22 +42,27 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
     private static final Logger log = LoggerFactory.getLogger(QuartzSessionValidationScheduler.class);
 
     /**
-     * The configured Quartz scheduler to use to schedule the Quartz job.  If no scheduler is
-     * configured, the schedular will be retrieved by calling {@link StdSchedulerFactory#getDefaultScheduler()}
+     * 调度器对象 {@link StdSchedulerFactory#getDefaultScheduler()}
      */
     private Scheduler scheduler;
 
+    /**
+     * 是否顺便启动和停止调度器
+     */
     private boolean schedulerImplicitlyCreated = false;
 
+    /**
+     * 定时任务是否启动
+     */
     private boolean enabled = false;
 
     /**
-     * The session manager used to validate sessions.
+     * Shiro的SessionManager
      */
     private ValidatingSessionManager sessionManager;
 
     /**
-     * The session validation interval in milliseconds.
+     * 会话验证的时间间隔
      */
     private int sessionValidationInterval = DEFAULT_SESSION_VALIDATION_INTERVAL;
 
@@ -65,15 +71,15 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
     ============================================*/
 
     /**
-     * Default constructor.
+     * 默认的构造
      */
     public QuartzSessionValidationScheduler() {
     }
 
     /**
-     * Constructor that specifies the session manager that should be used for validating sessions.
+     * 构造 设置 Shiro的SessionManager
      *
-     * @param sessionManager the <tt>SessionManager</tt> that should be used to validate sessions.
+     * @param sessionManager Shiro的SessionManager
      */
     public QuartzSessionValidationScheduler(ValidatingSessionManager sessionManager) {
         this.sessionManager = sessionManager;
@@ -88,8 +94,12 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
      */
     protected Scheduler getScheduler() throws SchedulerException {
         if (scheduler == null) {
-            scheduler = StdSchedulerFactory.getDefaultScheduler();
-            schedulerImplicitlyCreated = true;
+            scheduler = SpringContextHolder.getBean(SpringBeanNames.SchedulerFactoryBean);
+        }
+        if (scheduler == null) {
+            RuntimeException exception = new RuntimeException("### SchedulerFactoryBean注入失败");
+            log.error("### SchedulerFactoryBean注入失败", exception);
+            throw exception;
         }
         return scheduler;
     }
@@ -107,8 +117,8 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
     }
 
     /**
-     * Specifies how frequently (in milliseconds) this Scheduler will call the
-     * {@link org.apache.shiro.session.mgt.ValidatingSessionManager#validateSessions() ValidatingSessionManager#validateSessions()} method.
+     * 设置会话验证的时间间隔 (定时任务运行的时间间隔)
+     * {@link org.apache.shiro.session.mgt.ValidatingSessionManager#validateSessions() ValidatingSessionManager#validateSessions()}
      * <p>
      * <p>Unless this method is called, the default value is {@link #DEFAULT_SESSION_VALIDATION_INTERVAL}.
      *
@@ -123,91 +133,71 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
     ============================================*/
 
     /**
-     * Starts session validation by creating a Quartz simple trigger, linking it to
-     * the {@link org.cleverframe.sys.job.QuartzSessionValidationJob}, and scheduling it with the Quartz scheduler.
+     * 开始启用定时任务，定时验证会话是否有效 (只需要运行一次)
+     * 参考 {@link org.cleverframe.sys.job.QuartzSessionValidationJob}
      */
     public void enableSessionValidation() {
         if (log.isDebugEnabled()) {
-            log.debug("Scheduling session validation job using Quartz with " + "session validation interval of [" + sessionValidationInterval + "]ms...");
+            log.debug("Shiro会话验证调度器开始, 验证时间间隔:[{}]ms", sessionValidationInterval);
         }
-
+        if (sessionManager == null) {
+            throw new RuntimeException("必须注入sessionManager属性");
+        }
+        QuartzSessionValidationJob.setSessionManager(sessionManager);
         try {
-            SimpleTrigger trigger = newTrigger()
-                    .withIdentity(getClass().getName(), Scheduler.DEFAULT_GROUP)
-                    .withSchedule(simpleSchedule()
-                            .withRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY)
-                            .withIntervalInSeconds(sessionValidationInterval))
-                    .build();
-            JobDetail detail = newJob(QuartzSessionValidationJob.class)
-                    .withIdentity(JOB_NAME, Scheduler.DEFAULT_GROUP)
-                    .storeDurably()
-                    .build();
-            detail.getJobDataMap().put(QuartzSessionValidationJob.SESSION_MANAGER_KEY, sessionManager);
-
             Scheduler scheduler = getScheduler();
-            scheduler.scheduleJob(detail, trigger);
-            if (schedulerImplicitlyCreated) {
+            JobKey jobKey = new JobKey(JOB_NAME, Scheduler.DEFAULT_GROUP);
+            JobDetail detail = scheduler.getJobDetail(jobKey);
+            if (detail == null) {
+                SimpleTrigger trigger = newTrigger()
+                        .withIdentity(getClass().getName(), Scheduler.DEFAULT_GROUP)
+                        .withSchedule(simpleSchedule()
+                                .withRepeatCount(SimpleTrigger.REPEAT_INDEFINITELY)
+                                .withIntervalInMilliseconds(sessionValidationInterval))
+                        .build();
+                detail = newJob(QuartzSessionValidationJob.class)
+                        .withIdentity(JOB_NAME, Scheduler.DEFAULT_GROUP)
+                        .storeDurably(false)
+                        .build();
+                scheduler.scheduleJob(detail, trigger);
+            } else {
+                log.warn("定时验证会话是否有效的定时任务已经存在[{}]", jobKey.toString());
+            }
+            if (schedulerImplicitlyCreated && !scheduler.isStarted()) {
                 scheduler.start();
-                if (log.isDebugEnabled()) {
-                    log.debug("Successfully started implicitly created Quartz Scheduler instance.");
-                }
+                log.warn("已启动调度器,执行: scheduler.start()");
             }
             this.enabled = true;
-
-            if (log.isDebugEnabled()) {
-                log.debug("Session validation job successfully scheduled with Quartz.");
-            }
+            log.debug("Shiro会话验证调度器启用成功，等待执行");
 
         } catch (SchedulerException e) {
-            if (log.isErrorEnabled()) {
-                log.error("Error starting the Quartz session validation job.  Session validation may not occur.", e);
-            }
+            log.error("Shiro会话验证调度器启用失败", e);
         }
     }
 
+    /**
+     * 开始禁用定时任务 (只需要运行一次)
+     */
     public void disableSessionValidation() {
-        if (log.isDebugEnabled()) {
-            log.debug("Stopping Quartz session validation job...");
-        }
-
-        Scheduler scheduler;
+        log.debug("开始停止Shiro会话验证调度器...");
         try {
-            scheduler = getScheduler();
-            if (scheduler == null) {
-                if (log.isWarnEnabled()) {
-                    log.warn("getScheduler() method returned a null Quartz scheduler, which is unexpected.  Please " +
-                            "check your configuration and/or implementation.  Returning quietly since there is no " +
-                            "validation job to remove (scheduler does not exist).");
-                }
-                return;
-            }
-        } catch (SchedulerException e) {
-            if (log.isWarnEnabled()) {
-                log.warn("Unable to acquire Quartz Scheduler.  Ignoring and returning (already stopped?)", e);
-            }
+            Scheduler scheduler = getScheduler();
+            TriggerKey triggerKey = new TriggerKey(getClass().getName(), Scheduler.DEFAULT_GROUP);
+            scheduler.unscheduleJob(triggerKey);
+            JobKey jobKey = new JobKey(JOB_NAME, Scheduler.DEFAULT_GROUP);
+            scheduler.deleteJob(jobKey);
+            log.debug("停止Shiro会话验证调度器成功");
+        } catch (Exception e) {
+            log.debug("停止Shiro会话验证调度器失败", e);
             return;
         }
-
-        try {
-            scheduler.unscheduleJob(new TriggerKey(JOB_NAME, Scheduler.DEFAULT_GROUP));
-            if (log.isDebugEnabled()) {
-                log.debug("Quartz session validation job stopped successfully.");
-            }
-        } catch (SchedulerException e) {
-            if (log.isDebugEnabled()) {
-                log.debug("Could not cleanly remove SessionValidationJob from Quartz scheduler.  " + "Ignoring and stopping.", e);
-            }
-        }
-
         this.enabled = false;
-
         if (schedulerImplicitlyCreated) {
             try {
                 scheduler.shutdown();
+                log.warn("已停止调度器,执行: scheduler.shutdown()");
             } catch (SchedulerException e) {
-                if (log.isWarnEnabled()) {
-                    log.warn("Unable to cleanly shutdown implicitly created Quartz Scheduler instance.", e);
-                }
+                log.warn("停止调度器失败,执行: scheduler.shutdown()", e);
             } finally {
                 setScheduler(null);
                 schedulerImplicitlyCreated = false;

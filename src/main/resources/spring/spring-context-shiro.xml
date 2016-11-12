@@ -165,7 +165,7 @@
     </bean>
 
     <!-- 会话验证调度器 -->
-    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler">
+    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler" init-method="enableSessionValidation" destroy-method="disableSessionValidation">
         <!--<property name="enabled" value="true"/>-->
         <property name="sessionValidationInterval" value="${shiro.sessionValidationInterval}"/><!-- 会话验证的时间间隔，默认60分钟 -->
         <property name="sessionManager" ref="shiroSessionManager"/><!-- 设置对应的shiro会话管理器 -->

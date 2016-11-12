@@ -2,7 +2,6 @@ package org.cleverframe.sys.job;
 
 import org.apache.shiro.session.mgt.ValidatingSessionManager;
 import org.quartz.Job;
-import org.quartz.JobDataMap;
 import org.quartz.JobExecutionContext;
 import org.quartz.JobExecutionException;
 import org.slf4j.Logger;
@@ -19,15 +18,16 @@ public class QuartzSessionValidationJob implements Job {
    /*--------------------------------------------
     |             C O N S T A N T S             |
     ============================================*/
-    /**
-     * Key used to store the session manager in the job data map for this job.
-     */
-    static final String SESSION_MANAGER_KEY = "sessionManager";
 
     /*--------------------------------------------
     |    I N S T A N C E   V A R I A B L E S    |
     ============================================*/
     private static final Logger log = LoggerFactory.getLogger(QuartzSessionValidationJob.class);
+
+    /**
+     * Shiro的SessionManager
+     */
+    private static ValidatingSessionManager sessionManager;
 
     /*--------------------------------------------
     |         C O N S T R U C T O R S           |
@@ -48,18 +48,16 @@ public class QuartzSessionValidationJob implements Job {
      * @param context the Quartz job execution context for this execution.
      */
     public void execute(JobExecutionContext context) throws JobExecutionException {
-
-        JobDataMap jobDataMap = context.getMergedJobDataMap();
-        ValidatingSessionManager sessionManager = (ValidatingSessionManager) jobDataMap.get(SESSION_MANAGER_KEY);
-
-        if (log.isDebugEnabled()) {
-            log.debug("Executing session validation Quartz job...");
-        }
-
+        log.debug("开始验证会话是否有效...");
         sessionManager.validateSessions();
+        log.debug("验证会话是否有效执行完成");
+    }
 
-        if (log.isDebugEnabled()) {
-            log.debug("Session validation Quartz job complete.");
-        }
+    public static ValidatingSessionManager getSessionManager() {
+        return sessionManager;
+    }
+
+    public static void setSessionManager(ValidatingSessionManager sessionManager) {
+        QuartzSessionValidationJob.sessionManager = sessionManager;
     }
 }
