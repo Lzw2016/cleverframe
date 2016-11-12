@@ -4,6 +4,7 @@ import org.cleverframe.common.attributes.CommonApplicationAttributes;
 import org.cleverframe.common.configuration.CustomPropertyPlaceholderConfigurer;
 import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.controller.XssExcludeUrlUtils;
+import org.cleverframe.common.initialize.IHandle;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.context.ApplicationListener;
@@ -82,10 +83,27 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
             }
         }
         strTmp.append("#=======================================================================================================================#");
-        if (logger.isDebugEnabled() && count > 0) {
-            logger.debug(strTmp.toString());
+        if (logger.isInfoEnabled() && count > 0) {
+            logger.info(strTmp.toString());
         }
         return count;
+    }
+
+    /**
+     * 新增数据库里没有的资源
+     *
+     * @return 返回新增资源的数量
+     */
+    public int resourcesInitialize(ContextRefreshedEvent event) {
+        int addResourcesCount = 0;
+        IHandle resourcesIniHandle = SpringContextHolder.getBean(SpringBeanNames.ResourcesIniHandle);
+        if (resourcesIniHandle == null) {
+            RuntimeException exception = new RuntimeException("未注入Bean:[" + SpringBeanNames.ResourcesIniHandle + "]");
+            logger.error(exception.getMessage(), exception);
+        } else {
+            addResourcesCount = resourcesIniHandle.initialize(event);
+        }
+        return addResourcesCount;
     }
 
     @Override
@@ -133,6 +151,7 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MVC_PATH + " = " + mvcPath + "\r\n" +
                     "#\t 新增配置数据 " + initPropertiesMap() + "条\r\n" +
                     "#\t 加载不需要XXS过滤的URL路径 " + XssExcludeUrlUtils.loadXSSExcludeUrl() + " 个\r\n" +
+                    "#\t 新增Url资源信息 " + resourcesInitialize(event) + " 条\r\n" +
                     "#=======================================================================================================================#\r\n";
             logger.info(tmp);
         }

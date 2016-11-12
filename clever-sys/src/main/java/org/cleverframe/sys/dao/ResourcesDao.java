@@ -115,4 +115,16 @@ public class ResourcesDao extends BaseDao<Resources> {
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.findResourcesByRole");
         return hibernateDao.findBySql(sql, param);
     }
+
+    /**
+     * 根据资源路径(含有变量)查询资源
+     * @param resourcesUrl 资源路径(含有变量)
+     * @return 不存在返回null
+     */
+    public Resources getResources(String resourcesUrl) {
+        Parameter param = new Parameter();
+        param.put("resourcesUrl", resourcesUrl);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.getResources");
+        return hibernateDao.getBySql(sql, param);
+    }
 }

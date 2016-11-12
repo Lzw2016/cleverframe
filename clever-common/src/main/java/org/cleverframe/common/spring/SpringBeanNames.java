@@ -11,9 +11,22 @@ import org.cleverframe.common.IBeanNames;
  */
 @SuppressWarnings("unused")
 public class SpringBeanNames implements IBeanNames {
-
-    public static final String SpringContextHolder = "springContextHolder";
-    public static final String UserUtils = "UserUtils";
+    /**
+     * Spring的Bean获取工具
+     */
+    public static final String SpringContextHolder = "common_SpringContextHolder";
+    /**
+     * 系统用户信息获取工具
+     */
+    public static final String UserUtils = "core_UserUtils";
+    /**
+     * 系统配置服务Bean，实现org.cleverframe.common.configuration.IConfig接口
+     */
+    public static final String Config = "core_ConfigService";
+    /**
+     * 资源初始化服务类(新增)
+     */
+    public static final String ResourcesIniHandle = "sys_ResourcesIniHandle";
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-base.xml 配置文件的Bean名称
@@ -38,10 +51,6 @@ public class SpringBeanNames implements IBeanNames {
      * EhCacheManagerFactoryBean Bean名称
      */
     public static final String CacheManager = "cacheManager";
-    /**
-     * 系统配置服务Bean，实现org.cleverframe.common.configuration.IConfig接口
-     */
-    public static final String Config = "configService";
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-freemarker.xml 配置文件的Bean名称

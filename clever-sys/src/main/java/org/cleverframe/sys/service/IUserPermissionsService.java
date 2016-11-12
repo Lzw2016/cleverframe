@@ -3,6 +3,7 @@ package org.cleverframe.sys.service;
 import org.cleverframe.sys.entity.Resources;
 
 import java.io.Serializable;
+import java.util.List;
 
 /**
  * 用户权限管理服务,为UserPermissionsAuthorizationFilter提供服务<br/>
@@ -22,9 +23,9 @@ public interface IUserPermissionsService {
     /**
      * 重新加载(缓存)全部资源，当资源更新后调用此方法
      *
-     * @return 成功返回true
+     * @return 成功返回所有的资源数据
      */
-    boolean reloadResources();
+    List<Resources> reloadResources();
 
     /**
      * 根据ResourcesKey从缓存中获取Resources

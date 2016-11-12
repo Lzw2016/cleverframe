@@ -36,6 +36,11 @@ import java.util.Map;
 @Service(SysBeanNames.EhCacheResourcesService)
 public class EhCacheResourcesService extends BaseService implements IUserPermissionsService {
 
+    public static final String STATIC_PATH = "staticPath";
+    public static final String MVC_PATH = "mvcPath";
+    public static final String MODULES_PATH = "modulesPath";
+    public static final String DOC_PATH = "docPath";
+
     @Autowired
     @Qualifier(SysBeanNames.ResourcesDao)
     private ResourcesDao resourcesDao;
@@ -66,6 +71,7 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
      */
     private Cache resourcesCache = EhCacheUtils.createCache(EhCacheNames.ResourcesCache);
 
+    @SuppressWarnings("Duplicates")
     @PostConstruct
     private void init() {
         IConfig config = SpringContextHolder.getBean(SpringBeanNames.Config);
@@ -99,22 +105,22 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
         if (StringUtils.isBlank(resourcesUrl)) {
             return "";
         }
-        String result = replaceVariable(resourcesUrl, "staticPath", staticPath);
-        result = replaceVariable(result, "mvcPath", mvcPath);
-        result = replaceVariable(result, "modulesPath", modulesPath);
-        result = replaceVariable(result, "docPath", docPath);
+        String result = replaceVariable(resourcesUrl, STATIC_PATH, staticPath);
+        result = replaceVariable(result, MVC_PATH, mvcPath);
+        result = replaceVariable(result, MODULES_PATH, modulesPath);
+        result = replaceVariable(result, DOC_PATH, docPath);
         return result;
     }
 
     @Override
-    public boolean reloadResources() {
+    public List<Resources> reloadResources() {
         resourcesCache.removeAll();
         List<Resources> resourcesList = resourcesDao.findAllResources();
         for (Resources resources : resourcesList) {
             Element element = new Element(getResourcesKey(resources.getResourcesUrl()), resources);
             resourcesCache.put(element);
         }
-        return true;
+        return resourcesList;
     }
 
     @Override
@@ -254,5 +260,25 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
             }
         }
         return tree;
+    }
+
+    /*--------------------------------------------------------------
+     *          getter、setter
+     * -------------------------------------------------------------*/
+
+    public String getStaticPath() {
+        return staticPath;
+    }
+
+    public String getMvcPath() {
+        return mvcPath;
+    }
+
+    public String getModulesPath() {
+        return modulesPath;
+    }
+
+    public String getDocPath() {
+        return docPath;
     }
 }
