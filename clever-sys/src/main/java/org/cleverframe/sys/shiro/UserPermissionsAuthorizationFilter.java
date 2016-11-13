@@ -1,5 +1,6 @@
 package org.cleverframe.sys.shiro;
 
+import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
@@ -99,10 +100,35 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
             logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源表里的资源地址不正确({})", user.getLoginName(), url, resourcesUrl);
             return false;
         }
-        // 验证授权
-
-
-        logger.debug("请求用户[{}],请求地址[{}],授权成功允许访问", user.getLoginName(), url);
-        return true;
+        // 验证授权 - mappedValue
+        String[] perms = (String[]) mappedValue;
+        boolean isPermitted = true;
+        if (perms != null && perms.length > 0) {
+            if (perms.length == 1) {
+                if (!subject.isPermitted(perms[0])) {
+                    isPermitted = false;
+                }
+            } else {
+                if (!subject.isPermittedAll(perms)) {
+                    isPermitted = false;
+                }
+            }
+            if (!isPermitted) {
+                logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:没有权限[mappedValue={}]", user.getLoginName(), url, ArrayUtils.toString(mappedValue));
+                return false;
+            }
+        }
+        // 验证权限 - 自定义Url权限字符串
+        isPermitted = subject.isPermitted(resources.getPermission());
+        if (isPermitted) {
+            logger.debug("请求用户[{}],请求地址[{}],授权成功允许访问。验证权限[urlPermission={} ,mappedValue={}]",
+                    user.getLoginName(),
+                    url,
+                    resources.getPermission(),
+                    ArrayUtils.toString(mappedValue));
+        } else {
+            logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:没有权限[urlPermission={}]", user.getLoginName(), url, resources.getPermission());
+        }
+        return isPermitted;
     }
 }

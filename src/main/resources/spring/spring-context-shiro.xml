@@ -41,6 +41,11 @@
             <value>
                 <!--允许访问所有的静态资源-->
                 /${base.staticPath}/** = anon
+                <!--允许访问系统页面所依赖的静态文件-->
+                /${base.modulesPath}/**/*.js = anon
+                /${base.modulesPath}/**/*.css = anon
+                /${base.modulesPath}/**/*.png = anon
+                /${base.modulesPath}/**/*.jpg = anon
                 <!--允许访问系统错误页面-->
                 /${base.mvcPath}/error/** = anon
                 <!--允许访问全局的js文件-->
@@ -167,7 +172,8 @@
     </bean>
 
     <!-- 会话验证调度器 -->
-    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler" init-method="enableSessionValidation" destroy-method="disableSessionValidation">
+    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler" init-method="enableSessionValidation"
+          destroy-method="disableSessionValidation">
         <!--<property name="enabled" value="true"/>-->
         <property name="sessionValidationInterval" value="${shiro.sessionValidationInterval}"/><!-- 会话验证的时间间隔，默认60分钟 -->
         <property name="sessionManager" ref="shiroSessionManager"/><!-- 设置对应的shiro会话管理器 -->

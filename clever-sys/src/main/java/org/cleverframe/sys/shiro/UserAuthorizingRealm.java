@@ -11,12 +11,17 @@ import org.apache.shiro.realm.AuthorizingRealm;
 import org.apache.shiro.subject.PrincipalCollection;
 import org.cleverframe.common.codec.EncodeDecodeUtils;
 import org.cleverframe.sys.SysBeanNames;
+import org.cleverframe.sys.entity.Organization;
+import org.cleverframe.sys.entity.Resources;
+import org.cleverframe.sys.entity.Role;
 import org.cleverframe.sys.entity.User;
 import org.cleverframe.sys.service.AuthorizingRealmService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+
+import java.util.List;
 
 /**
  * 作者：LiZW <br/>
@@ -67,13 +72,13 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
             throw new UserLoginException(UserLoginException.User_Leave, "离职员工不能登录");
         }
 
-//        Organization homeCompany = authorizingRealmService.getOrgById(user.getHomeCompany());
-//        Organization homeOrg = authorizingRealmService.getOrgById(user.getHomeOrg());
-
+        // 获取用户组织机构信息 - TODO 不存在阻止用户登录？
+        Organization homeCompany = authorizingRealmService.getHomeCompany(user);
+        Organization homeOrg = authorizingRealmService.getHomeOrg(user);
         // Password组成：前16存储密码的salt，16以后存储密码
         byte[] salt = EncodeDecodeUtils.decodeHex(user.getPassword().substring(0, 16));
         return new SimpleAuthenticationInfo(
-                new UserPrincipal(null, null, user),// 用户信息
+                new UserPrincipal(homeCompany, homeOrg, user),// 用户信息
                 user.getPassword().substring(16),// 密码
                 new SaltByteSource(salt),// salt
                 getName()// Realm name
@@ -91,28 +96,34 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
      */
     @Override
     protected AuthorizationInfo doGetAuthorizationInfo(PrincipalCollection principals) {
-//        ShiroPrincipal principal = (ShiroPrincipal) getAvailablePrincipal(principals);
-//        if (principal == null || principal.getUser() == null) {
-//            throw new AuthorizationException("授权失败，不能获取当前用户");
-//        }
-//        SimpleAuthorizationInfo info = new SimpleAuthorizationInfo();
-//        // 获取角色信息
-//        List<Role> roleList = authorizingRealmService.findRoleByUserId(principal.getUser().getId());
-//        List<Serializable> roleIdList = new ArrayList<Serializable>();
-//        for (Role role : roleList) {
-//            info.addRole(role.getName());
-//            roleIdList.add(role.getId());
-//        }
-//        // 获取权限信息
-//        List<Permission> permissionList = authorizingRealmService.findPermissionByUserId(roleIdList);
-//        for (Permission permission : permissionList) {
-//            info.addStringPermission(permission.getPermission());
-//        }
+        Object object = getAvailablePrincipal(principals);
+        if (object == null) {
+            logger.error("### 授权失败，不能获取当前用户[Principal]");
+            return null;
+        }
+        if (!(object instanceof UserPrincipal)) {
+            logger.error("### 授权失败，用户对象不能转换成UserPrincipal对象");
+            return null;
+        }
+        UserPrincipal principal = (UserPrincipal) object;
+        if (principal.getUser() == null) {
+            logger.error("### 授权失败，不能获取当前登录用户[User]");
+            return null;
+        }
 
-
-        return new SimpleAuthorizationInfo();
+        // 创建授权信息对象
+        SimpleAuthorizationInfo authorizationInfo = new SimpleAuthorizationInfo();
+        User user = principal.getUser();
+        List<Role> roleList = authorizingRealmService.findRoleByUser(user);
+        for (Role role : roleList) {
+            authorizationInfo.addRole(role.getName());
+        }
+        List<Resources> resourcesList = authorizingRealmService.findResourcesByUser(user);
+        for (Resources resources : resourcesList) {
+            authorizationInfo.addStringPermission(resources.getPermission());
+        }
+        logger.info("用户[{}]，授权成功，用户角色 {} 个，系统资源 {} 个", user.getLoginName(), roleList.size(), resourcesList.size());
+        return authorizationInfo;
     }
-
     // getCachedAuthenticationInfo
-
 }

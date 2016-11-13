@@ -117,7 +117,7 @@
                 <table id="cacheDataTable" data-options="border:false">
                     <thead>
                     <tr>
-                        <th data-options="width:450 ,align:'left',hidden:false ,field:'key'">Key</th>
+                        <th data-options="width:450 ,align:'left',hidden:false ,field:'key',formatter:pageJsObject.jobDataFormatter">Key</th>
                         <th data-options="width:300 ,align:'left',hidden:true ,field:'keyClass'">Key Class</th>
                         <th data-options="width:50 ,align:'left',hidden:false ,field:'value',formatter:pageJsObject.jobDataFormatter">value</th>
                         <th data-options="width:300 ,align:'left',hidden:false ,field:'valueClass'">Value Class</th>

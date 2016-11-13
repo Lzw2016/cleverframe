@@ -94,7 +94,9 @@ public class ResourcesDao extends BaseDao<Resources> {
     }
 
     /**
-     * 查询所有的资源关系信息
+     * 查询所有的资源关系信息 - 直接查询sys_resources_relation表
+     *
+     * @return 返回字段 resources_id,dependence_resources_id
      */
     @SuppressWarnings("unchecked")
     public List<Map<String, Object>> findAllResourcesRelation() {
@@ -118,6 +120,7 @@ public class ResourcesDao extends BaseDao<Resources> {
 
     /**
      * 根据资源路径(含有变量)查询资源
+     *
      * @param resourcesUrl 资源路径(含有变量)
      * @return 不存在返回null
      */
@@ -126,5 +129,19 @@ public class ResourcesDao extends BaseDao<Resources> {
         param.put("resourcesUrl", resourcesUrl);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.getResources");
         return hibernateDao.getBySql(sql, param);
+    }
+
+    /**
+     * 返回用户所有的资源信息(不包含软删除数据)<br/>
+     * <b>注意：数据量大时性能低下(5张表关联查询)</b>
+     *
+     * @param loginName 用户登录名
+     * @return 不存在返回空集合
+     */
+    public List<Resources> getResourcesByUser(String loginName) {
+        Parameter param = new Parameter(Resources.DEL_FLAG_NORMAL);
+        param.put("loginName", loginName);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.ResourcesDao.getResourcesByUser");
+        return hibernateDao.findBySql(sql, param);
     }
 }
