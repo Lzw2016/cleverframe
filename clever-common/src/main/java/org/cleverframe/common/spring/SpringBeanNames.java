@@ -151,7 +151,7 @@ public class SpringBeanNames implements IBeanNames {
     /**
      * 会话DAO，使用Ehcache进行会话存储
      */
-    public static final String EnterpriseCacheSessionDAO = "sessionDAO";
+    public static final String ShiroSessionDAO = "sessionDAO";
 
     /**
      * 会话Cookie模板
