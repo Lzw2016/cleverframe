@@ -17,8 +17,8 @@ import java.util.Date;
 
 /**
  * 使用数据库存储Shiro用户登录Session信息,方便计算和查询(分页)在线人数等信息<br/>
- * 参考 EnterpriseCacheSessionDAO
- * <p>
+ * 参考 EnterpriseCacheSessionDAO<br/>
+ * <b>注意：使用数据库存储Session信息性能不高，建议使用Redis缓存</b>
  * 作者：LiZW <br/>
  * 创建时间：2016/11/13 22:54 <br/>
  *
