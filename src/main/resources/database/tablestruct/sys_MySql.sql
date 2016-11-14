@@ -362,7 +362,9 @@ CREATE TABLE sys_login_session
     create_date         datetime        NOT NULL                            COMMENT '创建时间',
     update_date         datetime                                            COMMENT '更新时间',
     session_id          varchar(64)     NOT NULL    UNIQUE                  COMMENT '资源标题',
-    login_name          varchar(100)    NOT NULL                            COMMENT '用户登录名',                                            
+    on_line             char(1)         NOT NULL                            COMMENT '是否在线（0：否；1：是）',
+    login_name          varchar(100)                                        COMMENT '用户登录名',
+    host_ip             varchar(30)                                         COMMENT '登录的IP地址',
     session_object      MediumBlob      NOT NULL                            COMMENT 'Shiro框架Session对象序列化数据',
     PRIMARY KEY (id)
 ) COMMENT = '存储Shiro框架Session数据(此表数据只是用户登入Session数据，必要时可清空此表)';

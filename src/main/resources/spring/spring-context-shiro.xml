@@ -143,18 +143,12 @@
         <property name="storedCredentialsHexEncoded" value="${shiro.storedCredentialsHexEncoded}"/><!-- 表示是否存储散列后的密码为16进制，需要和生成密码时的一样，默认true，false表示Base64编码 -->
     </bean>
 
-    <!-- 会话DAO，使用Ehcache进行会话存储 -->
-    <!--<bean id="sessionDAO" class="org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO">-->
-        <!--&lt;!&ndash; 设置Session缓存名字，默认就是shiro-activeSessionCache &ndash;&gt;-->
-        <!--<property name="activeSessionsCacheName" value="${shiro.activeSessionsCacheName}"/>-->
-        <!--&lt;!&ndash; 会话ID生成器 &ndash;&gt;-->
-        <!--<property name="sessionIdGenerator">-->
-            <!--<bean class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>-->
-        <!--</property>-->
-    <!--</bean>-->
-
-    <!-- 会话DAO，使用数据库进行会话存储 -->
+    <!-- 会话DAO，使用数据库进行会话存储，使用Ehcache作为缓存 -->
     <bean id="sessionDAO" class="org.cleverframe.sys.shiro.DataBaseSessionDAO">
+        <!--构造方法注入操作数据库的Dao-->
+        <constructor-arg type="org.cleverframe.sys.service.LoginSessionService" ref="sys_LoginSessionService"/>
+        <!-- 设置Session缓存名字，默认就是shiro-activeSessionCache -->
+        <property name="activeSessionsCacheName" value="${shiro.activeSessionsCacheName}"/>
         <!-- 会话ID生成器 -->
         <property name="sessionIdGenerator">
             <bean class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>

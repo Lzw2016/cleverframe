@@ -57,18 +57,16 @@
         <filter-name>encodingFilter</filter-name>
         <url-pattern>/*</url-pattern>
     </filter-mapping>
-<!--
 
-    &lt;!&ndash; Hibernate 重要配置,解决Hibernate延迟加载问题 &ndash;&gt;
-    <filter>
-        <filter-name>openSessionInViewFilter</filter-name>
-        <filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>
-    </filter>
-    <filter-mapping>
-        <filter-name>openSessionInViewFilter</filter-name>
-        <url-pattern>/*</url-pattern>
-    </filter-mapping>
--->
+    <!-- Hibernate 重要配置,解决Hibernate延迟加载问题(有性能问题?) -->
+    <!--<filter>-->
+    <!--<filter-name>openSessionInViewFilter</filter-name>-->
+    <!--<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>-->
+    <!--</filter>-->
+    <!--<filter-mapping>-->
+    <!--<filter-name>openSessionInViewFilter</filter-name>-->
+    <!--<url-pattern>/*</url-pattern>-->
+    <!--</filter-mapping>-->
 
     <!-- Apache Shiro 安全过滤器-->
     <filter>
@@ -82,7 +80,7 @@
     <filter-mapping>
         <filter-name>shiroFilter</filter-name>
         <url-pattern>/*</url-pattern>
-         <dispatcher>REQUEST</dispatcher>
+        <dispatcher>REQUEST</dispatcher>
     </filter-mapping>
 
     <!-- Spring MVC -->
@@ -115,11 +113,11 @@
         <param-value>cleverframe.root</param-value>
     </context-param>
     <!--负责将 Web 应用根目录以 webAppRootKey 上下文参数指定的属性名添加到系统参数中-->
-<!--
-    <listener>
-        <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
-    </listener>
--->
+    <!--
+        <listener>
+            <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
+        </listener>
+    -->
 
     <!-- 设置log4j的配置文件位置 -->
     <context-param>
@@ -153,12 +151,12 @@
 
     <!-- 随机验证码 -->
     <!--<servlet>-->
-        <!--<servlet-name>validateCodeServlet</servlet-name>-->
-        <!--<servlet-class>org.cleverframe.common.servlet.ImageValidateCodeServlet</servlet-class>-->
+    <!--<servlet-name>validateCodeServlet</servlet-name>-->
+    <!--<servlet-class>org.cleverframe.common.servlet.ImageValidateCodeServlet</servlet-class>-->
     <!--</servlet>-->
     <!--<servlet-mapping>-->
-        <!--<servlet-name>validateCodeServlet</servlet-name>-->
-        <!--<url-pattern>/servlet/validateCode</url-pattern>-->
+    <!--<servlet-name>validateCodeServlet</servlet-name>-->
+    <!--<url-pattern>/servlet/validateCode</url-pattern>-->
     <!--</servlet-mapping>-->
 
     <!-- Session 配置 -->
@@ -186,7 +184,7 @@
             <location>/WEB-INF/views/error/404.html</location>
         </error-page>
     -->
-    
+
     <welcome-file-list>
         <welcome-file>/WEB-INF/modules/index.jsp</welcome-file>
     </welcome-file-list>

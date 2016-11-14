@@ -7,7 +7,10 @@
         dynamicConfig="true"
         defaultTransactionTimeoutInSeconds="15">
 
-    <!-- diskstore设置缓存文件 对所有的 cache 和 defaultCache 有效 -->
+    <!--
+        diskstore设置缓存文件 对所有的 cache 和 defaultCache 有效
+        磁盘存储位置 D:\Tomcat\apache-tomcat-8.0.38\temp\cleverframe\ehcache\default
+    -->
     <diskStore path="java.io.tmpdir/cleverframe/ehcache/default"/>
 
     <!-- defaultCache 默认的管理策略 -->

@@ -49,6 +49,16 @@ public class LoginSession extends IdEntity {
     @Column(columnDefinition = "MediumBlob")
     private byte[] sessionObject;
 
+    /**
+     * 是否在线（0：否；1：是）
+     */
+    private Character onLine;
+
+    /**
+     * 登录的IP地址
+     */
+    private String hostIp;
+
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
@@ -121,5 +131,33 @@ public class LoginSession extends IdEntity {
      */
     public void setSessionObject(byte[] sessionObject) {
         this.sessionObject = sessionObject;
+    }
+
+    /**
+     * 是否在线（0：否；1：是）
+     */
+    public Character getOnLine() {
+        return onLine;
+    }
+
+    /**
+     * 是否在线（0：否；1：是）
+     */
+    public void setOnLine(Character onLine) {
+        this.onLine = onLine;
+    }
+
+    /**
+     * 登录的IP地址
+     */
+    public String getHostIp() {
+        return hostIp;
+    }
+
+    /**
+     * 登录的IP地址
+     */
+    public void setHostIp(String hostIp) {
+        this.hostIp = hostIp;
     }
 }

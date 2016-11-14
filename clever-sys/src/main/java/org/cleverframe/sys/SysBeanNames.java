@@ -29,6 +29,7 @@ public class SysBeanNames implements IBeanNames {
     public static final String MenuService = "sys_MenuService";
     public static final String LoginLogService = "sys_LoginLogService";
     public static final String AuthorizingRealmService = "sys_AuthorizingRealmService";
+    public static final String LoginSessionService = "sys_LoginSessionService";
     public static final String OnlineUserService = "sys_OnlineUserService";
 
 
