@@ -83,9 +83,9 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         }
 
         // 获取当前url在数据库里配置的授权信息 - 验证授权
-        Resources resources = userPermissionsService.getResources(url);
+        Resources resources = userPermissionsService.getResourcesByCache(url);
         if (resources == null) {
-            resources = userPermissionsService.getResources(urlNoSuffix);
+            resources = userPermissionsService.getResourcesByCache(urlNoSuffix);
             if (resources == null) {
                 logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源未配置在资源表里", user.getLoginName(), url);
                 return false;

@@ -361,7 +361,7 @@ CREATE TABLE sys_login_session
     id                  bigint          NOT NULL    auto_increment          COMMENT '编号',
     create_date         datetime        NOT NULL                            COMMENT '创建时间',
     update_date         datetime                                            COMMENT '更新时间',
-    session_id          varchar(64)     NOT NULL    UNIQUE                  COMMENT '资源标题',
+    session_id          varchar(64)     NOT NULL    UNIQUE                  COMMENT 'Session ID',
     on_line             char(1)         NOT NULL                            COMMENT '是否在线（0：否；1：是）',
     login_name          varchar(100)                                        COMMENT '用户登录名',
     host_ip             varchar(30)                                         COMMENT '登录的IP地址',

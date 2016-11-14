@@ -1,6 +1,5 @@
 package org.cleverframe.sys.initialize;
 
-import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.initialize.IHandle;
 import org.cleverframe.common.spring.SpringBeanNames;
 import org.cleverframe.common.utils.IDCreateUtils;
@@ -41,24 +40,6 @@ public class ResourcesIniHandle implements IHandle {
     @Qualifier(SysBeanNames.EhCacheResourcesService)
     private EhCacheResourcesService ehCacheResourcesService;
 
-    /**
-     * 根据无变量的Url返回有变量的Url
-     *
-     * @param resourcesKey 无变量的Url
-     * @return 有变量的Url
-     */
-    private String getResourcesUrl(String resourcesKey) {
-        if (StringUtils.isBlank(resourcesKey)) {
-            return resourcesKey;
-        }
-        String resourcesUrl = resourcesKey;
-        resourcesUrl = resourcesUrl.replace(ehCacheResourcesService.getStaticPath(), "${" + EhCacheResourcesService.STATIC_PATH + "}");
-        resourcesUrl = resourcesUrl.replace(ehCacheResourcesService.getDocPath(), "${" + EhCacheResourcesService.DOC_PATH + "}");
-        resourcesUrl = resourcesUrl.replace(ehCacheResourcesService.getModulesPath(), "${" + EhCacheResourcesService.MODULES_PATH + "}");
-        resourcesUrl = resourcesUrl.replace(ehCacheResourcesService.getMvcPath(), "${" + EhCacheResourcesService.MVC_PATH + "}");
-        return resourcesUrl;
-    }
-
     // 新增数据库里没有的资源
     @Transactional(readOnly = false)
     @Override
@@ -76,7 +57,7 @@ public class ResourcesIniHandle implements IHandle {
         // 新增系统中所有的资源 - addUrlList
         List<String> addUrlList = new ArrayList<>();
         for (String url : urlList) {
-            String resourcesUrl = getResourcesUrl(url);
+            String resourcesUrl = ehCacheResourcesService.getResourcesUrl(url);
             Resources resources = resourcesDao.getResources(resourcesUrl);
             if (resources == null) {
                 Resources newResources = new Resources();

@@ -18,7 +18,7 @@ public class LoginSessionService extends BaseService {
 
     @Autowired
     @Qualifier(SysBeanNames.LoginSessionDao)
-    public LoginSessionDao loginSessionDao;
+    private LoginSessionDao loginSessionDao;
 
     /**
      * 根据session_id查询Session数据
@@ -34,7 +34,8 @@ public class LoginSessionService extends BaseService {
      */
     @Transactional(readOnly = false)
     public boolean update(LoginSession loginSession) {
-        loginSessionDao.getHibernateDao().update(loginSession);
+        loginSessionDao.getHibernateDao().get(loginSession.getId());
+        loginSessionDao.getHibernateDao().getSession().merge(loginSession);
         return true;
     }
 

@@ -33,7 +33,7 @@ public class LoginSession extends IdEntity {
     private Date updateDate;
 
     /**
-     * 资源标题
+     * Session ID
      */
     private String sessionId;
 
@@ -99,14 +99,14 @@ public class LoginSession extends IdEntity {
     }
 
     /**
-     * 设置 资源标题
+     * 设置 Session ID
      */
     public void setSessionId(String sessionId) {
         this.sessionId = sessionId;
     }
 
     /**
-     * 获取 用户登录名
+     * 获取 Session ID
      */
     public String getLoginName() {
         return loginName;

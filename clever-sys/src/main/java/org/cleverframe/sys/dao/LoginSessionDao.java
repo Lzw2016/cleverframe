@@ -1,10 +1,12 @@
 package org.cleverframe.sys.dao;
 
+import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.persistence.Parameter;
 import org.cleverframe.core.persistence.dao.BaseDao;
 import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.entity.LoginSession;
+import org.cleverframe.sys.vo.request.LoginSessionQueryVo;
 import org.springframework.stereotype.Repository;
 
 /**
@@ -13,6 +15,22 @@ import org.springframework.stereotype.Repository;
  */
 @Repository(SysBeanNames.LoginSessionDao)
 public class LoginSessionDao extends BaseDao<LoginSession> {
+
+    /**
+     * 分页查询在线用户(Session)信息
+     */
+    public Page<LoginSession> findByPage(Page<LoginSession> page, LoginSessionQueryVo loginSessionQueryVo) {
+        Parameter param = new Parameter();
+        param.put("createDateStart", loginSessionQueryVo.getCreateDateStart());
+        param.put("createDateEnd", loginSessionQueryVo.getCreateDateEnd());
+        param.put("updateDateStart", loginSessionQueryVo.getUpdateDateStart());
+        param.put("updateDateEnd", loginSessionQueryVo.getUpdateDateEnd());
+        param.put("loginName", loginSessionQueryVo.getLoginName());
+        param.put("onLine", loginSessionQueryVo.getOnLine());
+        param.put("hostIp", loginSessionQueryVo.getHostIp());
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.LoginSessionDao.findByPage");
+        return hibernateDao.findBySql(page, sql, param);
+    }
 
     /**
      * 根据session_id查询Session数据

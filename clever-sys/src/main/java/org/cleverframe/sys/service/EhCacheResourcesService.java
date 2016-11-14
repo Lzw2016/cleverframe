@@ -84,20 +84,17 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
         docPath = config.getConfig(BaseConfigNames.DOC_PATH);
     }
 
-    /**
-     * 字符串变量替换，如： 123${name}456 - [name='qwe'] => 123qwe456
-     *
-     * @param str           原字符串
-     * @param variableName  变量名称
-     * @param variableValue 变量值
-     * @return 替换后的字符串
-     */
-    private String replaceVariable(String str, String variableName, String variableValue) {
-        if (StringUtils.isBlank(str)) {
-            return str;
+    @Override
+    public String getResourcesUrl(String resourcesKey) {
+        if (StringUtils.isBlank(resourcesKey)) {
+            return resourcesKey;
         }
-        str = str.replace("${" + variableName + "}", variableValue);
-        return str;
+        String resourcesUrl = resourcesKey;
+        resourcesUrl = resourcesUrl.replace(staticPath, "${" + EhCacheResourcesService.STATIC_PATH + "}");
+        resourcesUrl = resourcesUrl.replace(mvcPath, "${" + EhCacheResourcesService.MVC_PATH + "}");
+        resourcesUrl = resourcesUrl.replace(modulesPath, "${" + EhCacheResourcesService.MODULES_PATH + "}");
+        resourcesUrl = resourcesUrl.replace(docPath, "${" + EhCacheResourcesService.DOC_PATH + "}");
+        return resourcesUrl;
     }
 
     @Override
@@ -105,11 +102,12 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
         if (StringUtils.isBlank(resourcesUrl)) {
             return "";
         }
-        String result = replaceVariable(resourcesUrl, STATIC_PATH, staticPath);
-        result = replaceVariable(result, MVC_PATH, mvcPath);
-        result = replaceVariable(result, MODULES_PATH, modulesPath);
-        result = replaceVariable(result, DOC_PATH, docPath);
-        return result;
+        String resourcesKey = resourcesUrl;
+        resourcesKey = resourcesKey.replace("${" + EhCacheResourcesService.STATIC_PATH + "}", staticPath);
+        resourcesKey = resourcesKey.replace("${" + EhCacheResourcesService.MVC_PATH + "}", mvcPath);
+        resourcesKey = resourcesKey.replace("${" + EhCacheResourcesService.MODULES_PATH + "}", modulesPath);
+        resourcesKey = resourcesKey.replace("${" + EhCacheResourcesService.DOC_PATH + "}", docPath);
+        return resourcesKey;
     }
 
     @Override
@@ -124,8 +122,15 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     }
 
     @Override
-    public Resources getResources(String resourcesKey) {
+    public Resources getResourcesByCache(String resourcesKey) {
         Element element = resourcesCache.get(resourcesKey);
+//        if (element == null) {
+//            Resources resources = resourcesDao.getResourcesByCache(getResourcesUrl(resourcesKey));
+//            if (resources != null) {
+//                element = new Element(resourcesKey, resources);
+//                resourcesCache.put(element);
+//            }
+//        }
         return element == null ? null : (Resources) element.getObjectValue();
     }
 
@@ -144,7 +149,7 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     }
 
     /**
-     * 保存资源信息
+     * 更新资源信息
      *
      * @return 成功返回true
      */

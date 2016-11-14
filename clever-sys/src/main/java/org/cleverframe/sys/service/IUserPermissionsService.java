@@ -14,11 +14,19 @@ import java.util.List;
 public interface IUserPermissionsService {
 
     /**
-     * 根据带有变量的Url获取实际的Url地址
+     * 根据 数据库保存的含有变量的Url 获取 实际的Url地址
      * @param resourcesUrl 数据库保存的含有变量的Url
      * @return 实际的Url地址
      */
     String getResourcesKey(String resourcesUrl);
+
+    /**
+     * 根据 无变量的Url 返回 数据库保存的含有变量的Url
+     *
+     * @param resourcesKey 无变量的Url
+     * @return 数据库保存的含有变量的Url
+     */
+    String getResourcesUrl(String resourcesKey);
 
     /**
      * 重新加载(缓存)全部资源，当资源更新后调用此方法
@@ -28,10 +36,10 @@ public interface IUserPermissionsService {
     List<Resources> reloadResources();
 
     /**
-     * 根据ResourcesKey从缓存中获取Resources
+     * 根据ResourcesKey从缓存中获取Resources(只从缓存中取)
      * @return 不存在返回null
      */
-    Resources getResources(String resourcesKey);
+    Resources getResourcesByCache(String resourcesKey);
 
     /**
      * 保存资源信息,顺便保存到缓存中
