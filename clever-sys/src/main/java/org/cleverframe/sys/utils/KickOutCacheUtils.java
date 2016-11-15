@@ -38,7 +38,7 @@ public class KickOutCacheUtils {
 
     /**
      * 返回需要踢出的人的
-     *
+     * <p>
      * 根据登入名称获取所有登录的SessionID集合,如果集合中不包含当前SessionID或集合为空,就把当前SessionID存入集合 并保存到缓存中<br/>
      * 移除无效的SessionID 和 未登录的SessionID<br/>
      * <b>注意:此方法是同步方法 保证线程安全</b>
@@ -88,11 +88,10 @@ public class KickOutCacheUtils {
                 invalidSessionId.add(sId);
             }
         }
-        if (invalidSessionId.size() > 0) {
-            isSave = true;
-        }
+        // 移除失效的Session
         for (Serializable sId : invalidSessionId) {
             loginSessionDeque.remove(sId);
+            isSave = true;
         }
         // 踢出用户
         List<Serializable> kickOutSessionIdList = new ArrayList<>();
@@ -113,5 +112,25 @@ public class KickOutCacheUtils {
             cache.put(element);
         }
         return kickOutSessionIdList;
+    }
+
+    /**
+     * 移除ShiroKickOutCache缓存中失效的Session(Session过期或者用户已经登出)
+     */
+    @SuppressWarnings("unchecked")
+    public static void removeInvalidSessionId(String loginName, Serializable sessionId) {
+        Cache cache = getKickOutCache();
+        Element element = cache.get(loginName);
+        if (element == null) {
+            return;
+        }
+        Object object = element.getObjectValue();
+        if ((object == null) || !(object instanceof Deque)) {
+            cache.remove(loginName);
+            return;
+        }
+        Deque<Serializable> loginSessionDeque = (Deque<Serializable>) object;
+        loginSessionDeque.remove(sessionId);
+        cache.put(element);
     }
 }

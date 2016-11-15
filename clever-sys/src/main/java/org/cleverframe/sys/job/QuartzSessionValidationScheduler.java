@@ -73,7 +73,8 @@ public class QuartzSessionValidationScheduler implements SessionValidationSchedu
     /**
      * 默认的构造
      */
-    public QuartzSessionValidationScheduler() {
+    public QuartzSessionValidationScheduler(Scheduler scheduler) {
+        this.scheduler =scheduler;
     }
 
     /**

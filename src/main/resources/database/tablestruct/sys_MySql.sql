@@ -378,12 +378,13 @@ CREATE TABLE sys_login_session
 ==================================================================================================================== */
 CREATE TABLE sys_login_log
 (
-    id              bigint          NOT NULL    auto_increment          COMMENT '编号',
-    login_name      varchar(100)    NOT NULL                            COMMENT '登录名',
-    login_time      datetime        NOT NULL                            COMMENT '登录时间',
-    login_ip        varchar(30)                                         COMMENT '登录的IP地址',
-    user_agent      varchar(100)                                        COMMENT '用户代理，客户端信息或浏览器信息',
-    user_info       varchar(5000)                                       COMMENT '用户信息，Json格式数据',
+    id                  bigint          NOT NULL    auto_increment          COMMENT '编号',
+    login_name          varchar(100)    NOT NULL                            COMMENT '登录名',
+    login_time          datetime        NOT NULL                            COMMENT '登录时间',
+    login_operation     varchar(32)     NOT NULL                            COMMENT '登录操作（login或logout）',
+    login_ip            varchar(30)                                         COMMENT '登录的IP地址',
+    user_agent          varchar(100)                                        COMMENT '用户代理，客户端信息或浏览器信息',
+    user_info           varchar(5000)                                       COMMENT '用户信息，Json格式数据',
     PRIMARY KEY (id)
 ) COMMENT = '用户登录日志表';
 /*------------------------------------------------------------------------------------------------------------------------

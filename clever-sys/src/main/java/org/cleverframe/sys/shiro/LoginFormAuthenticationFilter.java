@@ -7,9 +7,14 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.common.utils.ConversionUtils;
+import org.cleverframe.common.utils.UserAgentUtils;
 import org.cleverframe.common.vo.ValidateCode;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.sys.attributes.SysSessionAttributes;
+import org.cleverframe.sys.entity.LoginLog;
+import org.cleverframe.sys.entity.User;
+import org.cleverframe.sys.service.LoginLogService;
+import org.cleverframe.sys.utils.HttpSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -17,6 +22,7 @@ import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.Date;
 
 /**
  * 实现Shiro基于Form表单的身份验证过滤器，用于用户登录<br/>
@@ -47,6 +53,12 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
      * 用户登录表单的验证码参数名，Spring容器注册时需要指定该属性的值
      */
     private String captchaParam = "validateCode";
+
+    private LoginLogService loginLogService;
+
+    public LoginFormAuthenticationFilter(LoginLogService loginLogService) {
+        this.loginLogService = loginLogService;
+    }
 
     /**
      * 处理登录表单中的参数，根据登录表单的参数生成 AuthenticationToken<br>
@@ -150,8 +162,7 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
             int count = NumberUtils.toInt(temp == null ? null : temp.toString(), 0);
             count++;
             session.setAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT, count);
-            // TODO 移除当前请求Session中的用户相关属性
-            session.removeAttribute(SysSessionAttributes.LOGIN_USER);
+            HttpSessionUtils.logout(session);
             if (!(token instanceof UserLoginToken)) {
                 throw new UserLoginException(UserLoginException.System_Exception, "Token转换UserLoginToken失败");
             }
@@ -194,9 +205,19 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
             throw new UserLoginException(UserLoginException.System_Exception, "用户授权信息转换失败(UserPrincipal)");
         }
         UserPrincipal principal = (UserPrincipal) object;
-        session.setAttribute(SysSessionAttributes.LOGIN_USER, principal.getUser());
+        User user = principal.getUser();
+        session.setAttribute(SysSessionAttributes.LOGIN_USER, user);
         // TODO 把当前用户相关信息加入到Session中
 
+        // 保存登录日志
+        LoginLog loginLog = new LoginLog();
+        loginLog.setLoginName(user.getLoginName());
+        loginLog.setLoginTime(new Date());
+        loginLog.setLoginOperation(LoginLog.LOGIN);
+        loginLog.setLoginIp(request.getRemoteAddr());
+        loginLog.setUserAgent(UserAgentUtils.getUserAgent((HttpServletRequest) request).toString());
+        loginLog.setUserInfo(JacksonMapper.nonEmptyMapper().toJson(user));
+        loginLogService.save(loginLog);
         logger.debug("[{}]登录成功", principal.getUser().getLoginName());
         return super.onLoginSuccess(token, subject, request, response);
     }

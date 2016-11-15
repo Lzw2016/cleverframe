@@ -101,7 +101,15 @@
         <property name="sessionIdCookieEnabled" value="${shiro.sessionIdCookieEnabled}"/><!-- 是否启用Session Id Cookie，默认是启用的 -->
         <property name="sessionDAO" ref="sessionDAO"/><!-- 会话DAO -->
         <property name="sessionIdCookie" ref="sessionIdCookie"/><!-- 会话Cookie模板 -->
-        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler" />&lt;!&ndash; 会话验证调度器 &ndash;&gt;-->
+        <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>&lt;!&ndash; 会话验证调度器 &ndash;&gt;-->
+        <!--Session 监听器-->
+        <property name="sessionListeners">
+            <list>
+                <bean class="org.cleverframe.sys.shiro.UserSessionListener">
+                    <constructor-arg type="org.cleverframe.sys.service.LoginLogService" ref="sys_LoginLogService"/>
+                </bean>
+            </list>
+        </property>
     </bean>
 
     <!-- 安全管理器 - rememberMe管理器 -->
@@ -120,6 +128,7 @@
 
     <!-- 用户登入验证过滤器 - 基于Form表单的身份验证过滤器，用于验证用户身份信息 -->
     <bean id="loginFormAuthenticationFilter" class="org.cleverframe.sys.shiro.LoginFormAuthenticationFilter">
+        <constructor-arg type="org.cleverframe.sys.service.LoginLogService" ref="sys_LoginLogService"/>
         <property name="loginUrl" value="${shiro.loginUrl}"/><!-- 设置用户登录表单请求的请求地址 -->
         <property name="usernameParam" value="${shiro.usernameParam}"/><!-- 设置用户登录表单请求的"用户名"参数名 -->
         <property name="passwordParam" value="${shiro.passwordParam}"/><!-- 设置用户登录表单请求的"密码"参数名 -->
@@ -135,11 +144,11 @@
     <!--用户被踢出出过滤器-检查用户是否被踢出-->
     <bean id="kickOutSessionFilter" class="org.cleverframe.sys.shiro.KickOutSessionFilter">
         <!--当用户被踢出后，跳转的Url地址-->
-        <property name="kickOutUrl" value="${shiro.kickOutUrl}" />
+        <property name="kickOutUrl" value="${shiro.kickOutUrl}"/>
         <!--默认 后登陆系统的踢出之前登录系统的(先登录的被踢出)-->
-        <property name="kickOutBefore" value="${shiro.kickOutBefore}" />
+        <property name="kickOutBefore" value="${shiro.kickOutBefore}"/>
         <!--同一个用户最多同时登入几次(默认1次)-->
-        <property name="maxLoginCount" value="${shiro.maxLoginCount}" />
+        <property name="maxLoginCount" value="${shiro.maxLoginCount}"/>
     </bean>
 
     <!-- 自定义Shiro权限解析器，把权限字符串解析成Permission对象 -->
@@ -185,9 +194,10 @@
         <property name="arguments" ref="securityManager"/>
     </bean>
 
-    <!-- 会话验证调度器 -->
-    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler" init-method="enableSessionValidation"
-          destroy-method="disableSessionValidation">
+    <!-- 会话验证调度器 init-method="enableSessionValidation" destroy-method="disableSessionValidation"-->
+    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler">
+        <!--注入定时任务调度器-->
+        <constructor-arg type="org.quartz.Scheduler" ref="schedulerFactoryBean"/>
         <!--<property name="enabled" value="true"/>-->
         <property name="sessionValidationInterval" value="${shiro.sessionValidationInterval}"/><!-- 会话验证的时间间隔，默认60分钟 -->
         <property name="sessionManager" ref="shiroSessionManager"/><!-- 设置对应的shiro会话管理器 -->

@@ -22,6 +22,16 @@ public class LoginLog extends IdEntity {
     private static final long serialVersionUID = 1L;
 
     /**
+     * 登录操作（login或logout）
+     */
+    public static final String LOGIN="login";
+
+    /**
+     * 登录操作（login或logout）
+     */
+    public static final String LOGOUT="logout";
+
+    /**
      * 登录名
      */
     private String loginName;
@@ -30,6 +40,11 @@ public class LoginLog extends IdEntity {
      * 登录时间
      */
     private Date loginTime;
+
+    /**
+     * 登录操作（login或logout）
+     */
+    private String loginOperation;
 
     /**
      * 登录的IP地址
@@ -76,6 +91,20 @@ public class LoginLog extends IdEntity {
      */
     public void setLoginTime(Date loginTime) {
         this.loginTime = loginTime;
+    }
+
+    /**
+     * 登录操作（login或logout）
+     */
+    public String getLoginOperation() {
+        return loginOperation;
+    }
+
+    /**
+     * 登录操作（login或logout）
+     */
+    public void setLoginOperation(String loginOperation) {
+        this.loginOperation = loginOperation;
     }
 
     /**
