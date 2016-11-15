@@ -4,11 +4,10 @@ import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
-import org.apache.shiro.subject.support.DefaultSubjectContext;
-import org.cleverframe.sys.attributes.SysSessionAttributes;
 import org.cleverframe.sys.entity.LoginSession;
 import org.cleverframe.sys.entity.User;
 import org.cleverframe.sys.service.LoginSessionService;
+import org.cleverframe.sys.utils.ShiroSessionUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -24,59 +23,16 @@ import java.util.Date;
  *
  * @see org.apache.shiro.session.mgt.eis.EnterpriseCacheSessionDAO
  */
-public class DataBaseSessionDAO extends CachingSessionDAO {
+public class DataBaseSessionDao extends CachingSessionDAO {
     /**
      * 日志对象
      */
-    private final static Logger logger = LoggerFactory.getLogger(DataBaseSessionDAO.class);
+    private final static Logger logger = LoggerFactory.getLogger(DataBaseSessionDao.class);
 
     private LoginSessionService loginSessionService;
 
-    public DataBaseSessionDAO(LoginSessionService loginSessionService) {
+    public DataBaseSessionDao(LoginSessionService loginSessionService) {
         this.loginSessionService = loginSessionService;
-    }
-
-    /**
-     * 从Shiro Session中获取user对象
-     *
-     * @param session Shiro Session
-     * @return 不存在返回null
-     */
-    private User getUserBySession(Session session) {
-        if (session == null || session.getAttribute(SysSessionAttributes.LOGIN_USER) == null) {
-            return null;
-        }
-        Object object = session.getAttribute(SysSessionAttributes.LOGIN_USER);
-        if (!(object instanceof User)) {
-            logger.error("Shiro Session中的属性值不能转换成User对象，属性[{}]", SysSessionAttributes.LOGIN_USER);
-            return null;
-        }
-        return (User) object;
-    }
-
-    /**
-     * 从Shiro Session中获取 用户是否登录通过
-     *
-     * @param session Shiro Session
-     * @return {@link org.cleverframe.core.persistence.entity.BaseEntity#YES} 或者 {@link org.cleverframe.core.persistence.entity.BaseEntity#NO}
-     */
-    private Character getIsOnLineBySession(Session session) {
-        Character result = User.NO;
-        if (session == null) {
-            return result;
-        }
-        if (session.getAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY) != null) {
-            if ("true".equalsIgnoreCase(session.getAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY).toString())) {
-                result = User.YES;
-            } else if ("false".equalsIgnoreCase(session.getAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY).toString())) {
-                result = User.NO;
-            } else {
-                logger.error("Shiro Session用户是否登录通过属性值未知，{}={}",
-                        DefaultSubjectContext.AUTHENTICATED_SESSION_KEY,
-                        session.getAttribute(DefaultSubjectContext.AUTHENTICATED_SESSION_KEY));
-            }
-        }
-        return result;
     }
 
     /**
@@ -93,12 +49,12 @@ public class DataBaseSessionDAO extends CachingSessionDAO {
         if (loginSession == null) {
             loginSession = new LoginSession();
         }
-        User user = getUserBySession(session);
+        User user = ShiroSessionUtils.getUserBySession(session);
         String sessionId = (String) session.getId();
         loginSession.setSessionId(sessionId);
         loginSession.setLoginName(user == null ? null : user.getLoginName());
         loginSession.setSessionObject(SerializationUtils.serialize((Serializable) session));
-        loginSession.setOnLine(getIsOnLineBySession(session));
+        loginSession.setOnLine(ShiroSessionUtils.getIsOnLineBySession(session));
         loginSession.setHostIp(session.getHost());
         return loginSession;
     }
@@ -113,6 +69,7 @@ public class DataBaseSessionDAO extends CachingSessionDAO {
             logger.error("Shiro Session ID 不能为空 - doUpdate");
             return;
         }
+        // TODO 如果只更新了时间 LastAccessTime 可以判断LastAccessTime时间修改值大于一个固定时间才修改，减少更新Session次数，提高性能
         LoginSession loginSession = loginSessionService.getBySessionId(sessionId);
         if (loginSession == null) {
             doCreate(session);

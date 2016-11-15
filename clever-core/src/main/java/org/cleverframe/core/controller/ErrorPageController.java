@@ -37,4 +37,9 @@ public class ErrorPageController extends BaseController {
     public ModelAndView get503(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView(CoreJspUrlPath.Error503);
     }
+
+    @RequestMapping("/KickOut" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getKickOut(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(CoreJspUrlPath.KickOut);
+    }
 }

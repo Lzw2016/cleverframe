@@ -134,6 +134,11 @@ public class SpringBeanNames implements IBeanNames {
     public static final String UserPermissionsAuthorizationFilter = "userPermissionsAuthorizationFilter";
 
     /**
+     * 用户访问资源授权过滤器，检验权限
+     */
+    public static final String KickOutSessionFilter = "kickOutSessionFilter";
+
+    /**
      * 自定义Shiro权限解析器，把权限字符串解析成Permission对象
      */
     public static final String UserPermissionResolver = "permissionResolver";

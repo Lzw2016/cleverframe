@@ -34,6 +34,8 @@
                 <entry key="authc" value-ref="loginFormAuthenticationFilter"/>
                 <!--用户访问资源授权过滤器，检验权限-->
                 <entry key="perms" value-ref="userPermissionsAuthorizationFilter"/>
+                <!--用户被踢出过滤器-检查用户是否被踢出-->
+                <entry key="kickout" value-ref="kickOutSessionFilter"/>
             </map>
         </property>
         <property name="filterChainDefinitions">
@@ -56,12 +58,12 @@
                 /${base.mvcPath}/sys/login/Login.html = anon
                 /${base.modulesPath}/sys/Login.css = anon
                 /${base.modulesPath}/sys/Login.js = anon
-                <!--允许访问登录请求地址-->
-                /${base.mvcPath}/sys/login/userLogin.json = authc
                 <!--允许访问登出地址-->
                 /${base.mvcPath}/sys/login/userLogout.json = logout
+                <!--允许访问登录请求地址-->
+                /${base.mvcPath}/sys/login/userLogin.json = authc
                 <!--其他资源需要用户登入而且有相应的权限才能访问-->
-                /** = user,perms
+                /** = user,perms,kickout
             </value>
         </property>
     </bean>
@@ -130,6 +132,16 @@
     <!--用户访问资源授权过滤器，检验权限-->
     <bean id="userPermissionsAuthorizationFilter" class="org.cleverframe.sys.shiro.UserPermissionsAuthorizationFilter"/>
 
+    <!--用户被踢出出过滤器-检查用户是否被踢出-->
+    <bean id="kickOutSessionFilter" class="org.cleverframe.sys.shiro.KickOutSessionFilter">
+        <!--当用户被踢出后，跳转的Url地址-->
+        <property name="kickOutUrl" value="${shiro.kickOutUrl}" />
+        <!--默认 后登陆系统的踢出之前登录系统的(先登录的被踢出)-->
+        <property name="kickOutBefore" value="${shiro.kickOutBefore}" />
+        <!--同一个用户最多同时登入几次(默认1次)-->
+        <property name="maxLoginCount" value="${shiro.maxLoginCount}" />
+    </bean>
+
     <!-- 自定义Shiro权限解析器，把权限字符串解析成Permission对象 -->
     <bean id="permissionResolver" class="org.cleverframe.sys.shiro.UserPermissionResolver"/>
 
@@ -144,7 +156,7 @@
     </bean>
 
     <!-- 会话DAO，使用数据库进行会话存储，使用Ehcache作为缓存 -->
-    <bean id="sessionDAO" class="org.cleverframe.sys.shiro.DataBaseSessionDAO">
+    <bean id="sessionDAO" class="org.cleverframe.sys.shiro.DataBaseSessionDao">
         <!--构造方法注入操作数据库的Dao-->
         <constructor-arg type="org.cleverframe.sys.service.LoginSessionService" ref="sys_LoginSessionService"/>
         <!-- 设置Session缓存名字，默认就是shiro-activeSessionCache -->

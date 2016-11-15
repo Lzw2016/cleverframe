@@ -110,6 +110,17 @@
             diskPersistent="true"
             diskExpiryThreadIntervalSeconds="600"/>
 
+    <!-- 用于存储登录的用户和其SessionID关系结构数据，用于实现限制一个用户并发登录数量-->
+    <cache
+            name="shiroKickOutCache"
+            maxElementsInMemory="100"
+            overflowToDisk="true"
+            eternal="true"
+            timeToLiveSeconds="0"
+            timeToIdleSeconds="0"
+            diskPersistent="true"
+            diskExpiryThreadIntervalSeconds="600"/>
+
     <!--
         <cache
             name="org.apache.shiro.realm.text.PropertiesRealm-0-accounts"

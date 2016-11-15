@@ -30,6 +30,11 @@ public class CoreJspUrlPath implements IJspUrlPath {
      */
     public static final String Error503 = "error/503";
 
+    /**
+     * 服务不可用
+     */
+    public static final String KickOut = "error/KickOut";
+
     // =======================================================================================================================================
 
     /**

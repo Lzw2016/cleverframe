@@ -52,5 +52,10 @@ public class EhCacheNames {
      */
     public static final String ShiroAuthorizationCache = "shiroAuthorizationCache";
 
+    /**
+     * 用于存储登录的用户和其SessionID关系结构数据，用于实现限制一个用户并发登录数量
+     */
+    public static final String ShiroKickOutCache = "shiroKickOutCache";
+
 
 }
