@@ -58,10 +58,12 @@
                 /${base.mvcPath}/sys/login/Login.html = anon
                 /${base.modulesPath}/sys/Login.css = anon
                 /${base.modulesPath}/sys/Login.js = anon
-                <!--允许访问登出地址-->
-                /${base.mvcPath}/sys/login/userLogout.json = logout
+                <!--获取登录是否需要验证码 -->
+                /${base.mvcPath}/sys/login/needLoginValidateCode.json = anon
                 <!--允许访问登录请求地址-->
                 /${base.mvcPath}/sys/login/userLogin.json = authc
+                <!--允许访问登出地址-->
+                /${base.mvcPath}/sys/login/userLogout.json = logout
                 <!--其他资源需要用户登入而且有相应的权限才能访问-->
                 /** = user,perms,kickout
             </value>

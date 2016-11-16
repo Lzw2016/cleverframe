@@ -16,6 +16,7 @@ import org.cleverframe.sys.SysJspUrlPath;
 import org.cleverframe.sys.attributes.SysSessionAttributes;
 import org.cleverframe.sys.shiro.LoginFormAuthenticationFilter;
 import org.cleverframe.sys.shiro.UserLoginException;
+import org.cleverframe.sys.utils.HttpSessionUtils;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -53,9 +54,9 @@ public class LoginController extends BaseController {
         response.getOutputStream().write(outputStream.toByteArray());
         if (StringUtils.isNotBlank(content)) {
             ValidateCode validateCode = new ValidateCode(System.currentTimeMillis(), content);
-            request.getSession().setAttribute(SysSessionAttributes.LOGIN_VALIDATE_CODE, validateCode);
+            HttpSessionUtils.setLoginValidateCode(request.getSession(), validateCode);
         } else {
-            request.getSession().removeAttribute(SysSessionAttributes.LOGIN_VALIDATE_CODE);
+            HttpSessionUtils.getLoginValidateCode(request.getSession());
             response.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR, "生成验证码失败");
         }
     }
@@ -115,6 +116,24 @@ public class LoginController extends BaseController {
             ajaxMessage.setNeedValidateCode(true);
         }
         return ajaxMessage;
+    }
+
+    /**
+     * 用户登录是否需要验证码
+     */
+    @RequestMapping("/needLoginValidateCode")
+    @ResponseBody
+    public AjaxMessage<Boolean> needLoginValidateCode(HttpServletRequest request, HttpServletResponse response) {
+        AjaxMessage<Boolean> message = new AjaxMessage<>(true, "请求成功", null);
+        LoginFormAuthenticationFilter lfaf = SpringContextHolder.getBean(SpringBeanNames.LoginFormAuthenticationFilter);
+        if(lfaf == null){
+            message.setSuccess(false);
+            message.setFailMessage("请求失败");
+        }else{
+        int loginFailedCount = HttpSessionUtils.getLoginFailedCount(request.getSession());
+            message.setResult(loginFailedCount >= lfaf.getLoginFailedMaxCount());
+        }
+        return message;
     }
 
 

@@ -1,16 +1,13 @@
 package org.cleverframe.sys.shiro;
 
-import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.authc.AuthenticationException;
 import org.apache.shiro.authc.AuthenticationToken;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authc.FormAuthenticationFilter;
 import org.cleverframe.common.mapper.JacksonMapper;
-import org.cleverframe.common.utils.ConversionUtils;
 import org.cleverframe.common.utils.UserAgentUtils;
 import org.cleverframe.common.vo.ValidateCode;
 import org.cleverframe.common.vo.response.AjaxMessage;
-import org.cleverframe.sys.attributes.SysSessionAttributes;
 import org.cleverframe.sys.entity.LoginLog;
 import org.cleverframe.sys.entity.User;
 import org.cleverframe.sys.service.LoginLogService;
@@ -110,11 +107,9 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
             HttpSession session = ((HttpServletRequest) request).getSession();
 
             // 登录次数过多必须使用验证码 - 验证验证码
-            int loginFailedCount = ConversionUtils.converter(session.getAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT), 0);
+            int loginFailedCount = HttpSessionUtils.getLoginFailedCount(session);
             if (loginFailedCount >= this.loginFailedMaxCount) {
-                ValidateCode captcha = (ValidateCode) session.getAttribute(SysSessionAttributes.LOGIN_VALIDATE_CODE);
-                session.removeAttribute(SysSessionAttributes.LOGIN_VALIDATE_CODE);
-
+                ValidateCode captcha = HttpSessionUtils.getLoginValidateCode(session);
                 // 判断验证码存在
                 if (captcha == null) {
                     throw new UserLoginException(UserLoginException.Not_Validate_Code, "连续登录失败次数过多，必须要使用验证码登录");
@@ -158,10 +153,9 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
             }
             HttpSession session = ((HttpServletRequest) request).getSession();
             // Session 属性中用户连续登录失败次数加 1
-            Object temp = session.getAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT);
-            int count = NumberUtils.toInt(temp == null ? null : temp.toString(), 0);
+            int count = HttpSessionUtils.getLoginFailedCount(session);
             count++;
-            session.setAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT, count);
+            HttpSessionUtils.setLoginFailedCount(session, count);
             HttpSessionUtils.logout(session);
             if (!(token instanceof UserLoginToken)) {
                 throw new UserLoginException(UserLoginException.System_Exception, "Token转换UserLoginToken失败");
@@ -198,7 +192,7 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
         }
         HttpSession session = ((HttpServletRequest) request).getSession();
         // Session属性中用户连续登录失败次数清零
-        session.setAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT, 0);
+        HttpSessionUtils.setLoginFailedCount(session, 0);
         // 把当前用户加入到Session中
         Object object = subject.getPrincipal();
         if (!(object instanceof UserPrincipal)) {
@@ -206,7 +200,7 @@ public class LoginFormAuthenticationFilter extends FormAuthenticationFilter {
         }
         UserPrincipal principal = (UserPrincipal) object;
         User user = principal.getUser();
-        session.setAttribute(SysSessionAttributes.LOGIN_USER, user);
+        HttpSessionUtils.setLoginUser(session, user);
         // TODO 把当前用户相关信息加入到Session中
 
         // 保存登录日志

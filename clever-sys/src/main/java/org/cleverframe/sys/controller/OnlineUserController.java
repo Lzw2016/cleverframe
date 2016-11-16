@@ -7,6 +7,7 @@ import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.entity.LoginSession;
 import org.cleverframe.sys.service.OnlineUserService;
+import org.cleverframe.sys.vo.request.KickOutUserVo;
 import org.cleverframe.sys.vo.request.LoginSessionQueryVo;
 import org.cleverframe.sys.vo.request.SessionGetVo;
 import org.cleverframe.webui.easyui.data.DataGridJson;
@@ -80,5 +81,20 @@ public class OnlineUserController extends BaseController {
         return message;
     }
 
-
+    /**
+     * 手动踢出用户(强制使用户下线)
+     */
+    @RequestMapping("/kickOutUser")
+    @ResponseBody
+    public AjaxMessage<String> kickOutUser(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid KickOutUserVo kickOutUserVo,
+            BindingResult bindingResult) {
+        AjaxMessage<String> message = new AjaxMessage<>(true, "踢出用户成功", null);
+        if (beanValidator(bindingResult, message)) {
+            onlineUserService.kickOutUser(kickOutUserVo.getSessionId(), message);
+        }
+        return message;
+    }
 }
