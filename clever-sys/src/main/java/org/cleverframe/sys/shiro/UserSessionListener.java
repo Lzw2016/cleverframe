@@ -45,6 +45,7 @@ public class UserSessionListener implements SessionListener {
     @Override
     public void onStop(Session session) {
         logger.debug("Shiro Session[退出/过期]，ID={}", session.getId());
+
         User user = ShiroSessionUtils.getUserBySession(session);
         // 移除ShiroKickOutCache缓存中失效的Session(Session过期或者用户已经登出)
         if (user != null && user.getLoginName() != null) {

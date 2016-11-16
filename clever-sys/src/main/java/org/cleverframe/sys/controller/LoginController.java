@@ -1,5 +1,6 @@
 package org.cleverframe.sys.controller;
 
+import org.apache.commons.io.output.ByteArrayOutputStream;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.apache.shiro.SecurityUtils;
@@ -47,7 +48,9 @@ public class LoginController extends BaseController {
         response.setHeader("Cache-Control", "no-cache");
         response.setDateHeader("Expires", 0);
         response.setContentType("image/jpeg");
-        String content = ImageValidateCageUtils.createImageStream(response.getOutputStream());
+        ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
+        String content = ImageValidateCageUtils.createImageStream(outputStream);
+        response.getOutputStream().write(outputStream.toByteArray());
         if (StringUtils.isNotBlank(content)) {
             ValidateCode validateCode = new ValidateCode(System.currentTimeMillis(), content);
             request.getSession().setAttribute(SysSessionAttributes.LOGIN_VALIDATE_CODE, validateCode);

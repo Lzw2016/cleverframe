@@ -99,9 +99,13 @@
         <property name="globalSessionTimeout" value="${shiro.globalSessionTimeout}"/><!-- 设置全局会话超时时间，默认30分钟，即如果30分钟内没有访问会话将过期-->
         <property name="deleteInvalidSessions" value="${shiro.deleteInvalidSessions}"/><!-- 是否删除过期的会话,默认是开启的 -->
         <property name="sessionIdCookieEnabled" value="${shiro.sessionIdCookieEnabled}"/><!-- 是否启用Session Id Cookie，默认是启用的 -->
-        <property name="sessionDAO" ref="sessionDAO"/><!-- 会话DAO -->
         <property name="sessionIdCookie" ref="sessionIdCookie"/><!-- 会话Cookie模板 -->
+        <property name="sessionDAO" ref="sessionDAO"/><!-- 会话DAO -->
         <!--<property name="sessionValidationScheduler" ref="sessionValidationScheduler"/>&lt;!&ndash; 会话验证调度器 &ndash;&gt;-->
+        <!--设置Session创建工厂，使用自定义的Session-->
+        <property name="sessionFactory">
+            <bean class="org.cleverframe.sys.shiro.ShiroSessionFactory"/>
+        </property>
         <!--Session 监听器-->
         <property name="sessionListeners">
             <list>

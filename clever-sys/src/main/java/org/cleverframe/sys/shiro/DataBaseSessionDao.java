@@ -3,6 +3,7 @@ package org.cleverframe.sys.shiro;
 import org.apache.commons.lang3.SerializationUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.session.Session;
+import org.apache.shiro.session.mgt.ValidatingSession;
 import org.apache.shiro.session.mgt.eis.CachingSessionDAO;
 import org.cleverframe.sys.entity.LoginSession;
 import org.cleverframe.sys.entity.User;
@@ -48,6 +49,9 @@ public class DataBaseSessionDao extends CachingSessionDAO {
         }
         if (loginSession == null) {
             loginSession = new LoginSession();
+            loginSession.setCreateDate(new Date());
+        } else {
+            loginSession.setUpdateDate(new Date());
         }
         User user = ShiroSessionUtils.getUserBySession(session);
         String sessionId = (String) session.getId();
@@ -64,40 +68,41 @@ public class DataBaseSessionDao extends CachingSessionDAO {
      */
     @Override
     protected void doUpdate(Session session) {
+        // 如果会话过期/停止 没必要再更新了
+        if (session instanceof ValidatingSession && !((ValidatingSession) session).isValid()) {
+            return;
+        }
+        // 验证Session类型
+        if (!(session instanceof ShiroSession)) {
+            throw new RuntimeException("必须使用ShiroSession，当前Session类型:" + session.getClass().getName());
+        }
+        // 验证Session ID
         String sessionId = (String) session.getId();
         if (StringUtils.isBlank(sessionId)) {
             logger.error("Shiro Session ID 不能为空 - doUpdate");
             return;
         }
-        // TODO 如果只更新了时间 LastAccessTime 可以判断LastAccessTime时间修改值大于一个固定时间才修改，减少更新Session次数，提高性能
+        // 验证Session是否需呀更新到存储中 - (判断Session是否修改)
+        ShiroSession shiroSession = (ShiroSession) session;
+        if (!shiroSession.isChanged()) {
+            logger.debug("Session未修改，不需要更新, SessionId=[{}]", sessionId);
+            return;
+        }
+        // 更新Session到存储
         LoginSession loginSession = loginSessionService.getBySessionId(sessionId);
         if (loginSession == null) {
             doCreate(session);
             return;
         }
-        loginSession = getLoginSessionBySession(session, loginSession);
-        loginSession.setUpdateDate(new Date());
-        loginSessionService.update(loginSession);
+        try {
+            shiroSession.setChanged(false);
+            loginSession = getLoginSessionBySession(session, loginSession);
+            loginSessionService.update(loginSession);
+        } catch (Throwable e) {
+            shiroSession.setChanged(true);
+            throw e;
+        }
         logger.debug("Session更新成功, SessionId=[{}]", sessionId);
-    }
-
-    /**
-     * 调用delete时，先从缓存中移除Session，再调用doDelete
-     */
-    @Override
-    protected void doDelete(Session session) {
-        String sessionId = (String) session.getId();
-        if (StringUtils.isBlank(sessionId)) {
-            logger.error("Shiro Session ID 不能为空 - doDelete");
-            return;
-        }
-        boolean flag = loginSessionService.deleteBySessionId(sessionId);
-        if (!flag) {
-            RuntimeException exception = new RuntimeException("Shiro Session 删除失败");
-            logger.error(exception.getMessage(), exception);
-        } else {
-            logger.debug("Session删除成功, SessionId=[{}]", sessionId);
-        }
     }
 
     /**
@@ -105,18 +110,28 @@ public class DataBaseSessionDao extends CachingSessionDAO {
      */
     @Override
     protected Serializable doCreate(Session session) {
+        // 验证Session类型
+        if (!(session instanceof Serializable)) {
+            throw new RuntimeException("Shiro Session没有实现Serializable接口不能序列化存储");
+        }
+        if (!(session instanceof ShiroSession)) {
+            throw new RuntimeException("必须使用ShiroSession，当前Session类型:" + session.getClass().getName());
+        }
+        ShiroSession shiroSession = (ShiroSession) session;
         Serializable sessionId = this.generateSessionId(session);
         assignSessionId(session, sessionId);
         String strId = (String) session.getId();
         if (StringUtils.isBlank(strId)) {
             throw new RuntimeException("Shiro Session ID 不能为空");
         }
-        if (!(session instanceof Serializable)) {
-            throw new RuntimeException("Shiro Session没有实现Serializable接口不能序列化存储");
+        try {
+            shiroSession.setChanged(false);
+            LoginSession loginSession = getLoginSessionBySession(session, null);
+            loginSessionService.save(loginSession);
+        } catch (Throwable e) {
+            shiroSession.setChanged(true);
+            throw e;
         }
-        LoginSession loginSession = getLoginSessionBySession(session, null);
-        loginSession.setCreateDate(new Date());
-        loginSessionService.save(loginSession);
         logger.debug("Session新增成功, SessionId=[{}]", sessionId);
         return sessionId;
     }
@@ -139,4 +154,28 @@ public class DataBaseSessionDao extends CachingSessionDAO {
         }
         return session;
     }
+
+    /**
+     * 调用delete时，先从缓存中移除Session，再调用doDelete
+     */
+    @Override
+    protected void doDelete(Session session) {
+        String sessionId = (String) session.getId();
+        if (StringUtils.isBlank(sessionId)) {
+            logger.error("Shiro Session ID 不能为空 - doDelete");
+            return;
+        }
+        boolean flag = loginSessionService.deleteBySessionId(sessionId);
+        if (!flag) {
+            RuntimeException exception = new RuntimeException("Shiro Session 删除失败");
+            logger.error(exception.getMessage(), exception);
+        } else {
+            logger.debug("Session删除成功, SessionId=[{}]", sessionId);
+        }
+    }
+
+//    @Override
+//    public Session readSession(Serializable sessionId) throws UnknownSessionException {
+//        return super.readSession(sessionId);
+//    }
 }
