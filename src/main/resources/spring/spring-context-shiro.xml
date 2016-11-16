@@ -147,12 +147,9 @@
 
     <!--用户被踢出出过滤器-检查用户是否被踢出-->
     <bean id="kickOutSessionFilter" class="org.cleverframe.sys.shiro.KickOutSessionFilter">
-        <!--当用户被踢出后，跳转的Url地址-->
-        <property name="kickOutUrl" value="${shiro.kickOutUrl}"/>
-        <!--默认 后登陆系统的踢出之前登录系统的(先登录的被踢出)-->
-        <property name="kickOutBefore" value="${shiro.kickOutBefore}"/>
-        <!--同一个用户最多同时登入几次(默认1次)-->
-        <property name="maxLoginCount" value="${shiro.maxLoginCount}"/>
+        <property name="kickOutUrl" value="${shiro.kickOutUrl}"/><!--当用户被踢出后，跳转的Url地址-->
+        <property name="kickOutBefore" value="${shiro.kickOutBefore}"/><!--默认 后登陆系统的踢出之前登录系统的(先登录的被踢出)-->
+        <property name="maxLoginCount" value="${shiro.maxLoginCount}"/><!--同一个用户最多同时登入几次(默认1次)-->
     </bean>
 
     <!-- 自定义Shiro权限解析器，把权限字符串解析成Permission对象 -->
@@ -170,10 +167,8 @@
 
     <!-- 会话DAO，使用数据库进行会话存储，使用Ehcache作为缓存 -->
     <bean id="sessionDAO" class="org.cleverframe.sys.shiro.DataBaseSessionDao">
-        <!--构造方法注入操作数据库的Dao-->
-        <constructor-arg type="org.cleverframe.sys.service.LoginSessionService" ref="sys_LoginSessionService"/>
-        <!-- 设置Session缓存名字，默认就是shiro-activeSessionCache -->
-        <property name="activeSessionsCacheName" value="${shiro.activeSessionsCacheName}"/>
+        <constructor-arg type="org.cleverframe.sys.service.LoginSessionService" ref="sys_LoginSessionService"/><!--构造方法注入操作数据库的Dao-->
+        <property name="activeSessionsCacheName" value="${shiro.activeSessionsCacheName}"/><!-- 设置Session缓存名字，默认就是shiro-activeSessionCache -->
         <!-- 会话ID生成器 -->
         <property name="sessionIdGenerator">
             <bean class="org.apache.shiro.session.mgt.eis.JavaUuidSessionIdGenerator"/>
@@ -198,12 +193,11 @@
         <property name="arguments" ref="securityManager"/>
     </bean>
 
-    <!-- 会话验证调度器 init-method="enableSessionValidation" destroy-method="disableSessionValidation"-->
-    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler">
-        <!--注入定时任务调度器-->
-        <constructor-arg type="org.quartz.Scheduler" ref="schedulerFactoryBean"/>
+    <!-- 会话验证调度器 -->
+    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler" init-method="enableSessionValidation" destroy-method="disableSessionValidation">
+        <property name="sessionManager" ref="shiroSessionManager"/><!-- 设置对应的shiro会话管理器 -->
+        <constructor-arg type="org.quartz.Scheduler" ref="schedulerFactoryBean"/><!--注入定时任务调度器-->
         <!--<property name="enabled" value="true"/>-->
         <property name="sessionValidationInterval" value="${shiro.sessionValidationInterval}"/><!-- 会话验证的时间间隔，默认60分钟 -->
-        <property name="sessionManager" ref="shiroSessionManager"/><!-- 设置对应的shiro会话管理器 -->
     </bean>
 </beans>

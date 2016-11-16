@@ -44,12 +44,47 @@ public class ShiroSession extends SimpleSession implements Serializable {
      */
     private boolean isChanged = false;
 
+    /**
+     * 最后修改时间，记录由于 {@link #CHANGE_INTERVAL} 值而设置isChanged=true的时间
+     */
+    private Date changeTime;
+
     public boolean isChanged() {
         return isChanged;
     }
 
     public void setChanged(boolean changed) {
         isChanged = changed;
+    }
+
+    public Date getChangeTime() {
+        return changeTime;
+    }
+
+    private void setChangeTime(Date changeTime) {
+        this.changeTime = changeTime;
+    }
+
+    /**
+     * Session最后访问时间超过 {@link #CHANGE_INTERVAL} 才设置 isChanged=true<br/>
+     * 同时更新changeTime=new Date()<br/>
+     * <b>注意：LastAccessTime 值更新之后再调用此方法</b>
+     */
+    private void updateChangeTime() {
+        if (changeTime == null) {
+            changeTime = new Date();
+            setChanged(true);
+            logger.debug("当前用户是第一次访问，SessionID={}", getId());
+        } else {
+            long now = getLastAccessTime().getTime();
+            long last = changeTime.getTime();
+            long interval = now - last;
+            if (interval >= CHANGE_INTERVAL) {
+                changeTime = new Date();
+                setChanged(true);
+            }
+            logger.debug("当前用户两次访问时间间隔： {}ms， SessionID={}", interval, getId());
+        }
     }
 
     /*--------------------------------------------------------------
@@ -94,31 +129,14 @@ public class ShiroSession extends SimpleSession implements Serializable {
 
     @Override
     public void setLastAccessTime(Date lastAccessTime) {
-        if (getLastAccessTime() != null) {
-            long last = getLastAccessTime().getTime();
-            long now = lastAccessTime.getTime();
-            //如果10s内访问 则不更新session,否则需要更新远端过期时间
-            if ((last - now) >= CHANGE_INTERVAL) {
-                setChanged(true);
-            }
-        }
         super.setLastAccessTime(lastAccessTime);
+        updateChangeTime();
     }
 
     @Override
     public void touch() {
-        Date preLastAccessTime = getLastAccessTime();
         super.touch();
-        if (preLastAccessTime != null) {
-            long now = getLastAccessTime().getTime();
-            long pre = preLastAccessTime.getTime();
-            long interval = now - pre;
-            //如果10s内访问 则不更新session,否则需要更新远端过期时间
-            if (interval >= CHANGE_INTERVAL) {
-                setChanged(true);
-            }
-            logger.debug("当前用户两次访问时间间隔： {}ms", interval);
-        }
+        updateChangeTime();
     }
 
     @Override
