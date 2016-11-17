@@ -170,6 +170,14 @@ project(':clever-common') {
     }
 }
 
+// 实现了UI框架中的Json结构对应的Java对象
+project(':clever-webui') {
+    dependencies {
+        compile project(':clever-common')
+        compile('com.github.abel533:ECharts:2.2.7')
+    }
+}
+
 // 系统基础功能
 project(':clever-core') {
     dependencies {
@@ -223,18 +231,13 @@ project(':clever-doc') {
         compile project(':clever-common')
     }
 }
-// 实现了UI框架中的Json结构对应的Java对象
-project(':clever-webui') {
-    dependencies {
-        compile project(':clever-common')
-        compile('com.github.abel533:ECharts:2.2.7')
-    }
-}
 
 // 文件上传管理监控模块
-project(':clever-fileupload') {
+project(':clever-filemanager') {
     dependencies {
         compile project(':clever-common')
+        // FastDFS Java客户端需要自己导出jar包
+        // compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
     }
 }
 
@@ -306,16 +309,6 @@ project(':clever-memcached') {
         compile project(':clever-common')
         // ##################
         compile('com.googlecode.xmemcached:xmemcached:2.0.1')
-    }
-}
-
-// FastDFS 整合模块
-project(':clever-fastdfs') {
-    dependencies {
-        compile project(':clever-common')
-        // ##################
-        // FastDFS Java客户端需要自己导出jar包
-        // compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
     }
 }
 

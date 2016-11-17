@@ -46,7 +46,7 @@ clever-monitor
 clever-sys
 依赖模块：clever-common、clever-core
 未完成功能：
-
+    动态授权
 
 
 
