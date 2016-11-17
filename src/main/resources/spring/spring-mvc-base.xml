@@ -17,8 +17,7 @@
 	<!-- 4.配置视图与视图解析器 -->
 
 	<!--下面移走-->
-	<!-- 5.Apache Shiro MVC层配置 -->
-	<!-- 6.SpringMVC其它配置 -->
+	<!-- 5.SpringMVC其它配置 -->
 	<!-- 7.commons-fileupload 文件上传配置 -->
 	<description>Spring MVC Base</description>
 
@@ -173,7 +172,7 @@
 		</property>
 	</bean>
 
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 6.SpringMVC其它配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
+	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 5.SpringMVC其它配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
 	<!-- 初始化系统属性值,在系统启动时调用,加入一些系统级别的属性值 -->
 	<!-- <bean id="servletContextProperty" class="org.cleverframe.config.ServletContextProperty" init-method="init"/> -->
 
@@ -200,22 +199,6 @@
             </bean>
         </mvc:message-converters>
     </mvc:annotation-driven>
-
-	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 7.commons-fileupload 文件上传配置 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->
-	<!-- 上传文件拦截,设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes -->
-	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
-		<property name="defaultEncoding" value="UTF-8" />
-		<property name="maxInMemorySize" value="10240" />
-		<property name="maxUploadSize" value="${fileupload.web.maxUploadSize}" />
-		<!-- true：延迟解析上传的文件,先执行Controller里面的代码(默认为false) -->
-		<property name="resolveLazily" value="true"/>
-		<!-- 文件上传使用的临时目录 -->
-		<property name="uploadTempDir">
-			<bean class="org.springframework.core.io.FileSystemResource">
-				<constructor-arg type="java.lang.String" value="${fileupload.web.fileStoragePath}/temp"/>
-			</bean>
-		</property>
-	</bean>
 
     <!-- Spring MVC Context 容器初始化完成之后的处理类 -->
 	<bean id="springContextRefreshedListener" class="org.cleverframe.common.spring.SpringContextRefreshedListener">

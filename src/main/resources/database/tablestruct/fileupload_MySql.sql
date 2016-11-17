@@ -20,20 +20,20 @@ PRIMARY KEY (id)
 -------------------------------- IdEntity -------------------------------- */
 
 /* ====================================================================================================================
-    fileupload -- 文件上传
+    filemanager_file_info -- 文件上传
 ==================================================================================================================== */
 
-CREATE TABLE fileupload_fileinfo
+CREATE TABLE filemanager_file_info
 (
     id              bigint          NOT NULL    auto_increment          COMMENT '编号',
-    company_code    bigint          NOT NULL                            COMMENT '数据所属公司的ID,用于公司之间的数据隔离',
-    org_id          bigint          NOT NULL                            COMMENT '数据直属机构的ID',
-    create_by       bigint          NOT NULL                            COMMENT '创建者',
+    company_code    varchar(255)    NOT NULL                            COMMENT '数据所属公司的机构编码',
+    org_code        varchar(255)    NOT NULL                            COMMENT '数据直属机构的编码',
+    create_by       varchar(255)    NOT NULL                            COMMENT '创建者',
     create_date     datetime        NOT NULL                            COMMENT '创建时间',
-    update_by       bigint          NOT NULL                            COMMENT '更新者',
+    update_by       varchar(255)    NOT NULL                            COMMENT '更新者',
     update_date     datetime        NOT NULL                            COMMENT '更新时间',
     remarks         varchar(255)                                        COMMENT '备注信息',
-    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）,以字典表sys_dict.dict_key=‘删除标记’为准',
+    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     stored_type     char(1)         NOT NULL                            COMMENT '上传文件的存储类型（1：当前服务器硬盘；2：FTP服务器；3：；FastDFS服务器）',
@@ -48,17 +48,17 @@ CREATE TABLE fileupload_fileinfo
     file_source     varchar(255)    NOT NULL                            COMMENT '文件来源（可以是系统模块名）',
     PRIMARY KEY (id)
 ) COMMENT = '上传文件信息表';
-CREATE INDEX fileupload_fileinfo_digest     ON  fileupload_fileinfo     (digest ASC);
+CREATE INDEX filemanager_file_info_digest     ON  filemanager_file_info     (digest ASC);
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/
 
 
 /* ====================================================================================================================
-    ftp_user -- ftp服务器用户
+    filemanager_ftp_user -- ftp服务器用户
 ==================================================================================================================== */
 
-CREATE TABLE ftp_user (
+CREATE TABLE filemanager_ftp_user (
     userid          varchar(64)     NOT NULL                            COMMENT '用户ID',
     userpassword    varchar(64)                                         COMMENT '用户密码',
     homedirectory   varchar(128)    NOT NULL                            COMMENT '主目录',

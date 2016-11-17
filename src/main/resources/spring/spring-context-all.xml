@@ -16,7 +16,7 @@
                 <value>classpath:cleverframe/cleverframe-base.properties</value>
                 <value>classpath:cleverframe/cleverframe-database.properties</value>
                 <value>classpath:cleverframe/cleverframe-ehcache.properties</value>
-                <value>classpath:cleverframe/cleverframe-fileupload.properties</value>
+                <value>classpath:cleverframe/cleverframe-filemanager.properties</value>
                 <value>classpath:cleverframe/cleverframe-hibernate.properties</value>
                 <value>classpath:cleverframe/cleverframe-memcached.properties</value>
                 <value>classpath:cleverframe/cleverframe-redis.properties</value>

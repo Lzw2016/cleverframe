@@ -7,9 +7,9 @@ package org.cleverframe.common.configuration;
  * 作者：LiZW <br/>
  * 创建时间：2016/11/12 12:17 <br/>
  *
- * @see FileUploadConfigValues
+ * @see FilemanagerConfigValues
  */
-public class FileUploadConfigNames {
+public class FilemanagerConfigNames {
 
     /**
      * 最大文件上传限制，单位字节. 10M=10*1024*1024(B)=10485760 bytes
