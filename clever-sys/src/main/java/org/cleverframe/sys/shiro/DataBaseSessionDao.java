@@ -13,10 +13,10 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.Serializable;
-import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
-import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * 使用数据库存储Shiro用户登录Session信息,方便计算和查询(分页)在线人数等信息<br/>
@@ -187,22 +187,31 @@ public class DataBaseSessionDao extends CachingSessionDAO {
      */
     @Override
     public Collection<Session> getActiveSessions() {
-        List<Session> list = new ArrayList<>();
+        Map<Serializable, Session> map = new HashMap<>();
         Collection<Session> collection = super.getActiveSessions();
         if (collection != null && collection.size() > 0) {
-            list.addAll(collection);
+            for (Session session : collection) {
+                map.put(session.getId(), session);
+            }
+        }
+        if (map.size() >= 1000) {
+            return map.values();
         }
         Page<LoginSession> page = new Page<>(1, 500);
         page = loginSessionService.findAllByPage(page);
         if (page != null && page.getList() != null && page.getList().size() > 0) {
             for (LoginSession loginSession : page.getList()) {
+                Session session = map.get(loginSession.getSessionId());
+                if (session != null) {
+                    continue;
+                }
                 try {
-                    list.add(ShiroSessionUtils.deserialize(loginSession.getSessionObject()));
+                    map.put(loginSession.getSessionId(), ShiroSessionUtils.deserialize(loginSession.getSessionObject()));
                 } catch (Throwable e) {
                     logger.error("Session序列化失败", e);
                 }
             }
         }
-        return list;
+        return map.values();
     }
 }
