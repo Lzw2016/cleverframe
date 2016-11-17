@@ -1,5 +1,6 @@
 package org.cleverframe.sys.service;
 
+import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.dao.LoginSessionDao;
@@ -19,6 +20,13 @@ public class LoginSessionService extends BaseService {
     @Autowired
     @Qualifier(SysBeanNames.LoginSessionDao)
     private LoginSessionDao loginSessionDao;
+
+    /**
+     * 查询所有的 Shiro Session(使用分页)
+     */
+    public Page<LoginSession> findAllByPage(Page<LoginSession> page) {
+        return loginSessionDao.findAllByPage(page);
+    }
 
     /**
      * 根据session_id查询Session数据

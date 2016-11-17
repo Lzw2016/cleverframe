@@ -20,8 +20,6 @@ public class HttpSessionUtils {
         httpSession.removeAttribute(SysSessionAttributes.LOGIN_USER);
         httpSession.removeAttribute(SysSessionAttributes.CURRENT_COMPANY);
         httpSession.removeAttribute(SysSessionAttributes.CURRENT_ORG);
-//        httpSession.removeAttribute(SysSessionAttributes.LOGIN_FAILED_COUNT);
-//        httpSession.removeAttribute(SysSessionAttributes.LOGIN_VALIDATE_CODE);
     }
 
     /**

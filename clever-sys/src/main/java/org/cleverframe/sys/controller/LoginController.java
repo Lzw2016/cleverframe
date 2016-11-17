@@ -62,7 +62,7 @@ public class LoginController extends BaseController {
     }
 
     /**
-     * 用户登录请求地址  TODO 用户重复登入，必须判断用户是否想切换账号
+     * 用户登录登录失败 或 已经用户登录访问
      */
     @RequestMapping("/userLogin")
     @ResponseBody
@@ -76,6 +76,7 @@ public class LoginController extends BaseController {
         // 验证用户已经登录
         Subject subject = SecurityUtils.getSubject();
         if (subject.isAuthenticated()) {
+            ajaxMessage.setSuccessMessage("已经登录，请不要重复登录");
             ajaxMessage.setSuccessUrl(loginFormAuthenticationFilter.getSuccessUrl());
             return ajaxMessage;
         }

@@ -5,7 +5,6 @@ import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.AccessControlFilter;
 import org.apache.shiro.web.util.WebUtils;
 import org.cleverframe.sys.entity.User;
-import org.cleverframe.sys.utils.HttpSessionUtils;
 import org.cleverframe.sys.utils.KickOutCacheUtils;
 import org.cleverframe.sys.utils.ShiroSessionUtils;
 import org.slf4j.Logger;
@@ -14,7 +13,6 @@ import org.slf4j.LoggerFactory;
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
 import java.io.Serializable;
 import java.util.List;
 
@@ -93,13 +91,17 @@ public class KickOutSessionFilter extends AccessControlFilter {
      */
     @Override
     protected boolean onAccessDenied(ServletRequest request, ServletResponse response) throws Exception {
-        HttpServletRequest httpServletRequest = (HttpServletRequest) request;
-        HttpSession httpSession = httpServletRequest.getSession();
-        // 清除用户登入信息
-        HttpSessionUtils.logout(httpSession);
+        // HttpServletRequest httpServletRequest = (HttpServletRequest) request;
+        // HttpSession httpSession = httpServletRequest.getSession();
+        // 清除用户登入信息 - 没必要 Shiro会处理
+        // HttpSessionUtils.logout(httpSession);
         // 先退出 Shiro
         Subject subject = getSubject(request, response);
-        subject.logout();
+        try {
+            subject.logout();
+        } catch (Throwable e) {
+            logger.error("强制退出用户异常", e);
+        }
         //再重定向
         WebUtils.issueRedirect(request, response, kickOutUrl);
         return false;

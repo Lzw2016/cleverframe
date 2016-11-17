@@ -17,6 +17,14 @@ import org.springframework.stereotype.Repository;
 public class LoginSessionDao extends BaseDao<LoginSession> {
 
     /**
+     * 查询所有的 Shiro Session(使用分页)
+     */
+    public Page<LoginSession> findAllByPage(Page<LoginSession> page) {
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.LoginSessionDao.findAllByPage");
+        return hibernateDao.findBySql(page, sql);
+    }
+
+    /**
      * 分页查询在线用户(Session)信息
      */
     public Page<LoginSession> findByPage(Page<LoginSession> page, LoginSessionQueryVo loginSessionQueryVo) {

@@ -1,5 +1,6 @@
 package org.cleverframe.sys.utils;
 
+import org.apache.commons.lang3.SerializationUtils;
 import org.apache.shiro.session.Session;
 import org.apache.shiro.session.mgt.eis.SessionDAO;
 import org.apache.shiro.subject.support.DefaultSubjectContext;
@@ -124,5 +125,28 @@ public class ShiroSessionUtils {
     public static boolean isKickOut(Session session) {
         Object isKickOut = session.getAttribute(USER_IS_KICK_OUT);
         return isKickOut != null && "true".equalsIgnoreCase(isKickOut.toString());
+    }
+
+    /**
+     * 序列化Shiro Session
+     */
+    public static byte[] serialize(Session session) {
+        if (session == null) {
+            return null;
+        }
+        if (!(session instanceof Serializable)) {
+            throw new RuntimeException("Session没有实现Serializable接口，Session Class=" + session.getClass().getName());
+        }
+        return SerializationUtils.serialize((Serializable) session);
+    }
+
+    /**
+     * 反序列化Shiro Session
+     */
+    public static Session deserialize(byte[] data) {
+        if (data == null) {
+            return null;
+        }
+        return SerializationUtils.deserialize(data);
     }
 }
