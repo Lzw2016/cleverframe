@@ -125,5 +125,12 @@ public class UserAuthorizingRealm extends AuthorizingRealm {
         logger.info("用户[{}]，授权成功，用户角色 {} 个，系统资源 {} 个", user.getLoginName(), roleList.size(), resourcesList.size());
         return authorizationInfo;
     }
-    // getCachedAuthenticationInfo
+
+//    clearCachedAuthenticationInfo - 清除缓存 认证信息
+
+//    clearCachedAuthorizationInfo - 清除缓存 授权信息
+
+//    clearCache - - 清除缓存 认证信息 授权信息
+
+//    clearAllCachedAuthorizationInfo、clearAllCachedAuthenticationInfo、clearAllCache
 }

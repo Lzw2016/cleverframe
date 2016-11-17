@@ -65,7 +65,7 @@
                 <!--允许访问登出地址-->
                 /${base.mvcPath}/sys/login/userLogout.json = logout
                 <!--其他资源需要用户登入而且有相应的权限才能访问-->
-                /** = user,perms,kickout
+                /** = kickout,user,perms
             </value>
         </property>
     </bean>
@@ -196,7 +196,9 @@
     </bean>
 
     <!-- 会话验证调度器 -->
-    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler" init-method="enableSessionValidation" destroy-method="disableSessionValidation">
+    <bean id="sessionValidationScheduler" class="org.cleverframe.sys.job.QuartzSessionValidationScheduler"
+          init-method="enableSessionValidation"
+          destroy-method="disableSessionValidation">
         <property name="sessionManager" ref="shiroSessionManager"/><!-- 设置对应的shiro会话管理器 -->
         <constructor-arg type="org.quartz.Scheduler" ref="schedulerFactoryBean"/><!--注入定时任务调度器-->
         <!--<property name="enabled" value="true"/>-->
