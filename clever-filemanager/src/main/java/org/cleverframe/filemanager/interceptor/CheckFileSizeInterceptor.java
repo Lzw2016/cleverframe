@@ -59,11 +59,11 @@ public class CheckFileSizeInterceptor implements HandlerInterceptor {
 
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        logger.debug("postHandle");
+        // logger.debug("postHandle");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
-        logger.debug("afterCompletion");
+        // logger.debug("afterCompletion");
     }
 }

@@ -35,10 +35,30 @@
 <body>
 <input id="fileupload001" type="file" name="files[]" > <br/>
 <div id="dropzone001" style="background: #cccccc;width: 500px;height: 70px;text-align: center;">拖放文件到此处上传</div>
-progressbar: <div id="progressbar001-1" class="easyui-progressbar" style="width:500px;"></div><br/>
-progressallbar: <div id="progressbar001-2" class="easyui-progressbar" style="width:500px;"></div><br/>
-从服务器端获取进度:<div id="progressbar001-3" class="easyui-progressbar" style="width:500px;"></div><br/>
+单个文件进度: <div id="progressbar001-1" class="easyui-progressbar" style="width:500px;"></div><br/>
+所有文件进度: <div id="progressbar001-2" class="easyui-progressbar" style="width:500px;"></div><br/>
+<hr/>
 
+<input id="fileupload002" type="file" multiple="multiple" name="files[]" > <br/>
+<div id="progressDiv" >
+    上传文件总进度：<div id="progressbar002" class="easyui-progressbar" style="width:500px;"></div><br/>
+</div>
+<hr/>
+
+<input id="fileupload003" type="file" name="files[]" > <br/>
+MD5:(依赖函数 arrayBufferToWordArray(arrayBuffer)、swapendian32(val) ) <br/>
+<span id="md5003-1">MD5值</span>
+<div id="progressbar003-1" class="easyui-progressbar" data-options="text:'计算进度：{value}%'" style="width:500px;"></div><br/>
+
+MD5:(依赖文件 lib-typedarrays-min.js ) <br/>
+<span id="md5003-2">MD5值</span>
+<div id="progressbar003-2" class="easyui-progressbar" data-options="text:'计算进度：{value}%'"  style="width:500px;"></div><br/>
+<hr/>
+
+<input id="fileupload004" type="file" name="files[]" style="margin-right: 20px">
+<input type="button" value="开始上传" onclick="pageJsObject.start();" ><br/>
+秒传进度: <span id="uploadLazyToLocal004"></span><div id="progressbar004-1" class="easyui-progressbar" style="width:500px;"></div><br/>
+上传进度: <span id="uploadToLocal004"></span><div id="progressbar004-2" class="easyui-progressbar" style="width:500px;"></div><br/>
 
 </body>
 </html>

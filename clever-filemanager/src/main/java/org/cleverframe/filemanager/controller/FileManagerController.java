@@ -62,6 +62,10 @@ public class FileManagerController extends BaseController {
             @Valid FileUploadLazyVo fileUploadLazyVo,
             BindingResult bindingResult) {
         AjaxMessage<FileInfo> message = new AjaxMessage<>(true, "文件秒传成功", null);
+        if (!beanValidator(bindingResult, message)) {
+            return message;
+        }
+
         // 验证是否是Hex编码
         String fileDigest = fileUploadLazyVo.getFileDigest().toLowerCase();
         if (!EncodeDecodeUtils.isHexcode(fileDigest)) {
@@ -100,6 +104,11 @@ public class FileManagerController extends BaseController {
             message.setSuccess(false);
             message.setFailMessage("上传文件失败，系统异常");
             message.setException(e);
+        }
+        if (fileInfo == null) {
+            message.setSuccess(false);
+            message.setFailMessage("文件秒传失败，该文件从未上传过");
+            return message;
         }
         message.setResult(fileInfo);
         return message;
