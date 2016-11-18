@@ -26,7 +26,7 @@ dependencies {
     compile project(':clever-sso') // 需要删除
 
     testCompile('junit:junit:4.12')
-    testCompile('org.springframework:spring-test:4.2.8.RELEASE')
+    testCompile('org.springframework:spring-test:4.3.4.RELEASE')
     testCompile('org.mockito:mockito-all:1.10.19')
     testCompile('org.hamcrest:hamcrest-all:1.3')
 }
@@ -65,7 +65,7 @@ subprojects {
     // 公共依赖配置
     dependencies {
         testCompile('junit:junit:4.12')
-        testCompile('org.springframework:spring-test:4.2.8.RELEASE')
+        testCompile('org.springframework:spring-test:4.3.4.RELEASE')
         testCompile('org.mockito:mockito-all:1.10.19')
         testCompile('org.hamcrest:hamcrest-all:1.3')
     }
@@ -160,14 +160,14 @@ project(':clever-common') {
         compile('javax.websocket:javax.websocket-api:1.1')
 
         // ##################Spring 框架
-        compile('org.springframework:spring-context-support:4.2.8.RELEASE')
-        compile('org.springframework:spring-context:4.2.8.RELEASE')
-        compile('org.springframework:spring-web:4.2.8.RELEASE')
-        compile('org.springframework:spring-webmvc:4.2.8.RELEASE')
-        compile('org.springframework:spring-oxm:4.2.8.RELEASE')
-        compile('org.springframework:spring-orm:4.2.8.RELEASE')
-        compile('org.springframework:spring-websocket:4.2.8.RELEASE')
-        compile('org.springframework:spring-messaging:4.2.8.RELEASE')
+        compile('org.springframework:spring-context-support:4.3.4.RELEASE')
+        compile('org.springframework:spring-context:4.3.4.RELEASE')
+        compile('org.springframework:spring-web:4.3.4.RELEASE')
+        compile('org.springframework:spring-webmvc:4.3.4.RELEASE')
+        compile('org.springframework:spring-oxm:4.3.4.RELEASE')
+        compile('org.springframework:spring-orm:4.3.4.RELEASE')
+        compile('org.springframework:spring-websocket:4.3.4.RELEASE')
+        compile('org.springframework:spring-messaging:4.3.4.RELEASE')
     }
 }
 
@@ -239,7 +239,8 @@ project(':clever-filemanager') {
         compile project(':clever-core')
 
         // ##################上传文件依赖库
-        compile('commons-fileupload:commons-fileupload:1.3.1')
+        // 使用Servlet 3.0的文件上传API不需要依赖此jar包
+         compile('commons-fileupload:commons-fileupload:1.3.2')
         // FastDFS Java客户端需要自己导出jar包
         // compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
     }

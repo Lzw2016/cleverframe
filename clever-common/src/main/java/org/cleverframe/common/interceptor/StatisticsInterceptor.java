@@ -126,7 +126,7 @@ public class StatisticsInterceptor implements HandlerInterceptor {
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 存在异常
         if (ex != null) {
-            logger.error("### afterCompletion - ！", ex);
+            logger.error("### 服务器发生异常(afterCompletion)", ex);
         }
 
         // 从request Attribute中获取异常信息

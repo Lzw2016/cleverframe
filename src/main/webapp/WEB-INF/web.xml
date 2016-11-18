@@ -91,6 +91,16 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath*:/spring/spring-mvc-all.xml</param-value>
         </init-param>
+        <!--<multipart-config>-->
+            <!--&lt;!&ndash;每个文件的最大大小 1024 * 1024 * 10 = 10485760 = 10M &ndash;&gt;-->
+            <!--<max-file-size>10485760</max-file-size>-->
+            <!--&lt;!&ndash;整个multipart的最大总大小(所有文件总大小限制) 10485760 * 10 = 100M &ndash;&gt;-->
+            <!--<max-request-size>104857600</max-request-size>-->
+            <!--&lt;!&ndash;不将文件写入磁盘的最大大小(超过这个限制, 就会把文件写入临时目录中)&ndash;&gt;-->
+            <!--<file-size-threshold>0</file-size-threshold>-->
+            <!--&lt;!&ndash;写文件的临时目录&ndash;&gt;-->
+            <!--&lt;!&ndash;<location></location>&ndash;&gt;-->
+        <!--</multipart-config>-->
         <load-on-startup>1</load-on-startup>
     </servlet>
     <servlet-mapping>

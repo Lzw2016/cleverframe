@@ -174,7 +174,7 @@ public abstract class BaseController {
         // 错误信息存到request Attribute中，给拦截器处理(存储)
         request.setAttribute(CommonRequestAttributes.SERVER_EXCEPTION, throwable);
 
-        // 如果是ajax请求直接返回响应数据，跳转到对应的错误页面
+        // 如果是ajax请求直接返回响应数据，跳转到对应的错误页面 // TODO 判断是否是ajax请求 需要使用工具类 统一处理
         if ("true".equals(request.getParameter("ajaxRequest")) || request.getRequestURI().endsWith(".json") || request.getRequestURI().endsWith(".xml")) {
             AjaxMessage<String> ajaxMessage = new AjaxMessage<>(throwable, "服务器异常!");
             ajaxMessage.setFailMessage("服务器异常!");

@@ -2,6 +2,7 @@ package org.cleverframe.common.utils;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.web.multipart.MultipartHttpServletRequest;
 
 import javax.servlet.http.HttpServletRequest;
 import java.net.URLDecoder;
@@ -115,6 +116,9 @@ public class HttpServletRequestUtils {
      * @return 请求数据值(已解码)
      */
     public static String getRequestParams(HttpServletRequest request) {
+        if (request instanceof MultipartHttpServletRequest) {
+            return "用户上传文件请求[系统判断]";
+        }
         if (request == null) {
             return "";
         }
