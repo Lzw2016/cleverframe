@@ -40,7 +40,7 @@ public interface IStorageService {
      * 删除服务器端的文件<br>
      *
      * @param fileInfoUuid 文件信息UUID
-     * @param lazy         如果值为true表示：只删除当前文件引用；值为false表示：如果没有其他引用就删除服务器端文件
+     * @param lazy         如果值为true表示：只删除当前文件引用；值为false表示：直接从硬盘中删除服务器端文件
      * @return 1：成功删除fileInfo和服务器端文件；2：只删除了fileInfo；3：fileInfo不存在
      */
     int deleteFile(Serializable fileInfoUuid, boolean lazy) throws Exception;

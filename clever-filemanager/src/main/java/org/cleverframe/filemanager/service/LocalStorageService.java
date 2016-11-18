@@ -20,6 +20,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
@@ -70,32 +71,25 @@ public class LocalStorageService extends BaseService implements IStorageService 
         }
         // 到数据库查找判断此文件是否已经上传过了 - 此文件是否已经上传过了，不需要重复保存
         dbFileInfo = fileInfoDao.findFileInfoByDigest(fileDigest, digestType);
-        if (dbFileInfo == null || StringUtils.isBlank(dbFileInfo.getFilePath()) || StringUtils.isBlank(dbFileInfo.getNewName())) {
+        if (dbFileInfo == null) {
+            logger.debug("秒传失败，文件没有上传过");
             return null;
-        } else {
-            String filepath = FILE_STORAGE_PATH + dbFileInfo.getFilePath() + File.separator + dbFileInfo.getNewName();
-            File file = new File(filepath);
-            if (!file.exists() || !file.isFile()) {
-                return null;
-            }
         }
-        // 已找到上传文件，保存文件信息
-        FileInfo fileInfo = new FileInfo();
-        fileInfo.setFileName(fileName);
-        fileInfo.setUploadTime(0L);
-        fileInfo.setStoredTime(0L);
-        // 复制信息
-        fileInfo.setStoredType(dbFileInfo.getStoredType());
-        fileInfo.setFilePath(dbFileInfo.getFilePath());
-        fileInfo.setDigest(dbFileInfo.getDigest());
-        fileInfo.setDigestType(dbFileInfo.getDigestType());
-        fileInfo.setFileSize(dbFileInfo.getFileSize());
-        fileInfo.setNewName(dbFileInfo.getNewName());
-        // 保存文件信息
-        fileInfoDao.getHibernateDao().save(fileInfo);
-        return fileInfo;
+        if (StringUtils.isBlank(dbFileInfo.getFilePath()) || StringUtils.isBlank(dbFileInfo.getNewName())) {
+            logger.warn("秒传失败，数据库里文件(FilePath、NewName)信息为空，文件信息UUID={}", dbFileInfo.getUuid());
+            return null;
+        }
+        String filepath = FILE_STORAGE_PATH + dbFileInfo.getFilePath() + File.separator + dbFileInfo.getNewName();
+        File file = new File(filepath);
+        if (!file.exists() || !file.isFile()) {
+            logger.warn("秒传失败，上传文件不存在(可能已经被删除)，文件路径[{}]", filepath);
+            return null;
+        }
+        logger.warn("文件秒传成功，文件存储路径[{}]", filepath);
+        return dbFileInfo;
     }
 
+    @Transactional(readOnly = false)
     @Override
     public FileInfo saveFile(long uploadTime, MultipartFile multipartFile) throws Exception {
         // 设置文件签名类型 和 文件签名
@@ -118,7 +112,11 @@ public class LocalStorageService extends BaseService implements IStorageService 
         // 上传文件的存储类型：当前服务器硬盘
         fileInfo.setStoredType(FileInfo.LOCAL_STORAGE);
         // 设置文件存储之后的名称：UUID + 后缀名(此操作依赖文件原名称)
-        String newName = IDCreateUtils.uuid() + "." + FilenameUtils.getExtension(fileInfo.getFileName());
+        String newName = IDCreateUtils.uuid();
+        String fileExtension = FilenameUtils.getExtension(fileInfo.getFileName());
+        if (StringUtils.isBlank(fileExtension)) {
+            newName = newName + "." + fileExtension.toLowerCase();
+        }
         fileInfo.setNewName(newName);
         // 上传文件存储到当前服务器的路径(相对路径，相对于 FILE_STORAGE_PATH)
         String filePath = StoragePathUtils.createFilePathByDate("");
@@ -126,7 +124,7 @@ public class LocalStorageService extends BaseService implements IStorageService 
         // 计算文件的绝对路径，保存文件
         String absoluteFilePath = FILE_STORAGE_PATH + filePath + File.separator + newName;
         File file = new File(absoluteFilePath);
-        long start = System.currentTimeMillis();
+        long storageStart = System.currentTimeMillis();
         // 文件夹不存在，创建文件夹
         File parentFile = file.getParentFile();
         if (parentFile != null && !parentFile.exists()) {
@@ -138,31 +136,28 @@ public class LocalStorageService extends BaseService implements IStorageService 
         }
         // 如果filePath表示的不是一个路径，文件就会被存到System.getProperty("user.dir")路径下
         multipartFile.transferTo(file);
-        long end = System.currentTimeMillis();
+        long storageEnd = System.currentTimeMillis();
         // 设置存储所用的时间
-        fileInfo.setStoredTime(end - start);
+        fileInfo.setStoredTime(storageEnd - storageStart);
+        logger.info("文件存储所用时间:[{}ms]", fileInfo.getStoredTime());
         // 保存文件信息
         fileInfoDao.getHibernateDao().save(fileInfo);
         return fileInfo;
     }
 
+    @Transactional(readOnly = false)
     @Override
     public int deleteFile(Serializable fileInfoUuid, boolean lazy) throws Exception {
         // 1：成功删除fileInfo和服务器端文件；2：只删除了fileInfo；3：fileInfo不存在
         FileInfo fileInfo = fileInfoDao.getFileInfoByUuid(fileInfoUuid);
-        if (fileInfo == null || fileInfo.getDelFlag() == FileInfo.DEL_FLAG_DELETE) {
+        if (fileInfo == null) {
             // FileInfo 不存在或已经被删除
             return 3;
         }
-        // TODO 删除FileInfo要确保系统没有引用或使用该FileInfo实例(确保该文件没有被使用)
-        fileInfoDao.getHibernateDao().delete(fileInfo);
+        int count = fileInfoDao.deleteFileInfo(fileInfo.getFilePath(), fileInfo.getNewName());
+        logger.info("删除文件引用数量：{} 条", count);
         if (lazy) {
             // lazy == true:只删除FileInfo
-            return 2;
-        }
-        int count = fileInfoDao.findRepeatFile(fileInfo.getFilePath(), fileInfo.getNewName());
-        if (count > 1) {
-            // 此文件被多个FileInfo引用
             return 2;
         }
         String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
@@ -172,14 +167,17 @@ public class LocalStorageService extends BaseService implements IStorageService 
             if (!file.delete()) {
                 throw new Exception("文件删除失败：" + fullPath);
             }
+        } else {
+            throw new Exception("文件删除失败：" + fullPath);
         }
+        logger.warn("删除文件成功，文件路径[{}]", fullPath);
         return 1;
     }
 
     @Override
     public FileInfo isExists(Serializable fileInfoUuid) throws Exception {
         FileInfo fileInfo = fileInfoDao.getFileInfoByUuid(fileInfoUuid);
-        if (fileInfo == null || fileInfo.getDelFlag() == FileInfo.DEL_FLAG_DELETE) {
+        if (fileInfo == null) {
             return null;
         }
         String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
@@ -188,26 +186,29 @@ public class LocalStorageService extends BaseService implements IStorageService 
         if (file.exists() && file.isFile()) {
             return fileInfo;
         }
+        logger.warn("文件引用[UUID={}]对应的文件不存在", fileInfo.getUuid());
         return null;
     }
 
     @Override
     public FileInfo openFile(Serializable fileInfoUuid, OutputStream outputStream) throws Exception {
         FileInfo fileInfo = fileInfoDao.getFileInfoByUuid(fileInfoUuid);
-        if (fileInfo != null && fileInfo.getDelFlag() != FileInfo.DEL_FLAG_DELETE) {
-            String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
-            fullPath = FilenameUtils.concat(fullPath, fileInfo.getNewName());
-            File file = new File(fullPath);
-            if (file.exists() && file.isFile()) {
-                try (InputStream inputStream = FileUtils.openInputStream(file)) {
-                    byte[] data = new byte[256 * 1024];
-                    while (inputStream.read(data) > -1) {
-                        outputStream.write(data);
-                    }
-                }
-                return fileInfo;
-            }
+        if (fileInfo == null) {
+            return null;
         }
+        String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
+        fullPath = FilenameUtils.concat(fullPath, fileInfo.getNewName());
+        File file = new File(fullPath);
+        if (file.exists() && file.isFile()) {
+            try (InputStream inputStream = FileUtils.openInputStream(file)) {
+                byte[] data = new byte[256 * 1024];
+                while (inputStream.read(data) > -1) {
+                    outputStream.write(data);
+                }
+            }
+            return fileInfo;
+        }
+        logger.warn("文件引用[UUID={}]对应的文件不存在", fileInfo.getUuid());
         return null;
     }
 }

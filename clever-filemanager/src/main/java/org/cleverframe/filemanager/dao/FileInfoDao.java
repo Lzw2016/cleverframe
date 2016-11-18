@@ -3,7 +3,6 @@ package org.cleverframe.filemanager.dao;
 import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.persistence.Parameter;
 import org.cleverframe.core.persistence.dao.BaseDao;
-import org.cleverframe.core.persistence.entity.BaseEntity;
 import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.filemanager.FilemanagerBeanNames;
 import org.cleverframe.filemanager.entity.FileInfo;
@@ -35,7 +34,7 @@ public class FileInfoDao extends BaseDao<FileInfo> {
      * @return 上传的文件信息，未找到返回null
      */
     public FileInfo findFileInfoByDigest(String fileDigest, Character digestType) {
-        Parameter param = new Parameter(BaseEntity.DEL_FLAG_NORMAL);
+        Parameter param = new Parameter();
         param.put("fileDigest", fileDigest);
         param.put("digestType", digestType);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.filemanager.dao.FileInfoDao.findFileInfoByDigest");
@@ -50,32 +49,37 @@ public class FileInfoDao extends BaseDao<FileInfo> {
         }
     }
 
+    /**
+     * 根据UUID查询文件信息
+     *
+     * @param uuid 查询参数：数据UUID
+     */
+    public FileInfo getFileInfoByUuid(Serializable uuid) {
+        Parameter param = new Parameter();
+        param.put("uuid", uuid);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.filemanager.dao.FileInfoDao.getFileInfoByUuid");
+        return getHibernateDao().getBySql(sql, param);
+    }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+    /**
+     * 删除所有的文件引用
+     *
+     * @param filePath 文件路径
+     * @param newName  文件名称
+     * @return 返回删除文件引用的数量
+     */
+    public int deleteFileInfo(String filePath, String newName) {
+        Parameter param = new Parameter();
+        param.put("filePath", filePath);
+        param.put("newName", newName);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.filemanager.dao.FileInfoDao.deleteFileInfo");
+        Long count = this.getHibernateDao().getCountBySql(sql, param);
+        return count.intValue();
+    }
 
 
     // ------------------------------------------------------------------------------------------------------------------------------------------------------
+
     /**
      * 查询同一文件在数据库里的引用数量<br>
      * <p>
@@ -86,7 +90,7 @@ public class FileInfoDao extends BaseDao<FileInfo> {
      * @return 文件被引用的数量
      */
     public int findRepeatFile(String filePath, String newName) {
-        Parameter param = new Parameter(BaseEntity.DEL_FLAG_NORMAL);
+        Parameter param = new Parameter();
         param.put("filePath", filePath);
         param.put("newName", newName);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.filemanager.dao.FileInfoDao.findRepeatFile");
@@ -105,7 +109,7 @@ public class FileInfoDao extends BaseDao<FileInfo> {
      * @param endTime   查询参数：结束时间
      */
     public Page<FileInfo> findFileInfoByPage(Page<FileInfo> page, String digest, String fileName, String newName, Date startTime, Date endTime) {
-        Parameter param = new Parameter(BaseEntity.DEL_FLAG_NORMAL);
+        Parameter param = new Parameter();
         param.put("digest", digest);
         param.put("fileName", fileName);
         param.put("newName", newName);
@@ -114,17 +118,5 @@ public class FileInfoDao extends BaseDao<FileInfo> {
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.filemanager.dao.FileInfoDao.findFileInfoByPage");
         this.getHibernateDao().findBySql(page, sql, param);
         return page;
-    }
-
-    /**
-     * 根据UUID查询文件信息
-     *
-     * @param uuid 查询参数：数据UUID
-     */
-    public FileInfo getFileInfoByUuid(Serializable uuid) {
-        Parameter param = new Parameter();
-        param.put("uuid", uuid);
-        String sql = QLScriptUtils.getSQLScript("org.cleverframe.filemanager.dao.FileInfoDao.getFileInfoByUuid");
-        return getHibernateDao().getBySql(sql, param);
     }
 }
