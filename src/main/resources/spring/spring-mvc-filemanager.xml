@@ -4,7 +4,8 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
     <!-- 上传文件拦截,设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes -->
-    <bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+    <!--<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">-->
+    <bean id="multipartResolver" class="org.cleverframe.filemanager.servlet.SpeedLimitMultipartResolver">
         <property name="defaultEncoding" value="UTF-8"/>
         <property name="maxInMemorySize" value="10240"/>
         <property name="maxUploadSize" value="${fileupload.web.maxUploadSize}"/>

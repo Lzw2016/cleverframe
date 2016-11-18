@@ -33,23 +33,23 @@ public class SpeedLimitMultipartResolver extends CommonsMultipartResolver {
 
     /**
      * 解析上传的文件，此方法必定会被执行
-     * 重写此方法的主要目的是注册文件上传时的上传进度监听器，其他代码参考父类实现
+     * 重写此方法的主要目的是限制上传速度，其他代码参考父类实现
      */
     @Override
     protected MultipartParsingResult parseRequest(HttpServletRequest request) throws MultipartException {
         String encoding = determineEncoding(request);
         FileUpload fileUpload = prepareFileUpload(encoding);
-
-        // 注册文件上传时的上传进度监听器，并向监听器
-        // fileUpload.setProgressListener(new LocalProgressListener(request.getSession()));
+        // 注册文件上传时的上传进度监听器，用于限制上传速度
+        fileUpload.setProgressListener(new SpeedLimitProgressListener());
         try {
             List<FileItem> fileItems = ((ServletFileUpload) fileUpload).parseRequest(request);
             return parseFileItems(fileItems, encoding);
         } catch (FileUploadBase.SizeLimitExceededException ex) {
             throw new MaxUploadSizeExceededException(fileUpload.getSizeMax(), ex);
+        } catch (FileUploadBase.FileSizeLimitExceededException ex) {
+            throw new MaxUploadSizeExceededException(fileUpload.getFileSizeMax(), ex);
         } catch (FileUploadException ex) {
-            throw new MultipartException("Could not parse multipart servlet request", ex);
+            throw new MultipartException("Failed to parse multipart servlet request", ex);
         }
     }
-
 }

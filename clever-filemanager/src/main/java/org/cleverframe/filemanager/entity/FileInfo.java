@@ -23,24 +23,24 @@ public class FileInfo extends DataEntity {
     /**
      * 上传文件的存储类型（1：当前服务器硬盘；2：FTP服务器；3：FastDFS服务器）
      */
-    public static final char LOCAL_STORAGE = '1';
+    public static final Character LOCAL_STORAGE = '1';
     /**
      * 上传文件的存储类型（1：当前服务器硬盘；2：FTP服务器；3：FastDFS服务器）
      */
-    public static final char FTP_STORAGE = '2';
+    public static final Character FTP_STORAGE = '2';
     /**
      * 上传文件的存储类型（1：当前服务器硬盘；2：FTP服务器；3：FastDFS服务器）
      */
-    public static final char FASTDFS_STORAGE = '3';
+    public static final Character FASTDFS_STORAGE = '3';
 
     /**
      * 文件签名算法类型（1：MD5；2：SHA-1；）
      */
-    public static final char MD5_DIGEST = '1';
+    public static final Character MD5_DIGEST = '1';
     /**
      * 文件签名算法类型（1：MD5；2：SHA-1；）
      */
-    public static final char SHA1_DIGEST = '2';
+    public static final Character SHA1_DIGEST = '2';
 
     /**
      * 上传文件的存储类型（1：当前服务器硬盘；2：FTP服务器；3：；FastDFS服务器）

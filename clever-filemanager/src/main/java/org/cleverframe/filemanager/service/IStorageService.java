@@ -30,11 +30,12 @@ public interface IStorageService {
      * <b>注意：如果上传的文件在服务器端存在(通过文件签名判断)，就不会存储文件只会新增文件引用</b>
      *
      * @param uploadTime    文件上传所用时间
+     * @param fileSource    上传文件来源(可以是系统模块名称)
      * @param multipartFile 上传的文件信息
      * @return 返回存储后的文件信息
      * @throws Exception 保存失败抛出异常
      */
-    FileInfo saveFile(long uploadTime, MultipartFile multipartFile) throws Exception;
+    FileInfo saveFile(long uploadTime, String fileSource, MultipartFile multipartFile) throws Exception;
 
     /**
      * 删除服务器端的文件<br>

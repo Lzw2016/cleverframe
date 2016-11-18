@@ -91,7 +91,7 @@ public class LocalStorageService extends BaseService implements IStorageService 
 
     @Transactional(readOnly = false)
     @Override
-    public FileInfo saveFile(long uploadTime, MultipartFile multipartFile) throws Exception {
+    public FileInfo saveFile(long uploadTime, String fileSource, MultipartFile multipartFile) throws Exception {
         // 设置文件签名类型 和 文件签名
         String digest;
         try (InputStream inputStream = multipartFile.getInputStream()) {
@@ -104,6 +104,7 @@ public class LocalStorageService extends BaseService implements IStorageService 
         }
         // 服务器端不存在相同文件
         FileInfo fileInfo = new FileInfo();
+        fileInfo.setFileSource(fileSource);
         fileInfo.setUploadTime(uploadTime);
         fileInfo.setFileName(multipartFile.getOriginalFilename());
         fileInfo.setFileSize(multipartFile.getSize());
@@ -114,7 +115,7 @@ public class LocalStorageService extends BaseService implements IStorageService 
         // 设置文件存储之后的名称：UUID + 后缀名(此操作依赖文件原名称)
         String newName = IDCreateUtils.uuid();
         String fileExtension = FilenameUtils.getExtension(fileInfo.getFileName());
-        if (StringUtils.isBlank(fileExtension)) {
+        if (StringUtils.isNotBlank(fileExtension)) {
             newName = newName + "." + fileExtension.toLowerCase();
         }
         fileInfo.setNewName(newName);
