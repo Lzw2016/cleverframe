@@ -40,6 +40,7 @@ public class StatisticsInterceptor implements HandlerInterceptor {
 
     /**
      * 返回用户信息获取接口
+     *
      * @return 获取失败返回null
      */
     public static IUserUtils getUserUtils() {
@@ -74,38 +75,41 @@ public class StatisticsInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         if (null == requestStatistics) {
             logger.error("### StatisticsInterceptor.preHandle 服务所有的请求统计实现类未注入，请注入：StatisticsInterceptor.requestStatistics");
-        } else {
-            // 设置当前请求请求时间
-            requestStatistics.setRequestStartTime(request, response);
+            return true;
+        }
 
-            // 服务器本次启动后处理的请求总数 加1
-            boolean requestCountByStartFlag = requestStatistics.addRequestCountByStart(request, response);
 
-            // 服务器当天处理请求总数(00:00:00--23:59:59) 加1
-            boolean requestCountByDayFlag = requestStatistics.addRequestCountByDay(request, response);
 
-            // 服务器当前小时处理请求总数(n:00:00-n:59:59) 加1
-            boolean requestCountByHourFlag = requestStatistics.addRequestCountByHour(request, response);
+        // 设置当前请求请求时间
+        requestStatistics.setRequestStartTime(request, response);
 
-            // 设置最后一次请求的时间-- 必须在请求数量统计之后调用，否则会导致 RequestCountByDay RequestCountByHour 无法清零
-            boolean lastRequestTimeFlag = requestStatistics.setLastRequestTime(request, response);
+        // 服务器本次启动后处理的请求总数 加1
+        boolean requestCountByStartFlag = requestStatistics.addRequestCountByStart(request, response);
 
-            if (logger.isDebugEnabled()) {
-                String tmp = "\r\n" +
-                        "#=======================================================================================================================#\r\n" +
-                        "# 请求处理前的处理：\r\n" +
-                        "#\t 设置最后一次请求的时间：" + lastRequestTimeFlag + "\r\n" +
-                        "#\t 服务器本次启动后处理的请求总数 加1：" + requestCountByStartFlag + "\r\n" +
-                        "#\t 服务器当天处理请求总数(00:00:00--23:59:59) 加1：" + requestCountByDayFlag + "\r\n" +
-                        "#\t 统计服务器当前小时处理请求总数(n:00:00-n:59:59) 加1：" + requestCountByHourFlag + "\r\n" +
-                        "#\t ------------------------------------------------\r\n" +
-                        "#\t 最后一次请求的时间：" + DateTimeUtils.getDate(requestStatistics.getLastRequestTime(request, response), "yyyy-MM-dd HH:mm:ss.SSS") + "\r\n" +
-                        "#\t 服务器本次启动后处理的请求总数：" + requestStatistics.getRequestCountByStart(request, response) + "\r\n" +
-                        "#\t 服务器当天处理请求总数(00:00:00--23:59:59)：" + requestStatistics.getRequestCountByDay(request, response) + "\r\n" +
-                        "#\t 服务器当前小时处理请求总数(n:00:00-n:59:59)：" + requestStatistics.getRequestCountByHour(request, response) + "\r\n" +
-                        "#=======================================================================================================================#\r\n";
-                logger.debug(tmp);
-            }
+        // 服务器当天处理请求总数(00:00:00--23:59:59) 加1
+        boolean requestCountByDayFlag = requestStatistics.addRequestCountByDay(request, response);
+
+        // 服务器当前小时处理请求总数(n:00:00-n:59:59) 加1
+        boolean requestCountByHourFlag = requestStatistics.addRequestCountByHour(request, response);
+
+        // 设置最后一次请求的时间-- 必须在请求数量统计之后调用，否则会导致 RequestCountByDay RequestCountByHour 无法清零
+        boolean lastRequestTimeFlag = requestStatistics.setLastRequestTime(request, response);
+
+        if (logger.isDebugEnabled()) {
+            String tmp = "\r\n" +
+                    "#=======================================================================================================================#\r\n" +
+                    "# 请求处理前的处理：\r\n" +
+                    "#\t 设置最后一次请求的时间：" + lastRequestTimeFlag + "\r\n" +
+                    "#\t 服务器本次启动后处理的请求总数 加1：" + requestCountByStartFlag + "\r\n" +
+                    "#\t 服务器当天处理请求总数(00:00:00--23:59:59) 加1：" + requestCountByDayFlag + "\r\n" +
+                    "#\t 统计服务器当前小时处理请求总数(n:00:00-n:59:59) 加1：" + requestCountByHourFlag + "\r\n" +
+                    "#\t ------------------------------------------------\r\n" +
+                    "#\t 最后一次请求的时间：" + DateTimeUtils.getDate(requestStatistics.getLastRequestTime(request, response), "yyyy-MM-dd HH:mm:ss.SSS") + "\r\n" +
+                    "#\t 服务器本次启动后处理的请求总数：" + requestStatistics.getRequestCountByStart(request, response) + "\r\n" +
+                    "#\t 服务器当天处理请求总数(00:00:00--23:59:59)：" + requestStatistics.getRequestCountByDay(request, response) + "\r\n" +
+                    "#\t 服务器当前小时处理请求总数(n:00:00-n:59:59)：" + requestStatistics.getRequestCountByHour(request, response) + "\r\n" +
+                    "#=======================================================================================================================#\r\n";
+            logger.debug(tmp);
         }
         return true;
     }

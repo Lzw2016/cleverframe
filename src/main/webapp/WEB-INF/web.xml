@@ -91,6 +91,7 @@
             <param-name>contextConfigLocation</param-name>
             <param-value>classpath*:/spring/spring-mvc-all.xml</param-value>
         </init-param>
+        <!--Servlet3.0上传文件配置-->
         <!--<multipart-config>-->
             <!--&lt;!&ndash;每个文件的最大大小 1024 * 1024 * 10 = 10485760 = 10M &ndash;&gt;-->
             <!--<max-file-size>10485760</max-file-size>-->

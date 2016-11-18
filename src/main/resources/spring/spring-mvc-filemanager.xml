@@ -1,7 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd"
+       default-lazy-init="false">
 
     <!-- 上传文件拦截,设置最大上传文件大小 10M=10*1024*1024(B)=10485760 bytes (依赖commons-fileupload) -->
     <bean id="multipartResolver" class="org.cleverframe.filemanager.servlet.SpeedLimitMultipartResolver">
@@ -18,9 +20,24 @@
         </property>
     </bean>
 
+    <!--
+        当上传超过限制大小的文件时 浏览器接收不到服务器返回的异常提示信息，而提示 net::err_connection_reset 错误，解决方案如下：(此方法无法解决！)
+        https://my.oschina.net/ironwill/blog/646762
+        http://gold.xitu.io/entry/57b57db92e958a00562eb08f
+    -->
+    <!--拦截器拦截文件上传路径，校验文件大小限制 (此方法无法解决！)-->
+    <!--<mvc:interceptors>-->
+    <!--<mvc:interceptor>-->
+    <!--<mvc:mapping path="/${base.mvcPath}/filemanager/manager/upload.*"/>-->
+    <!--<bean id="checkFileSizeInterceptor" class="org.cleverframe.filemanager.interceptor.CheckFileSizeInterceptor">-->
+    <!--<constructor-arg type="java.lang.Long" value="${fileupload.web.maxUploadSize}"/>-->
+    <!--</bean>-->
+    <!--</mvc:interceptor>-->
+    <!--</mvc:interceptors>-->
+
     <!--使用Servlet3.0的文件上传API配置-->
     <!--<bean id="multipartResolver" class="org.springframework.web.multipart.support.StandardServletMultipartResolver">-->
-        <!--&lt;!&ndash;文件上传使用的临时目录&ndash;&gt;-->
-        <!--<property name="resolveLazily" value="false"/>-->
+    <!--&lt;!&ndash;文件上传使用的临时目录&ndash;&gt;-->
+    <!--<property name="resolveLazily" value="false"/>-->
     <!--</bean>-->
 </beans>

@@ -213,5 +213,12 @@ public class SpringBeanNames implements IBeanNames {
      */
     public static final String RetryPolicy = "retryPolicy";
 
+    // -------------------------------------------------------------------------------------------//
+    // spring-mvc-filemanager.xml配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * 文件上传解析器
+     */
+    public static final String MultipartResolver = "multipartResolver";
 
 }

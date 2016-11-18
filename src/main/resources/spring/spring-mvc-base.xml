@@ -25,6 +25,7 @@
 	<!-- 使用Annotation自动注册Bean,只扫描@Controller,必须加上属性：use-default-filters="false" -->
 	<context:component-scan base-package="org.cleverframe" use-default-filters="false"><!-- base-package 如果多个,用“,”分隔 -->
 		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+		<context:exclude-filter type="annotation" expression="org.springframework.stereotype.Service"/>
 	</context:component-scan>
 
 	<!-- ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ 2.设置静态资源访问规则 ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~ -->

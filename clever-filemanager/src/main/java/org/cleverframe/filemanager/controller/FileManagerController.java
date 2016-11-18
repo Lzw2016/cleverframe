@@ -1,6 +1,5 @@
 package org.cleverframe.filemanager.controller;
 
-import org.cleverframe.common.attributes.CommonRequestAttributes;
 import org.cleverframe.common.codec.EncodeDecodeUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
@@ -14,12 +13,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.multipart.MaxUploadSizeExceededException;
-import org.springframework.web.multipart.MultipartException;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.multipart.MultipartHttpServletRequest;
 import org.springframework.web.servlet.ModelAndView;
@@ -166,32 +162,5 @@ public class FileManagerController extends BaseController {
         message.setResult(fileInfoList);
         message.setSuccessMessage("一共上传文件数量" + fileCount + "个，上传成功数量" + fileInfoList.size() + "个");
         return message;
-    }
-
-    /**
-     * 文件上传异常处理
-     */
-    @ExceptionHandler(value = {MaxUploadSizeExceededException.class, MultipartException.class})
-    @ResponseBody
-    private AjaxMessage uploadErrorHandler(HttpServletRequest request, HttpServletResponse response, Throwable throwable) {
-        ModelAndView modelAndView = new ModelAndView();
-        // 错误信息存到request Attribute中，给拦截器处理(存储)
-        request.setAttribute(CommonRequestAttributes.SERVER_EXCEPTION, throwable);
-        // 如果是ajax请求直接返回响应数据，跳转到对应的错误页面
-        AjaxMessage<String> ajaxMessage = new AjaxMessage<>(throwable, "服务器异常!");
-        if (throwable instanceof MaxUploadSizeExceededException) {
-            ajaxMessage.setFailMessage("上传文件大小超过了最大限制");
-        } else {
-            ajaxMessage.setFailMessage("文件上传异常!");
-        }
-        modelAndView.getModelMap().put(XML_OR_JSON_ROOT, ajaxMessage);
-//        try {
-//            response.getWriter().print(JacksonMapper.nonEmptyMapper().toJson(ajaxMessage));
-//            response.getWriter().flush();
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
-//        return modelAndView;
-        return ajaxMessage;
     }
 }
