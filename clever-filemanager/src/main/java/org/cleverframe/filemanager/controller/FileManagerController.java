@@ -45,7 +45,8 @@ public class FileManagerController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(FileManagerController.class);
 
     @Autowired
-    @Qualifier(FilemanagerBeanNames.LocalStorageService)
+//    @Qualifier(FilemanagerBeanNames.LocalStorageService)
+    @Qualifier(FilemanagerBeanNames.FtpStorageService)
     private IStorageService storageService;
 
     @RequestMapping("/Demo" + VIEW_PAGE_SUFFIX)

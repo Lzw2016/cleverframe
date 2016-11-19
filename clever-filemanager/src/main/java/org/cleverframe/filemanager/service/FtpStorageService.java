@@ -1,11 +1,9 @@
 package org.cleverframe.filemanager.service;
 
 import com.google.common.util.concurrent.RateLimiter;
-import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.configuration.FilemanagerConfigNames;
-import org.cleverframe.common.configuration.FilemanagerConfigValues;
 import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.spring.SpringBeanNames;
@@ -14,6 +12,7 @@ import org.cleverframe.common.utils.IDCreateUtils;
 import org.cleverframe.filemanager.FilemanagerBeanNames;
 import org.cleverframe.filemanager.dao.FileInfoDao;
 import org.cleverframe.filemanager.entity.FileInfo;
+import org.cleverframe.filemanager.utils.FTPClientTemplate;
 import org.cleverframe.filemanager.utils.FileDigestUtils;
 import org.cleverframe.filemanager.utils.StoragePathUtils;
 import org.slf4j.Logger;
@@ -30,37 +29,30 @@ import java.io.OutputStream;
 import java.io.Serializable;
 
 /**
- * 上传文件存储到当前服务器的Service<br>
- * <p>
  * 作者：LiZW <br/>
- * 创建时间：2016/11/17 22:17 <br/>
+ * 创建时间：2016/11/19 13:47 <br/>
  */
-@Service(FilemanagerBeanNames.LocalStorageService)
-public class LocalStorageService extends BaseService implements IStorageService {
+@Service(FilemanagerBeanNames.FtpStorageService)
+public class FtpStorageService extends BaseService implements IStorageService {
     /**
      * 日志对象
      */
-    private final static Logger logger = LoggerFactory.getLogger(LocalStorageService.class);
+    private final static Logger logger = LoggerFactory.getLogger(FtpStorageService.class);
 
     /**
-     * 上传文件存储到当前服务器的路径，如：F:\fileStoragePath<br>
-     * <p>
+     * 上传文件到FTP的存储路径
      * <b>注意：路径后面没有多余的“\”或者“/”</b>
      */
-    public final static String FILE_STORAGE_PATH;
+    public static final String FILE_STORAGE_PATH_BY_FTP;
 
-    // 初始化 存储路径
     static {
         IConfig config = SpringContextHolder.getBean(SpringBeanNames.Config);
         if (config == null) {
-            throw new RuntimeException("Bean[" + SpringBeanNames.Config + "]获取失败");
+            throw new RuntimeException("[FTP服务器]Spring Bean注入失败, BeanName=" + SpringBeanNames.Config);
         }
-        String path = config.getConfig(FilemanagerConfigNames.FILE_STORAGE_PATH);
-        if (StringUtils.isBlank(path)) {
-            path = FilemanagerConfigValues.FILE_STORAGE_PATH;
-        }
-        FILE_STORAGE_PATH = FilenameUtils.normalizeNoEndSeparator(path);
-        logger.info("### [本地服务器]上传文件存储到当前服务器的路径地址[{}]", FILE_STORAGE_PATH);
+        String path = config.getConfig(FilemanagerConfigNames.FILE_STORAGE_PATH_BY_FTP);
+        FILE_STORAGE_PATH_BY_FTP = FilenameUtils.normalizeNoEndSeparator(path);
+        logger.info("### [FTP服务器]上传文件存储到FTP服务器的路径地址[{}]", FILE_STORAGE_PATH_BY_FTP);
     }
 
     @Autowired
@@ -73,23 +65,21 @@ public class LocalStorageService extends BaseService implements IStorageService 
         if (StringUtils.isBlank(fileDigest) || digestType == null) {
             return null;
         }
-        // 到数据库查找判断此文件是否已经上传过了 - 此文件是否已经上传过了，不需要重复保存
+        // 到数据库查找判断此文件是否已经上传过了
         dbFileInfo = fileInfoDao.findFileInfoByDigest(fileDigest, digestType);
-        if (dbFileInfo == null) {
-            logger.debug("[本地服务器]秒传失败，文件没有上传过");
+        if (dbFileInfo == null || StringUtils.isBlank(dbFileInfo.getFilePath()) || StringUtils.isBlank(dbFileInfo.getNewName())) {
             return null;
+        } else {
+            String filepath = FILE_STORAGE_PATH_BY_FTP + dbFileInfo.getFilePath() + File.separator + dbFileInfo.getNewName();
+            filepath = FilenameUtils.separatorsToUnix(filepath);
+            boolean exists;
+            try (FTPClientTemplate ftp = new FTPClientTemplate()) {
+                exists = ftp.existsFile(filepath);
+            }
+            if (!exists) {
+                return null;
+            }
         }
-        if (StringUtils.isBlank(dbFileInfo.getFilePath()) || StringUtils.isBlank(dbFileInfo.getNewName())) {
-            logger.warn("[本地服务器]秒传失败，数据库里文件(FilePath、NewName)信息为空，文件信息UUID={}", dbFileInfo.getUuid());
-            return null;
-        }
-        String filepath = FILE_STORAGE_PATH + dbFileInfo.getFilePath() + File.separator + dbFileInfo.getNewName();
-        File file = new File(filepath);
-        if (!file.exists() || !file.isFile()) {
-            logger.warn("[本地服务器]秒传失败，上传文件不存在(可能已经被删除)，文件路径[{}]", filepath);
-            return null;
-        }
-        logger.warn("[本地服务器]文件秒传成功，文件存储路径[{}]", filepath);
         return dbFileInfo;
     }
 
@@ -97,9 +87,12 @@ public class LocalStorageService extends BaseService implements IStorageService 
     @Override
     public FileInfo saveFile(long uploadTime, String fileSource, MultipartFile multipartFile) throws Exception {
         // 设置文件签名类型 和 文件签名
-        String digest;
-        try (InputStream inputStream = multipartFile.getInputStream()) {
+        InputStream inputStream = multipartFile.getInputStream();
+        String digest = null;
+        try {
             digest = FileDigestUtils.FileDigestByMD5(inputStream);
+        } finally {
+            inputStream.close();
         }
         // 通过文件签名检查服务器端是否有相同文件
         FileInfo lazyFileInfo = this.lazySaveFile(multipartFile.getOriginalFilename(), digest, FileInfo.MD5_DIGEST);
@@ -114,8 +107,8 @@ public class LocalStorageService extends BaseService implements IStorageService 
         fileInfo.setFileSize(multipartFile.getSize());
         fileInfo.setDigest(digest);
         fileInfo.setDigestType(FileInfo.MD5_DIGEST);
-        // 上传文件的存储类型：当前服务器硬盘
-        fileInfo.setStoredType(FileInfo.LOCAL_STORAGE);
+        // 上传文件的存储类型：FTP服务器
+        fileInfo.setStoredType(FileInfo.FTP_STORAGE);
         // 设置文件存储之后的名称：UUID + 后缀名(此操作依赖文件原名称)
         String newName = IDCreateUtils.uuid();
         String fileExtension = FilenameUtils.getExtension(fileInfo.getFileName());
@@ -123,28 +116,33 @@ public class LocalStorageService extends BaseService implements IStorageService 
             newName = newName + "." + fileExtension.toLowerCase();
         }
         fileInfo.setNewName(newName);
-        // 上传文件存储到当前服务器的路径(相对路径，相对于 FILE_STORAGE_PATH)
+
+        // 上传文件存到FTP服务器的路径(相对路径)
         String filePath = StoragePathUtils.createFilePathByDate("");
         fileInfo.setFilePath(filePath);
         // 计算文件的绝对路径，保存文件
-        String absoluteFilePath = FILE_STORAGE_PATH + filePath + File.separator + newName;
-        File file = new File(absoluteFilePath);
+        String absoluteFilePath = FILE_STORAGE_PATH_BY_FTP + filePath + File.separator + newName;
+        absoluteFilePath = FilenameUtils.separatorsToUnix(absoluteFilePath);
         long storageStart = System.currentTimeMillis();
-        // 文件夹不存在，创建文件夹
-        File parentFile = file.getParentFile();
-        if (parentFile != null && !parentFile.exists()) {
-            if (parentFile.mkdirs()) {
-                logger.info("[本地服务器]创建文件夹：" + parentFile.getPath());
-            } else {
-                throw new RuntimeException("创建文件夹[" + parentFile.getPath() + "]失败");
+        FTPClientTemplate ftp = new FTPClientTemplate();
+        boolean success = false;
+        try {
+            inputStream = multipartFile.getInputStream();
+            success = ftp.uploadFile(absoluteFilePath, inputStream);
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
             }
+            ftp.close();
         }
-        // 如果filePath表示的不是一个路径，文件就会被存到System.getProperty("user.dir")路径下
-        multipartFile.transferTo(file);
         long storageEnd = System.currentTimeMillis();
+        if (!success) {
+            logger.error("[FTP服务器]上传文件到FTP服务器失败！");
+            throw new Exception("[FTP服务器]上传文件到FTP服务器失败！");
+        }
         // 设置存储所用的时间
         fileInfo.setStoredTime(storageEnd - storageStart);
-        logger.info("[本地服务器]文件存储所用时间:[{}ms]", fileInfo.getStoredTime());
+        logger.info("[FTP服务器]文件存储所用时间:[{}ms]", fileInfo.getStoredTime());
         // 保存文件信息
         fileInfoDao.getHibernateDao().save(fileInfo);
         return fileInfo;
@@ -160,22 +158,22 @@ public class LocalStorageService extends BaseService implements IStorageService 
             return 3;
         }
         int count = fileInfoDao.deleteFileInfo(fileInfo.getFilePath(), fileInfo.getNewName());
-        logger.info("[本地服务器]删除文件引用数量：{} 条", count);
+        logger.info("[FTP服务器]删除文件引用数量：{} 条", count);
         if (lazy) {
             // lazy == true:只删除FileInfo
             return 2;
         }
-        String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
+        String fullPath = FILE_STORAGE_PATH_BY_FTP + fileInfo.getFilePath();
         fullPath = FilenameUtils.concat(fullPath, fileInfo.getNewName());
-        File file = new File(fullPath);
-        if (file.exists() && file.isFile()) {
-            if (!file.delete()) {
-                throw new Exception("[本地服务器]文件删除失败：" + fullPath);
-            }
-        } else {
-            throw new Exception("[本地服务器]文件删除失败：" + fullPath);
+        fullPath = FilenameUtils.separatorsToUnix(fullPath);
+        boolean success;
+        try (FTPClientTemplate ftp = new FTPClientTemplate()) {
+            success = ftp.deleteFile(fullPath);
         }
-        logger.warn("[本地服务器]删除文件成功，文件路径[{}]", fullPath);
+        if (!success) {
+            logger.error("[FTP服务器]到FTP服务器删除文件失败！");
+            throw new Exception("[FTP服务器]到FTP服务器删除文件失败！");
+        }
         return 1;
     }
 
@@ -185,14 +183,17 @@ public class LocalStorageService extends BaseService implements IStorageService 
         if (fileInfo == null) {
             return null;
         }
-        String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
+        String fullPath = FILE_STORAGE_PATH_BY_FTP + fileInfo.getFilePath();
         fullPath = FilenameUtils.concat(fullPath, fileInfo.getNewName());
-        File file = new File(fullPath);
-        if (file.exists() && file.isFile()) {
-            return fileInfo;
+        fullPath = FilenameUtils.separatorsToUnix(fullPath);
+        boolean exists;
+        try (FTPClientTemplate ftp = new FTPClientTemplate()) {
+            exists = ftp.existsFile(fullPath);
         }
-        logger.warn("[本地服务器]文件引用[UUID={}]对应的文件不存在", fileInfo.getUuid());
-        return null;
+        if (!exists) {
+            return null;
+        }
+        return fileInfo;
     }
 
     @Override
@@ -201,22 +202,30 @@ public class LocalStorageService extends BaseService implements IStorageService 
         if (fileInfo == null) {
             return null;
         }
-        String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
+        String fullPath = FILE_STORAGE_PATH_BY_FTP + fileInfo.getFilePath();
         fullPath = FilenameUtils.concat(fullPath, fileInfo.getNewName());
-        File file = new File(fullPath);
-        if (file.exists() && file.isFile()) {
-            try (InputStream inputStream = FileUtils.openInputStream(file)) {
+        fullPath = FilenameUtils.separatorsToUnix(fullPath);
+        FTPClientTemplate ftp = new FTPClientTemplate();
+        InputStream inputStream = null;
+        try {
+            inputStream = ftp.downloadFile(fullPath);
+            if (inputStream != null) {
                 byte[] data = new byte[256 * 1024];
                 while (inputStream.read(data) > -1) {
                     outputStream.write(data);
                 }
+                return fileInfo;
             }
-            return fileInfo;
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            ftp.close();
         }
-        logger.warn("[本地服务器]文件引用[UUID={}]对应的文件不存在", fileInfo.getUuid());
         return null;
     }
 
+    @SuppressWarnings("Duplicates")
     @Override
     public FileInfo openFileSpeedLimit(Serializable fileInfoUuid, OutputStream outputStream, long maxSpeed) throws Exception {
         if (maxSpeed <= 0) {
@@ -227,11 +236,14 @@ public class LocalStorageService extends BaseService implements IStorageService 
         if (fileInfo == null) {
             return null;
         }
-        String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
+        String fullPath = FILE_STORAGE_PATH_BY_FTP + fileInfo.getFilePath();
         fullPath = FilenameUtils.concat(fullPath, fileInfo.getNewName());
-        File file = new File(fullPath);
-        if (file.exists() && file.isFile()) {
-            try (InputStream inputStream = FileUtils.openInputStream(file)) {
+        fullPath = FilenameUtils.separatorsToUnix(fullPath);
+        FTPClientTemplate ftp = new FTPClientTemplate();
+        InputStream inputStream = null;
+        try {
+            inputStream = ftp.downloadFile(fullPath);
+            if (inputStream != null) {
                 byte[] data = new byte[32 * 1024];
                 int readByte;
                 double sleepTime;
@@ -242,13 +254,17 @@ public class LocalStorageService extends BaseService implements IStorageService 
                     }
                     outputStream.write(data);
                     sleepTime = rateLimiter.acquire(readByte);
-                    logger.debug("[本地服务器]打开文件UUID:[{}], 读取字节数:[{}], 休眠时间:[{}]秒", fileInfo.getUuid(), readByte, sleepTime);
+                    logger.debug("[FTP服务器]打开文件UUID:[{}], 读取字节数:[{}], 休眠时间:[{}]秒", fileInfo.getUuid(), readByte, sleepTime);
                 }
+                return fileInfo;
             }
-            return fileInfo;
+        } finally {
+            if (inputStream != null) {
+                inputStream.close();
+            }
+            ftp.close();
         }
-        logger.warn("[本地服务器]文件引用[UUID={}]对应的文件不存在", fileInfo.getUuid());
+        logger.warn("[FTP服务器]文件引用[UUID={}]对应的文件不存在", fileInfo.getUuid());
         return null;
     }
 }
-

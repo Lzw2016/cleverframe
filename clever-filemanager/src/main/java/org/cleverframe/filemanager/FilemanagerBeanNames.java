@@ -18,6 +18,8 @@ public class FilemanagerBeanNames implements IBeanNames {
     // -------------------------------------------------------------------------------------------//
     public static final String FileManagerService = "filemanager_FileManagerService";
     public static final String LocalStorageService = "filemanager_LocalStorageService";
+    public static final String FtpStorageService = "filemanager_FtpStorageService";
+
 
     // -------------------------------------------------------------------------------------------//
     // Other

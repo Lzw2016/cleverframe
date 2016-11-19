@@ -133,7 +133,7 @@ project(':clever-common') {
         // Http客户端
         compile('org.apache.httpcomponents:httpclient:4.3.6')
         // 各种网络协议的客户端，支持Echo, Finger, FTP, NNTP, NTP, POP3(S), SMTP(S), Telnet, Whois
-        compile('commons-net:commons-net:3.4')
+        compile('commons-net:commons-net:3.5')
         compile('org.apache.commons:commons-email:1.4')
         // 解压和压缩
         compile('org.apache.commons:commons-compress:1.11')
