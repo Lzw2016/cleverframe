@@ -87,6 +87,7 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         if (resources == null) {
             resources = userPermissionsService.getResourcesByCache(urlNoSuffix);
             if (resources == null) {
+                // TODO 此处应该抛出 404 资源不存在
                 logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源未配置在资源表里", user.getLoginName(), url);
                 return false;
             }

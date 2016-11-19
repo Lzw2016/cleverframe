@@ -1,5 +1,6 @@
 package org.cleverframe.filemanager.service;
 
+import com.google.common.util.concurrent.RateLimiter;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
@@ -205,6 +206,40 @@ public class LocalStorageService extends BaseService implements IStorageService 
                 byte[] data = new byte[256 * 1024];
                 while (inputStream.read(data) > -1) {
                     outputStream.write(data);
+                }
+            }
+            return fileInfo;
+        }
+        logger.warn("文件引用[UUID={}]对应的文件不存在", fileInfo.getUuid());
+        return null;
+    }
+
+    @Override
+    public FileInfo openFileSpeedLimit(Serializable fileInfoUuid, OutputStream outputStream, long maxSpeed) throws Exception {
+        if (maxSpeed <= 0) {
+            maxSpeed = Max_Open_Speed;
+        }
+        RateLimiter rateLimiter = RateLimiter.create(maxSpeed);
+        FileInfo fileInfo = fileInfoDao.getFileInfoByUuid(fileInfoUuid);
+        if (fileInfo == null) {
+            return null;
+        }
+        String fullPath = FILE_STORAGE_PATH + fileInfo.getFilePath();
+        fullPath = FilenameUtils.concat(fullPath, fileInfo.getNewName());
+        File file = new File(fullPath);
+        if (file.exists() && file.isFile()) {
+            try (InputStream inputStream = FileUtils.openInputStream(file)) {
+                byte[] data = new byte[32 * 1024];
+                int readByte;
+                double sleepTime;
+                while (true) {
+                    readByte = inputStream.read(data);
+                    if (readByte <= 0) {
+                        break;
+                    }
+                    outputStream.write(data);
+                    sleepTime = rateLimiter.acquire(readByte);
+                    logger.debug("打开文件UUID:[{}], 读取字节数:[{}], 休眠时间:[{}]秒", fileInfo.getUuid(), readByte, sleepTime);
                 }
             }
             return fileInfo;

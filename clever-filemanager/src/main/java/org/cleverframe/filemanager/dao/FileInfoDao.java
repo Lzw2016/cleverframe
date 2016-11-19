@@ -6,6 +6,7 @@ import org.cleverframe.core.persistence.dao.BaseDao;
 import org.cleverframe.core.utils.QLScriptUtils;
 import org.cleverframe.filemanager.FilemanagerBeanNames;
 import org.cleverframe.filemanager.entity.FileInfo;
+import org.hibernate.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Repository;
@@ -73,8 +74,8 @@ public class FileInfoDao extends BaseDao<FileInfo> {
         param.put("filePath", filePath);
         param.put("newName", newName);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.filemanager.dao.FileInfoDao.deleteFileInfo");
-        Long count = this.getHibernateDao().getCountBySql(sql, param);
-        return count.intValue();
+        Query query = this.getHibernateDao().createSqlQuery(sql, param);
+        return query.executeUpdate();
     }
 
 

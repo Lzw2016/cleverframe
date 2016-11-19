@@ -62,6 +62,6 @@ public class SpeedLimitProgressListener implements ProgressListener {
         if (addReadBytes > 0) {
             sleepTime = rateLimiter.acquire(addReadBytes.intValue());
         }
-        logger.debug("已读取字节数:{}bit, 本次请求字节数:{}, 当前文件数:{}, 当前读取={}, 当前休眠时间:{}秒", pBytesRead, pContentLength, pItems, addReadBytes, sleepTime);
+        logger.debug("已读取字节数:[{}], 本次请求字节数:[{}], 当前文件数:[{}], 当前读取=[{}], 当前休眠时间:[{}]秒", pBytesRead, pContentLength, pItems, addReadBytes, sleepTime);
     }
 }

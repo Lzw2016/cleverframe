@@ -138,7 +138,8 @@ public abstract class BaseController {
      * @return 验证有错误返回False，无错误返回True
      */
     protected boolean beanValidator(BindingResult bindingResult, AjaxMessage<?> message) {
-        if (bindingResult.hasErrors()) {
+        boolean hasErrors = bindingResult.hasErrors();
+        if (hasErrors) {
             message.setSuccess(false);
             message.setSuccessMessage(null);
             message.setFailMessage("请求参数校验失败！");
@@ -156,10 +157,8 @@ public abstract class BaseController {
                         + " | code:" + code
                         + " | value:" + value);
             }
-        } else {
-            message.setSuccess(true);
         }
-        return !bindingResult.hasErrors();
+        return !hasErrors;
     }
 
     /**

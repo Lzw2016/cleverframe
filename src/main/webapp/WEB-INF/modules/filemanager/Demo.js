@@ -166,7 +166,7 @@ var pageJs = function (globalPath) {
         // 文件读取对象 HTML5
         var fileReader = new FileReader();
         // 分割文件对象
-        var blobSlice = File.prototype.mozSlice || File.prototype.webkitSlice || File.prototype.slice
+        var blobSlice = File.prototype.mozSlice || File.prototype.webkitSlice || File.prototype.slice;
         // 文件块大小 20KB
         var chunkSize = 20 * 1024;
         var chunks = Math.ceil(file.size / chunkSize);
