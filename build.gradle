@@ -55,6 +55,7 @@ allprojects {
         // mavenCentral()
         // 使用开源中国的maven仓库
         // maven { url 'http://maven.oschina.net/content/groups/public/' }
+        maven { url 'http://127.0.0.1:18080/nexus/content/repositories/thirdparty/' }
         maven { url 'http://maven.aliyun.com/nexus/content/groups/public/' }
         maven { url 'http://repo2.maven.org/maven2/' }
     }
@@ -240,9 +241,10 @@ project(':clever-filemanager') {
 
         // ##################上传文件依赖库
         // 使用Servlet 3.0的文件上传API不需要依赖此jar包
-         compile('commons-fileupload:commons-fileupload:1.3.2')
-        // FastDFS Java客户端需要自己导出jar包
-        // compile('com.github.tobato:fastdfs-client:1.25.1-RELEASE')
+        compile('commons-fileupload:commons-fileupload:1.3.2')
+        compile('org.apache.commons:commons-pool2:2.4.2') // 资源池
+        // FastDFS Java客户端
+        compile('org.cleverframe:fastdfs-java-client:1.0.0.RELEASE')
     }
 }
 

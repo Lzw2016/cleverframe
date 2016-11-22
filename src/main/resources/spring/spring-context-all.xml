@@ -10,7 +10,7 @@
     <!-- 加载配置属性文件 -->
     <!--<context:property-placeholder ignore-unresolvable="true" location="classpath:cleverframe.properties" />-->
     <bean id="customPropertyPlaceholderConfigurer" class="org.cleverframe.common.configuration.CustomPropertyPlaceholderConfigurer">
-        <property name="fileEncoding" value="UTF-8" />
+        <property name="fileEncoding" value="UTF-8"/>
         <property name="locations">
             <list>
                 <value>classpath:cleverframe/cleverframe-base.properties</value>
@@ -33,7 +33,7 @@
         2.设置数据库连接信息和连接池、数据库事务等信息
         3.设置服务端数据验证组件
     -->
-    <import resource="spring-context-base.xml" />
+    <import resource="spring-context-base.xml"/>
 
     <!--
         EHcache的缓存配置
@@ -61,6 +61,8 @@
     <import resource="spring-context-quartz.xml"/>
 
     <import resource="spring-context-shiro.xml"/>
+
+    <import resource="spring-context-filemanager.xml"/>
 
     <!--<import resource="spring-context-snaker.xml"/>-->
 

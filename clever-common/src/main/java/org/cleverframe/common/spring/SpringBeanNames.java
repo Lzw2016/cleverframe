@@ -214,11 +214,30 @@ public class SpringBeanNames implements IBeanNames {
     public static final String RetryPolicy = "retryPolicy";
 
     // -------------------------------------------------------------------------------------------//
+    // spring-context-filemanager.xml配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * FastDFS连接池配置
+     */
+    public static final String FastDfsConnectionPool = "fastDfsConnectionPool";
+    /**
+     * FastDfs命令执行器
+     */
+    public static final String FastDfsCommandExecutor = "fastDfsCommandExecutor";
+    /**
+     * FastDFS Tracker Client
+     */
+    public static final String FastDfsTrackerClient = "fastDfsTrackerClient";
+    /**
+     * FastDFS Storage Client
+     */
+    public static final String FastDfsStorageClient = "fastDfsStorageClient";
+
+    // -------------------------------------------------------------------------------------------//
     // spring-mvc-filemanager.xml配置文件的Bean名称
     // -------------------------------------------------------------------------------------------//
     /**
      * 文件上传解析器
      */
     public static final String MultipartResolver = "multipartResolver";
-
 }

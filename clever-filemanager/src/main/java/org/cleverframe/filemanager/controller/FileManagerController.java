@@ -46,7 +46,8 @@ public class FileManagerController extends BaseController {
 
     @Autowired
 //    @Qualifier(FilemanagerBeanNames.LocalStorageService)
-    @Qualifier(FilemanagerBeanNames.FtpStorageService)
+//    @Qualifier(FilemanagerBeanNames.FtpStorageService)
+    @Qualifier(FilemanagerBeanNames.FastDfsStorageService)
     private IStorageService storageService;
 
     @RequestMapping("/Demo" + VIEW_PAGE_SUFFIX)
