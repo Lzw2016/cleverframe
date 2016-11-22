@@ -210,6 +210,7 @@ public class LocalStorageService extends BaseService implements IStorageService 
                 while (inputStream.read(data) > -1) {
                     outputStream.write(data);
                 }
+                outputStream.flush();
             }
             return fileInfo;
         }
@@ -244,6 +245,7 @@ public class LocalStorageService extends BaseService implements IStorageService 
                     sleepTime = rateLimiter.acquire(readByte);
                     logger.debug("[本地服务器]打开文件UUID:[{}], 读取字节数:[{}], 休眠时间:[{}]秒", fileInfo.getUuid(), readByte, sleepTime);
                 }
+                outputStream.flush();
             }
             return fileInfo;
         }

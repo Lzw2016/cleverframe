@@ -211,9 +211,15 @@ public class FtpStorageService extends BaseService implements IStorageService {
             inputStream = ftp.downloadFile(fullPath);
             if (inputStream != null) {
                 byte[] data = new byte[256 * 1024];
-                while (inputStream.read(data) > -1) {
-                    outputStream.write(data);
+                int readByte;
+                while (true) {
+                    readByte = inputStream.read(data);
+                    if (readByte <= 0) {
+                        break;
+                    }
+                    outputStream.write(data, 0, readByte);
                 }
+                outputStream.flush();
                 return fileInfo;
             }
         } finally {
@@ -252,10 +258,11 @@ public class FtpStorageService extends BaseService implements IStorageService {
                     if (readByte <= 0) {
                         break;
                     }
-                    outputStream.write(data);
+                    outputStream.write(data, 0, readByte);
                     sleepTime = rateLimiter.acquire(readByte);
                     logger.debug("[FTP服务器]打开文件UUID:[{}], 读取字节数:[{}], 休眠时间:[{}]秒", fileInfo.getUuid(), readByte, sleepTime);
                 }
+                outputStream.flush();
                 return fileInfo;
             }
         } finally {
