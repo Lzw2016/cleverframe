@@ -145,6 +145,8 @@ project(':clever-common') {
         // 二维码、条形码
         compile('com.google.zxing:core:3.2.1')
         compile('com.google.zxing:javase:3.2.1')
+        // 生成图片缩略图
+        compile('net.coobird:thumbnailator:0.4.8')
         // 汉字转拼音
         compile('com.belerweb:pinyin4j:2.5.1')
         // 客户端(浏览器等)信息获取lib

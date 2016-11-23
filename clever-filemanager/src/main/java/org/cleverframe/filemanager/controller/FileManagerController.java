@@ -45,14 +45,19 @@ public class FileManagerController extends BaseController {
     private final static Logger logger = LoggerFactory.getLogger(FileManagerController.class);
 
     @Autowired
-//    @Qualifier(FilemanagerBeanNames.LocalStorageService)
+    @Qualifier(FilemanagerBeanNames.LocalStorageService)
 //    @Qualifier(FilemanagerBeanNames.FtpStorageService)
-    @Qualifier(FilemanagerBeanNames.FastDfsStorageService)
+//    @Qualifier(FilemanagerBeanNames.FastDfsStorageService)
     private IStorageService storageService;
 
     @RequestMapping("/Demo" + VIEW_PAGE_SUFFIX)
     public ModelAndView getLoginJsp(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView("filemanager/Demo");
+    }
+
+    @RequestMapping("/WebUploader" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getWebUploaderJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView("filemanager/WebUploader");
     }
 
     /**
