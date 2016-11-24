@@ -331,6 +331,14 @@ project(':clever-snaker') {
         compile('com.github.snakerflow:snaker-hibernate4:2.5.1')
         compile('com.github.snakerflow:snaker-quartz:2.5.1')
         compile('com.github.snakerflow:snaker-ehcache:2.5.1')
+
+        compile group: 'org.activiti', name: 'activiti-engine', version: '5.22.0'
+        compile group: 'org.activiti', name: 'activiti-spring', version: '5.22.0'
+        compile group: 'org.activiti', name: 'activiti-bpmn-model', version: '5.22.0'
+        compile group: 'org.activiti', name: 'activiti-bpmn-converter', version: '5.22.0'
+        compile group: 'org.activiti', name: 'activiti-bpmn-layout', version: '5.22.0'
+        compile group: 'org.activiti', name: 'activiti-json-converter', version: '5.22.0'
+        compile group: 'org.activiti', name: 'activiti-image-generator', version: '5.22.0'
     }
 }
 
