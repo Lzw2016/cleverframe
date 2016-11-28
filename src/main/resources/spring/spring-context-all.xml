@@ -60,9 +60,20 @@
     -->
     <import resource="spring-context-quartz.xml"/>
 
+    <!--
+        Spring与Shiro整合
+    -->
     <import resource="spring-context-shiro.xml"/>
 
+    <!--
+        文件上传模块 支持本地服务器、FTP、FastDFS
+    -->
     <import resource="spring-context-filemanager.xml"/>
+
+    <!--
+        Spring与Activiti整合
+    -->
+    <import resource="spring-context-activiti.xml"/>
 
     <!--<import resource="spring-context-snaker.xml"/>-->
 

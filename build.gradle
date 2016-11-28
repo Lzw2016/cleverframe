@@ -18,6 +18,7 @@ dependencies {
     compile project(':clever-monitor')
     compile project(':clever-sys')
     compile project(':clever-filemanager')
+    compile project(':clever-activiti')
 
     compile project(':clever-zookeeper')
     compile project(':clever-redis')
@@ -321,6 +322,19 @@ project(':clever-memcached') {
     }
 }
 
+// Activiti 工作流模块
+project(':clever-activiti') {
+    dependencies {
+        compile project(':clever-common')
+        compile project(':clever-core')
+        // ##################
+        compile('org.activiti:activiti-engine:5.22.0') {
+            exclude group: 'org.springframework', module: 'spring-beans'
+        }
+        compile('org.activiti:activiti-spring:5.22.0')
+    }
+}
+
 // Snaker 工作流模块
 project(':clever-snaker') {
     dependencies {
@@ -331,14 +345,6 @@ project(':clever-snaker') {
         compile('com.github.snakerflow:snaker-hibernate4:2.5.1')
         compile('com.github.snakerflow:snaker-quartz:2.5.1')
         compile('com.github.snakerflow:snaker-ehcache:2.5.1')
-
-        compile group: 'org.activiti', name: 'activiti-engine', version: '5.22.0'
-        compile group: 'org.activiti', name: 'activiti-spring', version: '5.22.0'
-        compile group: 'org.activiti', name: 'activiti-bpmn-model', version: '5.22.0'
-        compile group: 'org.activiti', name: 'activiti-bpmn-converter', version: '5.22.0'
-        compile group: 'org.activiti', name: 'activiti-bpmn-layout', version: '5.22.0'
-        compile group: 'org.activiti', name: 'activiti-json-converter', version: '5.22.0'
-        compile group: 'org.activiti', name: 'activiti-image-generator', version: '5.22.0'
     }
 }
 
@@ -362,10 +368,3 @@ project(':clever-monitor') {
 //compile('net.sf.ehcache:ehcache-web:2.0.4')
 //compile('io.netty:netty-all:4.0.36.Final')
 //compile('org.apache.commons:commons-math3:3.6.1') // 数学计算
-//compile('org.apache.commons:commons-pool2:2.4.2') // 资源池
-
-/*
-    clever-snaker               --
-    clever-activity             --
-    clever-foxbpm               --
-*/

@@ -240,4 +240,40 @@ public class SpringBeanNames implements IBeanNames {
      * 文件上传解析器
      */
     public static final String MultipartResolver = "multipartResolver";
+
+    // -------------------------------------------------------------------------------------------//
+    // spring-context-activiti.xml配置文件的Bean名称
+    // -------------------------------------------------------------------------------------------//
+    /**
+     * 一个流程引擎的配置对象
+     */
+    public static final String ProcessEngineConfiguration = "processEngineConfiguration";
+    /**
+     * 流程引擎对象
+     */
+    public static final String ProcessEngine = "processEngine";
+    /**
+     * 工作流仓储服务
+     */
+    public static final String RepositoryService = "repositoryService";
+    /**
+     * 工作流运行服务
+     */
+    public static final String RuntimeService = "runtimeService";
+    /**
+     * 工作流任务服务
+     */
+    public static final String TaskService = "taskService";
+    /**
+     * 工作流历史数据服务
+     */
+    public static final String HistoryService = "historyService";
+    /**
+     * 工作流管理服务
+     */
+    public static final String ManagementService = "managementService";
+    /**
+     * 工作流唯一服务
+     */
+    public static final String IdentityService = "identityService";
 }
