@@ -23,6 +23,13 @@
         <property name="activityFontName" value="宋体"/>
         <!--定义部署的流程文件地址，不会重复部署-->
         <!--<property name="deploymentResources" value="/workflow/**"/>-->
+
+        <!--流程引擎 流程变量(Spring Bean)-->
+        <property name="beans">
+            <map>
+                <entry key="key01" value="value01"/>
+            </map>
+        </property>
     </bean>
 
     <!-- 创建一个流程引擎bean -->

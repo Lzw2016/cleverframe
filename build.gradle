@@ -206,7 +206,7 @@ project(':clever-core') {
 
         // ##################数据库JDBC驱动、数据库连接池
         compile('mysql:mysql-connector-java:5.1.40')
-        compile('com.alibaba:druid:1.0.26')
+        compile('com.alibaba:druid:1.0.27')
     }
 }
 
