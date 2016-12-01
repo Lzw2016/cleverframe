@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+		http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+		http://www.springframework.org/schema/context
+		http://www.springframework.org/schema/context/spring-context-4.2.xsd"
+       default-lazy-init="false">
+
+    <!-- Activiti Rest接口配置文件 -->
+    <description>Activiti Rest Configuration</description>
+
+    <!-- 自动扫描且只扫描@Controller -->
+    <context:component-scan base-package="org.activiti.rest.service.api">
+        <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+    </context:component-scan>
+
+    <!--<mvc:annotation-driven/>-->
+
+    <!-- Bean 与 json之间相互转换Mapper -->
+    <bean id="objectMapper" class="com.fasterxml.jackson.databind.ObjectMapper"/>
+
+    <!-- 集成 Activiti Rest 服务需要的bean -->
+    <bean id="restResponseFactory" class="org.activiti.rest.service.api.RestResponseFactory"/>
+    <bean id="contentTypeResolver" class="org.activiti.rest.common.application.DefaultContentTypeResolver"/>
+</beans>

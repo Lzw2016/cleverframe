@@ -279,7 +279,7 @@ project(':clever-sys') {
 //            exclude group: 'org.quartz-scheduler', module: 'quartz'
 //            exclude group: 'org.opensymphony.quartz', module: 'quartz'
 //        }
-        // 与clever-quartz中的quartz有冲突
+//         与clever-quartz中的quartz有冲突
     }
 }
 
@@ -329,9 +329,26 @@ project(':clever-activiti') {
         compile project(':clever-core')
         // ##################
         compile('org.activiti:activiti-engine:5.22.0') {
+            transitive = true
+            exclude group: 'org.slf4j', module: 'slf4j-api'
+            exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+            exclude group: 'org.apache.commons', module: 'commons-lang3'
+            exclude group: 'joda-time', module: 'joda-time'
+            exclude group: 'org.apache.commons', module: 'commons-email'
             exclude group: 'org.springframework', module: 'spring-beans'
         }
-        compile('org.activiti:activiti-spring:5.22.0')
+        compile('org.activiti:activiti-rest:5.22.0')
+        compile('org.activiti:activiti-spring:5.22.0') {
+            transitive = true
+            exclude group: 'org.slf4j', module: 'slf4j-api'
+            exclude group: 'org.slf4j', module: 'jcl-over-slf4j'
+            exclude group: 'org.apache.commons', module: 'commons-lang3'
+            exclude group: 'org.springframework', module: 'spring-context'
+            exclude group: 'org.springframework', module: 'spring-tx'
+            exclude group: 'org.springframework', module: 'spring-jdbc'
+            exclude group: 'org.springframework', module: 'spring-orm'
+            exclude group: 'commons-dbcp', module: 'commons-dbcp'
+        }
     }
 }
 

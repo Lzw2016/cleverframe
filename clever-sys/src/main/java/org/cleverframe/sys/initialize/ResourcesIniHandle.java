@@ -83,20 +83,22 @@ public class ResourcesIniHandle implements IHandle {
             notExistUrlList.add(resourcesUrl);
         }
         // 打印相应的日志
-        StringBuilder strTmp = new StringBuilder();
-        strTmp.append("\r\n");
-        strTmp.append("#=======================================================================================================================#\r\n");
-        strTmp.append("# 新增的资源如下(").append(addUrlList.size()).append("条):\r\n");
-        for (String url : addUrlList) {
-            strTmp.append("#\t ").append(url).append("\r\n");
-        }
-        strTmp.append("# 未匹配到的数据库里的资源(").append(notExistUrlList.size()).append("条):\r\n");
-        for (String url : notExistUrlList) {
-            strTmp.append("#\t ").append(url).append("\r\n");
-        }
-        strTmp.append("#=======================================================================================================================#");
-        if (logger.isInfoEnabled() && (addUrlList.size() > 0 || notExistUrlList.size() > 0)) {
-            logger.info(strTmp.toString());
+        if (logger.isInfoEnabled()) {
+            StringBuilder strTmp = new StringBuilder();
+            strTmp.append("\r\n");
+            strTmp.append("#=======================================================================================================================#\r\n");
+            strTmp.append("# 新增的资源如下(").append(addUrlList.size()).append("条):\r\n");
+            for (String url : addUrlList) {
+                strTmp.append("#\t ").append(url).append("\r\n");
+            }
+            strTmp.append("# 未匹配到的数据库里的资源(").append(notExistUrlList.size()).append("条):\r\n");
+            for (String url : notExistUrlList) {
+                strTmp.append("#\t ").append(url).append("\r\n");
+            }
+            strTmp.append("#=======================================================================================================================#");
+            if (logger.isInfoEnabled() && (addUrlList.size() > 0 || notExistUrlList.size() > 0)) {
+                logger.info(strTmp.toString());
+            }
         }
         return addUrlList.size();
     }

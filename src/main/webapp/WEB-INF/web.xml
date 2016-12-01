@@ -8,28 +8,26 @@
     <display-name>CleverFrame</display-name>
 
     <!-- 激活Tomcat的defaultServlet来处理静态文件 -->
-    <!--
-        <servlet-mapping>
-            <servlet-name>default</servlet-name>
-            <url-pattern>*.jpg</url-pattern>
-        </servlet-mapping>
-        <servlet-mapping>
-            <servlet-name>default</servlet-name>
-            <url-pattern>*.gif</url-pattern>
-        </servlet-mapping>
-        <servlet-mapping>
-            <servlet-name>default</servlet-name>
-            <url-pattern>*.png</url-pattern>
-        </servlet-mapping>
-        <servlet-mapping>
-            <servlet-name>default</servlet-name>
-            <url-pattern>*.js</url-pattern>
-        </servlet-mapping>
-        <servlet-mapping>
-            <servlet-name>default</servlet-name>
-            <url-pattern>*.css</url-pattern>
-        </servlet-mapping>
-     -->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>default</servlet-name>-->
+        <!--<url-pattern>*.jpg</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>default</servlet-name>-->
+        <!--<url-pattern>*.gif</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>default</servlet-name>-->
+        <!--<url-pattern>*.png</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>default</servlet-name>-->
+        <!--<url-pattern>*.js</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>default</servlet-name>-->
+        <!--<url-pattern>*.css</url-pattern>-->
+    <!--</servlet-mapping>-->
 
     <!-- 加载Spring配置文件 -->
     <!-- 指定配置文件 -->
@@ -60,12 +58,12 @@
 
     <!-- Hibernate 重要配置,解决Hibernate延迟加载问题(有性能问题?) -->
     <!--<filter>-->
-    <!--<filter-name>openSessionInViewFilter</filter-name>-->
-    <!--<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>-->
+        <!--<filter-name>openSessionInViewFilter</filter-name>-->
+        <!--<filter-class>org.springframework.orm.hibernate4.support.OpenSessionInViewFilter</filter-class>-->
     <!--</filter>-->
     <!--<filter-mapping>-->
-    <!--<filter-name>openSessionInViewFilter</filter-name>-->
-    <!--<url-pattern>/*</url-pattern>-->
+        <!--<filter-name>openSessionInViewFilter</filter-name>-->
+        <!--<url-pattern>/*</url-pattern>-->
     <!--</filter-mapping>-->
 
     <!-- Apache Shiro 安全过滤器-->
@@ -110,25 +108,38 @@
     </servlet-mapping>
 
     <!-- 为了在Spring容器中获取当前线程所对应的HttpServletRequest对象而添加 -->
-    <!--
-        <listener>
-          <listener-class>
-              org.springframework.web.context.request.RequestContextListener
-          </listener-class>
-        </listener>
-    -->
+    <!--<listener>-->
+        <!--<listener-class>-->
+            <!--org.springframework.web.context.request.RequestContextListener-->
+        <!--</listener-class>-->
+    <!--</listener>-->
+
+    <!-- Activiti Rest接口 -->
+    <!--<servlet>-->
+        <!--<servlet-name>RestServlet</servlet-name>-->
+        <!--<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
+        <!--<init-param>-->
+            <!--<param-name>contextConfigLocation</param-name>-->
+            <!--<param-value>classpath*:/spring/spring-mvc-activiti.xml</param-value>-->
+        <!--</init-param>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>RestServlet</servlet-name>-->
+        <!--<url-pattern>/activiti/rest/*</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+
     <!-- log4j配置信息 -->
     <!-- 设置在log4j中应用Web应用根路径的环境变量：cleverframe.root -->
     <context-param>
         <param-name>webAppRootKey</param-name>
         <param-value>cleverframe.root</param-value>
     </context-param>
+
     <!--负责将 Web 应用根目录以 webAppRootKey 上下文参数指定的属性名添加到系统参数中-->
-    <!--
-        <listener>
-            <listener-class>org.springframework.web.util.WebAppRootListener</listener-class>
-        </listener>
-    -->
+    <!--<listener>-->
+        <!--<listener-class>org.springframework.web.util.WebAppRootListener</listener-class>-->
+    <!--</listener>-->
 
     <!-- 设置log4j的配置文件位置 -->
     <context-param>
@@ -162,12 +173,12 @@
 
     <!-- 随机验证码 -->
     <!--<servlet>-->
-    <!--<servlet-name>validateCodeServlet</servlet-name>-->
-    <!--<servlet-class>org.cleverframe.common.servlet.ImageValidateCodeServlet</servlet-class>-->
+        <!--<servlet-name>validateCodeServlet</servlet-name>-->
+        <!--<servlet-class>org.cleverframe.common.servlet.ImageValidateCodeServlet</servlet-class>-->
     <!--</servlet>-->
     <!--<servlet-mapping>-->
-    <!--<servlet-name>validateCodeServlet</servlet-name>-->
-    <!--<url-pattern>/servlet/validateCode</url-pattern>-->
+        <!--<servlet-name>validateCodeServlet</servlet-name>-->
+        <!--<url-pattern>/servlet/validateCode</url-pattern>-->
     <!--</servlet-mapping>-->
 
     <!-- Session 配置 -->
@@ -181,20 +192,18 @@
     </listener>
 
     <!-- 错误 页面配置 -->
-    <!--
-        <error-page>
-            <exception-type>java.lang.Throwable</exception-type>
-            <location>/WEB-INF/views/error/500.html</location>
-        </error-page>
-        <error-page>
-            <error-code>500</error-code>
-            <location>/WEB-INF/views/error/500.html</location>
-        </error-page>
-        <error-page>
-            <error-code>404</error-code>
-            <location>/WEB-INF/views/error/404.html</location>
-        </error-page>
-    -->
+    <!--<error-page>-->
+        <!--<exception-type>java.lang.Throwable</exception-type>-->
+        <!--<location>/WEB-INF/views/error/500.html</location>-->
+    <!--</error-page>-->
+    <!--<error-page>-->
+        <!--<error-code>500</error-code>-->
+        <!--<location>/WEB-INF/views/error/500.html</location>-->
+    <!--</error-page>-->
+    <!--<error-page>-->
+        <!--<error-code>404</error-code>-->
+        <!--<location>/WEB-INF/views/error/404.html</location>-->
+    <!--</error-page>-->
 
     <welcome-file-list>
         <welcome-file>/WEB-INF/modules/index.jsp</welcome-file>

@@ -49,5 +49,9 @@
     <bean id="managementService" factory-bean="processEngine" factory-method="getManagementService"/>
     <!-- 工作流唯一服务 -->
     <bean id="identityService" factory-bean="processEngine" factory-method="getIdentityService"/>
+    <!--表单服务-->
+    <bean id="formService" factory-bean="processEngine" factory-method="getFormService"/>
+    <!--动态流程服务-->
+    <bean id="dynamicBpmnService" factory-bean="processEngine" factory-method="getDynamicBpmnService"/>
 
 </beans>

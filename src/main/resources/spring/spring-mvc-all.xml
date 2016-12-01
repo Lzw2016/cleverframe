@@ -42,5 +42,7 @@
 
     <!--<import resource="spring-mvc-shiro.xml"/>-->
 
+    <import resource="spring-mvc-activiti.xml"/>
+
     <import resource="spring-mvc-websocket.xml"/>
 </beans>

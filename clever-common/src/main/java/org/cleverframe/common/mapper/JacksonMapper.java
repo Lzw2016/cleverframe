@@ -52,7 +52,7 @@ public class JacksonMapper {
     /**
      * 对象转换器
      */
-    private ObjectMapper mapper = new ObjectMapper();
+    private ObjectMapper mapper;
 
     /**
      * 构造函数创建新的ObjectMapper
