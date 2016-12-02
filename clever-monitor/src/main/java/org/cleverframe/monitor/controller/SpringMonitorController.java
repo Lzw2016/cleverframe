@@ -36,6 +36,9 @@ public class SpringMonitorController extends BaseController {
         return new ModelAndView(MonitorJspUrlPath.SpringMonitor);
     }
 
+    /**
+     * 获取 Spring Context Bean
+     */
     @RequestMapping("/getSpringBeans")
     @ResponseBody
     public DataGridJson<BeanInfoVo> getSpringBeans(
@@ -44,6 +47,22 @@ public class SpringMonitorController extends BaseController {
             @RequestParam(required = false) String beanName) {
         DataGridJson<BeanInfoVo> json = new DataGridJson<>();
         List<BeanInfoVo> list = springMonitorService.getSpringBeans(beanName);
+        json.setRows(list);
+        json.setTotal(list.size());
+        return json;
+    }
+
+    /**
+     * 获取 Spring Web Bean
+     */
+    @RequestMapping("/getSpringWebBeans")
+    @ResponseBody
+    public DataGridJson<BeanInfoVo> getSpringWebBeans(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @RequestParam(required = false) String beanName) {
+        DataGridJson<BeanInfoVo> json = new DataGridJson<>();
+        List<BeanInfoVo> list = springMonitorService.getSpringWebBeans(beanName);
         json.setRows(list);
         json.setTotal(list.size());
         return json;

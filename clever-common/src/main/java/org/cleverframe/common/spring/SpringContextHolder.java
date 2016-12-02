@@ -7,6 +7,12 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.core.io.DefaultResourceLoader;
 import org.springframework.stereotype.Component;
+import org.springframework.web.context.ContextLoader;
+import org.springframework.web.context.WebApplicationContext;
+import org.springframework.web.context.support.WebApplicationContextUtils;
+import org.springframework.web.servlet.FrameworkServlet;
+
+import javax.servlet.ServletContext;
 
 /**
  * 获取Spring ApplicationContext容器的类<br/>
@@ -28,6 +34,16 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
      * Spring ApplicationContext容器
      */
     private static ApplicationContext applicationContext = null;
+
+    /**
+     * Spring ApplicationContext容器的子容器
+     */
+    private static WebApplicationContext webApplicationContext = null;
+
+    /**
+     * Servlet容器的上下文
+     */
+    private static ServletContext servletContext = null;
 
     /**
      * 实现ApplicationContextAware接口, 注入Context到静态变量中.
@@ -91,7 +107,7 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
         try {
             return (T) applicationContext.getBean(name);
         } catch (Throwable e) {
-            logger.error("获取Bean失败", e);
+            logger.error("获取Bean失败 name=" + name, e);
             return null;
         }
     }
@@ -105,7 +121,58 @@ public class SpringContextHolder implements ApplicationContextAware, DisposableB
         try {
             return applicationContext.getBean(requiredType);
         } catch (Throwable e) {
-            logger.error("获取Bean失败", e);
+            logger.error("获取Bean失败 class=" + requiredType, e);
+            return null;
+        }
+    }
+
+    /**
+     * @return Servlet容器的上下文
+     */
+    private static ServletContext getServletContext() {
+        if (servletContext == null) {
+            WebApplicationContext webApplicationContext = ContextLoader.getCurrentWebApplicationContext();
+            servletContext = webApplicationContext.getServletContext();
+        }
+        return servletContext;
+    }
+
+    /**
+     * @return Spring ApplicationContext容器的子容器
+     */
+    public static WebApplicationContext getWebApplicationContext() {
+        if (webApplicationContext == null) {
+            String attrName = FrameworkServlet.SERVLET_CONTEXT_PREFIX + "springServlet";
+            webApplicationContext = WebApplicationContextUtils.getWebApplicationContext(getServletContext(), attrName);
+        }
+        return webApplicationContext;
+    }
+
+    /**
+     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     *
+     * @return 返回Bean对象，失败返回null
+     */
+    @SuppressWarnings("unchecked")
+    public static <T> T getWebBean(String name) {
+        try {
+            return (T) getWebApplicationContext().getBean(name);
+        } catch (Throwable e) {
+            logger.error("获取Bean失败 name=" + name, e);
+            return null;
+        }
+    }
+
+    /**
+     * 从静态变量applicationContext中取得Bean, 自动转型为所赋值对象的类型.
+     *
+     * @return 返回Bean对象，失败返回null
+     */
+    public static <T> T getWebBean(Class<T> requiredType) {
+        try {
+            return getWebApplicationContext().getBean(requiredType);
+        } catch (Throwable e) {
+            logger.error("获取Bean失败 class=" + requiredType, e);
             return null;
         }
     }

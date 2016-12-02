@@ -4,6 +4,7 @@ import org.apache.commons.lang3.ArrayUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.shiro.subject.Subject;
 import org.apache.shiro.web.filter.authz.AuthorizationFilter;
+import org.cleverframe.common.spring.SpringContextHolder;
 import org.cleverframe.sys.SysBeanNames;
 import org.cleverframe.sys.entity.Resources;
 import org.cleverframe.sys.entity.User;
@@ -12,6 +13,8 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.servlet.HandlerExecutionChain;
+import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.servlet.ServletRequest;
 import javax.servlet.ServletResponse;
@@ -68,6 +71,10 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         String url = httpRequest.getRequestURI();
         url = StringUtils.removeStart(url, contextPath);
         String urlNoSuffix = removeUrlSuffix(url);
+
+        RequestMappingHandlerMapping handlerMapping = SpringContextHolder.getWebBean(RequestMappingHandlerMapping.class);
+        HandlerExecutionChain handlerExecutionChain = handlerMapping.getHandler(httpRequest);
+
 
         // 获取当前登录用户信息
         Subject subject = getSubject(request, response);

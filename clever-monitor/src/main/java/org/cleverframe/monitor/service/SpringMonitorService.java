@@ -29,13 +29,13 @@ public class SpringMonitorService extends BaseService {
         beanInfoVo.setName(beanName);
         if (bean != null) {
             beanInfoVo.setClazz(bean.getClass().getCanonicalName());
-             beanInfoVo.setJsonValue(bean.toString());
+            beanInfoVo.setJsonValue(bean.toString());
         }
         return beanInfoVo;
     }
 
     /**
-     * 返回Spring容器中的Bean<br>
+     * 返回Spring Context容器中的Bean<br>
      *
      * @param beanName Bean名称
      * @return Bean信息集合
@@ -55,6 +55,32 @@ public class SpringMonitorService extends BaseService {
         String[] beanNames = SpringContextHolder.getApplicationContext().getBeanDefinitionNames();
         for (String name : beanNames) {
             Object object = SpringContextHolder.getBean(name);
+            beanInfoVoList.add(this.getBeanInfoVo(name, object));
+        }
+        return beanInfoVoList;
+    }
+
+    /**
+     * 返回Spring Web容器中的Bean<br>
+     *
+     * @param beanName Bean名称
+     * @return Bean信息集合
+     */
+    public List<BeanInfoVo> getSpringWebBeans(String beanName) {
+        List<BeanInfoVo> beanInfoVoList = new ArrayList<>();
+        // 只查询一个Spring Bean
+        if (StringUtils.isNotBlank(beanName)) {
+            Object object = SpringContextHolder.getWebBean(beanName);
+            if (object != null) {
+                beanInfoVoList.add(this.getBeanInfoVo(beanName, object));
+            }
+            return beanInfoVoList;
+        }
+
+        // 获取所有的Spring Bean
+        String[] beanNames = SpringContextHolder.getWebApplicationContext().getBeanDefinitionNames();
+        for (String name : beanNames) {
+            Object object = SpringContextHolder.getWebBean(name);
             beanInfoVoList.add(this.getBeanInfoVo(name, object));
         }
         return beanInfoVoList;

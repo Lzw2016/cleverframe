@@ -114,21 +114,6 @@
         <!--</listener-class>-->
     <!--</listener>-->
 
-    <!-- Activiti Rest接口 -->
-    <!--<servlet>-->
-        <!--<servlet-name>RestServlet</servlet-name>-->
-        <!--<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>-->
-        <!--<init-param>-->
-            <!--<param-name>contextConfigLocation</param-name>-->
-            <!--<param-value>classpath*:/spring/spring-mvc-activiti.xml</param-value>-->
-        <!--</init-param>-->
-    <!--</servlet>-->
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>RestServlet</servlet-name>-->
-        <!--<url-pattern>/activiti/rest/*</url-pattern>-->
-    <!--</servlet-mapping>-->
-
-
     <!-- log4j配置信息 -->
     <!-- 设置在log4j中应用Web应用根路径的环境变量：cleverframe.root -->
     <context-param>
