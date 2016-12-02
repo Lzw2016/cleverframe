@@ -1,8 +1,6 @@
 package org.cleverframe.common.spring;
 
 import org.cleverframe.common.attributes.CommonApplicationAttributes;
-import org.cleverframe.common.configuration.CustomPropertyPlaceholderConfigurer;
-import org.cleverframe.common.configuration.IConfig;
 import org.cleverframe.common.controller.XssExcludeUrlUtils;
 import org.cleverframe.common.initialize.IHandle;
 import org.slf4j.Logger;
@@ -14,8 +12,6 @@ import org.springframework.web.context.WebApplicationContext;
 import org.springframework.web.context.support.GenericWebApplicationContext;
 
 import javax.servlet.ServletContext;
-import java.util.Map;
-import java.util.Set;
 
 /**
  * Spring容器初始化完毕事件，需要在Spring中注入该Bean<br/>
@@ -60,33 +56,16 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
      *
      * @return 返回新增的配置数量
      */
-    public int initPropertiesMap() {
-        int count = 0;
-        IConfig config = SpringContextHolder.getBean(SpringBeanNames.Config);
-        if (config == null) {
-            RuntimeException exception = new RuntimeException("未注入Bean:[" + SpringBeanNames.Config + "]");
+    public int initPropertiesMap(ContextRefreshedEvent event) {
+        int addCfgCount = 0;
+        IHandle configInitHandle = SpringContextHolder.getBean(SpringBeanNames.ConfigInitHandle);
+        if (configInitHandle == null) {
+            RuntimeException exception = new RuntimeException("未注入Bean:[" + SpringBeanNames.ConfigInitHandle + "]");
             logger.error(exception.getMessage(), exception);
-            return count;
+        } else {
+            addCfgCount = configInitHandle.initialize(event);
         }
-        // 必须清除缓存数据，防止数据库与缓存中的数据不一样
-        config.clearAllCache();
-        StringBuilder strTmp = new StringBuilder();
-        strTmp.append("\r\n");
-        strTmp.append("#=======================================================================================================================#\r\n");
-        strTmp.append("# 新增的配置如下:\r\n");
-        Set<Map.Entry<String, String>> set = CustomPropertyPlaceholderConfigurer.PropertiesMap.entrySet();
-        for (Map.Entry<String, String> entry : set) {
-            boolean flag = config.updateOrAddConfig(entry.getKey(), entry.getValue());
-            if (flag) {
-                strTmp.append("#\t ").append(entry.getKey()).append(" = ").append(entry.getValue()).append("\r\n");
-                count++;
-            }
-        }
-        strTmp.append("#=======================================================================================================================#");
-        if (logger.isInfoEnabled() && count > 0) {
-            logger.info(strTmp.toString());
-        }
-        return count;
+        return addCfgCount;
     }
 
     /**
@@ -149,7 +128,7 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.DOC_PATH + " = " + docPath + "\r\n" +
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MODULES_PATH + " = " + modulesPath + "\r\n" +
                     "#\t 设置ServletContext属性 " + CommonApplicationAttributes.MVC_PATH + " = " + mvcPath + "\r\n" +
-                    "#\t 新增配置数据 " + initPropertiesMap() + "条\r\n" +
+                    "#\t 新增配置数据 " + initPropertiesMap(event) + "条\r\n" +
                     "#\t 加载不需要XXS过滤的URL路径 " + XssExcludeUrlUtils.loadXSSExcludeUrl() + " 个\r\n" +
                     "#\t 新增Url资源信息 " + resourcesInitialize(event) + " 条\r\n" +
                     "#=======================================================================================================================#\r\n";

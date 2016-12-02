@@ -58,6 +58,8 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
 
     /**
      * 根据请求对象获取 Spring Controller 里对应的方法名称
+     *
+     * @return 资源不存在(404) 返回 null
      */
     private String getHandlerMethod(HttpServletRequest request) throws Exception {
         RequestMappingHandlerMapping handlerMapping = SpringContextHolder.getWebBean(RequestMappingHandlerMapping.class);
@@ -65,6 +67,9 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
             throw new RuntimeException("获取RequestMappingHandlerMapping失败,权限验证异常");
         }
         HandlerExecutionChain handlerExecutionChain = handlerMapping.getHandler(request);
+        if (handlerExecutionChain == null) {
+            return null;
+        }
         HandlerMethod handlerMethod = (HandlerMethod) handlerExecutionChain.getHandler();
         return handlerMethod.getBeanType().getName() + "#" + handlerMethod.getMethod().getName();
     }
@@ -135,6 +140,11 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         url = StringUtils.removeStart(url, contextPath);
         String urlNoSuffix = removeUrlSuffix(url);
         String fullMethodName = getHandlerMethod(httpRequest);
+        if (fullMethodName == null) {
+            // TODO 此处应该抛出 404 资源不存在
+            printLog(false, "未匹配到映射Controller的方法", url, urlNoSuffix, null, null);
+            return true;
+        }
 
         // 获取当前登录用户信息
         Subject subject = getSubject(request, response);
@@ -152,7 +162,6 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         // 获取当前url在数据库里配置的授权信息 - 验证授权
         Resources resources = userPermissionsService.getResourcesByMethod(fullMethodName);
         if (resources == null) {
-            // TODO 此处应该抛出 404 资源不存在
             printLog(false, "资源未配置在资源表里", url, urlNoSuffix, user, null);
             return false;
         }
