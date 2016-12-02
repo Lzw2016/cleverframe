@@ -26,7 +26,7 @@ public class SpringBeanNames implements IBeanNames {
     /**
      * 资源初始化服务类(新增)
      */
-    public static final String ResourcesIniHandle = "sys_ResourcesIniHandle";
+    public static final String ResourcesInitHandle = "sys_ResourcesInitHandle";
 
     // -------------------------------------------------------------------------------------------//
     // spring-context-base.xml 配置文件的Bean名称

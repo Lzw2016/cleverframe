@@ -96,9 +96,9 @@ public class SpringContextRefreshedListener implements ApplicationListener<Conte
      */
     public int resourcesInitialize(ContextRefreshedEvent event) {
         int addResourcesCount = 0;
-        IHandle resourcesIniHandle = SpringContextHolder.getBean(SpringBeanNames.ResourcesIniHandle);
+        IHandle resourcesIniHandle = SpringContextHolder.getBean(SpringBeanNames.ResourcesInitHandle);
         if (resourcesIniHandle == null) {
-            RuntimeException exception = new RuntimeException("未注入Bean:[" + SpringBeanNames.ResourcesIniHandle + "]");
+            RuntimeException exception = new RuntimeException("未注入Bean:[" + SpringBeanNames.ResourcesInitHandle + "]");
             logger.error(exception.getMessage(), exception);
         } else {
             addResourcesCount = resourcesIniHandle.initialize(event);

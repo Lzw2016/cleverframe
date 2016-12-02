@@ -24,13 +24,13 @@ import java.util.*;
  * 作者：LiZW <br/>
  * 创建时间：2016/11/12 19:56 <br/>
  */
-@Service(SpringBeanNames.ResourcesIniHandle)
-public class ResourcesIniHandle implements IHandle {
+@Service(SpringBeanNames.ResourcesInitHandle)
+public class ResourcesInitHandle implements IHandle {
 
     /**
      * 日志记录器
      */
-    private final static Logger logger = LoggerFactory.getLogger(ResourcesIniHandle.class);
+    private final static Logger logger = LoggerFactory.getLogger(ResourcesInitHandle.class);
 
     @Autowired
     @Qualifier(SysBeanNames.ResourcesDao)
