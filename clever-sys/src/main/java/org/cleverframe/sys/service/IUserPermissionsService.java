@@ -15,6 +15,7 @@ public interface IUserPermissionsService {
 
     /**
      * 根据 数据库保存的含有变量的Url 获取 实际的Url地址
+     *
      * @param resourcesUrl 数据库保存的含有变量的Url
      * @return 实际的Url地址
      */
@@ -36,10 +37,11 @@ public interface IUserPermissionsService {
     List<Resources> reloadResources();
 
     /**
-     * 根据ResourcesKey从缓存中获取Resources(只从缓存中取)
+     * 根据 Spring Controller里对应的方法名称 从缓存中获取Resources(只从缓存中取)
+     *
      * @return 不存在返回null
      */
-    Resources getResourcesByCache(String resourcesKey);
+    Resources getResourcesByMethod(String controllerMethod);
 
     /**
      * 保存资源信息,顺便保存到缓存中

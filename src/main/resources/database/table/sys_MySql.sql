@@ -80,7 +80,8 @@ CREATE TABLE sys_resources
 (
     id                  bigint          NOT NULL    auto_increment          COMMENT '编号',
     title               varchar(255)    NOT NULL                            COMMENT '资源标题',
-    resources_url       varchar(255)    NOT NULL    UNIQUE                  COMMENT '资源URL地址',
+    resources_url       varchar(255)    NOT NULL                            COMMENT '资源URL地址',
+    controller_method   varchar(255)    NOT NULL    UNIQUE                  COMMENT 'Spring Controller类对应的方法',
     permission          varchar(255)    NOT NULL    UNIQUE                  COMMENT '资源访问所需要的权限标识字符串',
     resources_type      char(1)         NOT NULL                            COMMENT '资源类型（1:Web页面URL地址, 2:后台请求URL地址, 3:Web页面UI资源）',
     need_authorization  char(1)         NOT NULL                            COMMENT '需要授权才允许访问（1：需要；2：不需要）',

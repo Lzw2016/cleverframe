@@ -19,7 +19,7 @@ import javax.persistence.Table;
 @Table(name = "sys_resources")
 @DynamicInsert
 @DynamicUpdate
-public class Resources extends IdEntity {
+public class Resources extends IdEntity implements Comparable<Resources> {
     private static final long serialVersionUID = 1L;
 
     /**
@@ -58,6 +58,11 @@ public class Resources extends IdEntity {
     private String resourcesUrl;
 
     /**
+     * Spring Controller类对应的方法
+     */
+    private String controllerMethod;
+
+    /**
      * 资源访问所需要的权限标识字符串
      */
     private String permission;
@@ -79,6 +84,13 @@ public class Resources extends IdEntity {
     @Column(columnDefinition = "MediumText")
     private String description;
 
+    @Override
+    public int compareTo(Resources resources) {
+        String strA = this.getResourcesUrl() == null ? "" : this.getResourcesUrl();
+        String strB = resources.getResourcesUrl() == null ? "" : resources.getResourcesUrl();
+        return strA.compareTo(strB);
+    }
+
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
@@ -97,6 +109,14 @@ public class Resources extends IdEntity {
 
     public void setResourcesUrl(String resourcesUrl) {
         this.resourcesUrl = resourcesUrl;
+    }
+
+    public String getControllerMethod() {
+        return controllerMethod;
+    }
+
+    public void setControllerMethod(String controllerMethod) {
+        this.controllerMethod = controllerMethod;
     }
 
     public String getPermission() {
@@ -129,5 +149,18 @@ public class Resources extends IdEntity {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    @Override
+    public String toString() {
+        return "Resources{" +
+                "title='" + title + '\'' +
+                ", resourcesUrl='" + resourcesUrl + '\'' +
+                ", controllerMethod='" + controllerMethod + '\'' +
+                ", permission='" + permission + '\'' +
+                ", resourcesType=" + resourcesType +
+                ", needAuthorization=" + needAuthorization +
+                ", description='" + description + '\'' +
+                '}';
     }
 }

@@ -115,15 +115,15 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
         resourcesCache.removeAll();
         List<Resources> resourcesList = resourcesDao.findAllResources();
         for (Resources resources : resourcesList) {
-            Element element = new Element(getResourcesKey(resources.getResourcesUrl()), resources);
+            Element element = new Element(resources.getControllerMethod(), resources);
             resourcesCache.put(element);
         }
         return resourcesList;
     }
 
     @Override
-    public Resources getResourcesByCache(String resourcesKey) {
-        Element element = resourcesCache.get(resourcesKey);
+    public Resources getResourcesByMethod(String controllerMethod) {
+        Element element = resourcesCache.get(controllerMethod);
 //        if (element == null) {
 //            Resources resources = resourcesDao.getResourcesByCache(getResourcesUrl(resourcesKey));
 //            if (resources != null) {
@@ -143,7 +143,7 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     @Override
     public boolean addResources(Resources resources) {
         resourcesDao.getHibernateDao().save(resources);
-        Element element = new Element(getResourcesKey(resources.getResourcesUrl()), resources);
+        Element element = new Element(resources.getControllerMethod(), resources);
         resourcesCache.put(element);
         return true;
     }
@@ -157,9 +157,9 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     @Override
     public boolean updateResources(Resources resources) {
         Resources oldResources1 = resourcesDao.getHibernateDao().get(resources.getId());
-        resourcesCache.remove(getResourcesKey(oldResources1.getResourcesUrl()));
+        resourcesCache.remove(oldResources1.getControllerMethod());
         resources = resourcesDao.getHibernateDao().update(resources, false, true);
-        Element element = new Element(getResourcesKey(resources.getResourcesUrl()), resources);
+        Element element = new Element(resources.getControllerMethod(), resources);
         resourcesCache.put(element);
         return true;
     }
@@ -174,7 +174,7 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
     public boolean deleteResources(Serializable resourcesId) {
         // TODO 验证当前资源有没有被其他资源所依赖，若有则不能删除
         Resources oldResources1 = resourcesDao.getHibernateDao().get(resourcesId);
-        resourcesCache.remove(getResourcesKey(oldResources1.getResourcesUrl()));
+        resourcesCache.remove(oldResources1.getControllerMethod());
         return resourcesDao.getHibernateDao().deleteById(resourcesId) >= 1;
     }
 

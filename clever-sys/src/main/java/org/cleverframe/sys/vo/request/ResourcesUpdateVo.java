@@ -33,6 +33,11 @@ public class ResourcesUpdateVo extends BaseRequestVo {
     private String resourcesUrl;
 
     /**
+     * Spring Controller类对应的方法
+     */
+    private String controllerMethod;
+
+    /**
      * 资源访问所需要的权限标识字符串
      */
     private String permission;
@@ -81,6 +86,14 @@ public class ResourcesUpdateVo extends BaseRequestVo {
 
     public void setResourcesUrl(String resourcesUrl) {
         this.resourcesUrl = resourcesUrl;
+    }
+
+    public String getControllerMethod() {
+        return controllerMethod;
+    }
+
+    public void setControllerMethod(String controllerMethod) {
+        this.controllerMethod = controllerMethod;
     }
 
     public String getPermission() {

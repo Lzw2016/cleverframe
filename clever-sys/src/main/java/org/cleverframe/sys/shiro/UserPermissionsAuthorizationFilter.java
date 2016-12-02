@@ -13,6 +13,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
@@ -56,6 +57,68 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
     }
 
     /**
+     * 根据请求对象获取 Spring Controller 里对应的方法名称
+     */
+    private String getHandlerMethod(HttpServletRequest request) throws Exception {
+        RequestMappingHandlerMapping handlerMapping = SpringContextHolder.getWebBean(RequestMappingHandlerMapping.class);
+        if (handlerMapping == null) {
+            throw new RuntimeException("获取RequestMappingHandlerMapping失败,权限验证异常");
+        }
+        HandlerExecutionChain handlerExecutionChain = handlerMapping.getHandler(request);
+        HandlerMethod handlerMethod = (HandlerMethod) handlerExecutionChain.getHandler();
+        return handlerMethod.getBeanType().getName() + "#" + handlerMethod.getMethod().getName();
+    }
+
+    /**
+     * 输出授权结构日志信息
+     *
+     * @param isSuccess   是否成功
+     * @param message     授权原因信息
+     * @param url         请求url
+     * @param urlNoSuffix 请求地址(无后缀)
+     * @param user        当前用户
+     * @param resources   资源
+     */
+    private void printLog(boolean isSuccess, String message, String url, String urlNoSuffix, User user, Resources resources) {
+        // 审核失败
+        if ((!isSuccess || user == null) && logger.isWarnEnabled()) {
+            String tmp = "\r\n" +
+                    "#=======================================================================================================================#\r\n" +
+                    "# 授权失败: " + message + "\r\n";
+            if (user != null) {
+                tmp = tmp + "# 请求用户: " + user.getLoginName() + "\r\n";
+            }
+            tmp = tmp +
+                    "# 请求地址: " + url + "\r\n" +
+                    "# 请求地址(无后缀): " + urlNoSuffix + "\r\n";
+            if (resources != null) {
+                tmp = tmp +
+                        "# 请求地址(Controller配置): " + resources.getResourcesUrl() + "\r\n" +
+                        "# 请求方法: " + resources.getControllerMethod() + "\r\n" +
+                        "# 权限标识字符串: " + resources.getPermission() + "\r\n";
+            }
+            tmp = tmp +
+                    "#=======================================================================================================================#\r\n";
+            logger.warn(tmp);
+        }
+        // 审核成功
+        if (isSuccess && logger.isDebugEnabled()) {
+            assert user != null;
+            String tmp = "\r\n" +
+                    "#=======================================================================================================================#\r\n" +
+                    "# 授权成功允许访问: " + message + "\r\n" +
+                    "# 请求用户: " + user.getLoginName() + "\r\n" +
+                    "# 请求地址: " + url + "\r\n" +
+                    "# 请求地址(无后缀): " + urlNoSuffix + "\r\n" +
+                    "# 请求地址(Controller配置): " + resources.getResourcesUrl() + "\r\n" +
+                    "# 请求方法: " + resources.getControllerMethod() + "\r\n" +
+                    "# 权限标识字符串: " + resources.getPermission() + "\r\n" +
+                    "#=======================================================================================================================#\r\n";
+            logger.debug(tmp);
+        }
+    }
+
+    /**
      * 验证用户是否有权访问<br/>
      *
      * @return 有权访问返回true，无权访问返回false
@@ -71,10 +134,7 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         String url = httpRequest.getRequestURI();
         url = StringUtils.removeStart(url, contextPath);
         String urlNoSuffix = removeUrlSuffix(url);
-
-        RequestMappingHandlerMapping handlerMapping = SpringContextHolder.getWebBean(RequestMappingHandlerMapping.class);
-        HandlerExecutionChain handlerExecutionChain = handlerMapping.getHandler(httpRequest);
-
+        String fullMethodName = getHandlerMethod(httpRequest);
 
         // 获取当前登录用户信息
         Subject subject = getSubject(request, response);
@@ -85,29 +145,22 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         UserPrincipal userPrincipal = (UserPrincipal) object;
         User user = userPrincipal.getUser();
         if (user == null) {
-            logger.warn("请求地址[{}],授权失败，原因:获取用户登录信息为空", url);
+            printLog(false, "获取用户登录信息为空", url, urlNoSuffix, null, null);
             return false;
         }
 
         // 获取当前url在数据库里配置的授权信息 - 验证授权
-        Resources resources = userPermissionsService.getResourcesByCache(url);
+        Resources resources = userPermissionsService.getResourcesByMethod(fullMethodName);
         if (resources == null) {
-            resources = userPermissionsService.getResourcesByCache(urlNoSuffix);
-            if (resources == null) {
-                // TODO 此处应该抛出 404 资源不存在
-                logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源未配置在资源表里", user.getLoginName(), url);
-                return false;
-            }
-        }
-        if (Resources.NO_NEED.equals(resources.getNeedAuthorization())) {
-            logger.warn("请求用户[{}],请求地址[{}],授权成功允许访问，原因:资源不需要验证权限", user.getLoginName(), url);
-            return true;
-        }
-        String resourcesUrl = userPermissionsService.getResourcesKey(resources.getResourcesUrl());
-        if (resourcesUrl == null || !urlNoSuffix.equals(removeUrlSuffix(resourcesUrl))) {
-            logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:资源表里的资源地址不正确({})", user.getLoginName(), url, resourcesUrl);
+            // TODO 此处应该抛出 404 资源不存在
+            printLog(false, "资源未配置在资源表里", url, urlNoSuffix, user, null);
             return false;
         }
+        if (Resources.NO_NEED.equals(resources.getNeedAuthorization())) {
+            printLog(true, "资源不需要验证权限", url, urlNoSuffix, user, resources);
+            return true;
+        }
+
         // 验证授权 - mappedValue
         String[] perms = (String[]) mappedValue;
         boolean isPermitted = true;
@@ -122,20 +175,17 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
                 }
             }
             if (!isPermitted) {
-                logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:没有权限[mappedValue={}]", user.getLoginName(), url, ArrayUtils.toString(mappedValue));
+                printLog(false, "没有授权=" + ArrayUtils.toString(mappedValue), url, urlNoSuffix, user, resources);
                 return false;
             }
         }
+
         // 验证权限 - 自定义Url权限字符串
         isPermitted = subject.isPermitted(resources.getPermission());
         if (isPermitted) {
-            logger.debug("请求用户[{}],请求地址[{}],授权成功允许访问。验证权限[urlPermission={} ,mappedValue={}]",
-                    user.getLoginName(),
-                    url,
-                    resources.getPermission(),
-                    ArrayUtils.toString(mappedValue));
+            printLog(true, "授权成功=" + ArrayUtils.toString(mappedValue), url, urlNoSuffix, user, resources);
         } else {
-            logger.warn("请求用户[{}],请求地址[{}],授权失败，原因:没有权限[urlPermission={}]", user.getLoginName(), url, resources.getPermission());
+            printLog(false, "没有授权=" + ArrayUtils.toString(mappedValue), url, urlNoSuffix, user, resources);
         }
         return isPermitted;
     }

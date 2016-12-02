@@ -35,6 +35,13 @@ public class ResourcesAddVo extends BaseRequestVo {
     private String resourcesUrl;
 
     /**
+     * Spring Controller类对应的方法
+     */
+    @NotBlank(message = "Controller类对应的方法不能为空")
+    @Length(min = 1, max = 255, message = "Controller类对应的方法值长度不能超过255个字符")
+    private String controllerMethod;
+
+    /**
      * 资源访问所需要的权限标识字符串
      */
     @NotBlank(message = "权限标识不能为空")
@@ -80,6 +87,14 @@ public class ResourcesAddVo extends BaseRequestVo {
 
     public void setResourcesUrl(String resourcesUrl) {
         this.resourcesUrl = resourcesUrl;
+    }
+
+    public String getControllerMethod() {
+        return controllerMethod;
+    }
+
+    public void setControllerMethod(String controllerMethod) {
+        this.controllerMethod = controllerMethod;
     }
 
     public String getPermission() {

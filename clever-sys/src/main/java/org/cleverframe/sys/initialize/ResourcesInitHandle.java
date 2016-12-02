@@ -44,43 +44,58 @@ public class ResourcesInitHandle implements IHandle {
     @Transactional(readOnly = false)
     @Override
     public int initialize(ContextRefreshedEvent event) {
-        // 获取系统中所有的Url请求地址 - urlList
+        // 获取系统中所有的资源,并排序 - allUrlList
+        List<Resources> allUrlList = new ArrayList<>();
         RequestMappingHandlerMapping handlerMapping = event.getApplicationContext().getBean(RequestMappingHandlerMapping.class);
-        Map<RequestMappingInfo, HandlerMethod> map = handlerMapping.getHandlerMethods();
-        Set<RequestMappingInfo> set = map.keySet();
-        List<String> urlList = new ArrayList<>();
-        for (RequestMappingInfo requestMappingInfo : set) {
+        Map<RequestMappingInfo, HandlerMethod> handlerMap = handlerMapping.getHandlerMethods();
+        for (Map.Entry<RequestMappingInfo, HandlerMethod> entry : handlerMap.entrySet()) {
+            RequestMappingInfo requestMappingInfo = entry.getKey();
+            HandlerMethod handlerMethod = entry.getValue();
+            String fullMethodName = handlerMethod.getBeanType().getName() + "#" + handlerMethod.getMethod().getName();
             Set<String> urlArray = requestMappingInfo.getPatternsCondition().getPatterns();
-            urlList.addAll(urlArray);
-        }
-        Collections.sort(urlList);
-        // 新增系统中所有的资源 - addUrlList
-        List<String> addUrlList = new ArrayList<>();
-        for (String url : urlList) {
-            String resourcesUrl = ehCacheResourcesService.getResourcesUrl(url);
-            Resources resources = resourcesDao.getResources(resourcesUrl);
-            if (resources == null) {
+            for (String url : urlArray) {
+                // 数据库里保存有 变量的 url路径
+                String resourcesUrl = ehCacheResourcesService.getResourcesUrl(url);
                 Resources newResources = new Resources();
                 newResources.setTitle("资源标题");
                 newResources.setResourcesUrl(resourcesUrl);
+                newResources.setControllerMethod(fullMethodName);
                 newResources.setPermission(IDCreateUtils.uuid());
                 newResources.setResourcesType(Resources.WEB_PAGE);
                 newResources.setNeedAuthorization(Resources.NO_NEED);
                 newResources.setDescription("系统自动生成, 必须手动配置");
-                resourcesDao.getHibernateDao().save(newResources);
-                addUrlList.add(resourcesUrl);
+                allUrlList.add(newResources);
+            }
+        }
+        Collections.sort(allUrlList);
+        // 保存系统中有而数据库里没有的资源 - addUrlList
+        List<Resources> addUrlList = new ArrayList<>();
+        List<Resources> allResources = resourcesDao.findAllResources();
+        Map<String, String> mapResources = new HashMap<>();
+        for (Resources resources : allResources) {
+            mapResources.put(resources.getControllerMethod(), resources.getResourcesUrl());
+        }
+        for (Resources resources : allUrlList) {
+            String resourcesUrl = mapResources.get(resources.getControllerMethod());
+            if (resourcesUrl == null) {
+                resourcesDao.getHibernateDao().save(resources);
+                addUrlList.add(resources);
             }
         }
         // 统计数据库中有而系统中没有的资源数据 - notExistUrlList
-        List<Resources> resourcesList = ehCacheResourcesService.reloadResources();
         List<String> notExistUrlList = new ArrayList<>();
+        // 重新加载数据库里所有的资源信息到缓存中 - resourcesList
+        List<Resources> resourcesList = ehCacheResourcesService.reloadResources();
+        mapResources.clear();
+        for (Resources resources : allUrlList) {
+            mapResources.put(resources.getControllerMethod(), resources.getResourcesUrl());
+        }
+        // 数据库里有而系统不存在的资源信息
         for (Resources resources : resourcesList) {
-            String resourcesUrl = resources.getResourcesUrl();
-            String resourcesKey = ehCacheResourcesService.getResourcesKey(resourcesUrl);
-            if (urlList.contains(resourcesKey)) {
-                continue;
+            String resourcesUrl = mapResources.get(resources.getControllerMethod());
+            if (resourcesUrl == null) {
+                notExistUrlList.add(resources.getResourcesUrl());
             }
-            notExistUrlList.add(resourcesUrl);
         }
         // 打印相应的日志
         if (logger.isInfoEnabled()) {
@@ -88,8 +103,8 @@ public class ResourcesInitHandle implements IHandle {
             strTmp.append("\r\n");
             strTmp.append("#=======================================================================================================================#\r\n");
             strTmp.append("# 新增的资源如下(").append(addUrlList.size()).append("条):\r\n");
-            for (String url : addUrlList) {
-                strTmp.append("#\t ").append(url).append("\r\n");
+            for (Resources resources : addUrlList) {
+                strTmp.append("#\t ").append(resources.getResourcesUrl()).append("\r\n");
             }
             strTmp.append("# 未匹配到的数据库里的资源(").append(notExistUrlList.size()).append("条):\r\n");
             for (String url : notExistUrlList) {
