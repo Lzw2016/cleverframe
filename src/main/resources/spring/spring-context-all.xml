@@ -13,6 +13,7 @@
         <property name="fileEncoding" value="UTF-8"/>
         <property name="locations">
             <list>
+                <value>classpath:cleverframe/cleverframe-activiti.properties</value>
                 <value>classpath:cleverframe/cleverframe-base.properties</value>
                 <value>classpath:cleverframe/cleverframe-database.properties</value>
                 <value>classpath:cleverframe/cleverframe-ehcache.properties</value>

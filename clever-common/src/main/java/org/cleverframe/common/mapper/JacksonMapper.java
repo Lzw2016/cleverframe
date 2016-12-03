@@ -39,7 +39,7 @@ public class JacksonMapper {
      */
     private static final JacksonMapper NON_DEFAULT_MAPPER;
 
-    /**
+    /*
      * 创建单例的JacksonMapper，使用全局共享的ObjectMapper对象，节省内存空间<br/>
      * 可以根据需求增加<br/>
      */
@@ -217,5 +217,12 @@ public class JacksonMapper {
             logger.error("update json string:" + jsonString + " to object:" + object + " error.", e);
             return false;
         }
+    }
+
+    /**
+     * 返回当前 Jackson 对应的 ObjectMapper
+     */
+    public ObjectMapper getMapper() {
+        return mapper;
     }
 }

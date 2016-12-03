@@ -22,7 +22,7 @@
         <property name="labelFontName" value="宋体"/>
         <property name="activityFontName" value="宋体"/>
         <!--定义部署的流程文件地址，不会重复部署-->
-        <!--<property name="deploymentResources" value="/workflow/**"/>-->
+        <property name="deploymentResources" value="classpath*:/workflow/**"/>
 
         <!--流程引擎 流程变量(Spring Bean)-->
         <property name="beans">

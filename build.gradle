@@ -337,7 +337,6 @@ project(':clever-activiti') {
             exclude group: 'org.apache.commons', module: 'commons-email'
             exclude group: 'org.springframework', module: 'spring-beans'
         }
-        compile('org.activiti:activiti-rest:5.22.0')
         compile('org.activiti:activiti-spring:5.22.0') {
             transitive = true
             exclude group: 'org.slf4j', module: 'slf4j-api'
@@ -349,6 +348,16 @@ project(':clever-activiti') {
             exclude group: 'org.springframework', module: 'spring-orm'
             exclude group: 'commons-dbcp', module: 'commons-dbcp'
         }
+        compile('org.activiti:activiti-rest:5.22.0')
+//        compile('org.activiti:activiti-modeler:5.22.0')
+        compile('org.activiti:activiti-json-converter:5.22.0')
+        compile('org.apache.xmlgraphics:batik-parser:1.7')
+        compile('org.apache.xmlgraphics:batik-transcoder:1.7')
+        compile('org.apache.xmlgraphics:batik-bridge:1.7')
+        compile('org.apache.xmlgraphics:batik-codec:1.7')
+        compile('org.apache.xmlgraphics:batik-css:1.7')
+        compile('org.apache.xmlgraphics:batik-svg-dom:1.7')
+        compile('org.apache.xmlgraphics:batik-svggen:1.7')
     }
 }
 

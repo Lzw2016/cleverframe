@@ -156,6 +156,16 @@
         <url-pattern>/druid/*</url-pattern>
     </servlet-mapping>
 
+    <!-- Activiti JsonpFilter -->
+    <filter>
+        <filter-name>JsonpFilter</filter-name>
+        <filter-class>org.cleverframe.activiti.filter.JsonpCallbackFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>JsonpFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
+
     <!-- 随机验证码 -->
     <!--<servlet>-->
         <!--<servlet-name>validateCodeServlet</servlet-name>-->
