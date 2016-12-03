@@ -61,12 +61,17 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
      *
      * @return 资源不存在(404) 返回 null
      */
-    private String getHandlerMethod(HttpServletRequest request) throws Exception {
+    private String getHandlerMethod(HttpServletRequest request) {
         RequestMappingHandlerMapping handlerMapping = SpringContextHolder.getWebBean(RequestMappingHandlerMapping.class);
         if (handlerMapping == null) {
             throw new RuntimeException("获取RequestMappingHandlerMapping失败,权限验证异常");
         }
-        HandlerExecutionChain handlerExecutionChain = handlerMapping.getHandler(request);
+        HandlerExecutionChain handlerExecutionChain = null;
+        try {
+            handlerExecutionChain = handlerMapping.getHandler(request);
+        } catch (Throwable e) {
+            logger.warn("根据请求对象获取Spring Controller里对应的方法名称失败", e);
+        }
         if (handlerExecutionChain == null) {
             return null;
         }
@@ -141,7 +146,7 @@ public class UserPermissionsAuthorizationFilter extends AuthorizationFilter {
         String urlNoSuffix = removeUrlSuffix(url);
         String fullMethodName = getHandlerMethod(httpRequest);
         if (fullMethodName == null) {
-            // TODO 此处应该抛出 404 资源不存在
+            // TODO 此处应该抛出: 404资源不存在 405不支持的请求
             printLog(false, "未匹配到映射Controller的方法", url, urlNoSuffix, null, null);
             return true;
         }

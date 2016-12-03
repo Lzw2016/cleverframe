@@ -42,6 +42,7 @@
 
     <!--<import resource="spring-mvc-shiro.xml"/>-->
 
+    <!--整合Activiti-->
     <import resource="spring-mvc-activiti.xml"/>
 
     <import resource="spring-mvc-websocket.xml"/>
