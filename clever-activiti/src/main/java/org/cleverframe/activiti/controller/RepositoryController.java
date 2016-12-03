@@ -70,7 +70,6 @@ public class RepositoryController extends BaseController {
 
             repositoryService.saveModel(modelData);
             repositoryService.addModelEditorSource(modelData.getId(), modelNode.toString().getBytes("utf-8"));
-
         } catch (Throwable e) {
             logger.error("", e);
             message.setSuccess(false);

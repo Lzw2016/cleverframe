@@ -9,13 +9,13 @@
     font-style: normal;
 }
 
-.row-no-gutter .col-xs-9 {
+.row-no-gutter .col-xs-10 {
 	padding-left: 0px;
 	padding-right: 0px;
 	z-index: 50;
 }
 
-.row-no-gutter .col-xs-3 {
+.row-no-gutter .col-xs-2 {
 	padding-left: 0px;
 	padding-right: 0px;
 	z-index: 100;
@@ -109,7 +109,7 @@
 	margin: 0px 0px 5px 15px;
 	background-color: #ffffff;
 	font-family: Arial, Regular;
-	font-size: 17px;
+	font-size: 13px;
 	color: #323437;
 }
 

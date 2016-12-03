@@ -935,8 +935,16 @@ a.dropdown-toggle {
     margin: 0 auto;
 }
 
+/*.wrapper.full {*/
+    /*padding: 40px 0px 0px 0px;*/
+    /*overflow: hidden;*/
+    /*max-width: 100%;*/
+    /*min-width: 100%;*/
+/*}*/
+
+/*隐藏Activiti Logo*/
 .wrapper.full {
-    padding: 40px 0px 0px 0px;
+    padding: 0 0 0 0;
     overflow: hidden;
     max-width: 100%;
     min-width: 100%;
