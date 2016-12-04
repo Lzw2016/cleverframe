@@ -38,4 +38,13 @@ public class ActivitiManagerController extends BaseController {
         return new ModelAndView(ActivitiJspUrlPath.ProcessInstance);
     }
 
+    @RequestMapping("/Execution" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getExecutionJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(ActivitiJspUrlPath.Execution);
+    }
+
+    @RequestMapping("/Task" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getTaskJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(ActivitiJspUrlPath.Task);
+    }
 }

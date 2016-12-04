@@ -23,4 +23,12 @@ public class ActivitiJspUrlPath implements IJspUrlPath {
      * 流程实例
      */
     public static final String ProcessInstance = "activiti/ProcessInstance";
+    /**
+     * 流程执行器
+     */
+    public static final String Execution = "activiti/Execution";
+    /**
+     * 流程任务
+     */
+    public static final String Task = "activiti/Task";
 }
