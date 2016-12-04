@@ -34,7 +34,84 @@
     <%-- 页面标题 --%>
     <title>流程模型管理</title>
 </head>
-<body>
+<body class="easyui-layout" data-options="fit:true,border:false">
+<%-- 页面上部 --%>
+<div data-options="region:'north',border:true,minWidth:800" style="height:75px;">
+
+    <form id="searchForm">
+        <%--sort	否	'id' (默认), 'category', 'createTime', 'key', 'lastUpdateTime', 'name'，'version'或'tenantId'	排序的字段，和'order'一起使用。--%>
+        <input type="hidden" name="sort" value="name">
+        <input type="hidden" name="order" value="asc">
+        <div class="row">
+            <span class="column">
+                <label for="searchNameLike">流程名称</label>
+                <input id="searchNameLike" name="nameLike">
+            </span>
+
+            <span class="column">
+                <label for="searchCategoryLike">流程类别</label>
+                <input id="searchCategoryLike" name="categoryLike">
+            </span>
+
+            <span class="columnLast">
+                <label for="searchKey">模型Key</label>
+                <input id="searchKey" name="key">
+            </span>
+        </div>
+
+        <div class="row">
+            <span class="column">
+                <label for="searchTenantIdLike">租户ID</label>
+                <input id="searchTenantIdLike" name="tenantIdLike">
+            </span>
+
+            <span class="column">
+                <label for="searchDeployed">是否部署</label>
+                <input id="searchDeployed" name="deployed">
+            </span>
+
+            <span class="columnLast">
+                <label for="searchLatestVersion">最后的版本</label>
+                <input id="searchLatestVersion" name="latestVersion">
+            </span>
+        </div>
+
+        <%--deploymentId--%>
+    </form>
+</div>
+
+<%-- 页面中部 --%>
+<div id="centerPanel" data-options="region:'center',border:true">
+    <table id="dataTable" data-options="border:false">
+        <thead>
+        <tr>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'id'">模型ID</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'name'">模型名称</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'key'">模型Key</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'category'">模型类型</th>
+            <th data-options="width:130,align:'left',hidden:false,field:'createTime',formatter:pageJsObject.timeFormatter">创建时间</th>
+            <th data-options="width:130,align:'left',hidden:false,field:'lastUpdateTime',formatter:pageJsObject.timeFormatter">更新时间</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'version'">模型版本</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'metaInfo'">MetaInfo</th>
+            <th data-options="width:380,align:'left',hidden:false,field:'url'">模型Url</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'deploymentId'">流程部署ID</th>
+            <th data-options="width:380,align:'left',hidden:false,field:'deploymentUrl'">流程部署Url</th>
+            <th data-options="width:380,align:'left',hidden:false,field:'sourceUrl'">模型SourceUrl</th>
+            <th data-options="width:380,align:'left',hidden:false,field:'sourceExtraUrl'">模型SourceExtraUrl</th>
+            <th data-options="width:120,align:'left',hidden:false,field:'tenantId'">租户ID</th>
+            <th data-options="width:120,align:'left',hidden:false,field:'tenantId'">操作</th>
+            <%--可编译源码 附加可编辑源码--%>
+        </tr>
+        </thead>
+    </table>
+    <div id="dataTableButtons">
+        <a id="dataTableButtonsSearch" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询</a>
+        <a id="dataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a>
+        <a id="dataTableButtonsEdit" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
+        <a id="dataTableButtonsDelete" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
+    </div>
+</div>
+
 
 </body>
 </html>
