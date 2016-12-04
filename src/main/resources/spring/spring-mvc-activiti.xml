@@ -13,7 +13,7 @@
 
     <!--org.activiti.rest.service.api-->
     <!-- 自动扫描且只扫描@Controller -->
-    <context:component-scan base-package="org.activiti.rest.editor,org.activiti.rest.diagram" use-default-filters="false">
+    <context:component-scan base-package="org.activiti.rest.service.api,org.activiti.rest.editor,org.activiti.rest.diagram" use-default-filters="false">
         <context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
     </context:component-scan>
 

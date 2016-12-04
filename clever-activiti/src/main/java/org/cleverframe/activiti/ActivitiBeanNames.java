@@ -15,7 +15,8 @@ public class ActivitiBeanNames implements IBeanNames {
     // -------------------------------------------------------------------------------------------//
     // Service
     // -------------------------------------------------------------------------------------------//
-
+    public static final String RepositoryService = "activiti_RepositoryService";
+    public static final String ModelService = "activiti_ModelService";
 
     // -------------------------------------------------------------------------------------------//
     // Other

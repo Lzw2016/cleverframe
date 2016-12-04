@@ -32,6 +32,18 @@ public class CreateModelVo extends BaseRequestVo {
     @Length(max = 255, message = "流程说明值长度不能超过255个字符")
     private String description;
 
+    /**
+     * 流程类别
+     */
+    @Length(max = 255, message = "流程类别值长度不能超过255个字符")
+    private String category;
+
+    /**
+     * 流程租户ID
+     */
+    @Length(max = 255, message = "流程租户ID值长度不能超过255个字符")
+    private String tenantId;
+
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
@@ -58,5 +70,21 @@ public class CreateModelVo extends BaseRequestVo {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
+    }
+
+    public String getTenantId() {
+        return tenantId;
+    }
+
+    public void setTenantId(String tenantId) {
+        this.tenantId = tenantId;
     }
 }

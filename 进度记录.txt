@@ -221,3 +221,10 @@ clever-sys
 /${base.mvcPath}/sys/resources/findResourcesTree.json
 
 
+## ----------------------------------------- 流程引擎 ----------------------------------------- ##
+## =========== clever-activiti
+/${base.mvcPath}/activiti/manager/Deployment.html
+
+
+/${base.staticPath}/Activiti/modeler.html?modelId=15001
+/${base.staticPath}/Activiti/diagram-viewer/index.html?processDefinitionId=请假流程:1:4

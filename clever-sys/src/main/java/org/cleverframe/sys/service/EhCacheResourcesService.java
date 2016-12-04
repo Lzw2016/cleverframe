@@ -131,6 +131,9 @@ public class EhCacheResourcesService extends BaseService implements IUserPermiss
 //                resourcesCache.put(element);
 //            }
 //        }
+        if (resourcesCache.getSize() <= 0) {
+            this.reloadResources();
+        }
         return element == null ? null : (Resources) element.getObjectValue();
     }
 

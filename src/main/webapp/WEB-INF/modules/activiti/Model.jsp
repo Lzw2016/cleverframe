@@ -1,7 +1,9 @@
-<%--suppress HtmlUnknownTarget --%>
 <%--
-  作者: LiZW
-  时间: 2016-6-4 23:58
+  Created by IntelliJ IDEA.
+  User: LiZW
+  Date: 2016/12/4
+  Time: 18:35
+  To change this template use File | Settings | File Templates.
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
@@ -14,23 +16,12 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>
-    <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/ajxGlobalEventByEasyUI.js"--%>
-
-    <%-- Bootstrap --%>
-    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.6-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.6-dist/css/bootstrap-theme.min.css" />
-    <script src="${applicationScope.staticPath}/Bootstrap/js/jquery-1.12.3.min.js"></script>
-    <script src="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
 
     <%-- CodeMirror --%>
-    <%--<script src="//cdn.bootcss.com/jquery/1.12.1/jquery.js"></script>--%>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
-
-    <%--Chart.js--%>
-    <script src="${applicationScope.staticPath}/Chart.js/Chart.js-2.2.1/Chart.min.js"></script>
 
     <%--Moment--%>
     <script src="${applicationScope.staticPath}/Moment/moment-2.17.1/moment.min.js"></script>
@@ -38,19 +29,12 @@
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
-    <link rel="stylesheet" type="text/css" href="${applicationScope.modulesPath}/Example.css">
-    <script type="text/javascript" src="${applicationScope.modulesPath}/Example.js"></script>
+    <link rel="stylesheet" type="text/css" href="${applicationScope.modulesPath}/activiti/Model.css">
+    <script type="text/javascript" src="${applicationScope.modulesPath}/activiti/Model.js"></script>
     <%-- 页面标题 --%>
-    <title>页面示例</title>
+    <title>流程模型管理</title>
 </head>
 <body>
-<%--　路径变量　--%>
-${applicationScope.appPath}<br/>
-${applicationScope.staticPath}<br/>
-${applicationScope.docPath}<br/>
-${applicationScope.modulesPath}<br/>
-${applicationScope.mvcPath}<br/>
-
 
 </body>
 </html>
