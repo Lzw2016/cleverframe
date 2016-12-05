@@ -23,7 +23,7 @@ var pageJs = function (globalPath) {
 
     // --------------------------------------------------------------------------------------------------------------------
     // 获取部署资源
-    var getDeploymentResourceUrl = globalPath.mvcPath + "/activiti/repository/getDeploymentResource";
+    // var getDeploymentResourceUrl = globalPath.mvcPath + "/activiti/repository/getDeploymentResource";
 
     // 获取部署资源数据
     var getDeploymentResourceDataUrl = globalPath.mvcPath + "/activiti/repository/getDeploymentResourceData";
@@ -50,8 +50,8 @@ var pageJs = function (globalPath) {
     var dataTableButtonsSearch_2 = $("#dataTableButtonsSearch_2");
     // 用于显示 选择的流程
     var selectDeployment = $("#selectDeployment");
-    // 当前选择的部署流程ID
-    var selectDeploymentId = null;
+    // 当前选择的部署流程 数据
+    var selectDeploymentObject = null;
 
     // 查看模版代码对话框
     var viewCodeTemplateDialog = $("#viewCodeTemplateDialog");
@@ -85,6 +85,10 @@ var pageJs = function (globalPath) {
         dataTableButtonsSearch.click(function () {
             dataTable.datagrid('load');
         });
+        dataTableButtonsSearch_2.click(function () {
+            _this.loadeDataTable_2(selectDeploymentObject);
+        });
+
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -114,6 +118,7 @@ var pageJs = function (globalPath) {
             pageSize: 20,
             pageList: [10, 20, 30, 50, 100, 150],
             onClickRow: function (rowIndex, rowData) {
+
                 _this.loadeDataTable_2(rowData);
             },
             onBeforeLoad: function (param) {
@@ -215,8 +220,8 @@ var pageJs = function (globalPath) {
         if ($.trim(deploymentData.id) == "") {
             return;
         }
-        selectDeploymentId = deploymentData.id;
-        selectDeployment.val("部署流程ID: " + deploymentData.id + ", 流程名称: " + deploymentData.name);
+        selectDeploymentObject = deploymentData;
+        selectDeployment.text("部署流程ID: " + deploymentData.id + ", 流程名称: " + deploymentData.name);
         var url = getAllResourcesUrl.replace("{deploymentId}", encodeURIComponent(deploymentData.id));
         $.ajax({
             type: "GET", dataType: "JSON", url: url, data: {}, async: false,
@@ -247,7 +252,7 @@ var pageJs = function (globalPath) {
     this.operateFormatter = function (value, rowData, rowIndex) {
         var id = _this.getUUID(32, 16);
         var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openResourceView(\"" + id + "\")'>查看</a>");
-        a.attr("deploymentId", selectDeploymentId);
+        a.attr("deploymentId", selectDeploymentObject ? selectDeploymentObject.id : "");
         a.attr("resourceId", rowData.id);
         a.attr("mediaType", rowData.mediaType);
         return $("<div/>").append(a).html();
