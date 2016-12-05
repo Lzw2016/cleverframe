@@ -55,12 +55,18 @@ var pageJs = function (globalPath) {
     // 数据显示表格 删除
     var dataTableButtonsDelete = $("#dataTableButtonsDelete");
 
+    // 查看模版代码对话框
+    var viewCodeTemplateDialog = $("#viewCodeTemplateDialog");
+    // 查看代码对话框-编辑器
+    var viewCodeTemplateEdit = null;
+
     /**
      * 页面初始化方法
      */
     this.init = function () {
         _this.initSearchForm();
         _this.initDataTable();
+        _this.initViewCodeTemplateDialog();
 
         _this.dataBind();
         _this.eventBind();
@@ -111,7 +117,7 @@ var pageJs = function (globalPath) {
             pageSize: 20,
             pageList: [10, 20, 30, 50, 100, 150],
             onClickRow: function (rowIndex, rowData) {
-                _this.loadeDataTable_2(rowData);
+                // _this.loadeDataTable_2(rowData);
             },
             onBeforeLoad: function (param) {
                 // 增加查询参数
@@ -161,6 +167,37 @@ var pageJs = function (globalPath) {
         });
     };
 
+    // 初始化查看模版代码对话框
+    this.initViewCodeTemplateDialog = function () {
+        viewCodeTemplateDialog.dialog({
+            title: "查看流程资源",
+            closed: true,
+            minimizable: false,
+            maximizable: true,
+            resizable: true,
+            minWidth: 700,
+            minHeight: 450,
+            modal: true,
+            //buttons: "#viewCodeTemplateDialogButtons",
+            onOpen: function () {
+                if (viewCodeTemplateEdit != null) {
+                    return;
+                }
+                // Java编辑器-初始化,
+                viewCodeTemplateEdit = CodeMirror.fromTextArea(document.getElementById("viewCodeTemplateEdit"), {
+                    mode: "application/xml",
+                    lineNumbers: true,
+                    matchBrackets: true,
+                    indentUnit: 4,
+                    readOnly: true
+                });
+                viewCodeTemplateEdit.setSize("auto", "auto");
+                viewCodeTemplateEdit.setOption("theme", "cobalt");
+                viewCodeTemplateEdit.setValue('');
+            }
+        });
+    };
+
     //noinspection JSUnusedLocalSymbols
     this.timeFormatter = function (value, rowData, rowIndex) {
         var time = moment(value);
@@ -169,6 +206,165 @@ var pageJs = function (globalPath) {
         } else {
             return value
         }
+    };
+
+    //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
+    this.metaInfoFormatter = function (value, rowData, rowIndex) {
+        if ($.trim(value) == "") {
+            return value;
+        } else {
+            var id = _this.getUUID(32, 16);
+            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openMetaInfoView(\"" + id + "\")'>查看</a>");
+            a.attr("data", value);
+            return $("<div/>").append(a).html();
+        }
+    };
+
+    this.openMetaInfoView = function (id) {
+        var a = $("#" + id);
+        var data = a.attr("data");
+        if (!data || data == null) {
+            data = "";
+        } else {
+            data = js_beautify(data, 4, ' ')
+        }
+        viewCodeTemplateDialog.dialog("open");
+        viewCodeTemplateEdit.setValue("");
+        viewCodeTemplateEdit.setOption("mode", _this.getCodeMirrorMode("json"));
+        viewCodeTemplateEdit.setValue(data);
+    };
+
+    //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
+    this.urlFormatter = function (value, rowData, rowIndex) {
+        if ($.trim(value) == "") {
+            return value;
+        } else {
+            var id = _this.getUUID(32, 16);
+            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openModelUrlView(\"" + id + "\")'>查看</a>");
+            a.attr("modelUrl", value);
+            return $("<div/>").append(a).html();
+        }
+    };
+
+    this.openModelUrlView = function (id) {
+        var a = $("#" + id);
+        var modelUrl = a.attr("modelUrl");
+        $.ajax({
+            type: "GET", dataType: "text", url: modelUrl, data: {}, async: true,
+            success: function (data) {
+                if (!data || data == null) {
+                    data = "";
+                } else {
+                    data = js_beautify(data, 4, ' ')
+                }
+                viewCodeTemplateDialog.dialog("open");
+                viewCodeTemplateEdit.setValue("");
+                viewCodeTemplateEdit.setOption("mode", _this.getCodeMirrorMode("json"));
+                viewCodeTemplateEdit.setValue(data);
+            }
+        });
+    };
+
+    //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
+    this.sourceUrlFormatter = function (value, rowData, rowIndex) {
+        if ($.trim(value) == "") {
+            return value;
+        } else {
+            var id = _this.getUUID(32, 16);
+            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openSourceUrlView(\"" + id + "\")'>查看</a>");
+            a.attr("sourceUrl", value);
+            return $("<div/>").append(a).html();
+        }
+    };
+
+    this.openSourceUrlView = function (id) {
+        var a = $("#" + id);
+        var sourceUrl = a.attr("sourceUrl");
+        $.ajax({
+            type: "GET", dataType: "text", url: sourceUrl, data: {}, async: true,
+            success: function (data) {
+                if (!data || data == null) {
+                    data = "";
+                } else {
+                    data = js_beautify(data, 4, ' ')
+                }
+                viewCodeTemplateDialog.dialog("open");
+                viewCodeTemplateEdit.setValue("");
+                viewCodeTemplateEdit.setOption("mode", _this.getCodeMirrorMode("json"));
+                viewCodeTemplateEdit.setValue(data);
+            }
+        });
+    };
+
+    //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
+    this.sourceExtraUrlFormatter = function (value, rowData, rowIndex) {
+        if ($.trim(value) == "") {
+            return value;
+        } else {
+            var id = _this.getUUID(32, 16);
+            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openSourceExtraUrlView(\"" + id + "\")'>查看</a>");
+            a.attr("sourceExtraUrl", value);
+            return $("<div/>").append(a).html();
+        }
+    };
+
+    this.openSourceExtraUrlView = function (id) {
+        var a = $("#" + id);
+        var sourceExtraUrl = a.attr("sourceExtraUrl") + ".png";
+        $.fancybox.open({href: sourceExtraUrl, title: '图片资源查看'});
+    };
+
+    // 根据编程语言获取CodeMirror的Mode属性
+    this.getCodeMirrorMode = function (mediaType) {
+        switch (mediaType.toLowerCase()) {
+            case "java":
+                return "text/x-java";
+            case "c#":
+                return "text/x-csharp";
+            case "text/xml":
+                return "application/xml";
+            case "html":
+                return "text/html";
+            case "jsp":
+                return "application/x-jsp";
+            case "css":
+                return "text/css";
+            case "sql":
+                return "text/x-mysql";
+            case "javascript":
+                return "text/javascript";
+            case "js":
+                return "text/javascript";
+            case "json":
+                return "application/json";
+        }
+        return "application/xml";
+    };
+
+    // 获取一个UUID
+    this.getUUID = function (len, radix) {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+        radix = radix || chars.length;
+        if (len) {
+            // Compact form
+            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+        } else {
+            // rfc4122, version 4 form
+            var r;
+            // rfc4122 requires these characters
+            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+            uuid[14] = '4';
+            // Fill in random data.  At i==19 set the high bits of clock sequence as
+            // per rfc4122, sec. 4.1.5
+            for (i = 0; i < 36; i++) {
+                if (!uuid[i]) {
+                    r = 0 | Math.random() * 16;
+                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                }
+            }
+        }
+        return uuid.join('');
     };
 };
 

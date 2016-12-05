@@ -22,9 +22,22 @@
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/xml/xml.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/htmlembedded/htmlembedded.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/css/css.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/sql/sql.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/javascript/javascript.js"></script>
+
+    <%--代码格式化JS--%>
+    <script src="${applicationScope.staticPath}/CodeFormat/jsbeautify.js"></script>
 
     <%--Moment--%>
     <script src="${applicationScope.staticPath}/Moment/moment-2.17.1/moment.min.js"></script>
+
+    <%--FancyBox--%>
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <link rel="stylesheet" type="text/css" href="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.css?v=2.1.5" media="screen"/>
 
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
@@ -92,14 +105,14 @@
             <th data-options="width:130,align:'left',hidden:false,field:'createTime',formatter:pageJsObject.timeFormatter">创建时间</th>
             <th data-options="width:130,align:'left',hidden:false,field:'lastUpdateTime',formatter:pageJsObject.timeFormatter">更新时间</th>
             <th data-options="width:60 ,align:'left',hidden:false,field:'version'">模型版本</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'metaInfo'">MetaInfo</th>
-            <th data-options="width:380,align:'left',hidden:false,field:'url'">模型Url</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'metaInfo',formatter:pageJsObject.metaInfoFormatter">MetaInfo</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'url',formatter:pageJsObject.urlFormatter">模型Url</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'deploymentId'">流程部署ID</th>
-            <th data-options="width:380,align:'left',hidden:false,field:'deploymentUrl'">流程部署Url</th>
-            <th data-options="width:380,align:'left',hidden:false,field:'sourceUrl'">模型SourceUrl</th>
-            <th data-options="width:380,align:'left',hidden:false,field:'sourceExtraUrl'">模型SourceExtraUrl</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'deploymentUrl'">流程部署Url</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'sourceUrl',formatter:pageJsObject.sourceUrlFormatter">SourceUrl</th>
+            <th data-options="width:100,align:'left',hidden:false,field:'sourceExtraUrl',formatter:pageJsObject.sourceExtraUrlFormatter">SourceExtraUrl</th>
             <th data-options="width:120,align:'left',hidden:false,field:'tenantId'">租户ID</th>
-            <th data-options="width:120,align:'left',hidden:false,field:'tenantId'">操作</th>
+            <th data-options="width:120,align:'left',hidden:false,field:'operate'">操作</th>
             <%--可编译源码 附加可编辑源码--%>
         </tr>
         </thead>
@@ -112,6 +125,10 @@
     </div>
 </div>
 
-
+<%-- 查看流程数据对话框(文本) --%>
+<div id="viewCodeTemplateDialog" style="width: 700px;height: 450px;">
+    <%--suppress HtmlFormInputWithoutLabel --%>
+    <textarea id="viewCodeTemplateEdit"></textarea>
+</div>
 </body>
 </html>

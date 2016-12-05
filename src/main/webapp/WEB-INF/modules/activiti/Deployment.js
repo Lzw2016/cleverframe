@@ -235,7 +235,6 @@ var pageJs = function (globalPath) {
                 }
             }
         });
-
     };
 
     //noinspection JSUnusedLocalSymbols
