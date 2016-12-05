@@ -35,6 +35,23 @@
     <%--Moment--%>
     <script src="${applicationScope.staticPath}/Moment/moment-2.17.1/moment.min.js"></script>
 
+    <%--FancyBox--%>
+    <!-- Add jQuery library -->
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/lib/jquery-1.10.1.min.js"></script>
+    <!-- Add mousewheel plugin (this is optional) -->
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+    <!-- Add fancyBox main JS and CSS files -->
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <link rel="stylesheet" type="text/css" href="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.css?v=2.1.5" media="screen" />
+    <!-- Add Button helper (this is optional) -->
+    <link rel="stylesheet" type="text/css" href="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/helpers/jquery.fancybox-buttons.css?v=1.0.5" />
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/helpers/jquery.fancybox-buttons.js?v=1.0.5"></script>
+    <!-- Add Thumbnail helper (this is optional) -->
+    <link rel="stylesheet" type="text/css" href="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/helpers/jquery.fancybox-thumbs.css?v=1.0.7" />
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/helpers/jquery.fancybox-thumbs.js?v=1.0.7"></script>
+    <!-- Add Media helper (this is optional) -->
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/helpers/jquery.fancybox-media.js?v=1.0.6"></script>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>

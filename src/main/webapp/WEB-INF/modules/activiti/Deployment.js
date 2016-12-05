@@ -19,7 +19,14 @@ var pageJs = function (globalPath) {
     // 获取部署资源 GET repository/deployments/{deploymentId}/resources/{resourceId}
 
     // 获取部署资源的内容 GET repository/deployments/{deploymentId}/resourcedata/{resourceId}
-    var getResourceDataUrl = globalPath.appPath + "/repository/deployments/{deploymentId}/resourcedata/{resourceId}";
+    // var getResourceDataUrl = globalPath.appPath + "/repository/deployments/{deploymentId}/resourcedata/{resourceId}";
+
+    // --------------------------------------------------------------------------------------------------------------------
+    // 获取部署资源
+    var getDeploymentResourceUrl = globalPath.mvcPath + "/activiti/repository/getDeploymentResource";
+
+    // 获取部署资源数据
+    var getDeploymentResourceDataUrl = globalPath.mvcPath + "/activiti/repository/getDeploymentResourceData";
 
     // 查询表单
     var searchForm = $("#searchForm");
@@ -191,7 +198,7 @@ var pageJs = function (globalPath) {
                 }
                 // Java编辑器-初始化,
                 viewCodeTemplateEdit = CodeMirror.fromTextArea(document.getElementById("viewCodeTemplateEdit"), {
-                    mode: "text/x-java",
+                    mode: "application/xml",
                     lineNumbers: true,
                     matchBrackets: true,
                     indentUnit: 4,
@@ -254,26 +261,31 @@ var pageJs = function (globalPath) {
 
         switch (mediaType) {
             case "text/xml":
-                _this.openViewCodeTemplateDialog(deploymentId, resourceId, mediaType);
+                _this.openViewCodeTemplateDialog(deploymentId, resourceId, "xml");
                 break;
             case "image/png":
+                var paramData = {deploymentId: deploymentId, resourceId: resourceId};
+                var url = _this.getParamUrl(getDeploymentResourceDataUrl, "?", paramData);
+                $.fancybox.open({href: url, title: '图片资源查看'});
                 break;
             default:
+                _this.openViewCodeTemplateDialog(deploymentId, resourceId, "json");
         }
     };
 
     // 打开查看模版代码对话框
     this.openViewCodeTemplateDialog = function (deploymentId, resourceId, mediaType) {
-        var url = getResourceDataUrl.replace("{deploymentId}", encodeURIComponent(deploymentId)).replace("{resourceId}", encodeURIComponent(resourceId));
-        viewCodeTemplateDialog.dialog("open");
-        viewCodeTemplateEdit.setValue('');
+        var paramData = {deploymentId: deploymentId, resourceId: resourceId};
         $.ajax({
-            type: "GET", dataType: "JSON", url: url, data: {}, async: true,
+            type: "GET", dataType: "text", url: getDeploymentResourceDataUrl, data: paramData, async: true,
             success: function (data) {
-                if (data && data != null) {
+                if (!data || data == null) {
                     data = "";
+                } else if (mediaType == "json") {
+                    data = js_beautify(data, 4, ' ')
                 }
                 viewCodeTemplateDialog.dialog("open");
+                viewCodeTemplateEdit.setValue("");
                 viewCodeTemplateEdit.setOption("mode", _this.getCodeMirrorMode(mediaType));
                 viewCodeTemplateEdit.setValue(data);
             }
@@ -333,6 +345,17 @@ var pageJs = function (globalPath) {
         return uuid.join('');
     };
 
+    this.getParamUrl = function (url, connectStr, object) {
+        var param = null;
+        $.each(object, function (property, value) {
+            if (param == null) {
+                param = property + "=" + encodeURIComponent(value);
+            } else {
+                param = param + "&" + property + "=" + encodeURIComponent(value);
+            }
+        });
+        return url + connectStr + param;
+    }
 };
 
 /**

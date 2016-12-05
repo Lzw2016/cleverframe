@@ -280,4 +280,16 @@ public class SpringBeanNames implements IBeanNames {
      * 工作流唯一服务
      */
     public static final String IdentityService = "identityService";
+    /**
+     * 集成Activiti Rest服务需要的bean
+     */
+    public static final String RestResponseFactory = "restResponseFactory";
+    /**
+     * 集成Activiti Rest服务需要的bean
+     */
+    public static final String ContentTypeResolver = "contentTypeResolver";
+    /**
+     * Bean与json之间相互转换Mapper
+     */
+    public static final String ObjectMapper = "objectMapper";
 }
