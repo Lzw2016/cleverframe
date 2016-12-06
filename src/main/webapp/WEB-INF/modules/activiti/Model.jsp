@@ -117,6 +117,41 @@
     </div>
 </div>
 
+<%-- 新增对话框 --%>
+<div id="addDialog" style="width: 700px;height: 280px;padding: 5px 10px">
+    <form id="addForm" method="post">
+        <div class="row">
+            <span class="column">
+                <label for="addName">模型名称</label>
+                <input id="addName" name="name"/>
+            </span>
+            <span class="columnLast">
+                <label for="addKey">模型Key</label>
+                <input id="addKey" name="key"/>
+            </span>
+        </div>
+        <div class="row">
+            <span class="column">
+                <label for="addCategory">模型类别</label>
+                <input id="addCategory" name="category"/>
+            </span>
+            <span class="columnLast">
+                <label for="addTenantId">租户ID</label>
+                <input id="addTenantId" name="tenantId"/>
+            </span>
+        </div>
+        <div class="row">
+            <label for="addDescription">模型说明</label>
+            <input id="addDescription" name="description" style="width: 580px; height: 120px;"/>
+        </div>
+    </form>
+</div>
+<div id="addDialogButtons">
+    <a id="addDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
+    <a id="addDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
+
+
 <%-- 查看流程数据对话框(文本) --%>
 <div id="viewCodeTemplateDialog" style="width: 700px;height: 450px;">
     <%--suppress HtmlFormInputWithoutLabel --%>

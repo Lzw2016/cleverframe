@@ -55,6 +55,17 @@ var pageJs = function (globalPath) {
     // 数据显示表格 新增
     var dataTableButtonsAdd = $("#dataTableButtonsAdd");
 
+    // 新增模型
+    var addDialog = $("#addDialog");
+    var addForm = $("#addForm");
+    var addName = $("#addName");
+    var addKey = $("#addKey");
+    var addCategory = $("#addCategory");
+    var addTenantId = $("#addTenantId");
+    var addDescription = $("#addDescription");
+    var addDialogButtonsSave = $("#addDialogButtonsSave");
+    var addDialogButtonsCancel = $("#addDialogButtonsCancel");
+
     // 查看模版代码对话框
     var viewCodeTemplateDialog = $("#viewCodeTemplateDialog");
     // 查看代码对话框-编辑器
@@ -67,6 +78,7 @@ var pageJs = function (globalPath) {
         _this.initSearchForm();
         _this.initDataTable();
         _this.initViewCodeTemplateDialog();
+        _this.initAddDialog();
 
         _this.dataBind();
         _this.eventBind();
@@ -84,6 +96,19 @@ var pageJs = function (globalPath) {
     this.eventBind = function () {
         dataTableButtonsSearch.click(function () {
             dataTable.datagrid('load');
+        });
+
+        dataTableButtonsAdd.click(function () {
+            addDialog.dialog('open');
+            addForm.form('reset');
+        });
+
+        addDialogButtonsSave.click(function () {
+            _this.createModel();
+        });
+
+        addDialogButtonsCancel.click(function () {
+            addDialog.dialog('close');
         });
     };
 
@@ -194,6 +219,46 @@ var pageJs = function (globalPath) {
                 viewCodeTemplateEdit.setSize("auto", "auto");
                 viewCodeTemplateEdit.setOption("theme", "cobalt");
                 viewCodeTemplateEdit.setValue('');
+            }
+        });
+    };
+
+    // 初始化新增模型对话框
+    this.initAddDialog = function () {
+        addDialog.dialog({
+            title: "新增模型对话框",
+            closed: true,
+            minimizable: false,
+            maximizable: true,
+            resizable: false,
+            minWidth: 700,
+            minHeight: 280,
+            modal: true,
+            buttons: "#addDialogButtons"
+        });
+        addName.textbox({required: true, validType: 'length[0,255]'});
+        addKey.textbox({required: true, validType: 'length[0,255]'});
+        addCategory.textbox({required: false, validType: 'length[0,255]'});
+        addTenantId.textbox({required: false, validType: 'length[0,255]'});
+        addDescription.textbox({required: false, validType: 'length[0,255]', multiline: true});
+    };
+
+    this.createModel = function () {
+        addForm.form("submit", {
+            url: createModelUrl,
+            success: function (data) {
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    addDialog.dialog('close');
+                    dataTable.datagrid('reload');
+                    var editUrl = modelerEditUrl + data.result.id;
+                    window.open(editUrl);
+                    // $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                } else {
+                    // 保存失败
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
             }
         });
     };

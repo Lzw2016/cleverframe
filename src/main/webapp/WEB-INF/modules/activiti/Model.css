@@ -25,3 +25,27 @@
 #searchForm .row .columnLast {
     margin-right: 0;
 }
+
+/*新增表单样式*/
+#addForm .row {
+    margin-bottom: 8px;
+    width: inherit;
+}
+
+#addForm .row label {
+    display: inline-block;
+    width: 60px;
+    text-align: right;
+}
+
+#addForm .row input, select {
+    width: 240px;
+}
+
+#addForm .row .column {
+    margin-right: 30px;
+}
+
+#addForm .row .columnLast {
+    margin-right: 0;
+}
