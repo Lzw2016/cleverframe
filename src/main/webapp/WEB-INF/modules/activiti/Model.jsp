@@ -60,35 +60,29 @@
                 <label for="searchNameLike">流程名称</label>
                 <input id="searchNameLike" name="nameLike">
             </span>
-
             <span class="column">
                 <label for="searchCategoryLike">流程类别</label>
                 <input id="searchCategoryLike" name="categoryLike">
             </span>
-
             <span class="columnLast">
                 <label for="searchKey">模型Key</label>
                 <input id="searchKey" name="key">
             </span>
         </div>
-
         <div class="row">
             <span class="column">
                 <label for="searchTenantIdLike">租户ID</label>
                 <input id="searchTenantIdLike" name="tenantIdLike">
             </span>
-
             <span class="column">
                 <label for="searchDeployed">是否部署</label>
                 <input id="searchDeployed" name="deployed">
             </span>
-
             <span class="columnLast">
                 <label for="searchLatestVersion">最后的版本</label>
                 <input id="searchLatestVersion" name="latestVersion">
             </span>
         </div>
-
         <%--deploymentId--%>
     </form>
 </div>
@@ -112,7 +106,7 @@
             <th data-options="width:80 ,align:'left',hidden:false,field:'sourceUrl',formatter:pageJsObject.sourceUrlFormatter">SourceUrl</th>
             <th data-options="width:100,align:'left',hidden:false,field:'sourceExtraUrl',formatter:pageJsObject.sourceExtraUrlFormatter">SourceExtraUrl</th>
             <th data-options="width:120,align:'left',hidden:false,field:'tenantId'">租户ID</th>
-            <th data-options="width:120,align:'left',hidden:false,field:'operate'">操作</th>
+            <th data-options="width:120,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
             <%--可编译源码 附加可编辑源码--%>
         </tr>
         </thead>
@@ -120,8 +114,6 @@
     <div id="dataTableButtons">
         <a id="dataTableButtonsSearch" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询</a>
         <a id="dataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a>
-        <a id="dataTableButtonsEdit" class="easyui-linkbutton" data-options="iconCls:'icon-edit',plain:true">编辑</a>
-        <a id="dataTableButtonsDelete" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">删除</a>
     </div>
 </div>
 

@@ -1,9 +1,11 @@
 package org.cleverframe.activiti.controller;
 
+import org.activiti.engine.repository.Deployment;
 import org.activiti.engine.repository.Model;
 import org.cleverframe.activiti.ActivitiBeanNames;
 import org.cleverframe.activiti.service.ModelService;
 import org.cleverframe.activiti.vo.request.CreateModelVo;
+import org.cleverframe.activiti.vo.request.DeployModelVo;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -48,4 +50,21 @@ public class ModelController extends BaseController {
         return message;
     }
 
+    /**
+     * 根据数据库中的Model部署流程
+     */
+    @RequestMapping(value = "/deployModel")
+    @ResponseBody
+    public AjaxMessage<Deployment> deployModel(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid DeployModelVo deployModelVo,
+            BindingResult bindingResult) {
+        AjaxMessage<Deployment> message = new AjaxMessage<>(true, "根据数据库中的Model部署流程成功", null);
+        if (beanValidator(bindingResult, message)) {
+            Deployment deployment = modelService.deployModel(deployModelVo.getModelId(), message);
+            message.setResult(deployment);
+        }
+        return message;
+    }
 }

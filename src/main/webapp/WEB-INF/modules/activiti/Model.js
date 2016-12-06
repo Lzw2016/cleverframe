@@ -28,6 +28,10 @@ var pageJs = function (globalPath) {
 
     // 新增一个模型 用于在线流程设计
     var createModelUrl = globalPath.mvcPath + "/activiti/model/createModel.json";
+    // 根据数据库中的Model部署流程
+    var deployModelUrl = globalPath.mvcPath + "/activiti/model/deployModel.json?modelId=";
+    // 模型编辑地址
+    var modelerEditUrl = globalPath.staticPath + "/Activiti/modeler.html?modelId=";
 
     // 查询表单
     var searchForm = $("#searchForm");
@@ -50,10 +54,6 @@ var pageJs = function (globalPath) {
     var dataTableButtonsSearch = $("#dataTableButtonsSearch");
     // 数据显示表格 新增
     var dataTableButtonsAdd = $("#dataTableButtonsAdd");
-    // 数据显示表格 编辑
-    var dataTableButtonsEdit = $("#dataTableButtonsEdit");
-    // 数据显示表格 删除
-    var dataTableButtonsDelete = $("#dataTableButtonsDelete");
 
     // 查看模版代码对话框
     var viewCodeTemplateDialog = $("#viewCodeTemplateDialog");
@@ -312,6 +312,43 @@ var pageJs = function (globalPath) {
         var a = $("#" + id);
         var sourceExtraUrl = a.attr("sourceExtraUrl") + ".png";
         $.fancybox.open({href: sourceExtraUrl, title: '图片资源查看'});
+    };
+
+    //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
+    this.operateFormatter = function (value, rowData, rowIndex) {
+        var div = $("<div/>");
+        if (rowData.id) {
+            var editUrl = modelerEditUrl + rowData.id;
+            var edit = $("<a target='_blank' href='" + editUrl + "'>编辑</a>");
+            div.append(edit);
+            div.append("&nbsp;");
+            var deployUrl = deployModelUrl + rowData.id;
+            var id = _this.getUUID(32, 16);
+            var deploy = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.deployModel(\"" + id + "\")'>部署</a>");
+            deploy.attr("deployUrl", deployUrl);
+            div.append(deploy);
+        }
+        return div.html();
+    };
+
+    this.deployModel = function (id) {
+        var a = $("#" + id);
+        var deployUrl = a.attr("deployUrl");
+        $.ajax({
+            type: "GET", dataType: "json", url: deployUrl, data: {}, async: true,
+            success: function (data) {
+                if (data.success) {
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 1000, showType: 'slide'});
+                } else {
+                    var failMessageStr = "/* [" + data.failMessage + "] */ \r\n \r\n" + data.exceptionStack;
+                    viewCodeTemplateDialog.dialog("open");
+                    viewCodeTemplateEdit.setValue("");
+                    viewCodeTemplateEdit.setOption("mode", _this.getCodeMirrorMode("java"));
+                    viewCodeTemplateEdit.setValue(failMessageStr);
+                    // $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
     };
 
     // 根据编程语言获取CodeMirror的Mode属性

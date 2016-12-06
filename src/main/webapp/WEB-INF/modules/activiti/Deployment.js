@@ -118,7 +118,6 @@ var pageJs = function (globalPath) {
             pageSize: 20,
             pageList: [10, 20, 30, 50, 100, 150],
             onClickRow: function (rowIndex, rowData) {
-
                 _this.loadeDataTable_2(rowData);
             },
             onBeforeLoad: function (param) {
@@ -226,7 +225,7 @@ var pageJs = function (globalPath) {
         $.ajax({
             type: "GET", dataType: "JSON", url: url, data: {}, async: false,
             success: function (data) {
-                if (data) {
+                if (data.success) {
                     dataTable_2.datagrid("loadData", data);
                     $.messager.show({title: '提示', msg: "获取资源信息成功", timeout: 1000, showType: 'slide'});
                 } else {
