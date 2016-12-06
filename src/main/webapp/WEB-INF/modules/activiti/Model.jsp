@@ -50,7 +50,6 @@
 <body class="easyui-layout" data-options="fit:true,border:false">
 <%-- 页面上部 --%>
 <div data-options="region:'north',border:true,minWidth:800" style="height:75px;">
-
     <form id="searchForm">
         <%--sort	否	'id' (默认), 'category', 'createTime', 'key', 'lastUpdateTime', 'name'，'version'或'tenantId'	排序的字段，和'order'一起使用。--%>
         <input type="hidden" name="sort" value="name">

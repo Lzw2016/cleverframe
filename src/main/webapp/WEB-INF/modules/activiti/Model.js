@@ -139,7 +139,7 @@ var pageJs = function (globalPath) {
             pagination: true,
             loadMsg: "正在加载，请稍候...",
             toolbar: "#dataTableButtons",
-            pageSize: 20,
+            pageSize: 30,
             pageList: [10, 20, 30, 50, 100, 150],
             onClickRow: function (rowIndex, rowData) {
                 // _this.loadeDataTable_2(rowData);
