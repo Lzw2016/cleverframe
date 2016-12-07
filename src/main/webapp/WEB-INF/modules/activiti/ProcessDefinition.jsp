@@ -31,6 +31,9 @@
     <%--代码格式化JS--%>
     <script src="${applicationScope.staticPath}/CodeFormat/jsbeautify.js"></script>
 
+    <%--Moment--%>
+    <script src="${applicationScope.staticPath}/Moment/moment-2.17.1/moment.min.js"></script>
+
     <%--FancyBox--%>
     <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/lib/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.pack.js?v=2.1.5"></script>
@@ -102,7 +105,7 @@
             <th data-options="width:80 ,align:'left',hidden:false,field:'resource',formatter:pageJsObject.resourceFormatter">流程源数据</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'diagramResource',formatter:pageJsObject.diagramResourceFormatter">流程图形源数据</th>
             <th data-options="width:180,align:'left',hidden:false,field:'description'">流程说明</th>
-            <th data-options="width:160,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
+            <th data-options="width:170,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
         </tr>
         </thead>
     </table>

@@ -14,9 +14,9 @@ var pageJs = function (globalPath) {
     // 获得流程定义的BPMN模型 GET repository/process-definitions/{processDefinitionId}/model
 
     // 暂停流程定义 PUT repository/process-definitions/{processDefinitionId}
-
+    var suspendProcessDefinitionUrl = globalPath.appPath + "/repository/process-definitions/{processDefinitionId}.json";
     // 激活流程定义 PUT repository/process-definitions/{processDefinitionId}
-
+    var activateProcessDefinitionUrl = globalPath.appPath + "/repository/process-definitions/{processDefinitionId}.json";
     // 获得流程定义的所有候选启动者 GET repository/process-definitions/{processDefinitionId}/identitylinks
 
     // 为流程定义添加一个候选启动者 POST repository/process-definitions/{processDefinitionId}/identitylinks
@@ -334,7 +334,59 @@ var pageJs = function (globalPath) {
 
     //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
     this.operateFormatter = function (value, rowData, rowIndex) {
-        return "暂停 激活 编辑候选启动者";
+        var div = $("<div/>");
+        if (rowData.id) {
+            var id1 = _this.getUUID(32, 16);
+            var suspend = $("<a id='" + id1 + "' href='javascript:void(0)' onclick='pageJsObject.suspendProcessDefinition(\"" + id1 + "\")'>暂停</a>");
+            suspend.attr("processDefinitionId", rowData.id);
+            div.append(suspend);
+
+            div.append("&nbsp;");
+
+            var id2 = _this.getUUID(32, 16);
+            var activate = $("<a id='" + id2 + "' href='javascript:void(0)' onclick='pageJsObject.activateProcessDefinition(\"" + id2 + "\")'>激活</a>");
+            activate.attr("processDefinitionId", rowData.id);
+            div.append(activate);
+
+            div.append("&nbsp;");
+
+            div.append("编辑候选启动者");
+        }
+        return div.html();
+    };
+
+    this.suspendProcessDefinition = function (id) {
+        var a = $("#" + id);
+        var processDefinitionId = a.attr("processDefinitionId");
+        var url = suspendProcessDefinitionUrl.replace("{processDefinitionId}", encodeURIComponent(processDefinitionId));
+        var param = {action: "suspend", includeProcessInstances: "false", date: moment(new Date()).format()};
+        $.ajax({
+            type: "PUT", dataType: "json", url: url, data: JSON.stringify(param), async: true, contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.suspended) {
+                    // 成功
+                } else {
+                    // 失败
+                }
+            }
+        });
+    };
+
+    this.activateProcessDefinition = function (id) {
+        var a = $("#" + id);
+        var processDefinitionId = a.attr("processDefinitionId");
+        var url = activateProcessDefinitionUrl.replace("{processDefinitionId}", encodeURIComponent(processDefinitionId));
+        var param = {action: "activate", includeProcessInstances: "true", date: moment(new Date()).format()};
+        $.ajax({
+            type: "PUT", dataType: "json", url: url, data: JSON.stringify(param), async: true, contentType: "application/json; charset=utf-8",
+            success: function (data) {
+                if (data.suspended) {
+                    // 失败
+                } else {
+                    // 成功
+                }
+            }
+        });
     };
 
     // 根据编程语言获取CodeMirror的Mode属性
