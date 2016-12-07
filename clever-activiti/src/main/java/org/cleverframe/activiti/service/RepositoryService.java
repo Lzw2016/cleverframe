@@ -56,6 +56,15 @@ public class RepositoryService extends BaseService {
     protected ContentTypeResolver contentTypeResolver;
 
     /**
+     * 获取部署流程信息
+     */
+    public ProcessDefinition getProcessDefinition(String processDefinitionId) {
+        return repositoryService.createProcessDefinitionQuery()
+                .processDefinitionId(processDefinitionId)
+                .singleResult();
+    }
+
+    /**
      * ProcessDefinition 转换成 Model
      */
     @Transactional(readOnly = false)

@@ -86,6 +86,7 @@ public class ResourcesInitHandle implements IHandle {
         List<String> notExistUrlList = new ArrayList<>();
         // 重新加载数据库里所有的资源信息到缓存中 - resourcesList
         List<Resources> resourcesList = ehCacheResourcesService.reloadResources();
+        logger.info("### 已重新加载所有的资源信息到缓存中");
         mapResources.clear();
         for (Resources resources : allUrlList) {
             mapResources.put(resources.getControllerMethod(), resources.getResourcesUrl());

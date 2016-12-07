@@ -1,10 +1,12 @@
 package org.cleverframe.activiti.controller;
 
+import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.rest.service.api.repository.DeploymentResourceResponse;
 import org.cleverframe.activiti.ActivitiBeanNames;
 import org.cleverframe.activiti.service.RepositoryService;
 import org.cleverframe.activiti.vo.request.GetDeploymentResourceDataVo;
 import org.cleverframe.activiti.vo.request.GetDeploymentResourceVo;
+import org.cleverframe.activiti.vo.response.ProcessDefinitionVo;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.JacksonMapper;
 import org.cleverframe.common.vo.response.AjaxMessage;
@@ -85,5 +87,39 @@ public class RepositoryController extends BaseController {
         }
         response.setContentType("application/json");
         response.getOutputStream().write(JacksonMapper.nonEmptyMapper().toJson(message).getBytes());
+    }
+
+    /**
+     * 获取部署流程信息
+     */
+    @RequestMapping(value = "/getProcessDefinition/{processDefinitionId}")
+    @ResponseBody
+    public AjaxMessage<ProcessDefinitionVo> getProcessDefinition(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @PathVariable(required = true, name = "processDefinitionId") String processDefinitionId) {
+        AjaxMessage<ProcessDefinitionVo> message = new AjaxMessage<>(true, "获取部署流程信息成功", null);
+        ProcessDefinition processDefinition = repositoryService.getProcessDefinition(processDefinitionId);
+        if (processDefinition == null) {
+            message.setSuccess(false);
+            message.setFailMessage("获取部署流程信息失败");
+        } else {
+            ProcessDefinitionVo processDefinitionVo = new ProcessDefinitionVo();
+            processDefinitionVo.setId(processDefinition.getId());
+            processDefinitionVo.setCategory(processDefinition.getCategory());
+            processDefinitionVo.setName(processDefinition.getName());
+            processDefinitionVo.setKey(processDefinition.getKey());
+            processDefinitionVo.setDescription(processDefinition.getDescription());
+            processDefinitionVo.setVersion(processDefinition.getVersion());
+            processDefinitionVo.setResourceName(processDefinition.getResourceName());
+            processDefinitionVo.setDeploymentId(processDefinition.getDeploymentId());
+            processDefinitionVo.setDiagramResourceName(processDefinition.getDiagramResourceName());
+            processDefinitionVo.setStartFormDefined(processDefinition.hasStartFormKey());
+            processDefinitionVo.setGraphicalNotationDefined(processDefinition.hasGraphicalNotation());
+            processDefinitionVo.setSuspended(processDefinition.isSuspended());
+            processDefinitionVo.setTenantId(processDefinition.getTenantId());
+            message.setResult(processDefinitionVo);
+        }
+        return message;
     }
 }

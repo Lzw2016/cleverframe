@@ -17,6 +17,20 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>
 
+    <%-- CodeMirror --%>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/xml/xml.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/htmlembedded/htmlembedded.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/css/css.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/sql/sql.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/javascript/javascript.js"></script>
+
+    <%--代码格式化JS--%>
+    <script src="${applicationScope.staticPath}/CodeFormat/jsbeautify.js"></script>
+
     <%--FancyBox--%>
     <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/lib/jquery.mousewheel-3.0.6.pack.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.pack.js?v=2.1.5"></script>
@@ -74,21 +88,21 @@
     <table id="dataTable" data-options="border:false">
         <thead>
         <tr>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'id'">流程ID</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'url'">流程Url</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'version'">流程版本</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'key'">流程Key</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'category'">流程类别</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'suspended'">是否挂起</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'name'">流程名称</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'description'">流程说明</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'deploymentId'">部署ID</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'deploymentUrl'">部署Url</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'id'">流程ID</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'name'">流程名称</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'key'">流程Key</th>
+            <th data-options="width:230,align:'left',hidden:false,field:'category'">流程类别</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'suspended'">是否挂起</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'graphicalNotationDefined'">是否图形化</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'resource'">流程源数据</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'diagramResource'">流程图形源数据</th>
-            <th data-options="width:80 ,align:'left',hidden:false,field:'startFormDefined'">流程表单</th>
-            <%--可编译源码 附加可编辑源码--%>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'startFormDefined'">是否有表单</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'deploymentId'">部署ID</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'deploymentUrl',formatter:pageJsObject.deploymentUrlFormatter">部署Url</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'version'">流程版本</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'url',formatter:pageJsObject.urlFormatter">流程Url</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'resource',formatter:pageJsObject.resourceFormatter">流程源数据</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'diagramResource',formatter:pageJsObject.diagramResourceFormatter">流程图形源数据</th>
+            <th data-options="width:180,align:'left',hidden:false,field:'description'">流程说明</th>
+            <th data-options="width:160,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
         </tr>
         </thead>
     </table>
@@ -98,9 +112,10 @@
     </div>
 </div>
 
-
-
-
-启动流程(新建流程实例)
+<%-- 查看流程数据对话框(文本) --%>
+<div id="viewCodeTemplateDialog" style="width: 700px;height: 450px;">
+    <%--suppress HtmlFormInputWithoutLabel --%>
+    <textarea id="viewCodeTemplateEdit"></textarea>
+</div>
 </body>
 </html>

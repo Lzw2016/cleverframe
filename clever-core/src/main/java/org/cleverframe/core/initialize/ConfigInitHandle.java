@@ -65,6 +65,7 @@ public class ConfigInitHandle implements IHandle {
             logger.info(strTmp.toString());
         }
         config.reLoadAll();
+        logger.info("### 已重新加载所有的配置信息到缓存中");
         return addCfgCount;
     }
 }

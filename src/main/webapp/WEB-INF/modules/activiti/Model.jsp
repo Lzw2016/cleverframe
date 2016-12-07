@@ -106,7 +106,6 @@
             <th data-options="width:100,align:'left',hidden:false,field:'sourceExtraUrl',formatter:pageJsObject.sourceExtraUrlFormatter">SourceExtraUrl</th>
             <th data-options="width:120,align:'left',hidden:false,field:'tenantId'">租户ID</th>
             <th data-options="width:120,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
-            <%--可编译源码 附加可编辑源码--%>
         </tr>
         </thead>
     </table>
@@ -149,7 +148,6 @@
     <a id="addDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
     <a id="addDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 </div>
-
 
 <%-- 查看流程数据对话框(文本) --%>
 <div id="viewCodeTemplateDialog" style="width: 700px;height: 450px;">

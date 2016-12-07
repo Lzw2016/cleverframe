@@ -14,7 +14,7 @@ var pageJs = function (globalPath) {
     // 更新模型 PUT repository/models/{modelId}
 
     // 新建模型 POST repository/models
-    var createModelUrl = globalPath.appPath + "/repository/models";
+    // var createModelUrl = globalPath.appPath + "/repository/models";
     // 删除模型 DELETE repository/models/{modelId}
 
     // 获得模型的可编译源码 GET repository/models/{modelId}/source
