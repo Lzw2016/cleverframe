@@ -29,6 +29,8 @@ var pageJs = function (globalPath) {
     var getProcessDefinitionUrl = globalPath.mvcPath + "/activiti/repository/getProcessDefinition/{processDefinitionId}.json";
     // 获取部署资源数据
     var getDeploymentResourceDataUrl = globalPath.mvcPath + "/activiti/repository/getDeploymentResourceData";
+    // 启动流程实例 POST runtime/process-instances
+    var startProcessUrl = globalPath.appPath + "/runtime/process-instances";
 
     // 查询表单
     var searchForm = $("#searchForm");
@@ -48,12 +50,35 @@ var pageJs = function (globalPath) {
     // 流程定义数据表格
     var dataTable = $("#dataTable");
     var dataTableButtonsSearch = $("#dataTableButtonsSearch");
-    var dataTableButtonsAdd = $("#dataTableButtonsAdd");
+    var dataTableButtonsStart = $("#dataTableButtonsStart");
 
     // 查看模版代码对话框
     var viewCodeTemplateDialog = $("#viewCodeTemplateDialog");
     // 查看代码对话框-编辑器
     var viewCodeTemplateEdit = null;
+
+    // 新增流程实例对话框
+    var addProcessInstanceDialog = $("#addProcessInstanceDialog");
+    // 新增流程实例对话框 - 保存
+    var addProcessInstanceDialogSave = $("#addProcessInstanceDialogSave");
+    // 新增流程实例对话框 - 取消
+    var addProcessInstanceDialogCancel = $("#addProcessInstanceDialogCancel");
+    // 新增流程实例对话框 - 保存
+    var variablesTableButtonsSave = $("#variablesTableButtonsSave");
+    // 流程变量表格
+    var variablesTable = $("#variablesTable");
+    // 流程变量表格 - 新增
+    var variablesTableButtonsAdd = $("#variablesTableButtonsAdd");
+    // 流程变量表格 - 移除
+    var variablesTableButtonsRemove = $("#variablesTableButtonsRemove");
+    // 流程变量表格 - 编辑行
+    var addVariablesEditIndex = undefined;
+    // 新增流程实例 表单
+    var addProcessInstanceForm = $("#addProcessInstanceForm");
+    var addStartType = $("#addStartType");
+    var addProcessDefinitionId = $("#addProcessDefinitionId");
+    var addBusinessKey = $("#addBusinessKey");
+    var addTenantId = $("#addTenantId");
 
     /**
      * 页面初始化方法
@@ -62,6 +87,7 @@ var pageJs = function (globalPath) {
         _this.initSearchForm();
         _this.initDataTable();
         _this.initViewCodeTemplateDialog();
+        _this.initAddProcessInstanceDialog();
 
         _this.dataBind();
         _this.eventBind();
@@ -71,6 +97,7 @@ var pageJs = function (globalPath) {
      * 页面数据初始化
      */
     this.dataBind = function () {
+
     };
 
     /**
@@ -78,7 +105,24 @@ var pageJs = function (globalPath) {
      */
     this.eventBind = function () {
         dataTableButtonsSearch.click(function () {
-            dataTable.datagrid("reload");
+            dataTable.datagrid("load");
+        });
+        dataTableButtonsStart.click(function () {
+            var row = dataTable.datagrid('getSelected');
+            if (row == null) {
+                $.messager.alert('提示', '请先选择一个流程定义记录', 'info');
+                return;
+            }
+            addProcessInstanceForm.form('reset');
+            variablesTable.datagrid('loadData', []);
+            addProcessInstanceDialog.dialog('open');
+            addProcessDefinitionId.textbox("setValue", row.id);
+        });
+        addProcessInstanceDialogCancel.click(function () {
+            addProcessInstanceDialog.dialog('close');
+        });
+        addProcessInstanceDialogSave.click(function () {
+            _this.startProcess();
         });
     };
 
@@ -191,6 +235,157 @@ var pageJs = function (globalPath) {
                 viewCodeTemplateEdit.setSize("auto", "auto");
                 viewCodeTemplateEdit.setOption("theme", "cobalt");
                 viewCodeTemplateEdit.setValue('');
+            }
+        });
+    };
+
+    // 初始化启动流程对话框
+    this.initAddProcessInstanceDialog = function () {
+        addProcessInstanceDialog.dialog({
+            title: "启动任务",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            minWidth: 680,
+            minHeight: 450,
+            modal: true,
+            buttons: "#addProcessInstanceDialogButtons"
+        });
+
+        //noinspection JSUnusedLocalSymbols
+        addStartType.combobox({
+            required: true, editable: false, panelHeight: 70, validType: 'length[1,250]',
+            onChange: function (newValue, oldValue) {
+                addProcessDefinitionId.textbox("setValue", "");
+                addProcessDefinitionId.textbox("readonly", false);
+                var row = dataTable.datagrid('getSelected');
+                if (row == null) {
+                    return;
+                }
+                switch (newValue) {
+                    case "ID":
+                        addProcessDefinitionId.textbox("setValue", row.id);
+                        addProcessDefinitionId.textbox("readonly", true);
+                        break;
+                    case "KEY":
+                        addProcessDefinitionId.textbox("setValue", row.key);
+                        addProcessDefinitionId.textbox("readonly", true);
+                        break;
+                    case "MESSAGE":
+                        break;
+                    default:
+                }
+            }
+        });
+        addProcessDefinitionId.textbox({required: true, validType: 'length[1,250]', readonly: true});
+        addBusinessKey.textbox({required: true, validType: 'length[1,250]'});
+        addTenantId.textbox({required: false, validType: 'length[1,250]'});
+
+        var endEditing = function () {
+            if (addVariablesEditIndex == undefined) {
+                return true
+            }
+            if (variablesTable.datagrid('validateRow', addVariablesEditIndex)) {
+                variablesTable.datagrid('endEdit', addVariablesEditIndex);
+                addVariablesEditIndex = undefined;
+                return true;
+            } else {
+                return false;
+            }
+        };
+        variablesTable.datagrid({
+            fit: true,
+            fitColumns: false,
+            striped: true,
+            rownumbers: true,
+            singleSelect: true,
+            nowrap: true,
+            toolbar: "#variablesTableButtons",
+            pagination: false,
+            onEndEdit: function (index, row) {
+
+            },
+            onClickCell: function (index, field) {
+                if (addVariablesEditIndex != index) {
+                    if (endEditing()) {
+                        variablesTable.datagrid('selectRow', index).datagrid('beginEdit', index);
+                        var ed = variablesTable.datagrid('getEditor', {index: index, field: field});
+                        if (ed) {
+                            ($(ed.target).data('textbox') ? $(ed.target).textbox('textbox') : $(ed.target)).focus();
+                        }
+                        addVariablesEditIndex = index;
+                    } else {
+                        setTimeout(function () {
+                            variablesTable.datagrid('selectRow', addVariablesEditIndex);
+                        }, 0);
+                    }
+                }
+            }
+        });
+        // 变量数据表格 - 增加
+        variablesTableButtonsAdd.click(function () {
+            if (endEditing()) {
+                variablesTable.datagrid('appendRow', {});
+                addVariablesEditIndex = variablesTable.datagrid('getRows').length - 1;
+                variablesTable.datagrid('selectRow', addVariablesEditIndex).datagrid('beginEdit', addVariablesEditIndex);
+            }
+        });
+        // 变量数据表格 - 移除
+        variablesTableButtonsRemove.click(function () {
+            if (addVariablesEditIndex == undefined) {
+                return
+            }
+            variablesTable.datagrid('cancelEdit', addVariablesEditIndex).datagrid('deleteRow', addVariablesEditIndex);
+            addVariablesEditIndex = undefined;
+        });
+        // 变量数据表格 - 保存
+        variablesTableButtonsSave.click(function () {
+            if (endEditing()) {
+                variablesTable.datagrid('acceptChanges');
+            }
+        });
+    };
+
+    // 启动流程
+    this.startProcess = function () {
+        var param = {};
+        param.businessKey = addBusinessKey.textbox("getValue");
+        param.tenantId = addTenantId.textbox("getValue");
+        var startType = addStartType.combobox('getValue');
+        switch (startType) {
+            case "ID":
+                param.processDefinitionId = addProcessDefinitionId.textbox("getValue");
+                break;
+            case "KEY":
+                param.processDefinitionKey = addProcessDefinitionId.textbox("getValue");
+                break;
+            case "MESSAGE":
+                param.message = addProcessDefinitionId.textbox("getValue");
+                break;
+            default:
+                return;
+        }
+        var rows = variablesTable.datagrid('getData');
+        if (rows != null && rows.rows != null && rows.rows.length >= 0) {
+            param.variables = [];
+            $(rows.rows).each(function (index, element) {
+                param.variables.push({name: element.key, value: element.value});
+            });
+        }
+        $.ajax({
+            type: "POST", dataType: "text", url: startProcessUrl, data: JSON.stringify(param), async: true,
+            contentType: "application/json; charset=utf-8", success: function (data) {
+                addProcessInstanceDialog.dialog('close');
+                if (!data || data == null) {
+                    data = "";
+                } else {
+                    data = js_beautify(data, 4, ' ')
+                }
+                viewCodeTemplateDialog.dialog("open");
+                viewCodeTemplateEdit.setValue("");
+                viewCodeTemplateEdit.setOption("mode", _this.getCodeMirrorMode("json"));
+                viewCodeTemplateEdit.setValue(data);
             }
         });
     };
@@ -365,8 +560,11 @@ var pageJs = function (globalPath) {
             success: function (data) {
                 if (data.suspended) {
                     // 成功
+                    $.messager.show({title: '提示', msg: "流程暂停成功", timeout: 5000, showType: 'slide'});
+                    dataTable.datagrid("reload");
                 } else {
                     // 失败
+                    $.messager.alert("提示", "流程暂停失败", "warn");
                 }
             }
         });
@@ -382,8 +580,10 @@ var pageJs = function (globalPath) {
             success: function (data) {
                 if (data.suspended) {
                     // 失败
+                    $.messager.show({title: '提示', msg: "流程激活成功", timeout: 5000, showType: 'slide'});
                 } else {
                     // 成功
+                    $.messager.alert("提示", "流程激活失败", "warn");
                 }
             }
         });

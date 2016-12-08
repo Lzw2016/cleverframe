@@ -25,3 +25,37 @@
 #searchForm .row .columnLast {
     margin-right: 0;
 }
+
+/*新增流程实例表单*/
+#addProcessInstanceForm {
+    margin-top: 10px;
+    margin-bottom: 8px;
+    margin-left: 0;
+}
+
+#addProcessInstanceForm .row {
+    margin-bottom: 8px;
+}
+
+#addProcessInstanceForm .row label {
+    display: inline-block;
+    width: 75px;
+    text-align: right;
+}
+
+#addProcessInstanceForm .row input, select {
+    width: 230px;
+}
+
+#addProcessInstanceForm .row .column {
+    margin-right: 10px;
+}
+
+#addProcessInstanceForm .row .columnLast {
+    margin-right: 0;
+}
+
+/*自定义图标*/
+.icon-start {
+    background: url('image/media-playback-start-7.png') no-repeat center center;
+}

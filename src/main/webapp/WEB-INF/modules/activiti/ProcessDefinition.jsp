@@ -111,7 +111,7 @@
     </table>
     <div id="dataTableButtons">
         <a id="dataTableButtonsSearch" class="easyui-linkbutton" data-options="iconCls:'icon-search',plain:true">查询</a>
-        <a id="dataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a>
+        <a id="dataTableButtonsStart" class="easyui-linkbutton" data-options="iconCls:'icon-start',plain:true">启动流程</a>
     </div>
 </div>
 
@@ -120,5 +120,62 @@
     <%--suppress HtmlFormInputWithoutLabel --%>
     <textarea id="viewCodeTemplateEdit"></textarea>
 </div>
+
+<div id="addProcessInstanceDialog" style="width: 680px;height: 450px;">
+    <div class="easyui-layout" data-options="fit:true,border:false">
+        <div data-options="region:'north',border:false" style="height:75px;">
+            <form id="addProcessInstanceForm" method="post">
+                <%--processDefinitionId--%>
+                <%--processDefinitionKey--%>
+                <%--message--%>
+                <div class="row">
+                    <span class="column">
+                        <label for="addStartType">启动类型</label>
+                        <select id="addStartType" name="startType">
+                            <option value="ID" selected="selected">流程ID</option>
+                            <option value="KEY">流程Key</option>
+                            <option value="MESSAGE">流程Message</option>
+                        </select>
+                    </span>
+                    <span class="columnLast">
+                        <label for="addProcessDefinitionId">启动数据</label>
+                        <input id="addProcessDefinitionId" name="processDefinitionId"/>
+                    </span>
+                </div>
+                <div class="row">
+                    <span class="column">
+                        <label for="addBusinessKey">业务数据Key</label>
+                        <input id="addBusinessKey" name="businessKey"/>
+                    </span>
+                    <span class="columnLast">
+                        <label for="addTenantId">租户ID</label>
+                        <input id="addTenantId" name="tenantId"/>
+                    </span>
+                </div>
+            </form>
+        </div>
+        <div data-options="region:'center',border:false">
+            <table id="variablesTable" data-options="border:true">
+                <thead>
+                <tr>
+                    <th data-options="width:180,align:'left',hidden:false,field:'key',editor:{type:'textbox',options:{required: true}}">变量名称</th>
+                    <th data-options="width:430,align:'left',hidden:false,field:'value',editor:{type:'textbox',options:{required: true}}">变量值</th>
+                </tr>
+                </thead>
+            </table>
+            <div id="variablesTableButtons">
+                <a id="variablesTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true" href="javascript:void(0)"></a>
+                <a id="variablesTableButtonsRemove" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true" href="javascript:void(0)"></a>
+                <a id="variablesTableButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" href="javascript:void(0)"></a>
+                <span style="float: right;margin-right: 45px;margin-top: 5px;color: #738014;font-size: 14px;font-weight: bold;">流程变量数据设置</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="addProcessInstanceDialogButtons">
+    <a id="addProcessInstanceDialogSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'" href="javascript:void(0)">启动流程</a>
+    <a id="addProcessInstanceDialogCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" href="javascript:void(0)">取消</a>
+</div>
+
 </body>
 </html>
