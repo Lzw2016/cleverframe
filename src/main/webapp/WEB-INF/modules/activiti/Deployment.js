@@ -225,7 +225,7 @@ var pageJs = function (globalPath) {
         $.ajax({
             type: "GET", dataType: "JSON", url: url, data: {}, async: false,
             success: function (data) {
-                if (data.success) {
+                if (data) {
                     dataTable_2.datagrid("loadData", data);
                     $.messager.show({title: '提示', msg: "获取资源信息成功", timeout: 1000, showType: 'slide'});
                 } else {
