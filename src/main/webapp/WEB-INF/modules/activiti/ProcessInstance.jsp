@@ -17,6 +17,20 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>
 
+    <%-- CodeMirror --%>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/xml/xml.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/htmlembedded/htmlembedded.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/css/css.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/sql/sql.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/javascript/javascript.js"></script>
+
+    <%--代码格式化JS--%>
+    <script src="${applicationScope.staticPath}/CodeFormat/jsbeautify.js"></script>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
@@ -29,38 +43,39 @@
 <%-- 页面上部 --%>
 <div data-options="region:'north',border:true,minWidth:800" style="height:75px;">
     <form id="searchForm">
-        <%--'name'（默认），'id'，'key'，'category'，'deploymentId'和'version'--%>
-        <input type="hidden" name="sort" value="name">
+        <%--id（默认），processDefinitionId，tenantId 或 processDefinitionKey--%>
+        <input type="hidden" name="sort" value="id">
         <input type="hidden" name="order" value="asc">
+        <%--表示结果中包含流程变量--%>
+        <input type="hidden" name="includeProcessVariables" value="true">
         <div class="row">
             <span class="column">
-                <label for="searchNameLike">流程名称</label>
-                <input id="searchNameLike" name="nameLike">
+                <label for="searchProcessDefinitionKey">流程定义Key</label>
+                <input id="searchProcessDefinitionKey" name="processDefinitionKey">
             </span>
             <span class="column">
-                <label for="searchCategoryLike">流程类别</label>
-                <input id="searchCategoryLike" name="categoryLike">
+                <label for="searchProcessDefinitionId">流程定义ID</label>
+                <input id="searchProcessDefinitionId" name="processDefinitionId">
             </span>
             <span class="columnLast">
-                <label for="searchKeyLike">模型Key</label>
-                <input id="searchKeyLike" name="keyLike">
+                <label for="searchBusinessKey">业务主键</label>
+                <input id="searchBusinessKey" name="businessKey">
             </span>
         </div>
         <div class="row">
             <span class="column">
-                <label for="searchResourceNameLike">源数据名称</label>
-                <input id="searchResourceNameLike" name="resourceNameLike">
+                <label for="searchInvolvedUser">参与流程用户</label>
+                <input id="searchInvolvedUser" name="involvedUser">
             </span>
             <span class="column">
-                <label for="searchStartableByUser">启动的用户</label>
-                <input id="searchStartableByUser" name="startableByUser">
+                <label for="searchTenantIdLike">流程变量</label>
+                <input id="searchTenantIdLike" name="tenantIdLike">
             </span>
             <span class="columnLast">
                 <label for="searchSuspended">是否挂起</label>
                 <input id="searchSuspended" name="suspended">
             </span>
         </div>
-        <%--deploymentId--%>
     </form>
 </div>
 
@@ -70,6 +85,18 @@
         <thead>
         <tr>
             <th data-options="width:150,align:'left',hidden:false,field:'id'">流程ID</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'name'">名称</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'url',formatter:pageJsObject.urlFormatter">流程实例Url</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'activityId'">Activity ID</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'businessKey'">业务主键</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'variables',formatter:pageJsObject.variablesFormatter">流程变量</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'suspended'">是否暂停</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'completed'">是否完成</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'ended'">流程是否结束</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'processDefinitionId'">流程定义ID</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'processDefinitionKey'">流程定义Key</th>
+            <th data-options="width:80 ,align:'left',hidden:false,field:'processDefinitionUrl',formatter:pageJsObject.processDefinitionUrlFormatter">流程定义Url</th>
+            <th data-options="width:150,align:'left',hidden:false,field:'tenantId'">租户ID</th>
         </tr>
         </thead>
     </table>
@@ -78,5 +105,12 @@
         <a id="dataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">新增</a>
     </div>
 </div>
+
+<%-- 查看流程数据对话框(文本) --%>
+<div id="viewCodeTemplateDialog" style="width: 700px;height: 450px;">
+    <%--suppress HtmlFormInputWithoutLabel --%>
+    <textarea id="viewCodeTemplateEdit"></textarea>
+</div>
+
 </body>
 </html>

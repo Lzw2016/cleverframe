@@ -10,12 +10,12 @@
 
 #searchForm .row label {
     display: inline-block;
-    width: 70px;
+    width: 80px;
     text-align: right;
 }
 
 #searchForm .row input, select {
-    width: 160px;
+    width: 210px;
 }
 
 #searchForm .row .column {

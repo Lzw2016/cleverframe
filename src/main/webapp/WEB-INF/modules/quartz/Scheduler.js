@@ -342,7 +342,7 @@ var pageJs = function (globalPath) {
 
     //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
     this.jobDataFormatter = function (value, rowData, rowIndex) {
-        if (value != "" && value != null) {
+        if (value != "" && value != null && value.constructor == Object) {
             var jobData = JSON.stringify(value);
             jobData = js_beautify(jobData, 4, ' ');
             var uuid = _this.getUUID(32, 16);
