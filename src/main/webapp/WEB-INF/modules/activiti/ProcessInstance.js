@@ -18,14 +18,14 @@ var pageJs = function (globalPath) {
 
     // 查询流程实例 POST query/process-instances
 
-    // 获得流程实例的流程图 GET runtime/process-instances/{processInstanceId}
-
+    // 获得流程实例的流程图 GET runtime/process-instances/{processInstanceId}/diagram
+    var getDiagramUrl = globalPath.appPath + "/runtime/process-instances/{processInstanceId}/diagram.png";
     // 获得流程实例的参与者 GET runtime/process-instances/{processInstanceId}/identitylinks
-
+    var getIdentitylinksUrl = globalPath.appPath + "/runtime/process-instances/{processInstanceId}/identitylinks.json";
     // 为流程实例添加一个参与者 POST runtime/process-instances/{processInstanceId}/identitylinks
-
+    var addIdentitylinksUrl = globalPath.appPath + "/runtime/process-instances/{processInstanceId}/identitylinks.json";
     // 删除一个流程实例的参与者 DELETE runtime/process-instances/{processInstanceId}/identitylinks/users/{userId}/{type}
-
+    var deleteIdentitylinksUrl = globalPath.appPath + "/runtime/process-instances/{processInstanceId}/identitylinks/users/{userId}/{type}.json";
     // 列出流程实例的变量 GET runtime/process-instances/{processInstanceId}/variables
 
     // 获得流程实例的一个变量 GET runtime/process-instances/{processInstanceId}/variables/{variableName}
@@ -226,7 +226,7 @@ var pageJs = function (globalPath) {
         if (value != "" && value != null && (value.constructor == Object || $.isArray(value))) {
             var jsonValue = JSON.stringify(value);
             var id = _this.getUUID(32, 16);
-            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openVariablesView(\"" + id + "\")'>查看</a>");
+            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openVariablesView(\"" + id + "\")'>编辑</a>");
             a.attr("jsonValue", jsonValue);
             return $("<div/>").append(a).html();
         } else {
@@ -277,6 +277,55 @@ var pageJs = function (globalPath) {
                 viewCodeTemplateEdit.setValue(data);
             }
         });
+    };
+
+    //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
+    this.diagramFormatter = function (value, rowData, rowIndex) {
+        if ($.trim(rowData.id) == "") {
+            return "";
+        } else {
+            var id = _this.getUUID(32, 16);
+            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openDiagramView(\"" + id + "\")'>查看</a>");
+            a.attr("processInstanceId", rowData.id);
+            return $("<div/>").append(a).html();
+        }
+    };
+
+    this.openDiagramView = function (id) {
+        var a = $("#" + id);
+        var processInstanceId = a.attr("processInstanceId");
+        if ($.trim(processInstanceId) != "") {
+            var diagramUrl = getDiagramUrl.replace("{processInstanceId}", processInstanceId);
+            $.fancybox.open({href: diagramUrl, title: '图片资源查看'});
+        }
+    };
+
+    //noinspection JSUnusedLocalSymbols,JSUnusedGlobalSymbols
+    this.operateFormatter = function (value, rowData, rowIndex) {
+        var div = $("<div/>");
+        if (rowData.id) {
+            var id1 = _this.getUUID(32, 16);
+            var identitylinks = $("<a id='" + id1 + "' href='javascript:void(0)' onclick='pageJsObject.openIdentitylinksView(\"" + id1 + "\")'>编辑流程参与者</a>");
+            identitylinks.attr("processInstanceId", rowData.id);
+            div.append(identitylinks);
+        }
+        return div.html();
+    };
+
+    this.openIdentitylinksView = function (id) {
+        var a = $("#" + id);
+        var processInstanceId = a.attr("processInstanceId");
+        if ($.trim(processInstanceId) != "") {
+            var getUrl = getIdentitylinksUrl.replace("{processInstanceId}", processInstanceId);
+            $.ajax({
+                type: "GET", dataType: "text", url: getUrl, data: {}, async: true,
+                success: function (data) {
+                    console.log(data);
+                }
+            });
+            // var addUrl = addIdentitylinksUrl.replace("{processInstanceId}", processInstanceId);
+            // var delUrl = deleteIdentitylinksUrl.replace("{processInstanceId}", processInstanceId).replace("{userId}", "").replace("{type}", "");
+        }
     };
 
     // 根据编程语言获取CodeMirror的Mode属性

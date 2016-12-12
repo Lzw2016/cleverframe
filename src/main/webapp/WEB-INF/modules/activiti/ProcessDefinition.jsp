@@ -94,13 +94,13 @@
             <th data-options="width:150,align:'left',hidden:false,field:'id'">流程ID</th>
             <th data-options="width:150,align:'left',hidden:false,field:'name'">流程名称</th>
             <th data-options="width:150,align:'left',hidden:false,field:'key'">流程Key</th>
+            <th data-options="width:60 ,align:'left',hidden:false,field:'version'">流程版本</th>
             <th data-options="width:230,align:'left',hidden:false,field:'category'">流程类别</th>
             <th data-options="width:60 ,align:'left',hidden:false,field:'suspended'">是否挂起</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'graphicalNotationDefined'">是否图形化</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'startFormDefined'">是否有表单</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'deploymentId'">部署ID</th>
             <th data-options="width:60 ,align:'left',hidden:false,field:'deploymentUrl',formatter:pageJsObject.deploymentUrlFormatter">部署Url</th>
-            <th data-options="width:60 ,align:'left',hidden:false,field:'version'">流程版本</th>
             <th data-options="width:60 ,align:'left',hidden:false,field:'url',formatter:pageJsObject.urlFormatter">流程Url</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'resource',formatter:pageJsObject.resourceFormatter">流程源数据</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'diagramResource',formatter:pageJsObject.diagramResourceFormatter">流程图形源数据</th>

@@ -31,6 +31,11 @@
     <%--代码格式化JS--%>
     <script src="${applicationScope.staticPath}/CodeFormat/jsbeautify.js"></script>
 
+    <%--FancyBox--%>
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/lib/jquery.mousewheel-3.0.6.pack.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+    <link rel="stylesheet" type="text/css" href="${applicationScope.staticPath}/FancyBox/FancyBox-v2.1.5-0/source/jquery.fancybox.css?v=2.1.5" media="screen"/>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
@@ -90,6 +95,7 @@
             <th data-options="width:150,align:'left',hidden:false,field:'activityId'">Activity ID</th>
             <th data-options="width:150,align:'left',hidden:false,field:'businessKey'">业务主键</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'variables',formatter:pageJsObject.variablesFormatter">流程变量</th>
+            <th data-options="width:70 ,align:'left',hidden:false,field:'diagram',formatter:pageJsObject.diagramFormatter">流程实例图</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'suspended'">是否暂停</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'completed'">是否完成</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'ended'">流程是否结束</th>
@@ -97,6 +103,7 @@
             <th data-options="width:150,align:'left',hidden:false,field:'processDefinitionKey'">流程定义Key</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'processDefinitionUrl',formatter:pageJsObject.processDefinitionUrlFormatter">流程定义Url</th>
             <th data-options="width:150,align:'left',hidden:false,field:'tenantId'">租户ID</th>
+            <th data-options="width:170,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
         </tr>
         </thead>
     </table>

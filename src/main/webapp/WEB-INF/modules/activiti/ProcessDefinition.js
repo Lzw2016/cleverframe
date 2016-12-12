@@ -349,6 +349,10 @@ var pageJs = function (globalPath) {
 
     // 启动流程
     this.startProcess = function () {
+        // 校验表单
+        if (!addProcessInstanceForm.form("validate")) {
+            return;
+        }
         var param = {};
         param.businessKey = addBusinessKey.textbox("getValue");
         param.tenantId = addTenantId.textbox("getValue");
