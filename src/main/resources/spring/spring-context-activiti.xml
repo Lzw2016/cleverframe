@@ -12,15 +12,15 @@
         <!--数据库事务管理器-->
         <property name="transactionManager" ref="transactionManager"/>
         <!-- 设置数据库schema的更新方式 -->
-        <property name="databaseSchemaUpdate" value="true"/>
+        <property name="databaseSchemaUpdate" value="${activiti.databaseSchemaUpdate}"/>
         <!-- 是否启动jobExecutor -->
-        <property name="jobExecutorActivate" value="false"/>
+        <property name="jobExecutorActivate" value="${activiti.jobExecutorActivate}"/>
         <!--邮件配置-->
         <!--<property name="mailServerHost" value="mail.my-corp.com"/>-->
         <!--<property name="mailServerPort" value="5025"/>-->
         <!--设置生成流程图字体，支持中文-->
-        <property name="labelFontName" value="宋体"/>
-        <property name="activityFontName" value="宋体"/>
+        <property name="labelFontName" value="${activiti.labelFontName}"/>
+        <property name="activityFontName" value="${activiti.activityFontName}"/>
         <!--定义部署的流程文件地址，不会重复部署-->
         <property name="deploymentResources" value="classpath*:/workflow/**"/>
 
