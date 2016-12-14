@@ -129,6 +129,36 @@ fozzie	fozzie	user
 /runtime/tasks/{taskId}/variables/{variableName}
 /runtime/tasks/{taskId}/variables/{variableName}/data
 /simple-workflow
+
+
+
+
+
+
+
+
+assignee 流程处理人
+candidateUsers 流程处理候选人
+candidateGroups 路程处理候选组
+
+
+activiti 多实例任务
+activiti:candidateUsers="shareniu1,shareniu2,shareniu3,shareniu4" 这个节点可以4个人审核。
+<loopCardinality>2</loopCardinality> 循环2次结束。
+<multiInstanceLoopCharacteristics isSequential="true"> 串行并行的配置。
+<completionCondition>${nrOfCompletedInstances/nrOfInstances >= 0.25}</completionCondition> 完成条件的配置。
+如果使用串行方式操作nrOfActiveInstances 变量始终是1，因为并行的时候才会去+1操作。
+
+
+
+
+
+
+
+
+
+
+
 */
 
 

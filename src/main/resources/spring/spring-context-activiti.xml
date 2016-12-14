@@ -15,14 +15,42 @@
         <property name="databaseSchemaUpdate" value="${activiti.databaseSchemaUpdate}"/>
         <!-- 是否启动jobExecutor -->
         <property name="jobExecutorActivate" value="${activiti.jobExecutorActivate}"/>
-        <!--邮件配置-->
-        <!--<property name="mailServerHost" value="mail.my-corp.com"/>-->
-        <!--<property name="mailServerPort" value="5025"/>-->
+        <!--流程引擎关闭启动事件监听-->
+        <property name="processEngineLifecycleListener">
+            <bean class="org.cleverframe.activiti.workflow.listener.CustomProcessEngineLifecycleListener"/>
+        </property>
         <!--设置生成流程图字体，支持中文-->
         <property name="labelFontName" value="${activiti.labelFontName}"/>
         <property name="activityFontName" value="${activiti.activityFontName}"/>
         <!--定义部署的流程文件地址，不会重复部署-->
         <property name="deploymentResources" value="classpath*:/workflow/**"/>
+
+        <!--邮件配置-->
+        <!--<property name="mailServerHost" value="mail.my-corp.com"/>-->
+        <!--<property name="mailServerPort" value="5025"/>-->
+
+        <!-- 自定义表单字段类型 -->
+        <!--<property name="customFormTypes">-->
+        <!--<list>-->
+        <!--<bean class="me.kafeitu.demo.activiti.activiti.form.UsersFormType" />-->
+        <!--</list>-->
+        <!--</property>-->
+
+        <!--自定义“用户、用户组”-->
+        <!--<property name="customSessionFactories">-->
+            <!--<list>-->
+                <!--<bean class="tk.hecks.workflow.CustomGroupManagerFactory">-->
+                    <!--<property name="groupEntityManager">-->
+                        <!--<bean class="tk.hecks.workflow.CustomGroupManager"></bean>-->
+                    <!--</property>-->
+                <!--</bean>-->
+                <!--<bean class="tk.hecks.workflow.CustomUserManagerFactory">-->
+                    <!--<property name="userEntityManager">-->
+                        <!--<bean class="tk.hecks.workflow.CustomUserManager"></bean>-->
+                    <!--</property>-->
+                <!--</bean>-->
+            <!--</list>-->
+        <!--</property>-->
 
         <!--流程引擎 流程变量(Spring Bean)-->
         <property name="beans">
@@ -33,7 +61,7 @@
     </bean>
 
     <!-- 创建一个流程引擎bean -->
-    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean">
+    <bean id="processEngine" class="org.activiti.spring.ProcessEngineFactoryBean" destroy-method="destroy">
         <property name="processEngineConfiguration" ref="processEngineConfiguration"/>
     </bean>
 
