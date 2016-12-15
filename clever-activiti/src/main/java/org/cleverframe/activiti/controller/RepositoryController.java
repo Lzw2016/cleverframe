@@ -1,5 +1,6 @@
 package org.cleverframe.activiti.controller;
 
+import org.activiti.engine.repository.Model;
 import org.activiti.engine.repository.ProcessDefinition;
 import org.activiti.rest.service.api.repository.DeploymentResourceResponse;
 import org.cleverframe.activiti.ActivitiBeanNames;
@@ -41,9 +42,12 @@ public class RepositoryController extends BaseController {
      */
     @RequestMapping(value = "/convertToModel/{processDefinitionId}")
     @ResponseBody
-    public AjaxMessage convertToModel(@PathVariable("processDefinitionId") String processDefinitionId) {
-        AjaxMessage message = new AjaxMessage(true, "部署的流程ProcessDefinition转换成Model成功", null);
-        message = repositoryService.processDefinitionConvertToModel(processDefinitionId, message);
+    public AjaxMessage<Model> convertToModel(@PathVariable("processDefinitionId") String processDefinitionId) {
+        AjaxMessage<Model> message = new AjaxMessage<>(true, "部署的流程ProcessDefinition转换成Model成功", null);
+        Model model = repositoryService.processDefinitionConvertToModel(processDefinitionId, message);
+        if (model != null) {
+            message.setResult(model);
+        }
         return message;
     }
 

@@ -137,7 +137,7 @@ fozzie	fozzie	user
 
 
 
-assignee 流程处理人
+assignee 流程处理人 OWNER  https://my.oschina.net/acitiviti/blog/350957
 candidateUsers 流程处理候选人
 candidateGroups 路程处理候选组
 
@@ -150,7 +150,8 @@ activiti:candidateUsers="shareniu1,shareniu2,shareniu3,shareniu4" 这个节点�
 如果使用串行方式操作nrOfActiveInstances 变量始终是1，因为并行的时候才会去+1操作。
 
 
-
+流程通过、驳回、会签、转办、中止、挂起
+http://blog.csdn.net/rosten/article/details/38300267
 
 
 

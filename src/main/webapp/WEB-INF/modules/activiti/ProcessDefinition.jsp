@@ -105,7 +105,7 @@
             <th data-options="width:80 ,align:'left',hidden:false,field:'resource',formatter:pageJsObject.resourceFormatter">流程源数据</th>
             <th data-options="width:80 ,align:'left',hidden:false,field:'diagramResource',formatter:pageJsObject.diagramResourceFormatter">流程图形源数据</th>
             <th data-options="width:180,align:'left',hidden:false,field:'description'">流程说明</th>
-            <th data-options="width:170,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
+            <th data-options="width:350,align:'left',hidden:false,field:'operate',formatter:pageJsObject.operateFormatter">操作</th>
         </tr>
         </thead>
     </table>

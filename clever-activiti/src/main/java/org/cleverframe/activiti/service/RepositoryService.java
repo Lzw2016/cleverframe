@@ -68,14 +68,15 @@ public class RepositoryService extends BaseService {
      * ProcessDefinition 转换成 Model
      */
     @Transactional(readOnly = false)
-    public AjaxMessage processDefinitionConvertToModel(String processDefinitionId, AjaxMessage message) {
+    public Model processDefinitionConvertToModel(String processDefinitionId, AjaxMessage message) {
+        Model modelData = null;
         try {
             // 获取 ProcessDefinition
             ProcessDefinition processDefinition = repositoryService.createProcessDefinitionQuery()
                     .processDefinitionId(processDefinitionId)
                     .singleResult();
             // 创建 Model
-            Model modelData = repositoryService.newModel();
+            modelData = repositoryService.newModel();
             modelData.setKey(processDefinition.getKey());
             modelData.setName(processDefinition.getResourceName());
             modelData.setCategory(processDefinition.getDeploymentId());
@@ -95,7 +96,7 @@ public class RepositoryService extends BaseService {
             message.setSuccess(false);
             message.setFailMessage("ProcessDefinition转换Model失败");
         }
-        return message;
+        return modelData;
     }
 
     /**

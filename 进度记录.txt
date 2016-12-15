@@ -224,7 +224,14 @@ clever-sys
 ## ----------------------------------------- 流程引擎 ----------------------------------------- ##
 ## =========== clever-activiti
 /${base.mvcPath}/activiti/manager/Deployment.html
-
+/${base.mvcPath}/activiti/manager/ProcessDefinition.html
+/${base.mvcPath}/activiti/manager/Model.html
+/${base.mvcPath}/activiti/manager/ProcessInstance.html
+/${base.mvcPath}/activiti/manager/Task.html
 
 /${base.staticPath}/Activiti/modeler.html?modelId=15001
 /${base.staticPath}/Activiti/diagram-viewer/index.html?processDefinitionId=请假流程:1:4
+
+
+
+

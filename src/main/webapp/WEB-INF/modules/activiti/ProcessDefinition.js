@@ -5,6 +5,11 @@ var pageJs = function (globalPath) {
     // 当前pageJs对象
     var _this = this;
 
+    // ProcessDefinition 转换成 Model
+    var convertToModelUrl = globalPath.mvcPath + "/activiti/repository/convertToModel/{processDefinitionId}.json";
+    // 模型编辑地址
+    var modelerEditUrl = globalPath.staticPath + "/Activiti/modeler.html?modelId=";
+
     // 流程定义列表 GET repository/process-definitions
     var getProcessDefinitionsUrl = globalPath.appPath + "/repository/process-definitions";
     // 获得一个流程定义 GET repository/process-definitions/{processDefinitionId}
@@ -539,14 +544,18 @@ var pageJs = function (globalPath) {
             var suspend = $("<a id='" + id1 + "' href='javascript:void(0)' onclick='pageJsObject.suspendProcessDefinition(\"" + id1 + "\")'>暂停</a>");
             suspend.attr("processDefinitionId", rowData.id);
             div.append(suspend);
-
             div.append("&nbsp;");
 
             var id2 = _this.getUUID(32, 16);
             var activate = $("<a id='" + id2 + "' href='javascript:void(0)' onclick='pageJsObject.activateProcessDefinition(\"" + id2 + "\")'>激活</a>");
             activate.attr("processDefinitionId", rowData.id);
             div.append(activate);
+            div.append("&nbsp;");
 
+            var id3 = _this.getUUID(32, 16);
+            var convertToModel = $("<a id='" + id3 + "' href='javascript:void(0)' onclick='pageJsObject.convertToModelEdit(\"" + id2 + "\")'>转换成模型并编辑</a>");
+            activate.attr("processDefinitionId", rowData.id);
+            div.append(convertToModel);
             div.append("&nbsp;");
 
             div.append("编辑候选启动者");
@@ -588,6 +597,23 @@ var pageJs = function (globalPath) {
                 } else {
                     // 成功
                     $.messager.alert("提示", "流程激活失败", "warn");
+                }
+            }
+        });
+    };
+
+    this.convertToModelEdit = function (id) {
+        var a = $("#" + id);
+        var processDefinitionId = a.attr("processDefinitionId");
+        var url = convertToModelUrl.replace("{processDefinitionId}", encodeURIComponent(processDefinitionId));
+        $.ajax({
+            type: "POST", dataType: "json", url: url, data: {}, async: true,
+            success: function (data) {
+                if (data.success) {
+                    var editUrl = modelerEditUrl + data.result.id;
+                    window.open(editUrl);
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warn");
                 }
             }
         });

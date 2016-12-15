@@ -226,7 +226,7 @@ var pageJs = function (globalPath) {
         if (value != "" && value != null && (value.constructor == Object || $.isArray(value))) {
             var jsonValue = JSON.stringify(value);
             var id = _this.getUUID(32, 16);
-            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openVariablesView(\"" + id + "\")'>编辑</a>");
+            var a = $("<a id='" + id + "' href='javascript:void(0)' onclick='pageJsObject.openVariablesView(\"" + id + "\")'>查看</a>");
             a.attr("jsonValue", jsonValue);
             return $("<div/>").append(a).html();
         } else {
