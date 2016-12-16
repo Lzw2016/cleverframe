@@ -267,7 +267,7 @@ var pageJs = function (globalPath) {
                 _this.openViewCodeTemplateDialog(deploymentId, resourceId, "xml");
                 break;
             case "image/png":
-                var paramData = {deploymentId: deploymentId, resourceId: resourceId};
+                var paramData = {deploymentId: deploymentId, resourceId: resourceId, random: new Date().getTime()};
                 var url = _this.getParamUrl(getDeploymentResourceDataUrl, "?", paramData);
                 $.fancybox.open({href: url, title: '图片资源查看'});
                 break;

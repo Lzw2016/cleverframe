@@ -295,8 +295,8 @@ var pageJs = function (globalPath) {
         var a = $("#" + id);
         var processInstanceId = a.attr("processInstanceId");
         if ($.trim(processInstanceId) != "") {
-            var diagramUrl = getDiagramUrl.replace("{processInstanceId}", processInstanceId);
-            $.fancybox.open({href: diagramUrl, title: '图片资源查看'});
+            var diagramUrl = getDiagramUrl.replace("{processInstanceId}", processInstanceId) + "?random=" + new Date().getTime();
+            $.fancybox.open({type: "image", href: diagramUrl, title: '图片资源查看'});
         }
     };
 

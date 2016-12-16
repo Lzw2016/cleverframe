@@ -154,11 +154,31 @@ activiti:candidateUsers="shareniu1,shareniu2,shareniu3,shareniu4" 这个节点�
 http://blog.csdn.net/rosten/article/details/38300267
 
 
+TaskActionRequest
+action  complete claim delegate resolve
+assignee
+variables[]
+    name
+    type
+    variableScope LOCAL, GLOBAL
+    value
+    valueUrl
 
-
-
-
-
+{
+	"action": "complete",
+	"variables": [{
+			"name": "k3",
+			"type": "string",
+			"value": "v3",
+			"scope": "global"
+		}, {
+			"name": "k4",
+			"type": "string",
+			"value": "v4",
+			"scope": "global"
+		}
+	]
+}
 
 */
 

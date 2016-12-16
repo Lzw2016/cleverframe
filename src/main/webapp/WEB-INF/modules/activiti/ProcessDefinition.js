@@ -528,7 +528,7 @@ var pageJs = function (globalPath) {
             type: "GET", dataType: "json", url: urlTmp, data: {}, async: true,
             success: function (data) {
                 if (data.success) {
-                    var paramData = {deploymentId: deploymentId, resourceId: data.result.diagramResourceName};
+                    var paramData = {deploymentId: deploymentId, resourceId: data.result.diagramResourceName, random: new Date().getTime()};
                     var url = _this.getParamUrl(getDeploymentResourceDataUrl, "?", paramData);
                     $.fancybox.open({href: url, title: '图片资源查看'});
                 }

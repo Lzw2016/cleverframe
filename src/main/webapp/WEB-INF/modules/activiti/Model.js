@@ -375,7 +375,7 @@ var pageJs = function (globalPath) {
 
     this.openSourceExtraUrlView = function (id) {
         var a = $("#" + id);
-        var sourceExtraUrl = a.attr("sourceExtraUrl") + ".png";
+        var sourceExtraUrl = a.attr("sourceExtraUrl") + ".png" + "?random=" + new Date().getTime();
         $.fancybox.open({href: sourceExtraUrl, title: '图片资源查看'});
     };
 
