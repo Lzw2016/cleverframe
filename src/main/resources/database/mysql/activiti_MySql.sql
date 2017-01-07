@@ -1,9 +1,9 @@
 /*
 
-账号	密码	角色
-kermit	kermit	admin
-gonzo	gonzo	manager
-fozzie	fozzie	user
+账号  密码  角色
+kermit  kermit  admin
+gonzo   gonzo   manager
+fozzie  fozzie  user
 
 
 
@@ -165,19 +165,19 @@ variables[]
     valueUrl
 
 {
-	"action": "complete",
-	"variables": [{
-			"name": "k3",
-			"type": "string",
-			"value": "v3",
-			"scope": "global"
-		}, {
-			"name": "k4",
-			"type": "string",
-			"value": "v4",
-			"scope": "global"
-		}
-	]
+    "action": "complete",
+    "variables": [{
+            "name": "k3",
+            "type": "string",
+            "value": "v3",
+            "scope": "global"
+        }, {
+            "name": "k4",
+            "type": "string",
+            "value": "v4",
+            "scope": "global"
+        }
+    ]
 }
 
 查询所有的工作流定义 (查看流程图、编辑流程、删除流程、启动流程)
@@ -187,6 +187,32 @@ variables[]
 查询历史审核流程 (查看流程实例图、查看流程审核历史、查看流程数据)
 
 */
+
+
+
+CREATE TABLE log4j2
+(
+    id                  bigint          NOT NULL    auto_increment          COMMENT '编号',
+    EVENT_DATE          datetime                                            COMMENT '创建时间',
+    LEVEL               varchar(20)                                         COMMENT '日志等级',
+    LOGGER              varchar(255)                                        COMMENT '日志名称',
+    MESSAGE             varchar(2000)                                       COMMENT '日志信息',
+    THROWABLE           MediumText                                          COMMENT '异常堆栈',
+    PRIMARY KEY (id)
+) COMMENT = '日志记录表';
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

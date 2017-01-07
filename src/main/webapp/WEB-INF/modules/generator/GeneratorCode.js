@@ -31,9 +31,13 @@ var pageJs = function (globalPath) {
     var mainPanel = $("#mainPanel");
     // 数据库结构树
     var dataBaseTree = $("#dataBaseTree");
+    // 数据库结构树 - 加载中
+    var dataBaseTreeLoading = $("#dataBaseTreeLoading");
 
     // 代码模版树
     var codeTemplateTree = $("#codeTemplateTree");
+    // 代码模版树 - 加载中
+    var codeTemplateTreeLoading = $("#codeTemplateTreeLoading");
 
     // 页面中部多页签
     var tabsCenter = $("#tabsCenter");
@@ -45,10 +49,6 @@ var pageJs = function (globalPath) {
     var tabsCenterToolsCloseTab = $("#tabsCenterToolsCloseTab");
     // 页面中部工具栏-右键菜单
     var menuByTabs = $("#menuByTabs");
-
-
-    // 数据库概要信息，包括数据库名，数据库包含的所有表名和所有视图名称
-    var dataBaseSummary = null;
 
     /**
      * 页面初始化方法
@@ -93,7 +93,7 @@ var pageJs = function (globalPath) {
         // 数据库表结构树
         dataBaseTree.tree({
             formatter: function (node) {
-                if (node.attributes.type == Type_Table || node.attributes.type == Type_View) {
+                if (node.attributes && node.attributes.type && (node.attributes.type == Type_Table || node.attributes.type == Type_View)) {
                     return '<a href="javascript:void(0)">' + node.text + '</a>';
                 } else {
                     return node.text;
@@ -111,7 +111,7 @@ var pageJs = function (globalPath) {
                     _this.addTab(tabName, tabUrl);
                 }
             },
-            onBeforeExpand: function (node) {
+            onExpand: function (node) {
                 if (node.attributes.isLoad == IsLoad_True) {
                     return true;
                 }
@@ -242,182 +242,207 @@ var pageJs = function (globalPath) {
     // ---------------------------------------------------------------------------------------------------------
     // 初始化代码模版树的数据
     this.reloadCodeTemplateTree = function (codeTemplateTree) {
-        var codeTemplateData = [];
+        codeTemplateTree.tree("loadData", []);
+        codeTemplateTreeLoading.css("display", "block");
+
+        // 回调数据绑定
+        var callback = function (data) {
+            codeTemplateTree.tree("loadData", data);
+        };
+
+        // 请求数据
         $.ajax({
             type: "POST",
             dataType: "JSON",
             url: codeTemplateTreeUrl,
-            async: false,
+            async: true,
             success: function (data) {
-                codeTemplateData = data;
+                codeTemplateTreeLoading.css("display", "none");
+                callback(data);
             }
         });
-        codeTemplateTree.tree("loadData", codeTemplateData);
     };
 
     // 获取 数据库概要信息
     this.getDataBaseSummary = function (dataBaseTree) {
-        dataBaseSummary = null;
+        dataBaseTree.tree("loadData", []);
+        dataBaseTreeLoading.css("display", "block");
+
+        // 回调数据绑定
+        var callback = function (dataBaseSummary) {
+            //id：绑定节点的标识值。
+            //text：显示的节点文本。
+            //iconCls：显示的节点图标CSS类ID。
+            //state：节点状态，'open' 或 'closed'。
+            //attributes：绑定该节点的自定义属性。
+            var nodeArray = [];
+            $(dataBaseSummary).each(function (index, schemaName) {
+                var node = {};
+                node.id = (ID++);
+                node.text = schemaName.schemaName;
+                node.state = "closed";//open
+                node.iconCls = "icon-database";
+                node.children = [];
+                node.attributes = {};
+                node.attributes.type = Type_DataBase;
+                node.attributes.isLoad = IsLoad_True;
+                node.attributes.schemaName = schemaName.schemaName;
+
+                var nodeTable = {};
+                nodeTable.id = (ID++);
+                nodeTable.text = "表";
+                nodeTable.state = "closed";//open
+                nodeTable.iconCls = "icon-folderTable";
+                nodeTable.children = [];
+                nodeTable.attributes = {};
+                nodeTable.attributes.type = Type_FolderTable;
+                nodeTable.attributes.isLoad = IsLoad_True;
+                node.children.push(nodeTable);
+                $(schemaName.tableNameList).each(function (i, tableName) {
+                    var n = {};
+                    n.id = (ID++);
+                    n.text = tableName;
+                    n.state = "closed";
+                    n.iconCls = "icon-table";
+                    n.children = [{"id": (ID++), "text": "加载中...", "state": "open", "iconCls": "icon-loading"}];
+                    n.attributes = {};
+                    n.attributes.type = Type_Table;
+                    n.attributes.isLoad = IsLoad_False;
+                    n.attributes.schemaName = schemaName.schemaName;
+                    n.attributes.tableName = tableName;
+                    nodeTable.children.push(n);
+                });
+
+                var nodeView = {};
+                nodeView.id = (ID++);
+                nodeView.text = "视图";
+                nodeView.state = "closed";//open
+                nodeView.iconCls = "icon-folderView";
+                nodeView.children = [];
+                nodeView.attributes = {};
+                nodeView.attributes.type = Type_FolderView;
+                nodeView.attributes.isLoad = IsLoad_True;
+                node.children.push(nodeView);
+                $(schemaName.viewNames).each(function (i, viewName) {
+                    var n = {};
+                    n.id = (ID++);
+                    n.text = viewName;
+                    n.state = "closed";
+                    n.iconCls = "icon-table";
+                    n.children = [{"id": (ID++), "text": "加载中...", "state": "open", "iconCls": "icon-loading"}];
+                    n.attributes = {};
+                    n.attributes.type = Type_View;
+                    n.attributes.isLoad = IsLoad_False;
+                    n.attributes.schemaName = schemaName.schemaName;
+                    n.attributes.tableName = viewName;
+                    nodeView.children.push(n);
+                });
+                nodeArray.push(node);
+            });
+            dataBaseTree.tree("loadData", nodeArray);
+        };
+
+        // 请求数据
         $.ajax({
             type: "POST",
-            //dataType: "JSON",
+            dataType: "JSON",
             url: findAllDataBaseSummaryURL,
-            async: false,
+            async: true,
             success: function (data) {
+                dataBaseTreeLoading.css("display", "none");
                 if (data.success == true) {
-                    dataBaseSummary = data.result;
+                    callback(data.result);
                 } else {
                     $.messager.alert("提示", data.failMessage, "error");
                 }
             }
         });
-
-        //id：绑定节点的标识值。
-        //text：显示的节点文本。
-        //iconCls：显示的节点图标CSS类ID。
-        //state：节点状态，'open' 或 'closed'。
-        //attributes：绑定该节点的自定义属性。
-        var nodeArray = [];
-        $(dataBaseSummary).each(function (index, schemaName) {
-            var node = {};
-            node.id = (ID ++);
-            node.text = schemaName.schemaName;
-            node.state = "closed";//open
-            node.iconCls = "icon-database";
-            node.children = [];
-            node.attributes = {};
-            node.attributes.type = Type_DataBase;
-            node.attributes.isLoad = IsLoad_True;
-            node.attributes.schemaName = schemaName.schemaName;
-
-            var nodeTable = {};
-            nodeTable.id = (ID ++);
-            nodeTable.text = "表";
-            nodeTable.state = "closed";//open
-            nodeTable.iconCls = "icon-folderTable";
-            nodeTable.children = [];
-            nodeTable.attributes = {};
-            nodeTable.attributes.type = Type_FolderTable;
-            nodeTable.attributes.isLoad = IsLoad_True;
-            node.children.push(nodeTable);
-            $(schemaName.tableNameList).each(function (i, tableName) {
-                var n = {};
-                n.id = (ID ++);
-                n.text = tableName;
-                n.state = "closed";
-                n.iconCls = "icon-table";
-                n.attributes = {};
-                n.attributes.type = Type_Table;
-                n.attributes.isLoad = IsLoad_False;
-                n.attributes.schemaName = schemaName.schemaName;
-                n.attributes.tableName = tableName;
-                nodeTable.children.push(n);
-            });
-
-            var nodeView = {};
-            nodeView.id = (ID ++);
-            nodeView.text = "视图";
-            nodeView.state = "closed";//open
-            nodeView.iconCls = "icon-folderView";
-            nodeView.children = [];
-            nodeView.attributes = {};
-            nodeView.attributes.type = Type_FolderView;
-            nodeView.attributes.isLoad = IsLoad_True;
-            node.children.push(nodeView);
-            $(schemaName.viewNames).each(function (i, viewName) {
-                var n = {};
-                n.id = (ID ++);
-                n.text = viewName;
-                n.state = "closed";
-                n.attributes = {};
-                n.attributes.type = Type_View;
-                n.attributes.isLoad = IsLoad_False;
-                n.attributes.schemaName = schemaName.schemaName;
-                n.attributes.tableName = viewName;
-                nodeView.children.push(n);
-            });
-            nodeArray.push(node);
-        });
-        dataBaseTree.tree("loadData", nodeArray);
     };
 
     // 获取 数据库表详细信息
     this.getTableSchema = function (schemaName, tableName, dataBaseTree, node) {
-        var tableSchema = null;
+        $(node.children).each(function (index, n) {
+            dataBaseTree.tree("remove", document.getElementById(n.domId));
+        });
+        dataBaseTree.tree('update', {target: node.target, iconCls: 'icon-loading'});
+
+        // 回调数据绑定
+        var callback = function (tableSchema) {
+            node.attributes.schemaName = tableSchema.schemaName;
+            node.attributes.tableName = tableSchema.tableName;
+            node.attributes.engine = tableSchema.engine;
+            node.attributes.autoIncrement = tableSchema.autoIncrement;
+            node.attributes.charset = tableSchema.charset;
+            node.attributes.collation = tableSchema.collation;
+            node.attributes.description = tableSchema.description;
+            node.attributes.rowCount = tableSchema.rowCount;
+            node.attributes.avgRowLength = tableSchema.avgRowLength;
+            node.attributes.dataLength = tableSchema.dataLength;
+            node.attributes.createTime = tableSchema.createTime;
+            node.text = $.trim(tableSchema.description) == "" ? tableSchema.tableName : tableSchema.tableName + "(" + tableSchema.description + ")";
+            var nodeArray = [];
+            $(tableSchema.columnList).each(function (index, column) {
+                var n = {};
+                n.id = (ID++);
+                n.text = column.columnName;
+                n.state = "open";
+                n.iconCls = _this.getColumnImage(column.dataType);
+                n.attributes = {};
+                n.attributes.type = Type_Column;
+                n.attributes.isLoad = IsLoad_True;
+                n.attributes.schemaName = column.schemaName;
+                n.attributes.tableName = column.tableName;
+                n.attributes.columnName = column.columnName;
+                n.attributes.ordinalPosition = column.ordinalPosition;
+                n.attributes.size = column.size;
+                n.attributes.width = column.width;
+                n.attributes.decimalDigits = column.decimalDigits;
+                n.attributes.generated = column.generated;
+                n.attributes.hidden = column.hidden;
+                n.attributes.partOfForeignKey = column.partOfForeignKey;
+                n.attributes.partOfIndex = column.partOfIndex;
+                n.attributes.partOfPrimaryKey = column.partOfPrimaryKey;
+                n.attributes.partOfUniqueIndex = column.partOfUniqueIndex;
+                n.attributes.dataType = column.dataType;
+                n.attributes.notNull = column.notNull;
+                n.attributes.autoIncrement = column.autoIncrement;
+                n.attributes.defaultValue = column.defaultValue;
+                n.attributes.extra = column.extra;
+                n.attributes.charset = column.charset;
+                n.attributes.comment = column.comment;
+                n.attributes.attributes = column.attributes;
+                nodeArray.push(n);
+            });
+            param = {};
+            param.parent = node.target;
+            param.data = nodeArray;
+            dataBaseTree.tree("append", param);
+        };
+
+        // 请求数据
         var param = {};
         param.schemaName = schemaName;
         param.tableName = tableName;
         $.ajax({
             type: "POST",
-            //dataType: "JSON",
+            dataType: "JSON",
             url: getTableSchemaURL,
             data: param,
-            async: false,
+            async: true,
             success: function (data) {
+                dataBaseTree.tree('update', {target: node.target, iconCls: 'icon-table'});
                 if (data.success == true) {
-                    tableSchema = data.result;
+                    callback(data.result);
                 } else {
                     $.messager.alert("提示", data.failMessage, "error");
                 }
             }
         });
-        $(node.children).each(function (index, n) {
-            dataBaseTree.tree("remove", n.target);
-        });
-        node.attributes.schemaName = tableSchema.schemaName;
-        node.attributes.tableName = tableSchema.tableName;
-        node.attributes.engine = tableSchema.engine;
-        node.attributes.autoIncrement = tableSchema.autoIncrement;
-        node.attributes.charset = tableSchema.charset;
-        node.attributes.collation = tableSchema.collation;
-        node.attributes.description = tableSchema.description;
-        node.attributes.rowCount = tableSchema.rowCount;
-        node.attributes.avgRowLength = tableSchema.avgRowLength;
-        node.attributes.dataLength = tableSchema.dataLength;
-        node.attributes.createTime = tableSchema.createTime;
-        node.text = tableSchema.tableName + "(" + tableSchema.description + ")";
-        var nodeArray = [];
-        $(tableSchema.columnList).each(function (index, column) {
-            var n = {};
-            n.id = (ID++);
-            n.text = column.columnName;
-            n.state = "open";
-            n.iconCls = _this.getColumnImage(column.dataType);
-            n.attributes = {};
-            n.attributes.type = Type_Column;
-            n.attributes.isLoad = IsLoad_True;
-            n.attributes.schemaName = column.schemaName;
-            n.attributes.tableName = column.tableName;
-            n.attributes.columnName = column.columnName;
-            n.attributes.ordinalPosition = column.ordinalPosition;
-            n.attributes.size = column.size;
-            n.attributes.width = column.width;
-            n.attributes.decimalDigits = column.decimalDigits;
-            n.attributes.generated = column.generated;
-            n.attributes.hidden = column.hidden;
-            n.attributes.partOfForeignKey = column.partOfForeignKey;
-            n.attributes.partOfIndex = column.partOfIndex;
-            n.attributes.partOfPrimaryKey = column.partOfPrimaryKey;
-            n.attributes.partOfUniqueIndex = column.partOfUniqueIndex;
-            n.attributes.dataType = column.dataType;
-            n.attributes.notNull = column.notNull;
-            n.attributes.autoIncrement = column.autoIncrement;
-            n.attributes.defaultValue = column.defaultValue;
-            n.attributes.extra = column.extra;
-            n.attributes.charset = column.charset;
-            n.attributes.comment = column.comment;
-            n.attributes.attributes = column.attributes;
-            nodeArray.push(n);
-        });
-        param = {};
-        param.parent = node.target;
-        param.data = nodeArray;
-        dataBaseTree.tree("append", param);
     };
 
     // 根据数据库列类型返回 对应的图标
-    this.getColumnImage = function (dataType){
-        if(!dataType || dataType == null || dataType == ""){
+    this.getColumnImage = function (dataType) {
+        if (!dataType || dataType == null || dataType == "") {
             return "icon-unknown";
         }
         dataType = dataType.toLowerCase();
@@ -465,13 +490,13 @@ var pageJs = function (globalPath) {
                 content = "未定义页面路径！";
             }
             tabsCenter.tabs("add", {
-                title : tabName,
-                closable : true,
-                content : content,
-                tools : [{
-                    iconCls : "icon-mini-refresh",
-                    handler : function(){
-                        if(id){
+                title: tabName,
+                closable: true,
+                content: content,
+                tools: [{
+                    iconCls: "icon-mini-refresh",
+                    handler: function () {
+                        if (id) {
                             document.getElementById(id).contentWindow.location.reload(true);
                         }
                         //window.open(tabUrl); // 在新窗口中打开
@@ -486,7 +511,7 @@ var pageJs = function (globalPath) {
         var tab = tabsCenter.tabs('getSelected');
         if (tab) {
             var content = tab.panel('options')['content'];
-            if(content){
+            if (content) {
                 content = $('<div></div>').html(content);
                 var id = content.find("iframe").attr("id");
                 document.getElementById(id).contentWindow.location.reload(true);

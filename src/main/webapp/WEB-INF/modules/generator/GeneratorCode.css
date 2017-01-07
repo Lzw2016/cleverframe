@@ -41,8 +41,9 @@ html, body {
     text-decoration: underline;
     color: blue;
 }
-.icon-windowClose{
-    background:url('image/window-close-2.png') no-repeat center center;
+
+.icon-windowClose {
+    background: url('image/window-close-2.png') no-repeat center center;
 }
 
 /*设置树节点样式*/
@@ -53,58 +54,77 @@ html, body {
 .tree-title a:focus, .tree-title a:hover {
     color: #de2c3b;
 }
+
 .tree-title a {
     text-decoration: none;
 }
 
+.icon-loading {
+    background: url('image/loading.gif') no-repeat center center;
+}
+
 /* 数据库使用图标 ModulesImage */
-.icon-database{
-    background:url('image/database.png') no-repeat center center;
+.icon-database {
+    background: url('image/database.png') no-repeat center center;
 }
-.icon-table{
-    background:url('image/table.png') no-repeat center center;
+
+.icon-table {
+    background: url('image/table.png') no-repeat center center;
 }
-.icon-binary{
-    background:url('image/binary.png') no-repeat center center;
+
+.icon-binary {
+    background: url('image/binary.png') no-repeat center center;
 }
-.icon-boolean{
-    background:url('image/boolean.png') no-repeat center center;
+
+.icon-boolean {
+    background: url('image/boolean.png') no-repeat center center;
 }
-.icon-datetime{
-    background:url('image/datetime.png') no-repeat center center;
+
+.icon-datetime {
+    background: url('image/datetime.png') no-repeat center center;
 }
-.icon-lob{
-    background:url('image/lob.png') no-repeat center center;
+
+.icon-lob {
+    background: url('image/lob.png') no-repeat center center;
 }
-.icon-number{
-    background:url('image/number.png') no-repeat center center;
+
+.icon-number {
+    background: url('image/number.png') no-repeat center center;
 }
-.icon-rowid{
-    background:url('image/rowid.png') no-repeat center center;
+
+.icon-rowid {
+    background: url('image/rowid.png') no-repeat center center;
 }
-.icon-string{
-    background:url('image/string.png') no-repeat center center;
+
+.icon-string {
+    background: url('image/string.png') no-repeat center center;
 }
-.icon-text{
-    background:url('image/text.png') no-repeat center center;
+
+.icon-text {
+    background: url('image/text.png') no-repeat center center;
 }
-.icon-unknown{
-    background:url('image/unknown.png') no-repeat center center;
+
+.icon-unknown {
+    background: url('image/unknown.png') no-repeat center center;
 }
-.icon-uuid{
-    background:url('image/uuid.png') no-repeat center center;
+
+.icon-uuid {
+    background: url('image/uuid.png') no-repeat center center;
 }
-.icon-folderTable{
-    background:url('image/folder_table.png') no-repeat center center;
+
+.icon-folderTable {
+    background: url('image/folder_table.png') no-repeat center center;
 }
-.icon-folderView{
-    background:url('image/folder_view.png') no-repeat center center;
+
+.icon-folderView {
+    background: url('image/folder_view.png') no-repeat center center;
 }
 
 /* 模版使用图标 */
-.icon-folderPage{
-    background:url('image/folder_page.png') no-repeat center center;
+.icon-folderPage {
+    background: url('image/folder_page.png') no-repeat center center;
 }
-.icon-script{
-    background:url('image/script.png') no-repeat center center;
+
+.icon-script {
+    background: url('image/script.png') no-repeat center center;
 }

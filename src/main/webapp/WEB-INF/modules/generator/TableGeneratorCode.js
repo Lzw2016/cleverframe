@@ -61,7 +61,6 @@ var pageJs = function (globalPath) {
      * 页面初始化方法
      */
     this.init = function () {
-
         // 设置数据显示表格
         //noinspection JSUnusedLocalSymbols
         dataTable.datagrid({
@@ -116,12 +115,6 @@ var pageJs = function (globalPath) {
             return;
         }
         _this.getTableSchema(paramSchemaName, paramTableName, dataTable);
-
-        if(tableSchema != null){
-            labelSchemaName.text(tableSchema.schemaName);
-            labelTableName.text(tableSchema.tableName);
-            labelDescription.text(tableSchema.description);
-        }
     };
 
     //noinspection JSUnusedGlobalSymbols
@@ -137,10 +130,10 @@ var pageJs = function (globalPath) {
         // 代码模版-移除
         codeTemplateDataTableButtonsDel.click(function () {
             var delRow = codeTemplateDataTable.datagrid('getSelected');
-            if(delRow) {
+            if (delRow) {
                 var rows = codeTemplateDataTable.datagrid("getRows");
                 $(rows).each(function (index, row) {
-                    if(row.name == delRow.name) {
+                    if (row.name == delRow.name) {
                         codeTemplateDataTable.datagrid("deleteRow", index);
                         return false;
                     }
@@ -159,12 +152,12 @@ var pageJs = function (globalPath) {
         selectCodeTemplateDialogButtonsOk.click(function () {
             selectCodeTemplateMsg.text("");
             // 节点类型(0:模版分类; 1:代码模版)
-            if(selectCodeTemplateData.nodeType != "1") {
+            if (selectCodeTemplateData.nodeType != "1") {
                 selectCodeTemplateMsg.text("不能选择模版分类");
             }
             var rows = codeTemplateDataTable.datagrid("getRows");
             $(rows).each(function (index, row) {
-                if(row.name == selectCodeTemplateData.name) {
+                if (row.name == selectCodeTemplateData.name) {
                     selectCodeTemplateMsg.text("已经添加了模版[" + row.name + "]");
                     return false;
                 }
@@ -205,7 +198,7 @@ var pageJs = function (globalPath) {
             textField: 'text',
             onSelect: function (node) {
                 // 节点类型(0:模版分类; 1:代码模版)
-                if(node.attributes.nodeType != "1") {
+                if (node.attributes.nodeType != "1") {
                     selectCodeTemplateMsg.text("不能选择模版分类");
                 }
                 selectCodeTemplateData = node.attributes;
@@ -261,17 +254,19 @@ var pageJs = function (globalPath) {
         var codeTemplate = null;
         var rows = codeTemplateDataTable.datagrid("getRows");
         $(rows).each(function (index, row) {
-            if(row.name == name) {
+            if (row.name == name) {
                 codeTemplate = row;
                 return false;
             }
         });
-        if(codeTemplate == null) {
+        if (codeTemplate == null) {
             return;
         }
 
         viewCodeTemplateDialog.dialog("open");
         viewCodeTemplateEdit.setValue('');
+        var maskTarget = viewCodeTemplateDialog.panel('body');
+        $.mask({target: maskTarget, loadMsg: "加载中，请稍候。。。"});
         var param = {name: name};
         $.ajax({
             type: "POST",
@@ -280,9 +275,10 @@ var pageJs = function (globalPath) {
             data: param,
             async: true,
             success: function (data) {
+                $.unmask({target: maskTarget});
                 data = data.result;
                 viewCodeTemplateEdit.setOption("mode", _this.getCodeMirrorMode(codeTemplate.codeType));
-                if(data.content && data.content != null){
+                if (data.content && data.content != null) {
                     viewCodeTemplateEdit.setValue(data.content);
                 } else {
                     viewCodeTemplateEdit.setValue('');
@@ -320,6 +316,21 @@ var pageJs = function (globalPath) {
 
     // 获取 数据库表详细信息
     this.getTableSchema = function (schemaName, tableName, dataTable) {
+        dataTable.datagrid("loadData", []);
+        dataTable.datagrid("loading");
+
+        // 回调数据绑定
+        var callback = function (tableSchema) {
+            labelSchemaName.text(tableSchema.schemaName);
+            labelTableName.text(tableSchema.tableName);
+            labelDescription.text(tableSchema.description);
+
+            dataTable.datagrid("loadData", tableSchema.columnList);
+            // 默认全选
+            dataTable.datagrid("checkAll");
+            dataTable.datagrid("loaded");
+        };
+
         var param = {};
         param.schemaName = schemaName;
         param.tableName = tableName;
@@ -328,16 +339,16 @@ var pageJs = function (globalPath) {
             //dataType: "JSON",
             url: getTableSchemaURL,
             data: param,
-            async: false,
+            async: true,
             success: function (data) {
                 if (data.success == true) {
                     tableSchema = data.result;
+                    callback(data.result);
                 } else {
                     $.messager.alert("提示", data.failMessage, "error");
                 }
             }
         });
-        dataTable.datagrid("loadData", tableSchema.columnList);
     };
 
     // 获取URL参数
@@ -362,8 +373,8 @@ var pageJs = function (globalPath) {
     };
 
     // 根据数据库列类型返回 对应的图标
-    this.getColumnImage = function (dataType){
-        if(!dataType || dataType == null || dataType == ""){
+    this.getColumnImage = function (dataType) {
+        if (!dataType || dataType == null || dataType == "") {
             return "icon-unknown";
         }
         dataType = dataType.toLowerCase();
@@ -445,42 +456,50 @@ var pageJs = function (globalPath) {
         for (var i = tabList.length - 1; i >= 2; i--) {
             tabsCenter.tabs('close', i);
         }
+
+        var countTmp = codeTemplateData.length;
+        $.mask({target: 'body'});
         // 生成代码
         $(codeTemplateData).each(function (index, codeTemplate) {
-            var item = {};
-            item.templateName = codeTemplate.name;
-            item.codeType = codeTemplate.codeType;
+            // 获取模版数据
             var param = {name: codeTemplate.name};
             $.ajax({
                 type: "POST",
                 dataType: "JSON",
                 url: getTemplateByNameUrl,
                 data: param,
-                async: false,
+                async: true,
                 success: function (data) {
+                    var item = {};
+                    item.templateName = codeTemplate.name;
+                    item.codeType = codeTemplate.codeType;
                     item.codeContent = data.result.content;
-                }
-            });
-
-            param = {
-                schemaName: schemaName,
-                tableName: tableName,
-                includeColumn: JSON.stringify(includeColumn),
-                codeTemplate: JSON.stringify(item),
-                attributes: JSON.stringify(attributes)
-            };
-            $.ajax({
-                type: "POST",
-                dataType: "JSON",
-                url: generatorCodeUrl,
-                data: param,
-                async: false,
-                success: function (data) {
-                    if(data.success == true){
-                        _this.addGeneratorCodeTab(data.result);
-                    } else {
-                        $.messager.alert("提示", data.failMessage, "error");
-                    }
+                    // 根据模版和数据生成代码
+                    param = {
+                        schemaName: schemaName,
+                        tableName: tableName,
+                        includeColumn: JSON.stringify(includeColumn),
+                        codeTemplate: JSON.stringify(item),
+                        attributes: JSON.stringify(attributes)
+                    };
+                    $.ajax({
+                        type: "POST",
+                        dataType: "JSON",
+                        url: generatorCodeUrl,
+                        data: param,
+                        async: true,
+                        success: function (data) {
+                            countTmp--;
+                            if (countTmp <= 0) {
+                                $.unmask({target: 'body'});
+                            }
+                            if (data.success == true) {
+                                _this.addGeneratorCodeTab(data.result);
+                            } else {
+                                $.messager.alert("提示", data.failMessage, "error");
+                            }
+                        }
+                    });
                 }
             });
         });
@@ -524,7 +543,7 @@ var pageJs = function (globalPath) {
         });
         editor.setSize("auto", "auto");
 
-        if(!codeResult.codeContent || codeResult.codeContent == null){
+        if (!codeResult.codeContent || codeResult.codeContent == null) {
             editor.setValue("");
         } else {
             editor.setValue(codeResult.codeContent);
@@ -569,6 +588,10 @@ $(document).ready(function () {
     if (typeof(globalPath) == "undefined") {
         alert("系统全局路径对象未定义(globalPath)");
     } else {
+        // $.mask({target: 'body'});
+        // setTimeout(function () {
+        //     $.unmask({target: 'body'});
+        // }, 1500);
         pageJsObject = new pageJs(globalPath);
         pageJsObject.init();
     }

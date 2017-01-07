@@ -44,21 +44,6 @@ public class MateDataService extends BaseService {
     @Qualifier(SpringBeanNames.HibernateTemplate)
     private HibernateTemplate hibernateTemplate;
 
-//    /**
-//     * 获取数据库连接
-//     *
-//     * @return 失败返回null
-//     */
-//    private Connection getConnection() {
-//        Connection connection = null;
-//        try {
-//            connection = SessionFactoryUtils.getDataSource(hibernateTemplate.getSessionFactory()).getConnection();
-//        } catch (Throwable e) {
-//            logger.error("### 获取数据库连接异常", e);
-//        }
-//        return connection;
-//    }
-
     /**
      * 获取当前线程的Hibernate的Session
      */
@@ -76,6 +61,7 @@ public class MateDataService extends BaseService {
      * @param ajaxMessage 请求响应对象
      * @return 数据库基本信息(概要)
      */
+    @SuppressWarnings("Convert2Lambda")
     public List<DataBaseSummaryVo> findAllDataBaseSummary(final AjaxMessage ajaxMessage) {
         final List<DataBaseSummaryVo> resultList = new ArrayList<>();
         Session session = getSession();
@@ -123,6 +109,7 @@ public class MateDataService extends BaseService {
      * @param ajaxMessage 请求响应对象
      * @return 数据库表结构信息, 未找到返回null
      */
+    @SuppressWarnings("Convert2Lambda")
     public TableSchemaVo getTableSchema(final String schemaName, final String tableName, final AjaxMessage ajaxMessage) {
         final TableSchemaVo tableSchemaVo = new TableSchemaVo();
         if (StringUtils.isBlank(schemaName) || StringUtils.isBlank(tableName)) {

@@ -13,6 +13,7 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.mask.extend.js"></script>
 
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
@@ -47,11 +48,13 @@
 
 <!-- 页面左部 -->
 <div data-options="region:'west',title:'数据库',split:true,border:true" style="width:240px;">
+    <div id="dataBaseTreeLoading" class="panel-loading" style="display: none;">刷新中，请稍待。。。</div>
     <ul id="dataBaseTree"></ul>
 </div>
 
 <!-- 页面右部 -->
 <div data-options="region:'east',title:'代码模版',split:true,border:true" style="width:200px;">
+    <div id="codeTemplateTreeLoading" class="panel-loading" style="display: none;">刷新中，请稍待。。。</div>
     <ul id="codeTemplateTree"></ul>
 </div>
 

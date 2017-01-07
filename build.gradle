@@ -87,6 +87,9 @@ project(':clever-common') {
         compile('org.slf4j:slf4j-api:1.7.21')
         compile('org.slf4j:slf4j-log4j12:1.7.21')
         compile('log4j:log4j:1.2.17')
+
+        compile group: 'org.apache.logging.log4j', name: 'log4j-core', version: '2.7'
+
         // compile('ch.qos.logback:logback-classic:1.1.7')
 
         // ##################其他依赖
