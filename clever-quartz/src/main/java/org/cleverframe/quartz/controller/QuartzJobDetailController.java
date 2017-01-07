@@ -16,6 +16,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
@@ -93,6 +94,7 @@ public class QuartzJobDetailController extends BaseController {
         addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "保存JobDetail成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
+            // TODO 使用@RequestBody
             Map<String, String> jobData = null;
             if (StringUtils.isNotBlank(saveJobDetailVo.getJobData())) {
                 JavaType javaType = JacksonMapper.nonEmptyMapper().contructMapType(Map.class, String.class, String.class);

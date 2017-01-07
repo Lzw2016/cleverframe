@@ -11,6 +11,8 @@ import org.cleverframe.generator.GeneratorJspUrlPath;
 import org.cleverframe.generator.entity.CodeTemplate;
 import org.cleverframe.generator.service.CodeTemplateService;
 import org.cleverframe.generator.vo.request.*;
+import org.cleverframe.webui.easyui.data.DataGridJson;
+import org.cleverframe.webui.easyui.data.TreeGridNodeJson;
 import org.cleverframe.webui.easyui.data.TreeNodeJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
@@ -58,7 +60,7 @@ public class CodeTemplateController extends BaseController {
             String state = "open";
             if (CodeTemplate.NodeTypeCategory.equals(codeTemplate.getNodeType())) {
                 iconCls = "icon-folderPage";
-                if("true".equalsIgnoreCase(isClose)) {
+                if ("true".equalsIgnoreCase(isClose)) {
                     state = "closed";
                 } else {
                     state = "open";
@@ -76,6 +78,24 @@ public class CodeTemplateController extends BaseController {
             nodes.add(node);
         }
         return BuildTreeUtils.bulidTree(nodes);
+    }
+
+    /**
+     * 查询所有的代码模版，构建代码模版树
+     */
+    @RequestMapping("/findAllCodeTemplateToTreeGrid")
+    @ResponseBody
+    public DataGridJson<TreeGridNodeJson<CodeTemplate>> findAllCodeTemplateToTreeGrid(HttpServletRequest request, HttpServletResponse response) {
+        DataGridJson<TreeGridNodeJson<CodeTemplate>> json = new DataGridJson<>();
+        List<CodeTemplate> codeTemplateList = codeTemplateService.findAllCodeTemplate();
+        for (CodeTemplate codeTemplate : codeTemplateList) {
+//            if (codeTemplate.getParentId() <= 0L) {
+//                codeTemplate.setParentId(null);
+//            }
+            TreeGridNodeJson<CodeTemplate> tmp = new TreeGridNodeJson<>(codeTemplate.getParentId(), codeTemplate);
+            json.addRow(tmp);
+        }
+        return json;
     }
 
     /**

@@ -98,37 +98,21 @@
         <table id="codeTemplateDataTable" data-options="border:false,fit:true">
             <thead>
             <tr>
-                <th data-options="width:210,align:'left',hidden:false,field:'name',formatter:pageJsObject.codeTemplateNameFormatter">代码模版名称</th>
-                <th data-options="width:100,align:'left',hidden:false,field:'nodeType'">节点类型</th>
+                <%--<th data-options="field:'select',checkbox:true"></th>--%>
+                <th data-options="width:260,align:'left',hidden:false,field:'name',formatter:pageJsObject.codeTemplateNameFormatter">代码模版名称</th>
+                <th data-options="width:100,align:'left',hidden:true,field:'nodeType'">节点类型</th>
                 <th data-options="width:100,align:'left',hidden:true,field:'templateRef'">脚本模版引用</th>
-                <th data-options="width:100,align:'left',hidden:false,field:'codeType'">模版代码语言</th>
+                <th data-options="width:100,align:'left',hidden:false,field:'codeType',formatter:pageJsObject.codeTypeFormatter">模版代码语言</th>
                 <th data-options="width:650,align:'left',hidden:false,field:'description'">模版说明</th>
                 <th data-options="width:350,align:'left',hidden:false,field:'remarks'">备注信息</th>
             </tr>
             </thead>
         </table>
         <div id="codeTemplateDataTableButtons">
-            <a id="codeTemplateDataTableButtonsAdd" class="easyui-linkbutton" data-options="iconCls:'icon-add',plain:true">添加</a>
-            <a id="codeTemplateDataTableButtonsDel" class="easyui-linkbutton" data-options="iconCls:'icon-remove',plain:true">移除</a>
+            <a id="codeTemplateDataTableButtonsReload" class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true">刷新</a>
             <a id="codeTemplateDataTableButtonsRun" class="easyui-linkbutton" data-options="iconCls:'icon-run',plain:true">生成代码</a>
         </div>
     </div>
-</div>
-
-
-<%-- 选择模版代码对话框 --%>
-<div id="selectCodeTemplateDialog" style="width: 300px;height: 150px;padding: 15px 20px">
-    <span>
-        <label for="codeTemplateID">所属分类</label>
-        <input id="codeTemplateID"/>
-    </span>
-    <div style="text-align: center;margin-top: 8px;">
-        <label id="selectCodeTemplateMsg" style="color: red"></label>
-    </div>
-</div>
-<div id="selectCodeTemplateDialogButtons">
-    <a id="selectCodeTemplateDialogButtonsOk" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">选择</a>
-    <a id="selectCodeTemplateDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
 </div>
 
 <%-- 查看模版代码对话框 --%>
@@ -136,8 +120,6 @@
     <%--suppress HtmlFormInputWithoutLabel --%>
     <textarea id="viewCodeTemplateEdit"></textarea>
 </div>
-
-
 
 </body>
 </html>

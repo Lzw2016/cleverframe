@@ -60,6 +60,7 @@ public class GeneratorCodeController extends BaseController {
             @Valid GeneratorCodeVo generatorCodeVo,
             BindingResult bindingResult) {
         addXSSExcludeUrl(request);
+        // TODO 使用@RequestBody
         AjaxMessage<CodeResultVo> ajaxMessage = new AjaxMessage<>(true, "代码生成成功！", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             // 模版数据-表结构

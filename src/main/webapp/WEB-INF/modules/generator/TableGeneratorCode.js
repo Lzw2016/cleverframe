@@ -7,8 +7,8 @@ var pageJs = function (globalPath) {
 
     // 获取数据库表详细信息
     var getTableSchemaURL = globalPath.mvcPath + "/generator/matedata/getTableSchema.json";
-    // 代码模版树
-    var findAllCodeTemplateUrl = globalPath.mvcPath + "/generator/codetemplate/findAllCodeTemplate.json";
+    // 代码模版
+    var findAllCodeTemplateToTreeGridUrl = globalPath.mvcPath + "/generator/codetemplate/findAllCodeTemplateToTreeGrid.json";
     // 根据模版名称返回模版数据
     var getTemplateByNameUrl = globalPath.mvcPath + "/core/template/getTemplateByName.json";
     // 根据模版生成代码
@@ -27,23 +27,10 @@ var pageJs = function (globalPath) {
     var dataTable = $("#dataTable");
     // 代码模版-数据显示表格
     var codeTemplateDataTable = $("#codeTemplateDataTable");
-    // 代码模版-添加
-    var codeTemplateDataTableButtonsAdd = $("#codeTemplateDataTableButtonsAdd");
-    // 代码模版-移除
-    var codeTemplateDataTableButtonsDel = $("#codeTemplateDataTableButtonsDel");
+    // 代码模版-刷新
+    var codeTemplateDataTableButtonsReload = $("#codeTemplateDataTableButtonsReload");
     // 代码模版-生成代码
     var codeTemplateDataTableButtonsRun = $("#codeTemplateDataTableButtonsRun");
-
-    // 选择模版代码对话框
-    var selectCodeTemplateDialog = $("#selectCodeTemplateDialog");
-    // 代码模版选择树
-    var codeTemplateID = $("#codeTemplateID");
-    // 不能选择模版类型错误提示
-    var selectCodeTemplateMsg = $("#selectCodeTemplateMsg");
-    // 选择模版代码对话框-选择
-    var selectCodeTemplateDialogButtonsOk = $("#selectCodeTemplateDialogButtonsOk");
-    // 选择模版代码对话框-取消
-    var selectCodeTemplateDialogButtonsCancel = $("#selectCodeTemplateDialogButtonsCancel");
 
     // 查看模版代码对话框
     var viewCodeTemplateDialog = $("#viewCodeTemplateDialog");
@@ -54,8 +41,6 @@ var pageJs = function (globalPath) {
     var paramTableName = null;
     // 数据库表结构数据
     var tableSchema = null;
-    // 当前选择的模版数据
-    var selectCodeTemplateData = null;
 
     /**
      * 页面初始化方法
@@ -78,8 +63,13 @@ var pageJs = function (globalPath) {
             pageList: [10, 20, 30, 50, 100, 150]
         });
 
-        codeTemplateDataTable.datagrid({
-            idField: 'name',
+        //noinspection JSUnusedLocalSymbols
+        codeTemplateDataTable.treegrid({
+            url: findAllCodeTemplateToTreeGridUrl,
+            method: "POST",
+            idField: 'id',
+            treeField: 'name',
+            checkbox: true,
             fit: true,
             fitColumns: false,
             striped: true,
@@ -90,11 +80,22 @@ var pageJs = function (globalPath) {
             loadMsg: "正在加载，请稍候...",
             toolbar: "#codeTemplateDataTableButtons",
             pageSize: 30,
-            pageList: [10, 20, 30, 50, 100, 150]
+            pageList: [10, 20, 30, 50, 100, 150],
+            loadFilter: function (data, parentId) {
+                $(data.rows).each(function (index, node) {
+                    // 节点类型(0:模版分类; 1:代码模版)
+                    if (node.nodeType == '1') {
+                        node.iconCls = "icon-script";
+                        node.state = "open";
+                    } else {
+                        node.iconCls = "icon-folderPage";
+                        node.state = "closed";
+                    }
+                });
+                return data;
+            }
         });
 
-        // 初始化选择模版代码对话框
-        _this.initSelectCodeTemplateDialog();
         // 初始化查看模版代码对话框
         _this.initViewCodeTemplateDialog();
         // 页面数据初始化
@@ -117,106 +118,21 @@ var pageJs = function (globalPath) {
         _this.getTableSchema(paramSchemaName, paramTableName, dataTable);
     };
 
-    //noinspection JSUnusedGlobalSymbols
     /**
      * 界面事件绑定方法
      */
     this.eventBind = function () {
-        // 代码模版-添加
-        codeTemplateDataTableButtonsAdd.click(function () {
-            selectCodeTemplateDialog.dialog("open");
-        });
-
-        // 代码模版-移除
-        codeTemplateDataTableButtonsDel.click(function () {
-            var delRow = codeTemplateDataTable.datagrid('getSelected');
-            if (delRow) {
-                var rows = codeTemplateDataTable.datagrid("getRows");
-                $(rows).each(function (index, row) {
-                    if (row.name == delRow.name) {
-                        codeTemplateDataTable.datagrid("deleteRow", index);
-                        return false;
-                    }
-                });
-            } else {
-                $.messager.alert("提示", "请选择要移除的代码模版", "info");
-            }
+        codeTemplateDataTableButtonsReload.click(function () {
+            codeTemplateDataTable.treegrid("reload");
         });
 
         // 代码模版-生成代码
         codeTemplateDataTableButtonsRun.click(function () {
             _this.generatorCode();
         });
-
-        // 选择模版代码对话框-选择
-        selectCodeTemplateDialogButtonsOk.click(function () {
-            selectCodeTemplateMsg.text("");
-            // 节点类型(0:模版分类; 1:代码模版)
-            if (selectCodeTemplateData.nodeType != "1") {
-                selectCodeTemplateMsg.text("不能选择模版分类");
-            }
-            var rows = codeTemplateDataTable.datagrid("getRows");
-            $(rows).each(function (index, row) {
-                if (row.name == selectCodeTemplateData.name) {
-                    selectCodeTemplateMsg.text("已经添加了模版[" + row.name + "]");
-                    return false;
-                }
-            });
-            if (selectCodeTemplateMsg.text() == "") {
-                codeTemplateDataTable.datagrid("appendRow", selectCodeTemplateData);
-                selectCodeTemplateDialog.dialog("close");
-            }
-        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
-
-    // 初始化选择模版代码对话框
-    this.initSelectCodeTemplateDialog = function () {
-        selectCodeTemplateDialog.dialog({
-            title: "选择模版代码",
-            closed: true,
-            minimizable: false,
-            maximizable: false,
-            resizable: false,
-            minWidth: 300,
-            minHeight: 130,
-            modal: true,
-            buttons: "#selectCodeTemplateDialogButtons"
-        });
-
-        codeTemplateID.combotree({
-            required: true,
-            editable: false,
-            animate: false,
-            checkbox: false,
-            cascadeCheck: true,
-            onlyLeafCheck: false,
-            lines: true,
-            dnd: false,
-            valueField: 'text',
-            textField: 'text',
-            onSelect: function (node) {
-                // 节点类型(0:模版分类; 1:代码模版)
-                if (node.attributes.nodeType != "1") {
-                    selectCodeTemplateMsg.text("不能选择模版分类");
-                }
-                selectCodeTemplateData = node.attributes;
-            }
-        });
-
-        var param = {isClose: "true"};
-        $.ajax({
-            type: "POST",
-            dataType: "JSON",
-            url: findAllCodeTemplateUrl,
-            data: param,
-            async: true,
-            success: function (data) {
-                codeTemplateID.combotree("loadData", data);
-            }
-        });
-    };
 
     // 初始化查看模版代码对话框
     this.initViewCodeTemplateDialog = function () {
@@ -250,15 +166,8 @@ var pageJs = function (globalPath) {
     };
 
     // 打开查看模版代码对话框
-    this.openViewCodeTemplateDialog = function (name) {
-        var codeTemplate = null;
-        var rows = codeTemplateDataTable.datagrid("getRows");
-        $(rows).each(function (index, row) {
-            if (row.name == name) {
-                codeTemplate = row;
-                return false;
-            }
-        });
+    this.openViewCodeTemplateDialog = function (id) {
+        var codeTemplate = codeTemplateDataTable.treegrid("find", id);
         if (codeTemplate == null) {
             return;
         }
@@ -267,7 +176,7 @@ var pageJs = function (globalPath) {
         viewCodeTemplateEdit.setValue('');
         var maskTarget = viewCodeTemplateDialog.panel('body');
         $.mask({target: maskTarget, loadMsg: "加载中，请稍候。。。"});
-        var param = {name: name};
+        var param = {name: codeTemplate.name};
         $.ajax({
             type: "POST",
             dataType: "JSON",
@@ -427,7 +336,21 @@ var pageJs = function (globalPath) {
         if ($.trim(value) == "") {
             return value;
         }
-        return '<a href="javascript:void(0)" onclick="pageJsObject.openViewCodeTemplateDialog(\'' + value + '\');">' + value + '</a>';
+        // 节点类型(0:模版分类; 1:代码模版)
+        if (rowData.nodeType == '1') {
+            return '<a href="javascript:void(0)" onclick="pageJsObject.openViewCodeTemplateDialog(\'' + rowData.id + '\');">' + value + '</a>';
+        } else {
+            return value;
+        }
+    };
+
+    // 格式化
+    //noinspection JSUnusedGlobalSymbols,JSUnusedLocalSymbols
+    this.codeTypeFormatter = function (value, rowData, rowIndex) {
+        if (value == "Category") {
+            return "";
+        }
+        return value;
     };
 
     // 根据模版生成代码
@@ -446,7 +369,14 @@ var pageJs = function (globalPath) {
             includeColumn.push(column.columnName);
         });
 
-        var codeTemplateData = codeTemplateDataTable.datagrid("getData").rows;
+        var checkedNodes = codeTemplateDataTable.treegrid("getCheckedNodes");
+        var codeTemplateData = [];
+        $(checkedNodes).each(function (index, node) {
+            // 节点类型(0:模版分类; 1:代码模版)
+            if (node.nodeType == "1") {
+                codeTemplateData.push(node);
+            }
+        });
         if (codeTemplateData == null || codeTemplateData.length <= 0) {
             $.messager.alert("提示", "请选择代码模版", "info");
             return;

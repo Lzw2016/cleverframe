@@ -61,6 +61,7 @@ public class QuartzTriggerController extends BaseController {
         addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "给JobDetail增加一个SimpleTrigger成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
+            // TODO 使用@RequestBody
             Map<String, String> jobData = null;
             if (StringUtils.isNotBlank(addSimpleTriggerForJobVo.getJobData())) {
                 JavaType javaType = JacksonMapper.nonEmptyMapper().contructMapType(Map.class, String.class, String.class);
@@ -94,6 +95,7 @@ public class QuartzTriggerController extends BaseController {
         addXSSExcludeUrl(request);
         AjaxMessage<String> ajaxMessage = new AjaxMessage<>(true, "给JobDetail增加一个CronTrigger成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
+            // TODO 使用@RequestBody
             Map<String, String> jobData = null;
             if (StringUtils.isNotBlank(addCronTriggerForJobVo.getJobData())) {
                 JavaType javaType = JacksonMapper.nonEmptyMapper().contructMapType(Map.class, String.class, String.class);
