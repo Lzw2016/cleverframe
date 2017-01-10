@@ -35,4 +35,9 @@ public class GeneratorJspUrlPath implements IJspUrlPath {
      * 根据数据表选择模版生成代码
      */
     public static final String TableGeneratorCode = "generator/TableGeneratorCode";
+
+    /**
+     * 代码模版编辑页面
+     */
+    public static final String TemplateEdit = "generator/TemplateEdit";
 }

@@ -1,0 +1,7 @@
+/*自定义图标*/
+.icon-format{
+    background:url('image/format-stroke-color.png') no-repeat center center;
+}
+.icon-info{
+    background:url('image/information.png') no-repeat center center;
+}

@@ -57,6 +57,15 @@ public class CodeTemplateService extends BaseService {
     }
 
     /**
+     * 获取代码模版信息
+     *
+     * @param name 代码模版名称
+     */
+    public CodeTemplate getByName(String name) {
+        return codeTemplateDao.getByName(name);
+    }
+
+    /**
      * 新增代码模版-分类
      * <pre>
      *      1.设置节点类型[模版分类]，设置模版引用为null

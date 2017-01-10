@@ -46,6 +46,11 @@ public class CodeTemplateController extends BaseController {
         return new ModelAndView(GeneratorJspUrlPath.CodeTemplate);
     }
 
+    @RequestMapping("/TemplateEdit" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getTemplateEditJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(GeneratorJspUrlPath.TemplateEdit);
+    }
+
     /**
      * 查询所有的代码模版，构建代码模版树
      */
@@ -130,6 +135,28 @@ public class CodeTemplateController extends BaseController {
             nodes.add(node);
         }
         return BuildTreeUtils.bulidTree(nodes);
+    }
+
+    /**
+     * 获取代码模版信息
+     */
+    @RequestMapping("/getCodeTemplateByName")
+    @ResponseBody
+    public AjaxMessage<CodeTemplate> getCodeTemplateByName(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid GetCodeTemplateByNameVo getCodeTemplateByNameVo,
+            BindingResult bindingResult) {
+        AjaxMessage<CodeTemplate> ajaxMessage = new AjaxMessage<>(true, "获取代码模版信息成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            CodeTemplate codeTemplate = codeTemplateService.getByName(getCodeTemplateByNameVo.getName());
+            ajaxMessage.setResult(codeTemplate);
+            if (codeTemplate == null) {
+                ajaxMessage.setSuccess(false);
+                ajaxMessage.setFailMessage("代码模版不存在");
+            }
+        }
+        return ajaxMessage;
     }
 
     /**
