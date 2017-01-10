@@ -20,10 +20,6 @@ var pageJs = function (globalPath) {
     var findDictTypeUrl = globalPath.mvcPath + "/core/dict/findDictByType.json?dictType=";
     // 根据模版名称返回模版数据
     var getTemplateByNameUrl = globalPath.mvcPath + "/core/template/getTemplateByName.json";
-    // 只更新模版内容地址
-    var onlyUpdateCoreTemplateContentUrl = globalPath.mvcPath + "/core/template/updateTemplate.json";
-    // 代码格式化地址
-    var formatUrl = globalPath.mvcPath + "/generator/codeformat/format.json";
     // 代码模版编辑URL
     var templateEditUrl = globalPath.mvcPath + "/generator/codetemplate/TemplateEdit.html?templateName=";
 
@@ -41,8 +37,6 @@ var pageJs = function (globalPath) {
     var codeTemplateTreeLoading = $("#codeTemplateTreeLoading");
     // 代码模版树右键菜单
     var menuByCodeTemplateTree = $("#menuByCodeTemplateTree");
-    // 多页签中的代码编辑器
-    var tabsCenterEditor = {};
 
     // 新增代码模版对话框
     var addCodeDialog = $("#addCodeDialog");
@@ -284,8 +278,9 @@ var pageJs = function (globalPath) {
                 // 节点类型(0:模版分类; 1:代码模版)
                 if (node.attributes.nodeType == '0') {
                     _this.openEditDialog();
-                } else if (node.attributes.nodeType == '1') {
-                    _this.addTab(node.attributes.name, node.attributes);
+                } else if (node.attributes.nodeType == '1' && $.trim(node.attributes.name) != "") {
+                    var tabUrl = templateEditUrl + encodeURIComponent(node.attributes.name);
+                    _this.addTab(node.attributes.name, tabUrl);
                 }
             },
             onBeforeExpand: function (node) {
@@ -779,142 +774,6 @@ var pageJs = function (globalPath) {
         }
     };
 
-    // 增加代码模版叶签
-    this.addTab = function (tabName, codeTemplate) {
-        if (tabsCenter.tabs("exists", tabName)) {
-            tabsCenter.tabs("select", tabName);
-            return;
-        }
-
-        // 回调数据绑定
-        var callback = function (template) {
-            var content = [];
-            content.push('<div id="layout_' + codeTemplate.uuid + '" class="easyui-layout" data-options="fit:true,border:false">');
-            content.push('    <div data-options="region:\'north\',border:false" style="height:110px;background-color:#E0ECFF;">');
-            content.push('        <div class="tabsCenterPageTop">');
-            content.push('            <div class="row">');
-            content.push('                <span class="column">');
-            content.push('                    <label class="label">代码模版名称:</label>');
-            content.push('                    <label class="value">' + codeTemplate.name + '</label>');
-            content.push('                </span>');
-            content.push('                 <span class="column">');
-            content.push('                    <label class="label">代码语言:</label>');
-            content.push('                    <label class="value">' + codeTemplate.codeType + '</label>');
-            content.push('                </span>');
-            content.push('                 <span class="columnLast">');
-            content.push('                    <label class="label">模版语言:</label>');
-            content.push('                    <label class="value">' + template.locale + '</label>');
-            content.push('                </span>');
-            content.push('                <a id="button_save' + codeTemplate.uuid + '" class="button" href="javascript:void(0)" ></a>');//保存
-            content.push('                <a id="button_format' + codeTemplate.uuid + '" class="button" href="javascript:void(0)" ></a>');//格式化
-            content.push('                <a id="button_refresh' + codeTemplate.uuid + '" class="button" href="javascript:void(0)" ></a>');// 刷新
-            content.push('            </div>');
-            content.push('            <div class="row">');
-            content.push('                 <span class="columnLast">');
-            content.push('                    <label class="label">模版说明:</label>');
-            content.push('                    <label class="value">' + codeTemplate.description + '</label>');
-            content.push('                </span>');
-            content.push('            </div>');
-            content.push('            <div class="row">');
-            content.push('                 <span class="columnLast">');
-            content.push('                    <label class="label">备注信息:</label>');
-            content.push('                    <label class="value">' + codeTemplate.remarks + '</label>');
-            content.push('                </span>');
-            content.push('            </div>');
-            content.push('        </div>');
-            content.push('    </div>');
-            content.push('    <div data-options="region:\'center\',border:false,fit:false">');
-            content.push('        <textarea id="codeTemplate_' + codeTemplate.uuid + '"></textarea>');
-            content.push('    </div>');
-            content.push('</div>');
-            var html = content.join("");
-            tabsCenter.tabs("add", {
-                title: tabName,
-                closable: true,
-                content: html
-            });
-            // 设置布局
-            var layoutByTab = $("#layout_" + codeTemplate.uuid);
-            layoutByTab.layout({
-                fit: true,
-                border: false
-            });
-            layoutByTab.layout("panel", "north").panel({
-                region: "north",
-                border: false
-            });
-            layoutByTab.layout("panel", "center").panel({
-                region: "center",
-                border: false,
-                fit: false
-            });
-
-            // 设置保存按钮
-            $("#button_save" + codeTemplate.uuid).linkbutton({
-                iconCls: 'icon-save',
-                onClick: function () {
-                    _this.onlyUpdateCoreTemplateContent(template.id, tabName);
-                }
-            });
-            $("#button_refresh" + codeTemplate.uuid).linkbutton({
-                iconCls: 'icon-reload',
-                onClick: function () {
-                    $.ajax({
-                        type: "POST",
-                        dataType: "JSON",
-                        url: getTemplateByNameUrl,
-                        async: true,
-                        data: param,
-                        success: function (data) {
-                            if (data.success) {
-                                tabsCenterEditor[tabName].setValue(data.result.content);
-                                $.messager.show({title: '提示', msg: "刷新成功", timeout: 5000, showType: 'slide'});
-                            }
-                        }
-                    });
-                }
-            });
-            $("#button_format" + codeTemplate.uuid).linkbutton({
-                iconCls: 'icon-format',
-                onClick: function () {
-                    _this.codeFormat(codeTemplate.codeType, tabName);
-                }
-            });
-            // Java编辑器-初始化,
-            var editor = CodeMirror.fromTextArea(document.getElementById("codeTemplate_" + codeTemplate.uuid), {
-                lineNumbers: true,
-                matchBrackets: true,
-                indentUnit: 4,
-                readOnly: false
-            });
-            editor.setOption("mode", _this.getCodeMirrorMode(codeTemplate.codeType));
-            editor.setSize("auto", "auto");
-            //editor.setSize("height", 800);
-            editor.setOption("theme", "cobalt");
-
-            if (!template.content || template.content == null) {
-                editor.setValue("");
-            } else {
-                editor.setValue(template.content);
-            }
-            tabsCenterEditor[tabName] = editor;
-        };
-
-        // 请求模版数据
-        var param = {};
-        param.name = codeTemplate.templateRef;
-        $.ajax({
-            type: "POST",
-            dataType: "JSON",
-            url: getTemplateByNameUrl,
-            async: true,
-            data: param,
-            success: function (data) {
-                callback(data.result);
-            }
-        });
-    };
-
     // 加载所属分类树
     this.reloadInputCodeTemplateTree = function (parentIdComboTree, fullPath, excludePath, sync) {
         var param = {};
@@ -933,6 +792,40 @@ var pageJs = function (globalPath) {
         });
     };
 
+    //以iframe方式增加页面
+    this.addTab = function (tabName, tabUrl) {
+        if (tabsCenter.tabs("exists", tabName)) {
+            tabsCenter.tabs("select", tabName);
+        } else {
+            var tabs = tabsCenter.tabs("tabs");
+            if (tabs.length >= 6) {
+                $.messager.alert("提示", "最多只能打开6个叶签！", "info");
+                return;
+            }
+            var content = null;
+            if (tabUrl && $.trim(tabUrl) != "") {
+                var id = _this.getUUID(32, 16);
+                content = "<iframe id='" + id + "' scrolling='auto' style='width:100%;height:100%;' frameborder='0' src='" + tabUrl + "'></iframe>";
+            } else {
+                content = "未定义页面路径！";
+            }
+            tabsCenter.tabs("add", {
+                title: tabName,
+                closable: true,
+                content: content,
+                tools: [{
+                    iconCls: "icon-mini-refresh",
+                    handler: function () {
+                        if (id) {
+                            document.getElementById(id).contentWindow.location.reload(true);
+                        }
+                        //window.open(tabUrl); // 在新窗口中打开
+                    }
+                }]
+            });
+        }
+    };
+
     // 关闭页面
     this.closeTab = function () {
         var tab = tabsCenter.tabs('getSelected');
@@ -942,94 +835,30 @@ var pageJs = function (globalPath) {
         }
     };
 
-    // 只更新模版内容
-    this.onlyUpdateCoreTemplateContent = function (id, tabName) {
-        var editor = tabsCenterEditor[tabName];
-        var param = {};
-        param.id = id;
-        param.content = editor.getValue();
-        $.ajax({
-            type: "POST",
-            dataType: "JSON",
-            url: onlyUpdateCoreTemplateContentUrl,
-            async: false,
-            data: param,
-            success: function (data) {
-                if (data.success) {
-                    // 保存成功
-                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-                } else {
-                    // 保存失败
-                }
-            }
-        });
-    };
-
-    // 格式化代码
-    this.codeFormat = function (codeType, tabName) {
-        var editor = tabsCenterEditor[tabName];
-        var param = {};
-        param.codeType = codeType;
-        param.code = editor.getValue();
-        if (codeType.toLowerCase() == "html" || codeType.toLowerCase() == "java" || codeType.toLowerCase() == "json"
-            || codeType.toLowerCase() == "sql" || codeType.toLowerCase() == "xml") {
-            $.ajax({
-                type: "POST",
-                dataType: "JSON",
-                url: formatUrl,
-                async: false,
-                data: param,
-                success: function (data) {
-                    if (data.success) {
-                        editor.setValue(data.result);
-                        $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-                    } else {
-                        $.messager.alert("提示", data.failMessage, "error");
-                    }
-                }
-            });
-        } else if (codeType.toLowerCase() == "js" || codeType.toLowerCase() == "javascript") {
-            var code = param.code.replace(/^\s+/, '');
-            if (code.length > 0) {
-                code = js_beautify(code, 4, ' ');
-            }
-            editor.setValue(code);
-            $.messager.show({title: '提示', msg: "JavaScript代码格式化成功", timeout: 5000, showType: 'slide'});
-        } else if (codeType.toLowerCase() == "css") {
-            var options = {indent: '    '};
-            param.code = cssbeautify(param.code, options);
-            editor.setValue(param.code);
-            $.messager.show({title: '提示', msg: "CSS代码格式化成功", timeout: 5000, showType: 'slide'});
+    // 获取一个UUID
+    this.getUUID = function (len, radix) {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+        radix = radix || chars.length;
+        if (len) {
+            // Compact form
+            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
         } else {
-            $.messager.alert("提示", "不支持格式化的程序语言:" + codeType, "info");
+            // rfc4122, version 4 form
+            var r;
+            // rfc4122 requires these characters
+            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+            uuid[14] = '4';
+            // Fill in random data.  At i==19 set the high bits of clock sequence as
+            // per rfc4122, sec. 4.1.5
+            for (i = 0; i < 36; i++) {
+                if (!uuid[i]) {
+                    r = 0 | Math.random() * 16;
+                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                }
+            }
         }
-    };
-
-    // 根据编程语言获取CodeMirror的Mode属性
-    this.getCodeMirrorMode = function (codeType) {
-        switch (codeType.toLowerCase()) {
-            case "java":
-                return "text/x-java";
-            case "c#":
-                return "text/x-csharp";
-            case "xml":
-                return "application/xml";
-            case "html":
-                return "text/html";
-            case "jsp":
-                return "application/x-jsp";
-            case "css":
-                return "text/css";
-            case "sql":
-                return "text/x-mysql";
-            case "javascript":
-                return "text/javascript";
-            case "js":
-                return "text/javascript";
-            case "json":
-                return "application/json";
-        }
-        return "text/x-java";
+        return uuid.join('');
     };
 };
 

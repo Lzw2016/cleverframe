@@ -26,6 +26,8 @@ var pageJs = function (globalPath) {
     var tableGeneratorCodeUrl = globalPath.mvcPath + "/generator/matedata/TableGeneratorCode.html";
     // 代码模版树数据请求Url
     var codeTemplateTreeUrl = globalPath.mvcPath + "/generator/codetemplate/findAllCodeTemplate.json";
+    // 代码模版编辑URL
+    var templateEditUrl = globalPath.mvcPath + "/generator/codetemplate/TemplateEdit.html?templateName=";
 
     // 主页面
     var mainPanel = $("#mainPanel");
@@ -138,6 +140,12 @@ var pageJs = function (globalPath) {
         codeTemplateTree.tree({
             url: codeTemplateTreeUrl + "?isClose=true",
             method: "POST",
+            onBeforeLoad: function (node, param) {
+                // 展开节点不加载数据
+                if (param.id) {
+                    return false;
+                }
+            },
             formatter: function (node) {
                 // 节点类型(0:模版分类; 1:代码模版)
                 if (node.attributes.nodeType == '1') {
@@ -148,6 +156,11 @@ var pageJs = function (globalPath) {
             onClick: function (node) {
             },
             onDblClick: function (node) {
+                if ($.trim(node.attributes.name) == "") {
+                    return;
+                }
+                var tabUrl = templateEditUrl + encodeURIComponent(node.attributes.name);
+                _this.addTab(node.attributes.name + "(模版)", tabUrl);
             },
             onBeforeExpand: function (node) {
             },
@@ -482,6 +495,11 @@ var pageJs = function (globalPath) {
         if (tabsCenter.tabs("exists", tabName)) {
             tabsCenter.tabs("select", tabName);
         } else {
+            var tabs = tabsCenter.tabs("tabs");
+            if (tabs.length >= 6) {
+                $.messager.alert("提示", "最多只能打开6个叶签！", "info");
+                return;
+            }
             var content = null;
             if (tabUrl && $.trim(tabUrl) != "") {
                 var id = _this.getUUID(32, 16);
