@@ -136,7 +136,7 @@ var pageJs = function (globalPath) {
         // 初始化代码模版树
         //noinspection JSUnusedLocalSymbols
         codeTemplateTree.tree({
-            url: codeTemplateTreeUrl,
+            url: codeTemplateTreeUrl + "?isClose=true",
             method: "POST",
             formatter: function (node) {
                 // 节点类型(0:模版分类; 1:代码模版)
@@ -254,7 +254,7 @@ var pageJs = function (globalPath) {
         $.ajax({
             type: "POST",
             dataType: "JSON",
-            url: codeTemplateTreeUrl,
+            url: codeTemplateTreeUrl + "?isClose=true",
             async: true,
             success: function (data) {
                 codeTemplateTreeLoading.css("display", "none");

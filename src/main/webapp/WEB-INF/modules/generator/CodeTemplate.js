@@ -35,6 +35,12 @@ var pageJs = function (globalPath) {
     var tabsCenterToolsCloseTab = $("#tabsCenterToolsCloseTab");
     // 代码模版树
     var codeTemplateTree = $("#codeTemplateTree");
+    // 代码模版树 - 加载中
+    var codeTemplateTreeLoading = $("#codeTemplateTreeLoading");
+    // 代码模版树右键菜单
+    var menuByCodeTemplateTree = $("#menuByCodeTemplateTree");
+    // 多页签中的代码编辑器
+    var tabsCenterEditor = {};
 
     // 新增代码模版对话框
     var addCodeDialog = $("#addCodeDialog");
@@ -52,10 +58,6 @@ var pageJs = function (globalPath) {
     var addCodeDescription = $("#addCodeDescription");
     // 备注信息
     var addCodeRemarks = $("#addCodeRemarks");
-    // 模版内容
-    var addCodeContent = null;
-    // 新增代码模版对话框-按钮栏
-    var addCodeDialogButtons = $("#addCodeDialogButtons");
     // 新增代码模版对话框-按钮栏 保存
     var addCodeDialogButtonsSave = $("#addCodeDialogButtonsSave");
     // 新增代码模版对话框-按钮栏 取消
@@ -83,10 +85,6 @@ var pageJs = function (globalPath) {
     var editCodeDescription = $("#editCodeDescription");
     // 备注信息
     var editCodeRemarks = $("#editCodeRemarks");
-    // 模版内容
-    var editCodeContent = null;
-    // 编辑代码模版对话框-按钮栏
-    var editCodeDialogButtons = $("#editCodeDialogButtons");
     // 编辑代码模版对话框-按钮栏 保存
     var editCodeDialogButtonsSave = $("#editCodeDialogButtonsSave");
     // 编辑代码模版对话框-按钮栏 取消
@@ -104,8 +102,6 @@ var pageJs = function (globalPath) {
     var addCategoryDescription = $("#addCategoryDescription");
     // 备注信息
     var addCategoryRemarks = $("#addCategoryRemarks");
-    // 新增模版分类对话框-按钮栏
-    var addCategoryDialogButtons = $("#addCategoryDialogButtons");
     // 新增模版分类对话框-按钮栏 保存
     var addCategoryDialogButtonsSave = $("#addCategoryDialogButtonsSave");
     // 新增模版分类对话框-按钮栏 取消
@@ -117,8 +113,6 @@ var pageJs = function (globalPath) {
     var editCategoryForm = $("#editCategoryForm");
     // CodeTemplateId
     var editCategoryCodeTemplateId = $("#editCategoryCodeTemplateId");
-    // TemplateId
-    var editCategoryTemplateId = $("#editCategoryTemplateId");
     // 所属分类
     var editCategoryParentId = $("#editCategoryParentId");
     // 模版分类名称
@@ -129,22 +123,94 @@ var pageJs = function (globalPath) {
     var editCategoryRemarks = $("#editCategoryRemarks");
     // 删除标记
     var editCategoryDelFlag = $("#editCategoryDelFlag");
-    // 编辑模版分类对话框-按钮栏
-    var editCategoryDialogButtons = $("#editCategoryDialogButtons");
     // 编辑模版分类对话框-按钮栏 保存
     var editCategoryDialogButtonsSave = $("#editCategoryDialogButtonsSave");
     // 编辑模版分类对话框-按钮栏 取消
     var editCategoryDialogButtonsCancel = $("#editCategoryDialogButtonsCancel");
 
-    // 代码模版树右键菜单
-    var menuByCodeTemplateTree = $("#menuByCodeTemplateTree");
-    // 多页签中的代码编辑器
-    var tabsCenterEditor = {};
-
     /**
      * 页面初始化方法
      */
     this.init = function () {
+        _this.initMain();
+        _this.initAddCodeDialog();
+        _this.initEditCodeDialog();
+        _this.initAddCategoryDialog();
+        _this.initEditCategoryDialog();
+
+        _this.dataBind();
+        _this.eventBind();
+    };
+
+    /**
+     * 页面数据初始化
+     */
+    this.dataBind = function () {
+    };
+
+    /**
+     * 界面事件绑定方法
+     */
+    this.eventBind = function () {
+        // 新增代码模版对话框-按钮栏 保存
+        addCodeDialogButtonsSave.linkbutton({
+            onClick: function () {
+                _this.addCodeData();
+            }
+        });
+        // 新增代码模版对话框-按钮栏 取消
+        addCodeDialogButtonsCancel.linkbutton({
+            onClick: function () {
+                addCodeDialog.dialog("close");
+            }
+        });
+        // 编辑代码模版对话框-按钮栏 保存
+        editCodeDialogButtonsSave.linkbutton({
+            onClick: function () {
+                _this.updateCodeData();
+            }
+        });
+        // 编辑代码模版对话框-按钮栏 取消
+        editCodeDialogButtonsCancel.linkbutton({
+            onClick: function () {
+                editCodeDialog.dialog("close");
+            }
+        });
+        // 新增模版分类对话框-按钮栏 保存
+        addCategoryDialogButtonsSave.linkbutton({
+            onClick: function () {
+                _this.addCategoryData();
+            }
+        });
+        // 新增模版分类对话框-按钮栏 取消
+        addCategoryDialogButtonsCancel.linkbutton({
+            onClick: function () {
+                addCategoryDialog.dialog("close");
+            }
+        });
+        // 更新模版分类对话框-按钮栏 保存
+        editCategoryDialogButtonsSave.linkbutton({
+            onClick: function () {
+                _this.updateCategoryData();
+            }
+        });
+        // 更新模版分类对话框-按钮栏 取消
+        editCategoryDialogButtonsCancel.linkbutton({
+            onClick: function () {
+                editCategoryDialog.dialog("close");
+            }
+        });
+        // 关闭中部叶签
+        tabsCenterToolsCloseTab.linkbutton({
+            onClick: function () {
+                _this.closeTab();
+            }
+        });
+    };
+
+    // --------------------------------------------------------------------------------------------------------- init UI
+
+    this.initMain = function () {
         // 页面左部
         mainPanel.layout("panel", "west").panel({
             region: "west",
@@ -161,12 +227,11 @@ var pageJs = function (globalPath) {
                     addCategoryDialog.dialog("open");
                     addCategoryForm.form('reset');
                 }
-            },{
+            }, {
                 iconCls: "icon-scriptAdd",
                 handler: function () {
                     addCodeDialog.dialog("open");
                     addCodeForm.form('reset');
-                    addCodeContent.setValue("");
                 }
             }, {
                 iconCls: "icon-edit",
@@ -181,8 +246,7 @@ var pageJs = function (globalPath) {
             }, {
                 iconCls: "icon-reload",
                 handler: function () {
-                    // 初始化代码模版树的数据
-                    _this.reloadCodeTemplateTree(codeTemplateTree);
+                    codeTemplateTree.tree("reload");
                 }
             }]
         });
@@ -190,6 +254,21 @@ var pageJs = function (globalPath) {
         // 初始化代码模版树
         //noinspection JSUnusedLocalSymbols
         codeTemplateTree.tree({
+            url: findAllUrl + "?isClose=true",
+            method: "POST",
+            onBeforeLoad: function (node, param) {
+                // 展开节点不加载数据
+                if (param.id) {
+                    return false;
+                }
+                codeTemplateTreeLoading.css("display", "block");
+            },
+            onLoadSuccess: function (node, param) {
+                codeTemplateTreeLoading.css("display", "none");
+            },
+            onLoadError: function (arguments) {
+                codeTemplateTreeLoading.css("display", "none");
+            },
             formatter: function (node) {
                 // 节点类型(0:模版分类; 1:代码模版)
                 if (node.attributes.nodeType == '1') {
@@ -198,7 +277,6 @@ var pageJs = function (globalPath) {
                 return node.text;
             },
             onClick: function (node) {
-
             },
             onDblClick: function (node) {
                 // 节点类型(0:模版分类; 1:代码模版)
@@ -228,10 +306,9 @@ var pageJs = function (globalPath) {
         menuByCodeTemplateTree.menu({
             onClick: function (item) {
                 var selectNode = $(this).data("selectNode");
-
                 switch (item.name) {
                     case "refresh":
-                        _this.reloadCodeTemplateTree(codeTemplateTree);
+                        codeTemplateTree.tree("reload");
                         break;
                     case "addCategory" :
                         addCategoryDialog.dialog("open");
@@ -240,7 +317,6 @@ var pageJs = function (globalPath) {
                     case "addCode":
                         addCodeDialog.dialog("open");
                         addCodeForm.form('reset');
-                        addCodeContent.setValue("");
                         break;
                     case "edit":
                         _this.openEditDialog();
@@ -260,152 +336,31 @@ var pageJs = function (globalPath) {
             onContextMenu: function (e, title, index) {
             }
         });
-
-        // 页面数据初始化
-        _this.dataBind();
-        // 界面事件绑定方法
-        _this.eventBind();
-        // 初始化 新增代码模版对话框
-        _this.initAddCodeDialog();
-        // 初始化 编辑代码模版对话框
-        _this.initEditCodeDialog();
-        // 初始化 新增模版类别对话框
-        _this.initAddCategoryDialog();
-        // 初始化 更新模版类别对话框
-        _this.initEditCategoryDialog();
-    };
-
-    //noinspection JSUnusedGlobalSymbols
-    /**
-     * 页面数据初始化
-     */
-    this.dataBind = function () {
-        // 初始化代码模版树的数据
-        _this.reloadCodeTemplateTree(codeTemplateTree);
-    };
-
-    //noinspection JSUnusedGlobalSymbols
-    /**
-     * 界面事件绑定方法
-     */
-    this.eventBind = function () {
-        // 新增代码模版对话框-按钮栏 保存
-        addCodeDialogButtonsSave.click(function () {
-            _this.addCodeData();
-        });
-        // 新增代码模版对话框-按钮栏 取消
-        addCodeDialogButtonsCancel.click(function () {
-            _this.addCodeDialog.dialog("close");
-        });
-
-        // 新增模版分类对话框-按钮栏 保存
-        addCategoryDialogButtonsSave.click(function () {
-            _this.addCategoryData();
-        });
-        // 新增模版分类对话框-按钮栏 取消
-        addCategoryDialogButtonsCancel.click(function () {
-            _this.addCategoryDialog.dialog("close");
-        });
-
-        // 编辑代码模版对话框-按钮栏 保存
-        editCodeDialogButtonsSave.click(function () {
-            _this.updateCodeData();
-        });
-        // 编辑代码模版对话框-按钮栏 取消
-        editCodeDialogButtonsCancel.click(function () {
-            _this.editCodeDialogButtonsCancel.dialog("close");
-        });
-
-        // 更新模版分类对话框-按钮栏 保存
-        editCategoryDialogButtonsSave.click(function () {
-            _this.updateCategoryData();
-        });
-        // 更新模版分类对话框-按钮栏 取消
-        editCategoryDialogButtonsCancel.click(function () {
-            _this.editCategoryDialogButtonsCancel.dialog("close");
-        });
-
-        // 关闭中部叶签
-        tabsCenterToolsCloseTab.click(function () {
-            _this.closeTab();
-        });
-    };
-
-    // ---------------------------------------------------------------------------------------------------------
-
-    // 初始化代码模版树的数据
-    this.reloadCodeTemplateTree = function (codeTemplateTree) {
-        var codeTemplateData = [];
-        $.ajax({
-            type: "POST",
-            //dataType: "JSON",
-            url: findAllUrl,
-            async: false,
-            success: function (data) {
-                codeTemplateData = data;
-            }
-        });
-        codeTemplateTree.tree("loadData", codeTemplateData);
-    };
-
-    // 加载所属分类数
-    this.reloadInputCodeTemplateTree = function (parentIdComboTree, fullPath, excludePath) {
-        var param = {};
-        param.fullPath = fullPath;
-        param.excludePath = excludePath;
-        $.ajax({
-            type: "POST",
-            dataType: "JSON",
-            url: findChildNodeUrl,
-            async: false,
-            data: param,
-            success: function (data) {
-                parentIdComboTree.combotree("clear");
-                parentIdComboTree.combotree("loadData", data);
-            }
-        });
     };
 
     // 初始化 新增代码模版对话框
-    this.initAddCodeDialog = function (){
+    this.initAddCodeDialog = function () {
         addCodeDialog.dialog({
             title: "新增代码模版数据",
             closed: true,
             minimizable: false,
-            maximizable: true,
+            maximizable: false,
             resizable: false,
-            minWidth: 850,
-            minHeight: 330,
             modal: true,
             buttons: "#addCodeDialogButtons",
-            onOpen: function() {
+            onOpen: function () {
                 _this.reloadInputCodeTemplateTree(addCodeParentId, "", "excludePath");
-
-                if(addCodeContent != null) {
-                    return;
-                }
-                // Java编辑器-初始化,
-                addCodeContent = CodeMirror.fromTextArea(document.getElementById("addCodeContent"), {
-                    mode: "text/x-java",
-                    lineNumbers: true,
-                    matchBrackets: true,
-                    indentUnit: 4,
-                    readOnly: false
-                });
-                addCodeContent.setSize("auto", "auto");
-                addCodeContent.setOption("theme", "cobalt");
-                addCodeContent.setValue('\r\n');
             }
         });
         addCodeParentId.combotree({
-            required : true,
-            editable : false,
-            animate : false,
-            checkbox : false,
-            cascadeCheck : true,
-            onlyLeafCheck : false,
-            lines : true,
-            dnd : false,
+            required: true,
+            editable: false,
+            animate: false,
+            checkbox: false,
+            cascadeCheck: true,
+            onlyLeafCheck: false,
+            lines: true,
+            dnd: false,
             valueField: 'id',
             textField: 'text'
         });
@@ -435,49 +390,69 @@ var pageJs = function (globalPath) {
             multiline: true
         });
         addCodeRemarks.textbox({
+            required: false,
             validType: 'length[0,255]',
             multiline: true
         });
     };
 
+    // 保存代码模版数据
+    this.addCodeData = function () {
+        var maskTarget = addCodeDialog.panel("body");
+        addCodeForm.form("submit", {
+            url: addCodeUrl,
+            onSubmit: function (param) {
+                if (!addCodeForm.form("validate")) {
+                    return false;
+                }
+                // 模版节点类型 节点类型(0:模版分类; 1:代码模版)
+                param.nodeType = "1";
+                // param.content = "";
+                // 提交之前
+                addCodeDialogButtonsSave.linkbutton("disable");
+                addCodeDialogButtonsCancel.linkbutton("disable");
+                $.mask({target: maskTarget, loadMsg: "正在保存，请稍候..."});
+            },
+            success: function (data) {
+                $.unmask({target: maskTarget});
+                addCodeDialogButtonsSave.linkbutton("enable");
+                addCodeDialogButtonsCancel.linkbutton("enable");
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    addCodeDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    codeTemplateTree.tree("reload");
+                } else {
+                    // 保存失败
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
     // 初始化 编辑代码模版对话框
-    this.initEditCodeDialog = function (){
+    this.initEditCodeDialog = function () {
         editCodeDialog.dialog({
             title: "更新代码模版数据",
             closed: true,
             minimizable: false,
             maximizable: true,
             resizable: false,
-            minWidth: 850,
-            minHeight: 330,
+            // minWidth: 850,
+            // minHeight: 330,
             modal: true,
-            buttons: "#editCodeDialogButtons",
-            onOpen: function() {
-                if(editCodeContent != null) {
-                    return;
-                }
-                // Java编辑器-初始化,
-                editCodeContent = CodeMirror.fromTextArea(document.getElementById("editCodeContent"), {
-                    mode: "text/x-java",
-                    lineNumbers: true,
-                    matchBrackets: true,
-                    indentUnit: 4,
-                    readOnly: false
-                });
-                editCodeContent.setSize("auto", "auto");
-                editCodeContent.setOption("theme", "cobalt");
-                editCodeContent.setValue('\r\n');
-            }
+            buttons: "#editCodeDialogButtons"
         });
         editCodeParentId.combotree({
-            required : true,
-            editable : false,
-            animate : false,
-            checkbox : false,
-            cascadeCheck : true,
-            onlyLeafCheck : false,
-            lines : true,
-            dnd : false,
+            required: true,
+            editable: false,
+            animate: false,
+            checkbox: false,
+            cascadeCheck: true,
+            onlyLeafCheck: false,
+            lines: true,
+            dnd: false,
             valueField: 'id',
             textField: 'text'
         });
@@ -520,6 +495,41 @@ var pageJs = function (globalPath) {
         });
     };
 
+    // 更新代码模版数据
+    this.updateCodeData = function () {
+        var maskTarget = addCodeDialog.panel("body");
+        editCodeForm.form("submit", {
+            url: updateUrl,
+            onSubmit: function (param) {
+                if (!editCodeForm.form("validate")) {
+                    return false;
+                }
+                // 节点类型(0:模版分类; 1:代码模版)
+                param.templateRef = editCodeName.textbox("getValue");
+                param.nodeType = "1";
+                // 提交之前
+                editCodeDialogButtonsSave.linkbutton("disable");
+                editCodeDialogButtonsCancel.linkbutton("disable");
+                $.mask({target: maskTarget, loadMsg: "正在更新，请稍候..."});
+            },
+            success: function (data) {
+                $.unmask({target: maskTarget});
+                editCodeDialogButtonsSave.linkbutton("enable");
+                editCodeDialogButtonsCancel.linkbutton("enable");
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    editCodeDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    codeTemplateTree.tree("reload");
+                } else {
+                    // 保存失败
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
     // 初始化 新增模版类别对话框
     this.initAddCategoryDialog = function () {
         addCategoryDialog.dialog({
@@ -528,23 +538,23 @@ var pageJs = function (globalPath) {
             minimizable: false,
             maximizable: false,
             resizable: false,
-            minWidth: 850,
-            minHeight: 300,
+            // minWidth: 850,
+            // minHeight: 300,
             modal: true,
             buttons: "#addCategoryDialogButtons",
-            onOpen: function() {
+            onOpen: function () {
                 _this.reloadInputCodeTemplateTree(addCategoryParentId, "", "excludePath");
             }
         });
         addCategoryParentId.combotree({
-            required : true,
-            editable : false,
-            animate : false,
-            checkbox : false,
-            cascadeCheck : true,
-            onlyLeafCheck : false,
-            lines : true,
-            dnd : false,
+            required: true,
+            editable: false,
+            animate: false,
+            checkbox: false,
+            cascadeCheck: true,
+            onlyLeafCheck: false,
+            lines: true,
+            dnd: false,
             valueField: 'id',
             textField: 'text'
         });
@@ -563,6 +573,42 @@ var pageJs = function (globalPath) {
         });
     };
 
+    // 保存模版分类数据
+    this.addCategoryData = function () {
+        var maskTarget = addCategoryDialog.panel("body");
+        addCategoryForm.form("submit", {
+            url: addCategoryUrl,
+            onSubmit: function (param) {
+                if (!addCategoryForm.form("validate")) {
+                    return false;
+                }
+                // 节点类型(0:模版分类; 1:代码模版)
+                param.nodeType = "0";
+                // 模版代码语言，如：java、html、jsp、sql。若是模版分类取值“Category”
+                param.codeType = "Category";
+                // 提交之前
+                addCategoryDialogButtonsSave.linkbutton("disable");
+                addCategoryDialogButtonsCancel.linkbutton("disable");
+                $.mask({target: maskTarget, loadMsg: "正在保存，请稍候..."});
+            },
+            success: function (data) {
+                $.unmask({target: maskTarget});
+                addCategoryDialogButtonsSave.linkbutton("enable");
+                addCategoryDialogButtonsCancel.linkbutton("enable");
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    addCategoryDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    codeTemplateTree.tree("reload");
+                } else {
+                    // 保存失败
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
     // 初始化 更新模版类别对话框
     this.initEditCategoryDialog = function () {
         editCategoryDialog.dialog({
@@ -571,20 +617,20 @@ var pageJs = function (globalPath) {
             minimizable: false,
             maximizable: false,
             resizable: false,
-            minWidth: 850,
-            minHeight: 300,
+            // minWidth: 850,
+            // minHeight: 300,
             modal: true,
             buttons: "#editCategoryDialogButtons"
         });
         editCategoryParentId.combotree({
-            required : true,
-            editable : false,
-            animate : false,
-            checkbox : false,
-            cascadeCheck : true,
-            onlyLeafCheck : false,
-            lines : true,
-            dnd : false,
+            required: true,
+            editable: false,
+            animate: false,
+            checkbox: false,
+            cascadeCheck: true,
+            onlyLeafCheck: false,
+            lines: true,
+            dnd: false,
             valueField: 'id',
             textField: 'text'
         });
@@ -611,152 +657,49 @@ var pageJs = function (globalPath) {
         });
     };
 
-    // 打开编辑对话框
-    this.openEditDialog = function () {
-        var node = codeTemplateTree.tree("getSelected");
-        if(node == null) {
-            $.messager.alert("提示", "请选择要编辑的数据！", "info");
-            return;
-        }
-        // 节点类型(0:模版分类; 1:代码模版)
-        if(node.attributes.nodeType == "0") {
-            _this.reloadInputCodeTemplateTree(editCategoryParentId, "", node.attributes.fullPath);
-
-            editCategoryDialog.dialog('open');
-            editCategoryForm.form('load', node.attributes);
-            editCategoryCodeTemplateId.val(node.attributes.id);
-            editCategoryTemplateId.val("-1");
-        }
-        if (node.attributes.nodeType == "1") {
-            _this.reloadInputCodeTemplateTree(editCodeParentId, "", node.attributes.fullPath);
-
-            var param = {};
-            param.name = node.attributes.templateRef;
-            $.ajax({
-                type: "POST",
-                dataType: "JSON",
-                url: getTemplateByNameUrl,
-                async: false,
-                data: param,
-                success: function (data) {
-                    var template = data.result;
-                    editCodeDialog.dialog('open');
-                    // form必须先加载template,后加载node.attributes,需要node.attributes覆盖template中相同的属性
-                    editCodeForm.form('load', template);
-                    editCodeForm.form('load', node.attributes);
-                    if (template.content && template.content != null) {
-                        editCodeContent.setValue(template.content);
-                    } else {
-                        editCodeContent.setValue("");
-                    }
-                    editCodeTemplateId.val(template.id);
-                    editCodeCodeTemplateId.val(node.attributes.id);
-                }
-            });
-        }
-    };
-
-    /**
-     * 保存代码模版数据
-     */
-    this.addCodeData = function () {
-        addCodeForm.form("submit", {
-            url: addCodeUrl,
-            success: function (data) {
-                data = $.parseJSON(data);
-                if (data.success) {
-                    // 保存成功
-                    addCodeDialog.dialog('close');
-                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-
-                    _this.reloadCodeTemplateTree(codeTemplateTree);
-                } else {
-                    // 保存失败
-                }
-            }
-        });
-    };
-
-    /**
-     * 保存模版分类数据
-     */
-    this.addCategoryData = function () {
-        addCategoryForm.form("submit", {
-            url: addCategoryUrl,
-            success: function (data) {
-                data = $.parseJSON(data);
-                if (data.success) {
-                    // 保存成功
-                    addCategoryDialog.dialog('close');
-                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-
-                    _this.reloadCodeTemplateTree(codeTemplateTree);
-                } else {
-                    // 保存失败
-                }
-            }
-        });
-    };
-
-    /**
-     * 更新代码模版数据
-     */
-    this.updateCodeData = function () {
-        editCodeForm.form("submit", {
-            url: updateUrl,
-            onSubmit: function(param){
-                // 节点类型(0:模版分类; 1:代码模版)
-                param.nodeType = "1";
-            },
-            success: function (data) {
-                data = $.parseJSON(data);
-                if (data.success) {
-                    // 保存成功
-                    editCodeDialog.dialog('close');
-                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-                    _this.reloadCodeTemplateTree(codeTemplateTree);
-                } else {
-                    // 保存失败
-                }
-            }
-        });
-    };
-
-    /**
-     * 更新模版类别数据
-     */
+    // 更新模版类别数据
     this.updateCategoryData = function () {
+        var maskTarget = editCategoryDialog.panel("body");
         editCategoryForm.form("submit", {
             url: updateUrl,
-            onSubmit: function(param){
+            onSubmit: function (param) {
+                if (!editCategoryForm.form("validate")) {
+                    return false;
+                }
                 // 节点类型(0:模版分类; 1:代码模版)
+                param.templateId = "-1";
                 param.nodeType = "0";
                 param.codeType = "Category";
+                // 提交之前
+                editCategoryDialogButtonsSave.linkbutton("disable");
+                editCategoryDialogButtonsCancel.linkbutton("disable");
+                $.mask({target: maskTarget, loadMsg: "正在更新，请稍候..."});
             },
             success: function (data) {
+                $.unmask({target: maskTarget});
+                editCategoryDialogButtonsSave.linkbutton("enable");
+                editCategoryDialogButtonsCancel.linkbutton("enable");
                 data = $.parseJSON(data);
                 if (data.success) {
                     // 保存成功
                     editCategoryDialog.dialog('close');
                     $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-                    _this.reloadCodeTemplateTree(codeTemplateTree);
+                    codeTemplateTree.tree("reload");
                 } else {
                     // 保存失败
+                    $.messager.alert("提示", data.failMessage, "warning");
                 }
             }
         });
     };
 
-    /**
-     * 删除模版
-     */
+    // 删除模版
     this.delData = function () {
         var node = codeTemplateTree.tree("getSelected");
         if (node == null) {
             $.messager.alert("提示", "请选择要删除的数据！", "info");
             return;
         }
-
         var message = "确定删除";
         // 节点类型(0:模版分类; 1:代码模版)
         if (node.attributes.nodeType == "0") {
@@ -773,39 +716,78 @@ var pageJs = function (globalPath) {
         param.codeTemplateName = node.attributes.name;
         $.messager.confirm("确认删除", message, function (r) {
             if (r) {
+                var maskTarget = "body";
+                $.mask({target: maskTarget, loadMsg: "删除中，请稍候..."});
                 $.post(delUrl, param, function (data) {
+                    $.unmask({target: maskTarget});
                     if (data.success) {
                         // 删除成功
                         $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
-                        _this.reloadCodeTemplateTree(codeTemplateTree);
+                        codeTemplateTree.tree("reload");
                     } else {
                         // 删除失败
+                        $.messager.alert("提示", data.failMessage, "warning");
                     }
                 }, "json");
             }
         });
     };
 
+    // ---------------------------------------------------------------------------------------------------------
+
+    // 打开编辑对话框
+    this.openEditDialog = function () {
+        var node = codeTemplateTree.tree("getSelected");
+        if (node == null) {
+            $.messager.alert("提示", "请选择要编辑的数据！", "info");
+            return;
+        }
+        // 加载浮层 - 显示
+        var maskTarget = "body";
+        $.mask({target: maskTarget, loadMsg: "正在加载，请稍候..."});
+        // 加载浮层 - 隐藏
+        var unmask = function () {
+            $.unmask({target: maskTarget});
+        };
+        // 节点类型(0:模版分类; 1:代码模版)
+        if (node.attributes.nodeType == "0") {
+            _this.reloadInputCodeTemplateTree(editCategoryParentId, "", node.attributes.fullPath, true);
+            editCategoryDialog.dialog('open');
+            editCategoryForm.form('load', node.attributes);
+            editCategoryCodeTemplateId.val(node.attributes.id);
+            unmask();
+        }
+        if (node.attributes.nodeType == "1") {
+            // 模版分类树
+            _this.reloadInputCodeTemplateTree(editCodeParentId, "", node.attributes.fullPath, true);
+            // 代码模版数据
+            $.ajax({
+                type: "POST", dataType: "JSON", url: getTemplateByNameUrl, async: true, data: {name: node.attributes.templateRef},
+                success: function (data) {
+                    unmask();
+                    var template = data.result;
+                    editCodeDialog.dialog('open');
+                    editCodeForm.form('reset');
+                    editCodeForm.form('load', template);
+                    editCodeForm.form('load', node.attributes);
+                    editCodeTemplateId.val(template.id);
+                    editCodeCodeTemplateId.val(node.attributes.id);
+                }
+            });
+        }
+    };
+
     // 增加代码模版叶签
     this.addTab = function (tabName, codeTemplate) {
         if (tabsCenter.tabs("exists", tabName)) {
             tabsCenter.tabs("select", tabName);
-        } else {
-            var template = null;
-            var param = {};
-            param.name = codeTemplate.templateRef;
-            $.ajax({
-                type: "POST",
-                dataType: "JSON",
-                url: getTemplateByNameUrl,
-                async: false,
-                data: param,
-                success: function (data) {
-                    template = data.result;
-                }
-            });
+            return;
+        }
+
+        // 回调数据绑定
+        var callback = function (template) {
             var content = [];
-            content.push('<div id="layout_'+codeTemplate.uuid+'" class="easyui-layout" data-options="fit:true,border:false">');
+            content.push('<div id="layout_' + codeTemplate.uuid + '" class="easyui-layout" data-options="fit:true,border:false">');
             content.push('    <div data-options="region:\'north\',border:false" style="height:110px;background-color:#E0ECFF;">');
             content.push('        <div class="tabsCenterPageTop">');
             content.push('            <div class="row">');
@@ -868,23 +850,23 @@ var pageJs = function (globalPath) {
             // 设置保存按钮
             $("#button_save" + codeTemplate.uuid).linkbutton({
                 iconCls: 'icon-save',
-                onClick: function(){
+                onClick: function () {
                     _this.onlyUpdateCoreTemplateContent(template.id, tabName);
                 }
             });
             $("#button_refresh" + codeTemplate.uuid).linkbutton({
                 iconCls: 'icon-reload',
-                onClick: function(){
+                onClick: function () {
                     $.ajax({
                         type: "POST",
                         dataType: "JSON",
                         url: getTemplateByNameUrl,
-                        async: false,
+                        async: true,
                         data: param,
                         success: function (data) {
-                            if(data.success){
+                            if (data.success) {
                                 tabsCenterEditor[tabName].setValue(data.result.content);
-                                $.messager.show({title: '提示',  msg: "刷新成功", timeout: 5000, showType: 'slide'});
+                                $.messager.show({title: '提示', msg: "刷新成功", timeout: 5000, showType: 'slide'});
                             }
                         }
                     });
@@ -892,11 +874,10 @@ var pageJs = function (globalPath) {
             });
             $("#button_format" + codeTemplate.uuid).linkbutton({
                 iconCls: 'icon-format',
-                onClick: function(){
+                onClick: function () {
                     _this.codeFormat(codeTemplate.codeType, tabName);
                 }
             });
-
             // Java编辑器-初始化,
             var editor = CodeMirror.fromTextArea(document.getElementById("codeTemplate_" + codeTemplate.uuid), {
                 lineNumbers: true,
@@ -909,13 +890,45 @@ var pageJs = function (globalPath) {
             //editor.setSize("height", 800);
             editor.setOption("theme", "cobalt");
 
-            if(!template.content || template.content == null){
+            if (!template.content || template.content == null) {
                 editor.setValue("");
             } else {
                 editor.setValue(template.content);
             }
             tabsCenterEditor[tabName] = editor;
-        }
+        };
+
+        // 请求模版数据
+        var param = {};
+        param.name = codeTemplate.templateRef;
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: getTemplateByNameUrl,
+            async: true,
+            data: param,
+            success: function (data) {
+                callback(data.result);
+            }
+        });
+    };
+
+    // 加载所属分类树
+    this.reloadInputCodeTemplateTree = function (parentIdComboTree, fullPath, excludePath, sync) {
+        var param = {};
+        param.fullPath = fullPath;
+        param.excludePath = excludePath;
+        $.ajax({
+            type: "POST",
+            dataType: "JSON",
+            url: findChildNodeUrl,
+            async: sync != true,
+            data: param,
+            success: function (data) {
+                parentIdComboTree.combotree("clear");
+                parentIdComboTree.combotree("loadData", data);
+            }
+        });
     };
 
     // 关闭页面
@@ -928,7 +941,7 @@ var pageJs = function (globalPath) {
     };
 
     // 只更新模版内容
-    this.onlyUpdateCoreTemplateContent = function(id, tabName){
+    this.onlyUpdateCoreTemplateContent = function (id, tabName) {
         var editor = tabsCenterEditor[tabName];
         var param = {};
         param.id = id;

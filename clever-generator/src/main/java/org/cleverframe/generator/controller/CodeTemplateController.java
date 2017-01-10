@@ -89,9 +89,6 @@ public class CodeTemplateController extends BaseController {
         DataGridJson<TreeGridNodeJson<CodeTemplate>> json = new DataGridJson<>();
         List<CodeTemplate> codeTemplateList = codeTemplateService.findAllCodeTemplate();
         for (CodeTemplate codeTemplate : codeTemplateList) {
-//            if (codeTemplate.getParentId() <= 0L) {
-//                codeTemplate.setParentId(null);
-//            }
             TreeGridNodeJson<CodeTemplate> tmp = new TreeGridNodeJson<>(codeTemplate.getParentId(), codeTemplate);
             json.addRow(tmp);
         }

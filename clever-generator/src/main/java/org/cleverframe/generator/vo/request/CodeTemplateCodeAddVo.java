@@ -52,7 +52,6 @@ public class CodeTemplateCodeAddVo extends BaseRequestVo {
     /**
      * 模版内容
      */
-    @NotBlank(message = "模版内容不能为空")
     @Length(max = 2000000, message = "模版内容长度不能超过2000000个字符")
     private String content;
 

@@ -186,7 +186,7 @@ CREATE TABLE core_template
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     name            varchar(255)    NOT NULL    UNIQUE                  COMMENT '模版名称，不能重复',
-    content         MediumText      NOT NULL                            COMMENT '模版内容',
+    content         MediumText                                          COMMENT '模版内容',
     locale          varchar(50)     NOT NULL                            COMMENT '模版语言',
     description     varchar(1000)   NOT NULL                            COMMENT '模版说明',
     PRIMARY KEY (id)

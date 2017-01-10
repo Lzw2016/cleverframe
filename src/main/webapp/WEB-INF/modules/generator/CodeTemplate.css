@@ -54,12 +54,12 @@
 
 #editCodeForm .row label {
     display: inline-block;
-    width: 60px;
+    width: 80px;
     text-align: right;
 }
 
 #editCodeForm .row input, select {
-    width: 160px;
+    width: 220px;
 }
 
 #editCodeForm .row .column {
