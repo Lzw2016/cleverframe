@@ -27,11 +27,24 @@ var pageJs = function (globalPath) {
 
     // 代码编辑器
     var codeTemplateContent = null;
-
     // 模版数据
     var templateData = null;
     // 代码模版数据
     var codeTemplateData = null;
+
+    // 代码模版信息页面
+    var templateInfoDialog = $("#templateInfoDialog");
+    var infoName = $("#infoName");
+    var infoTemplateRef = $("#infoTemplateRef");
+    var infoLocale = $("#infoLocale");
+    var infoCodeType = $("#infoCodeType");
+    var infoDescription = $("#infoDescription");
+    var infoRemarks = $("#infoRemarks");
+    var infoCreateBy = $("#infoCreateBy");
+    var infoCreateDate = $("#infoCreateDate");
+    var infoUpdateBy = $("#infoUpdateBy");
+    var infoUpdateDate = $("#infoUpdateDate");
+    var templateInfoDialogClose = $("#templateInfoDialogClose");
 
     /**
      * 页面初始化方法
@@ -77,7 +90,12 @@ var pageJs = function (globalPath) {
         });
         infoTemplate.linkbutton({
             onClick: function () {
-
+                templateInfoDialog.dialog("open");
+            }
+        });
+        templateInfoDialogClose.linkbutton({
+            onClick: function () {
+                templateInfoDialog.dialog("close");
             }
         });
     };
@@ -94,6 +112,17 @@ var pageJs = function (globalPath) {
         codeTemplateContent.setSize("auto", "auto");
         //codeTemplateContent.setSize("height", 800);
         codeTemplateContent.setOption("theme", "cobalt");
+
+        templateInfoDialog.dialog({
+            title: "模版信息",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            // minWidth: 850,
+            // minHeight: 300,
+            modal: true
+        });
     };
 
     // 重新加载代码模版数据
@@ -107,6 +136,16 @@ var pageJs = function (globalPath) {
             }
 
             // 更新代码 信息
+            infoName.text(codeTemplate.name + " (" + template.name + ")");
+            infoTemplateRef.text(codeTemplate.templateRef);
+            infoLocale.text(template.locale);
+            infoCodeType.text(codeTemplate.codeType);
+            infoCreateBy.text(template.createBy);
+            infoCreateDate.text(template.createDate);
+            infoUpdateBy.text(template.updateBy);
+            infoUpdateDate.text(template.updateDate);
+            infoDescription.html(codeTemplate.description);
+            infoRemarks.html(codeTemplate.remarks);
         });
     };
 

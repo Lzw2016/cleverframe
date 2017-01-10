@@ -43,13 +43,66 @@
     <div data-options="region:'north',border:true,split:false" style="height:28px;">
         <a id="saveTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'">保存</a>
         <a id="reloadTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'">重新加载</a>
-        <a id="formatTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-format'">格式化</a>
         <a id="infoTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-info'">模版信息</a>
+        <a id="formatTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-format'">格式化</a>
     </div>
 
     <!-- 页面中部 -->
     <div data-options="region:'center',border:true,fit:false,minWidth:800,minHeight:300">
         <textarea id="codeTemplateContent"></textarea>
+    </div>
+</div>
+
+<%-- 代码模版信息页面 --%>
+<div id="templateInfoDialog" style="width: 550px;padding: 5px 10px">
+    <div class="templateInfoDiv">
+        <table>
+            <tbody>
+            <tr class="row">
+                <td class="label">模版名称</td>
+                <td class="value"><label id="infoName"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">脚本模版引用</td>
+                <td class="value"><label id="infoTemplateRef"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">模版语言</td>
+                <td class="value"><label id="infoLocale"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">代码语言</td>
+                <td class="value"><label id="infoCodeType"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">创建者</td>
+                <td class="value"><label id="infoCreateBy"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">创建时间</td>
+                <td class="value"><label id="infoCreateDate"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">更新者</td>
+                <td class="value"><label id="infoUpdateBy"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">更新时间</td>
+                <td class="value"><label id="infoUpdateDate"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">模版说明</td>
+                <td class="value"><label id="infoDescription"></label></td>
+            </tr>
+            <tr class="row">
+                <td class="label">备注信息</td>
+                <td class="value"><label id="infoRemarks"></label></td>
+            </tr>
+            </tbody>
+        </table>
+        <div style="width: 100%;text-align: center;margin-top: 10px;">
+            <a id="templateInfoDialogClose" href="javascript:void(0)" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">确定</a>
+        </div>
     </div>
 </div>
 </body>

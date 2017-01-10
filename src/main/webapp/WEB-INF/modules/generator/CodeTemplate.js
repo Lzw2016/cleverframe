@@ -24,6 +24,8 @@ var pageJs = function (globalPath) {
     var onlyUpdateCoreTemplateContentUrl = globalPath.mvcPath + "/core/template/updateTemplate.json";
     // 代码格式化地址
     var formatUrl = globalPath.mvcPath + "/generator/codeformat/format.json";
+    // 代码模版编辑URL
+    var templateEditUrl = globalPath.mvcPath + "/generator/codetemplate/TemplateEdit.html?templateName=";
 
     // 主页面
     var mainPanel = $("#mainPanel");
