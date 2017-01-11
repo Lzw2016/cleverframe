@@ -89,7 +89,9 @@ var pageJs = function (globalPath) {
                     // 初始化代码模版树的数据
                     _this.reloadCodeTemplateTree(codeTemplateTree);
                 }
-            }]
+            }
+                // TODO 全部展开 折叠
+            ]
         });
 
         // 数据库表结构树

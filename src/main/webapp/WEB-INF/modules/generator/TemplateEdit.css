@@ -32,3 +32,9 @@
 .icon-info{
     background:url('image/information.png') no-repeat center center;
 }
+.icon-code{
+    background:url('image/page_code.png') no-repeat center center;
+}
+.icon-select{
+    background:url('image/dialog-ok-apply.png') no-repeat center center;
+}

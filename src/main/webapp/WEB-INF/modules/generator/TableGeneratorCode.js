@@ -81,6 +81,9 @@ var pageJs = function (globalPath) {
             toolbar: "#codeTemplateDataTableButtons",
             pageSize: 30,
             pageList: [10, 20, 30, 50, 100, 150],
+            onBeforeLoad: function (row, param) {
+                // codeTemplateDataTable.treegrid("unselectAll");
+            },
             loadFilter: function (data, parentId) {
                 $(data.rows).each(function (index, node) {
                     // 节点类型(0:模版分类; 1:代码模版)

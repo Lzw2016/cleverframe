@@ -222,12 +222,34 @@ var pageJs = function (globalPath) {
                 handler: function () {
                     addCategoryDialog.dialog("open");
                     addCategoryForm.form('reset');
+                    var selecteNode = codeTemplateTree.tree("getSelected");
+                    if (selecteNode != null) {
+                        var parentId = null;
+                        // 节点类型(0:模版分类; 1:代码模版)
+                        if (selecteNode.attributes.nodeType == "0") {
+                            parentId = selecteNode.attributes.id;
+                        } else {
+                            parentId = selecteNode.attributes.parentId;
+                        }
+                        addCategoryParentId.combotree("setValue", parentId);
+                    }
                 }
             }, {
                 iconCls: "icon-scriptAdd",
                 handler: function () {
                     addCodeDialog.dialog("open");
                     addCodeForm.form('reset');
+                    var selecteNode = codeTemplateTree.tree("getSelected");
+                    if (selecteNode != null) {
+                        var parentId = null;
+                        // 节点类型(0:模版分类; 1:代码模版)
+                        if (selecteNode.attributes.nodeType == "0") {
+                            parentId = selecteNode.attributes.id;
+                        } else {
+                            parentId = selecteNode.attributes.parentId;
+                        }
+                        addCodeParentId.combotree("setValue", parentId);
+                    }
                 }
             }, {
                 iconCls: "icon-edit",
@@ -244,7 +266,9 @@ var pageJs = function (globalPath) {
                 handler: function () {
                     codeTemplateTree.tree("reload");
                 }
-            }]
+            }
+                // TODO 全部展开 折叠
+            ]
         });
 
         // 初始化代码模版树
@@ -310,10 +334,32 @@ var pageJs = function (globalPath) {
                     case "addCategory" :
                         addCategoryDialog.dialog("open");
                         addCategoryForm.form('reset');
+                        var selecteNode = codeTemplateTree.tree("getSelected");
+                        if (selecteNode != null) {
+                            var parentId = null;
+                            // 节点类型(0:模版分类; 1:代码模版)
+                            if (selecteNode.attributes.nodeType == "0") {
+                                parentId = selecteNode.attributes.id;
+                            } else {
+                                parentId = selecteNode.attributes.parentId;
+                            }
+                            addCategoryParentId.combotree("setValue", parentId);
+                        }
                         break;
                     case "addCode":
                         addCodeDialog.dialog("open");
                         addCodeForm.form('reset');
+                        var selecteNode = codeTemplateTree.tree("getSelected");
+                        if (selecteNode != null) {
+                            var parentId = null;
+                            // 节点类型(0:模版分类; 1:代码模版)
+                            if (selecteNode.attributes.nodeType == "0") {
+                                parentId = selecteNode.attributes.id;
+                            } else {
+                                parentId = selecteNode.attributes.parentId;
+                            }
+                            addCodeParentId.combotree("setValue", parentId);
+                        }
                         break;
                     case "edit":
                         _this.openEditDialog();
@@ -346,7 +392,7 @@ var pageJs = function (globalPath) {
             modal: true,
             buttons: "#addCodeDialogButtons",
             onOpen: function () {
-                _this.reloadInputCodeTemplateTree(addCodeParentId, "", "excludePath");
+                _this.reloadInputCodeTemplateTree(addCodeParentId, "", "excludePath", true);
             }
         });
         addCodeParentId.combotree({
@@ -434,7 +480,7 @@ var pageJs = function (globalPath) {
             title: "更新代码模版数据",
             closed: true,
             minimizable: false,
-            maximizable: true,
+            maximizable: false,
             resizable: false,
             // minWidth: 850,
             // minHeight: 330,
@@ -540,7 +586,7 @@ var pageJs = function (globalPath) {
             modal: true,
             buttons: "#addCategoryDialogButtons",
             onOpen: function () {
-                _this.reloadInputCodeTemplateTree(addCategoryParentId, "", "excludePath");
+                _this.reloadInputCodeTemplateTree(addCategoryParentId, "", "excludePath", true);
             }
         });
         addCategoryParentId.combotree({

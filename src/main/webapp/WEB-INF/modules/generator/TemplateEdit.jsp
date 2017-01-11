@@ -19,6 +19,7 @@
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/keymap/sublime.js"></script>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/xml/xml.js"></script>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/htmlembedded/htmlembedded.js"></script>
@@ -44,7 +45,19 @@
         <a id="saveTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'">保存</a>
         <a id="reloadTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'">重新加载</a>
         <a id="infoTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-info'">模版信息</a>
+        <a id="codeStyle" href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-code'">代码样式</a>
         <a id="formatTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-format'">格式化</a>
+        <div id="mm2" style="width:80px;">
+            <div data-options="iconCls:'icon-select'">Java</div>
+            <div>C#</div>
+            <div>XML</div>
+            <div>HTML</div>
+            <div>JSP</div>
+            <div>CSS</div>
+            <div>SQL</div>
+            <div>JavaScript</div>
+            <div>Json</div>
+        </div>
     </div>
 
     <!-- 页面中部 -->

@@ -45,6 +45,8 @@ var pageJs = function (globalPath) {
     var infoUpdateBy = $("#infoUpdateBy");
     var infoUpdateDate = $("#infoUpdateDate");
     var templateInfoDialogClose = $("#templateInfoDialogClose");
+    // 最后一次保存时间
+    var lastSaveTime = 0;
 
     /**
      * 页面初始化方法
@@ -98,6 +100,16 @@ var pageJs = function (globalPath) {
                 templateInfoDialog.dialog("close");
             }
         });
+        $(document).keydown(function (e) {
+            if (e.ctrlKey == true && e.keyCode == 83) {
+                var time = new Date().getTime();
+                if (time - lastSaveTime > (1000)) {
+                    lastSaveTime = time;
+                    _this.saveTemplateUrl();
+                }
+                return false;
+            }
+        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -107,11 +119,20 @@ var pageJs = function (globalPath) {
             lineNumbers: true,
             matchBrackets: true,
             indentUnit: 4,
-            readOnly: false
+            smartIndent: false,
+            readOnly: false,
+            keyMap: "sublime"
         });
         codeTemplateContent.setSize("auto", "auto");
         //codeTemplateContent.setSize("height", 800);
         codeTemplateContent.setOption("theme", "cobalt");
+        //noinspection JSUnusedLocalSymbols
+        codeTemplateContent.setOption("extraKeys", {
+            Tab: function (cm) {
+                var spaces = new Array(cm.getOption("indentUnit") + 1).join(" ");
+                cm.replaceSelection(spaces);
+            }
+        });
 
         templateInfoDialog.dialog({
             title: "模版信息",
