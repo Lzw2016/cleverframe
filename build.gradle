@@ -23,6 +23,7 @@ dependencies {
     compile project(':clever-zookeeper')
     compile project(':clever-redis')
     compile project(':clever-memcached')
+    compile project(':clever-doc')
 
     compile project(':clever-sso') // 需要删除
 
@@ -237,6 +238,8 @@ project(':clever-generator') {
 project(':clever-doc') {
     dependencies {
         compile project(':clever-common')
+        compile project(':clever-core')
+        compile project(':clever-filemanager')
     }
 }
 
