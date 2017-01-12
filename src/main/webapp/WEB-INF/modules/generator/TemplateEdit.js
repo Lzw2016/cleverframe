@@ -24,9 +24,17 @@ var pageJs = function (globalPath) {
     var formatTemplate = $("#formatTemplate");
     // 模版信息
     var infoTemplate = $("#infoTemplate");
+    // 代码样式
+    var codeStyle = $("#codeStyle");
+    var codeStyleMenu = $("#codeStyleMenu");
+    // 编辑器样式
+    var editTheme = $("#editTheme");
+    var editThemeMenu = $("#editThemeMenu");
 
     // 代码编辑器
     var codeTemplateContent = null;
+    // 当前辑器代码语言
+    var currentCodeType = null;
     // 模版数据
     var templateData = null;
     // 代码模版数据
@@ -118,6 +126,7 @@ var pageJs = function (globalPath) {
         codeTemplateContent = CodeMirror.fromTextArea(document.getElementById("codeTemplateContent"), {
             lineNumbers: true,
             matchBrackets: true,
+            styleActiveLine: true,
             indentUnit: 4,
             smartIndent: false,
             readOnly: false,
@@ -125,7 +134,8 @@ var pageJs = function (globalPath) {
         });
         codeTemplateContent.setSize("auto", "auto");
         //codeTemplateContent.setSize("height", 800);
-        codeTemplateContent.setOption("theme", "cobalt");
+        // codeTemplateContent.setOption("theme", "cobalt");
+        _this.setCodeEditTheme("cobalt");
         //noinspection JSUnusedLocalSymbols
         codeTemplateContent.setOption("extraKeys", {
             Tab: function (cm) {
@@ -144,13 +154,28 @@ var pageJs = function (globalPath) {
             // minHeight: 300,
             modal: true
         });
+
+        codeStyleMenu.menu({
+            hideOnUnhover: false,
+            inline: true,
+            onClick: function (item) {
+                _this.setCodeEditType(item.text);
+            }
+        });
+        editThemeMenu.menu({
+            hideOnUnhover: false,
+            inline: true,
+            onClick: function (item) {
+                _this.setCodeEditTheme(item.text);
+            }
+        });
     };
 
     // 重新加载代码模版数据
     this.loadInfoDataForUI = function () {
         _this.getInfoData(function (template, codeTemplate) {
             codeTemplateContent.setValue("");
-            codeTemplateContent.setOption("mode", _this.getCodeMirrorMode(codeTemplate.codeType));
+            _this.setCodeEditType(codeTemplate.codeType);
             // 更新代码 内容
             if (template.content) {
                 codeTemplateContent.setValue(template.content);
@@ -296,6 +321,40 @@ var pageJs = function (globalPath) {
                 return "application/json";
         }
         return "text/x-java";
+    };
+
+    // 设置编辑器主题
+    this.setCodeEditTheme = function (theme) {
+        var item = editThemeMenu.menu("findItem", theme);
+        if (codeTemplateContent && item) {
+            var oldTheme = codeTemplateContent.getOption("theme");
+            var oldItem = editThemeMenu.menu("findItem", oldTheme);
+            if (theme == oldTheme) {
+                return;
+            }
+            if (oldItem) {
+                editThemeMenu.menu('setIcon', {target: oldItem.target, iconCls: null});
+            }
+            editThemeMenu.menu('setIcon', {target: item.target, iconCls: 'icon-select'});
+            codeTemplateContent.setOption("theme", theme);
+        }
+    };
+
+    // 设置编辑器代码语言 codeType -> java c#
+    this.setCodeEditType = function (codeType) {
+        var item = codeStyleMenu.menu("findItem", codeType);
+        if (codeTemplateContent && item) {
+            var oldItem = codeStyleMenu.menu("findItem", currentCodeType);
+            if (codeType == currentCodeType) {
+                return;
+            }
+            if (oldItem) {
+                codeStyleMenu.menu('setIcon', {target: oldItem.target, iconCls: null});
+            }
+            codeStyleMenu.menu('setIcon', {target: item.target, iconCls: 'icon-select'});
+            currentCodeType = codeType;
+            codeTemplateContent.setOption("mode", _this.getCodeMirrorMode(codeType));
+        }
     };
 };
 

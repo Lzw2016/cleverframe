@@ -17,8 +17,17 @@
 
     <%-- CodeMirror --%>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/addon/edit/matchbrackets.js"></script>
+    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/addon/selection/active-line.js"></script>
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/blackboard.css">
     <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/dracula.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/eclipse.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/elegant.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/erlang-dark.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/lesser-dark.css">
+    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/rubyblue.css">
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/keymap/sublime.js"></script>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/clike/clike.js"></script>
     <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/mode/xml/xml.js"></script>
@@ -45,10 +54,11 @@
         <a id="saveTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-save'">保存</a>
         <a id="reloadTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-reload'">重新加载</a>
         <a id="infoTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-info'">模版信息</a>
-        <a id="codeStyle" href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#mm2',iconCls:'icon-code'">代码样式</a>
         <a id="formatTemplate" href="javascript:void(0)" class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-format'">格式化</a>
-        <div id="mm2" style="width:80px;">
-            <div data-options="iconCls:'icon-select'">Java</div>
+        <a id="codeStyle" href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#codeStyleMenu',iconCls:'icon-code'">代码样式</a>
+        <a id="editTheme" href="javascript:void(0)" class="easyui-menubutton" data-options="menu:'#editThemeMenu',iconCls:'icon-theme'">编辑器样式</a>
+        <div id="codeStyleMenu" style="width:80px;">
+            <div>Java</div>
             <div>C#</div>
             <div>XML</div>
             <div>HTML</div>
@@ -58,8 +68,17 @@
             <div>JavaScript</div>
             <div>Json</div>
         </div>
+        <div id="editThemeMenu" style="width:80px;">
+            <div>blackboard</div>
+            <div>cobalt</div>
+            <div>dracula</div>
+            <div>eclipse</div>
+            <div>elegant</div>
+            <div>erlang-dark</div>
+            <div>lesser-dark</div>
+            <div>rubyblue</div>
+        </div>
     </div>
-
     <!-- 页面中部 -->
     <div data-options="region:'center',border:true,fit:false,minWidth:800,minHeight:300">
         <textarea id="codeTemplateContent"></textarea>
