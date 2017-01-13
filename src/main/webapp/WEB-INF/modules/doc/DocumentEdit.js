@@ -7,9 +7,9 @@ var pageJs = function (globalPath) {
     // Editor.md编辑器 lib 路径
     var editorPath = globalPath.staticPath + "/editor.md/lib/";
     // Emoji's 图片地址
-    var emojiPath = globalPath.staticPath + "/editor.md/emoji/";
+    var emojiPath = globalPath.staticPath + "/Image/emoji/";
     // Twitter Emoji 图片地址
-    var twemojiPath = globalPath.staticPath + "/editor.md/twemoji/72x72/";
+    var twemojiPath = globalPath.staticPath + "/Image/twemoji/72x72/";
 
     /**
      * 页面初始化方法
