@@ -15,7 +15,7 @@ import javax.servlet.http.HttpServletResponse;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${base.mvcPath}/doc/document")
+@RequestMapping(value = "/${base.mvcPath}/doc/docdocument")
 public class DocDocumentController extends BaseController {
 
     @RequestMapping("/DocumentEdit" + VIEW_PAGE_SUFFIX)
