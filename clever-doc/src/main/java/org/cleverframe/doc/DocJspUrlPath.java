@@ -15,4 +15,9 @@ public class DocJspUrlPath implements IJspUrlPath {
      * 文档编辑器页面
      */
     public static final String DocumentEdit = "doc/DocumentEdit";
+
+    /**
+     * 文档管理页面
+     */
+    public static final String DocProject = "doc/DocProject";
 }

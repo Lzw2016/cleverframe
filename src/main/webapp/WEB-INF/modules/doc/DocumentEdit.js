@@ -28,15 +28,37 @@ var pageJs = function (globalPath) {
         };
 
         var editor = editormd("editormd", {
-            width: "90%",
-            height: 720,
+            width: "100%",
+            height: "100%",
+            // autoHeight: true,
             path: editorPath,
             emoji: true,
+            theme: "dark",
+            previewTheme: "dark",
+            // editorTheme: "cobalt",
+            editorTheme: "pastel-on-dark",
+            dialogMaskOpacity: 0.5,       // 设置透明遮罩层的透明度，全局通用，默认值为0.1
+            disabledKeyMaps: [
+                "Ctrl-B", "F11", "F10"
+            ],
+            onload: function () {
+                // setting signle key
+                var keyMap = {
+                    "Ctrl-T": function (cm) {
+                        alert("Ctrl+T");
+                    }
+                };
+                this.addKeyMap(keyMap);
+            },
             taskList: true
-        });
 
-        console.log(globalPath);
-        console.log("页面初始化");
+        });
+        // 工具栏自动固定定位的开启与禁用
+        // editor.setToolbarAutoFixed(false);
+
+
+        // console.log(globalPath);
+        // console.log("页面初始化");
 
         _this.dataBind();
         _this.eventBind();

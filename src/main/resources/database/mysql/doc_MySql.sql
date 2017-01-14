@@ -37,8 +37,8 @@ CREATE TABLE doc_project
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
     name            varchar(100)    NOT NULL    UNIQUE                  COMMENT '文档项目名称',
-    readme          MediumText      NOT NULL                            COMMENT '文档介绍和说明',
-    summary         MediumText      NOT NULL                            COMMENT '文档目录',
+    readme          MediumText                                          COMMENT '文档介绍和说明',
+    summary         MediumText                                          COMMENT '文档目录',
     PRIMARY KEY (id)
 ) COMMENT = '文档项目表';
 /*------------------------------------------------------------------------------------------------------------------------
@@ -62,12 +62,11 @@ CREATE TABLE doc_document
     del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT '删除标记（1：正常；2：删除；3：审核）',
     uuid            varchar(36)     NOT NULL                            COMMENT '数据全局标识UUID',
 
-    project_name    varchar(100)    NOT NULL                            COMMENT '文档项目名称-关联doc_project(文档项目表)',
+    project_id      bigint          NOT NULL                            COMMENT '文档项目ID-关联doc_project(文档项目表)',
     parent_id       bigint          NOT NULL                            COMMENT '父级编号,根节点的父级编号是：-1',
     full_path       varchar(255)    NOT NULL    UNIQUE                  COMMENT '树结构的全路径用“-”隔开,包含自己的ID',
     title           varchar(100)    NOT NULL                            COMMENT '文档或者章节的标题',
-    content         MediumText      NOT NULL                            COMMENT '文档内容',
-    is_directory    char(1)         NOT NULL                            COMMENT '是否是目录（0：否；1：是）',
+    content         MediumText                                          COMMENT '文档内容',
     PRIMARY KEY (id)
 ) COMMENT = '文档表';
 /*------------------------------------------------------------------------------------------------------------------------

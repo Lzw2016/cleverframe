@@ -108,16 +108,6 @@ var pageJs = function (globalPath) {
                 templateInfoDialog.dialog("close");
             }
         });
-        $(document).keydown(function (e) {
-            if (e.ctrlKey == true && e.keyCode == 83) {
-                var time = new Date().getTime();
-                if (time - lastSaveTime > (1000)) {
-                    lastSaveTime = time;
-                    _this.saveTemplateUrl();
-                }
-                return false;
-            }
-        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -134,7 +124,6 @@ var pageJs = function (globalPath) {
         });
         codeTemplateContent.setSize("auto", "auto");
         //codeTemplateContent.setSize("height", 800);
-        // codeTemplateContent.setOption("theme", "cobalt");
         _this.setCodeEditTheme("cobalt");
         //noinspection JSUnusedLocalSymbols
         codeTemplateContent.setOption("extraKeys", {
@@ -143,6 +132,17 @@ var pageJs = function (globalPath) {
                 cm.replaceSelection(spaces);
             }
         });
+        //noinspection JSUnusedLocalSymbols
+        var keyMap = {
+            "Ctrl-S": function (cm) {
+                var time = new Date().getTime();
+                if (time - lastSaveTime > (1000)) {
+                    lastSaveTime = time;
+                    _this.saveTemplateUrl();
+                }
+            }
+        };
+        codeTemplateContent.addKeyMap(keyMap);
 
         templateInfoDialog.dialog({
             title: "模版信息",

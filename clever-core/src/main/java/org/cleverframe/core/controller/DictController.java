@@ -58,7 +58,7 @@ public class DictController extends BaseController {
             BindingResult bindingResult) {
         DataGridJson<Dict> json = new DataGridJson<>();
         Page<Dict> qLScriptPage = dictService.findByPage(
-                new Page<Dict>(request, response),
+                new Page<>(request, response),
                 dictQueryVo.getDictKey(),
                 dictQueryVo.getDictType(),
                 dictQueryVo.getId(),

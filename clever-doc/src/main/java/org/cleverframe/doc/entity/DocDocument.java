@@ -23,9 +23,9 @@ public class DocDocument extends DataEntity {
     private static final long serialVersionUID = 1L;
 
     /**
-     * 文档项目名称-关联doc_project(文档项目表)
+     * 文档项目ID-关联doc_project(文档项目表)
      */
-    private String projectName;
+    private Long projectId;
 
     /**
      * 父级编号,根节点的父级编号是：-1
@@ -49,27 +49,16 @@ public class DocDocument extends DataEntity {
     @Column(columnDefinition = "MediumText")
     private String content;
 
-    /**
-     * 是否是目录（0：否；1：是）
-     */
-    private Character isDirectory;
-
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
 
-    /**
-     * 获取 文档项目名称-关联doc_project(文档项目表)
-     */
-    public String getProjectName() {
-        return projectName;
+    public Long getProjectId() {
+        return projectId;
     }
 
-    /**
-     * 设置 文档项目名称-关联doc_project(文档项目表)
-     */
-    public void setProjectName(String projectName) {
-        this.projectName = projectName;
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
     }
 
     /**
@@ -127,19 +116,4 @@ public class DocDocument extends DataEntity {
     public void setContent(String content) {
         this.content = content;
     }
-
-    /**
-     * 获取 是否是目录（0：否；1：是）
-     */
-    public Character getIsDirectory() {
-        return isDirectory;
-    }
-
-    /**
-     * 设置 是否是目录（0：否；1：是）
-     */
-    public void setIsDirectory(Character isDirectory) {
-        this.isDirectory = isDirectory;
-    }
-
 }

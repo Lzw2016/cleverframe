@@ -10,6 +10,13 @@
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+    <%-- EasyUI --%>
+    <%--<link rel="stylesheet" type="text/css" href="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/themes/default/easyui.css">--%>
+    <%--<link rel="stylesheet" type="text/css" href="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/themes/icon.css">--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/jquery.easyui.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>--%>
 
     <%--Editor.md--%>
     <link rel="stylesheet" href="${applicationScope.staticPath}/editor.md/css/editormd.min.css"/>
@@ -25,10 +32,18 @@
     <title>文档编辑</title>
 </head>
 <body>
+<%--<div class="easyui-layout" data-options="fit:true,border:false">--%>
+<%--<!-- 页面上部 -->--%>
+<%--<div data-options="region:'north',border:true,split:false" style="height:28px;">--%>
+<%--</div>--%>
 
-<div id="editormd">
-    <textarea style="display:none;">### Hello Editor.md !</textarea>
+<%--<!-- 页面中部 -->--%>
+<%--<div data-options="region:'center',border:true,fit:false,minWidth:800,minHeight:300">--%>
+<%--</div>--%>
+<%--</div>--%>
+
+<div id="editormd" style="width: 100%;height: 100%">
+    <textarea style="display:none;"></textarea>
 </div>
-
 </body>
 </html>
