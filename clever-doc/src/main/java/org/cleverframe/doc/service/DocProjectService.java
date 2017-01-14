@@ -1,5 +1,6 @@
 package org.cleverframe.doc.service;
 
+import org.cleverframe.common.persistence.Page;
 import org.cleverframe.common.service.BaseService;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.doc.DocBeanNames;
@@ -36,6 +37,25 @@ public class DocProjectService extends BaseService {
     @Autowired
     @Qualifier(DocBeanNames.DocHistoryDao)
     private DocHistoryDao docHistoryDao;
+
+    /**
+     * 分页查询文档项目
+     *
+     * @param name     项目文档名称
+     * @param createBy 创建人
+     */
+    public Page<DocProject> queryDocProject(Page<DocProject> page, String name, String createBy) {
+        return docProjectDao.queryDocProject(page, name, createBy);
+    }
+
+    /**
+     * 获取文档项目信息
+     *
+     * @param id 项目文档数据ID
+     */
+    public DocProject getDocProject(Serializable id) {
+        return docProjectDao.getHibernateDao().get(id);
+    }
 
     /**
      * 新增文档项目

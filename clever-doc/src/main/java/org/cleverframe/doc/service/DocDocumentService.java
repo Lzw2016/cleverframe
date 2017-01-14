@@ -15,6 +15,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * Service，对应表doc_document(文档表)<br/>
@@ -32,6 +33,22 @@ public class DocDocumentService extends BaseService {
     @Autowired
     @Qualifier(DocBeanNames.DocHistoryDao)
     private DocHistoryDao docHistoryDao;
+
+    /**
+     * 获取项目所有的文档信息，不包含文档内容
+     *
+     * @param projectId 项目ID
+     */
+    public List<DocDocument> findByProjectId(Serializable projectId) {
+        return docDocumentDao.findByProjectId(projectId);
+    }
+
+    /**
+     * 获取文档信息 - 包含文档内容
+     */
+    public DocDocument getDocDocument(Serializable id) {
+        return docDocumentDao.getHibernateDao().get(id);
+    }
 
     /**
      * 新增文档
@@ -57,6 +74,7 @@ public class DocDocumentService extends BaseService {
         docDocumentDao.getHibernateDao().update(docDocument);
         return true;
     }
+
 
     /**
      * 更新文档

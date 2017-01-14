@@ -2,15 +2,15 @@ package org.cleverframe.doc.controller;
 
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
+import org.cleverframe.common.tree.BuildTreeUtils;
+import org.cleverframe.common.tree.ITreeNode;
 import org.cleverframe.common.vo.response.AjaxMessage;
 import org.cleverframe.doc.DocBeanNames;
 import org.cleverframe.doc.DocJspUrlPath;
 import org.cleverframe.doc.entity.DocDocument;
 import org.cleverframe.doc.service.DocDocumentService;
-import org.cleverframe.doc.vo.request.DocDocumentAddVo;
-import org.cleverframe.doc.vo.request.DocDocumentDelVo;
-import org.cleverframe.doc.vo.request.DocDocumentRevertVo;
-import org.cleverframe.doc.vo.request.DocDocumentUpdateVo;
+import org.cleverframe.doc.vo.request.*;
+import org.cleverframe.webui.easyui.data.TreeNodeJson;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
@@ -22,6 +22,8 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * 作者：LiZW <br/>
@@ -39,6 +41,60 @@ public class DocDocumentController extends BaseController {
     @RequestMapping("/DocumentEdit" + VIEW_PAGE_SUFFIX)
     public ModelAndView getDocumentEditJsp(HttpServletRequest request, HttpServletResponse response) {
         return new ModelAndView(DocJspUrlPath.DocumentEdit);
+    }
+
+    /**
+     * 获取项目所有的文档信息，不包含文档内容 (树结构数据)
+     */
+    @RequestMapping("/findDocDocumentByProjectId")
+    @ResponseBody
+    public AjaxMessage<List<ITreeNode>> findDocDocumentByProjectId(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid DocDocumentQueryVo docDocumentQueryVo,
+            BindingResult bindingResult) {
+        AjaxMessage<List<ITreeNode>> ajaxMessage = new AjaxMessage<>(true, "获取项目文档成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            List<DocDocument> docDocumentList = docDocumentService.findByProjectId(docDocumentQueryVo.getProjectId());
+            List<ITreeNode> treeNodeList = new ArrayList<>();
+            for (DocDocument docDocument : docDocumentList) {
+                String iconCls = "";
+                String state = "open";
+                TreeNodeJson node = new TreeNodeJson(
+                        docDocument.getParentId(),
+                        docDocument.getId(),
+                        docDocument.getFullPath(),
+                        docDocument.getTitle(), iconCls, false, state);
+                node.setAttributes(docDocument);
+                treeNodeList.add(node);
+            }
+            treeNodeList = BuildTreeUtils.bulidTree(treeNodeList);
+            ajaxMessage.setResult(treeNodeList);
+        }
+        return ajaxMessage;
+    }
+
+    /**
+     * 获取文档信息 - 包含文档内容
+     */
+    @RequestMapping("/getDocDocument")
+    @ResponseBody
+    public AjaxMessage<DocDocument> getDocDocument(
+            HttpServletRequest request,
+            HttpServletResponse response,
+            @Valid DocDocumentGetVo docDocumentGetVo,
+            BindingResult bindingResult) {
+        AjaxMessage<DocDocument> ajaxMessage = new AjaxMessage<>(true, "获取文档信息成功", null);
+        if (beanValidator(bindingResult, ajaxMessage)) {
+            DocDocument docDocument = docDocumentService.getDocDocument(docDocumentGetVo.getId());
+            if (docDocument == null) {
+                ajaxMessage.setSuccess(false);
+                ajaxMessage.setFailMessage("文档不存在");
+            } else {
+                ajaxMessage.setResult(docDocument);
+            }
+        }
+        return ajaxMessage;
     }
 
     /**
