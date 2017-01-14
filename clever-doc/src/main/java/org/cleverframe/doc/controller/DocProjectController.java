@@ -30,7 +30,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${base.mvcPath}/moduleName/docproject")
+@RequestMapping(value = "/${base.mvcPath}/doc/docproject")
 public class DocProjectController extends BaseController {
 
     @Autowired
@@ -72,6 +72,7 @@ public class DocProjectController extends BaseController {
             HttpServletResponse response,
             @Valid DocProjectUpdateVo docProjectUpdateVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<DocProject> ajaxMessage = new AjaxMessage<>(true, "更新文档项目成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             DocProject docProject = BeanMapper.mapper(docProjectUpdateVo, DocProject.class);

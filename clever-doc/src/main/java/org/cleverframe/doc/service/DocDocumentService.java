@@ -96,7 +96,7 @@ public class DocDocumentService extends BaseService {
             docHistoryDao.getHibernateDao().save(docHistory);
         }
         docDocumentDao.getHibernateDao().getSession().evict(oldDocDocument);
-        docDocumentDao.getHibernateDao().update(docDocument, true, false);
+        docDocumentDao.getHibernateDao().update(docDocument, false, true);
         return true;
     }
 
@@ -110,6 +110,12 @@ public class DocDocumentService extends BaseService {
             ajaxMessage.setFailMessage("删除文档失败-存在子文档不能删除");
             return false;
         }
+        docDocument = docDocumentDao.getHibernateDao().get(docDocument.getId());
+        if (docDocument == null) {
+            ajaxMessage.setSuccess(false);
+            ajaxMessage.setFailMessage("删除文档失败-删除的文档不存在");
+            return false;
+        }
         docDocumentDao.getHibernateDao().delete(docDocument);
         docHistoryDao.delDocHistory(docDocument.getId());
         return true;
@@ -121,6 +127,7 @@ public class DocDocumentService extends BaseService {
      * @param documentId 文档ID
      * @param historyId  文档历史ID
      */
+    @Transactional(readOnly = false)
     public boolean revertDocDocument(Serializable documentId, Serializable historyId, AjaxMessage ajaxMessage) {
         DocDocument docDocument = docDocumentDao.getHibernateDao().get(documentId);
         if (docDocument == null) {
@@ -129,7 +136,7 @@ public class DocDocumentService extends BaseService {
             return false;
         }
         DocHistory docHistory = docHistoryDao.getHibernateDao().get(historyId);
-        if (docHistory == null) {
+        if (docHistory == null || !docHistory.getDocumentId().equals(documentId)) {
             ajaxMessage.setSuccess(false);
             ajaxMessage.setFailMessage("文档内容还原失败-历史文档不存在");
             return false;

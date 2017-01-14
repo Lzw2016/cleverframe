@@ -51,10 +51,12 @@ public class DocDocumentController extends BaseController {
             HttpServletResponse response,
             @Valid DocDocumentAddVo docDocumentAddVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<DocDocument> ajaxMessage = new AjaxMessage<>(true, "新增文档成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             DocDocument docDocument = BeanMapper.mapper(docDocumentAddVo, DocDocument.class);
             docDocumentService.addDocDocument(docDocument, ajaxMessage);
+            ajaxMessage.setResult(docDocument);
         }
         return ajaxMessage;
     }
@@ -69,6 +71,7 @@ public class DocDocumentController extends BaseController {
             HttpServletResponse response,
             @Valid DocDocumentUpdateVo docDocumentUpdateVo,
             BindingResult bindingResult) {
+        addXSSExcludeUrl(request);
         AjaxMessage<DocDocument> ajaxMessage = new AjaxMessage<>(true, "更新文档成功", null);
         if (beanValidator(bindingResult, ajaxMessage)) {
             DocDocument docDocument = BeanMapper.mapper(docDocumentUpdateVo, DocDocument.class);

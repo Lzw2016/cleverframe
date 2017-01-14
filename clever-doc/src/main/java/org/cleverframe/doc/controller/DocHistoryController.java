@@ -26,7 +26,7 @@ import javax.validation.Valid;
  */
 @SuppressWarnings("MVCPathVariableInspection")
 @Controller
-@RequestMapping(value = "/${base.mvcPath}/moduleName/dochistory")
+@RequestMapping(value = "/${base.mvcPath}/doc/dochistory")
 public class DocHistoryController extends BaseController {
 
     @Autowired

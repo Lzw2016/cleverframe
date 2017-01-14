@@ -44,8 +44,8 @@ public class DocHistoryDao extends BaseDao<DocHistory> {
     public int batchDelDocHistory(Set<Serializable> documentIds) {
         Parameter param = new Parameter();
         param.put("documentIds", documentIds);
-        String sql = QLScriptUtils.getSQLScript("org.cleverframe.doc.dao.DocHistoryDao.batchDelDocHistory");
-        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
+        String sql = QLScriptUtils.getSQLScript("org.cleverframe.doc.dao.DocHistoryDao.batchDelDocHistory", param);
+        SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, null);
         return sqlQuery.executeUpdate();
     }
 
