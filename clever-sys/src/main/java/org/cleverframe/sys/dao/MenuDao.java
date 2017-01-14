@@ -44,12 +44,12 @@ public class MenuDao extends BaseDao<Menu> {
     /**
      * 查询所有菜单类型
      */
+    @SuppressWarnings({"unchecked", "UnnecessaryLocalVariable"})
     public List<Map<String, Object>> findAllMenuType() {
         Parameter param = new Parameter();
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.sys.dao.MenuDao.findAllMenuType");
         SQLQuery sqlQuery = hibernateDao.createSqlQuery(sql, param);
         sqlQuery.setResultTransformer(Transformers.ALIAS_TO_ENTITY_MAP);
-        //noinspection unchecked,UnnecessaryLocalVariable
         List<Map<String, Object>> list = sqlQuery.list();
         return list;
     }

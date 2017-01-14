@@ -42,6 +42,7 @@ public class BaseProcessDefinitionDiagramLayoutResource {
     @Autowired
     private HistoryService historyService;
 
+    @SuppressWarnings("RedundantCast")
     public ObjectNode getDiagramNode(String processInstanceId, String processDefinitionId) {
 
         List<String> highLightedFlows = Collections.emptyList();
@@ -200,13 +201,13 @@ public class BaseProcessDefinitionDiagramLayoutResource {
 
     private List<String> getHighLightedFlows(String processInstanceId, ProcessDefinitionEntity processDefinition) {
 
-        List<String> highLightedFlows = new ArrayList<String>();
+        List<String> highLightedFlows = new ArrayList<>();
         List<HistoricActivityInstance> historicActivityInstances = historyService
                 .createHistoricActivityInstanceQuery()
                 .processInstanceId(processInstanceId)
                 .orderByHistoricActivityInstanceStartTime().asc().list();
 
-        List<String> historicActivityInstanceList = new ArrayList<String>();
+        List<String> historicActivityInstanceList = new ArrayList<>();
         for (HistoricActivityInstance hai : historicActivityInstances) {
             historicActivityInstanceList.add(hai.getActivityId());
         }
@@ -233,6 +234,7 @@ public class BaseProcessDefinitionDiagramLayoutResource {
         return highLightedFlows;
     }
 
+    @SuppressWarnings("unchecked")
     private void getActivity(String processInstanceId, ActivityImpl activity, ArrayNode activityArray,
                              ArrayNode sequenceFlowArray, ProcessInstance processInstance, List<String> highLightedFlows,
                              Map<String, ObjectNode> subProcessInstanceMap) {
