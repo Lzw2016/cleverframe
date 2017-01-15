@@ -69,3 +69,7 @@
 .icon-node {
     background: url('image/page.png') no-repeat center center;
 }
+
+.icon-history {
+    background: url('image/clock-history.png') no-repeat center center;
+}

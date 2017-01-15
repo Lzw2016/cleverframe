@@ -33,10 +33,10 @@ var pageJs = function (globalPath) {
             // autoHeight: true,
             path: editorPath,
             emoji: true,
-            theme: "dark",
-            previewTheme: "dark",
+            // theme: "dark",
+            // previewTheme: "dark",
             // editorTheme: "cobalt",
-            editorTheme: "pastel-on-dark",
+            // editorTheme: "pastel-on-dark",
             dialogMaskOpacity: 0.5,       // 设置透明遮罩层的透明度，全局通用，默认值为0.1
             disabledKeyMaps: [
                 "Ctrl-B", "F11", "F10"

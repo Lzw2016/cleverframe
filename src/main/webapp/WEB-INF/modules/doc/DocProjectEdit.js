@@ -8,8 +8,11 @@ var pageJs = function (globalPath) {
     var docDocumentTreeUrl = globalPath.mvcPath + "/doc/docdocument/findDocDocumentByProjectId.json";
     // 获取文档项目信息
     var docProjectInfoUrl = globalPath.mvcPath + "/doc/docproject/getDocProject.json";
+    // 文档编辑器
+    var documentEditUrl = globalPath.mvcPath + "/doc/docdocument/DocumentEdit.html";
     // 文档项目名称
     var docProjectIdParam = null;
+    // 文档项目信息
     var docProjectInfo = null;
 
     // 主面板
@@ -24,6 +27,10 @@ var pageJs = function (globalPath) {
     var tabsCenter = $("#tabsCenter");
     // 中央Tab面板 - 关闭
     var tabsCenterToolsCloseTab = $("#tabsCenterToolsCloseTab");
+    // 中央Tab面板 - 计数器
+    var tabsIndex = 1;
+    // 中央Tab面板 - 文档ID:叶签标题
+    var tabsCenterMap = {};
 
     /**
      * 页面初始化方法
@@ -53,6 +60,11 @@ var pageJs = function (globalPath) {
      * 界面事件绑定方法
      */
     this.eventBind = function () {
+        tabsCenterToolsCloseTab.linkbutton({
+            onClick: function () {
+                _this.closeTab();
+            }
+        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -137,6 +149,8 @@ var pageJs = function (globalPath) {
             onClick: function (node) {
             },
             onDblClick: function (node) {
+                var tabUrl = documentEditUrl + "?documentId=" + node.attributes.id;
+                _this.addTab(node.attributes.title, tabUrl, node.attributes.id);
             },
             onBeforeExpand: function (node) {
             },
@@ -167,6 +181,8 @@ var pageJs = function (globalPath) {
                         break;
                     case "properties":
                         break;
+                    case "history":
+                        break;
                     case "expand":
                         break;
                     case "collapse":
@@ -180,11 +196,24 @@ var pageJs = function (globalPath) {
         });
 
         // 页面中部多页签
+        //noinspection JSUnusedLocalSymbols
         tabsCenter.tabs({
             fit: true,
             border: 'false',
             tools: '#tabsCenterTools',
             onContextMenu: function (e, title, index) {
+            },
+            onClose: function (title, index) {
+                for (var item in tabsCenterMap) {//遍历对象属性名
+                    if (title == tabsCenterMap[item]) {
+                        delete tabsCenterMap[item];
+                        break;
+                    }
+                }
+                var tabs = tabsCenter.tabs('tabs');
+                if (tabs && tabs.length <= 0) {
+                    tabsIndex = 1;
+                }
             }
         });
     };
@@ -207,6 +236,62 @@ var pageJs = function (globalPath) {
         });
     };
 
+    //以iframe方式增加页面
+    this.addTab = function (tabName, tabUrl, id) {
+        var oldTabName;
+        if (id && tabsCenterMap[id]) {
+            oldTabName = tabsCenterMap[id];
+        }
+        if (oldTabName && tabsCenter.tabs("exists", tabName)) {
+            tabsCenter.tabs("select", tabName);
+        } else {
+            var tabs = tabsCenter.tabs("tabs");
+            if (tabs.length >= 6) {
+                $.messager.alert("提示", "最多只能打开6个叶签！", "info");
+                return;
+            }
+            var content = null;
+            if (tabUrl && $.trim(tabUrl) != "") {
+                content = "<iframe id='tabsCenter-" + id + "' scrolling='auto' style='width:100%;height:100%;' frameborder='0' src='" + tabUrl + "'></iframe>";
+            } else {
+                content = "未定义页面路径！";
+            }
+            var title = "(" + (tabsIndex++) + ")" + tabName;
+            tabsCenterMap[id] = title;
+            tabsCenter.tabs("add", {
+                id: id,
+                title: title,
+                closable: true,
+                content: content,
+                tools: [{
+                    iconCls: "icon-mini-refresh",
+                    handler: function () {
+                        if (id) {
+                            document.getElementById("tabsCenter-" + id).contentWindow.location.reload(true);
+                        }
+                        //window.open(tabUrl); // 在新窗口中打开
+                    }
+                }]
+            });
+        }
+    };
+
+    // 关闭页面
+    this.closeTab = function () {
+        var tab = tabsCenter.tabs('getSelected');
+        if (tab) {
+            if (tab.panel("options") && tab.panel("options").id) {
+                delete tabsCenterMap[tab.panel("options").id];
+            }
+            var index = tabsCenter.tabs('getTabIndex', tab);
+            tabsCenter.tabs('close', index);
+            var tabs = tabsCenter.tabs('tabs');
+            if (tabs && tabs.length <= 0) {
+                tabsIndex = 1;
+            }
+        }
+    };
+
     // 获取URL参数
     this.getUrlParam = function (name) {
         //构造一个含有目标参数的正则表达式对象
@@ -217,6 +302,32 @@ var pageJs = function (globalPath) {
             return decodeURIComponent(r[2]);
         }
         return null;
+    };
+
+    // 获取一个UUID
+    this.getUUID = function (len, radix) {
+        var chars = '0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz'.split('');
+        var uuid = [], i;
+        radix = radix || chars.length;
+        if (len) {
+            // Compact form
+            for (i = 0; i < len; i++) uuid[i] = chars[0 | Math.random() * radix];
+        } else {
+            // rfc4122, version 4 form
+            var r;
+            // rfc4122 requires these characters
+            uuid[8] = uuid[13] = uuid[18] = uuid[23] = '-';
+            uuid[14] = '4';
+            // Fill in random data.  At i==19 set the high bits of clock sequence as
+            // per rfc4122, sec. 4.1.5
+            for (i = 0; i < 36; i++) {
+                if (!uuid[i]) {
+                    r = 0 | Math.random() * 16;
+                    uuid[i] = chars[(i == 19) ? (r & 0x3) | 0x8 : r];
+                }
+            }
+        }
+        return uuid.join('');
     };
 };
 

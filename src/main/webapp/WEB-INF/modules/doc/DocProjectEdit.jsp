@@ -45,6 +45,7 @@
             <div data-options="name:'addDocument',iconCls:'icon-addDocument'">新增文档</div>
             <div data-options="name:'edit',iconCls:'icon-edit'">编辑</div>
             <div data-options="name:'delete',iconCls:'icon-remove'">删除</div>
+            <div data-options="name:'history',iconCls:'icon-history'">历史版本</div>
             <div data-options="name:'properties',iconCls:'icon-properties'">文档属性</div>
             <div class="menu-sep"></div>
             <%--TODO 展开或折叠只需要两个 - 自动判断 --%>
