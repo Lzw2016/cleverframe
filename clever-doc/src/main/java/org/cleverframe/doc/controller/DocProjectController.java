@@ -37,9 +37,19 @@ public class DocProjectController extends BaseController {
     @Qualifier(DocBeanNames.DocProjectService)
     private DocProjectService docProjectService;
 
-    @RequestMapping("/DocProject" + VIEW_PAGE_SUFFIX)
-    public ModelAndView getDocProjectJsp(HttpServletRequest request, HttpServletResponse response) {
-        return new ModelAndView(DocJspUrlPath.DocProject);
+    @RequestMapping("/DocProjectManager" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getDocProjectManagerJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(DocJspUrlPath.DocProjectManager);
+    }
+
+    @RequestMapping("/DocProjectEdit" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getDocProjectEditJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(DocJspUrlPath.DocProjectEdit);
+    }
+
+    @RequestMapping("/DocProjectRead" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getDocProjectReadJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(DocJspUrlPath.DocProjectRead);
     }
 
     /**

@@ -17,7 +17,22 @@ public class DocJspUrlPath implements IJspUrlPath {
     public static final String DocumentEdit = "doc/DocumentEdit";
 
     /**
-     * 文档管理页面
+     * 文档阅读页面
      */
-    public static final String DocProject = "doc/DocProject";
+    public static final String DocumentRead = "doc/DocumentRead";
+
+    /**
+     * 文档项目管理
+     */
+    public static final String DocProjectManager = "doc/DocProjectManager";
+
+    /**
+     * 文档项目编辑
+     */
+    public static final String DocProjectEdit = "doc/DocProjectEdit";
+
+    /**
+     * 文档项目阅读
+     */
+    public static final String DocProjectRead = "doc/DocProjectRead";
 }

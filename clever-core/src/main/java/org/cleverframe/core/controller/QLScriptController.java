@@ -1,5 +1,6 @@
 package org.cleverframe.core.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.persistence.Page;
@@ -62,6 +63,9 @@ public class QLScriptController extends BaseController {
             HttpServletResponse response,
             @Valid QLScriptQueryVo qlScriptQueryVo,
             BindingResult bindingResult) {
+        if (StringUtils.isNotBlank(qlScriptQueryVo.getName())) {
+            qlScriptQueryVo.setName("%" + qlScriptQueryVo.getName() + "%");
+        }
         DataGridJson<QLScript> json = new DataGridJson<>();
         Page<QLScript> qLScriptPage = qLScriptService.findAllQLScript(
                 new Page<>(request, response),

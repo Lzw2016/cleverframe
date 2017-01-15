@@ -327,6 +327,7 @@ var pageJs = function (globalPath) {
         menuByCodeTemplateTree.menu({
             onClick: function (item) {
                 var selectNode = $(this).data("selectNode");
+                var parentId = null;
                 switch (item.name) {
                     case "refresh":
                         codeTemplateTree.tree("reload");
@@ -334,14 +335,12 @@ var pageJs = function (globalPath) {
                     case "addCategory" :
                         addCategoryDialog.dialog("open");
                         addCategoryForm.form('reset');
-                        var selecteNode = codeTemplateTree.tree("getSelected");
-                        if (selecteNode != null) {
-                            var parentId = null;
+                        if (selectNode != null) {
                             // 节点类型(0:模版分类; 1:代码模版)
-                            if (selecteNode.attributes.nodeType == "0") {
-                                parentId = selecteNode.attributes.id;
+                            if (selectNode.attributes.nodeType == "0") {
+                                parentId = selectNode.attributes.id;
                             } else {
-                                parentId = selecteNode.attributes.parentId;
+                                parentId = selectNode.attributes.parentId;
                             }
                             addCategoryParentId.combotree("setValue", parentId);
                         }
@@ -349,14 +348,12 @@ var pageJs = function (globalPath) {
                     case "addCode":
                         addCodeDialog.dialog("open");
                         addCodeForm.form('reset');
-                        var selecteNode = codeTemplateTree.tree("getSelected");
-                        if (selecteNode != null) {
-                            var parentId = null;
+                        if (selectNode != null) {
                             // 节点类型(0:模版分类; 1:代码模版)
-                            if (selecteNode.attributes.nodeType == "0") {
-                                parentId = selecteNode.attributes.id;
+                            if (selectNode.attributes.nodeType == "0") {
+                                parentId = selectNode.attributes.id;
                             } else {
-                                parentId = selecteNode.attributes.parentId;
+                                parentId = selectNode.attributes.parentId;
                             }
                             addCodeParentId.combotree("setValue", parentId);
                         }

@@ -43,6 +43,11 @@ public class DocDocumentController extends BaseController {
         return new ModelAndView(DocJspUrlPath.DocumentEdit);
     }
 
+    @RequestMapping("/DocumentRead" + VIEW_PAGE_SUFFIX)
+    public ModelAndView getDocumentReadJsp(HttpServletRequest request, HttpServletResponse response) {
+        return new ModelAndView(DocJspUrlPath.DocumentRead);
+    }
+
     /**
      * 获取项目所有的文档信息，不包含文档内容 (树结构数据)
      */
@@ -54,12 +59,15 @@ public class DocDocumentController extends BaseController {
             @Valid DocDocumentQueryVo docDocumentQueryVo,
             BindingResult bindingResult) {
         AjaxMessage<List<ITreeNode>> ajaxMessage = new AjaxMessage<>(true, "获取项目文档成功", null);
+        String state = "open";
+        if ("true".equalsIgnoreCase(request.getParameter("isClose"))) {
+            state = "closed";
+        }
         if (beanValidator(bindingResult, ajaxMessage)) {
             List<DocDocument> docDocumentList = docDocumentService.findByProjectId(docDocumentQueryVo.getProjectId());
             List<ITreeNode> treeNodeList = new ArrayList<>();
             for (DocDocument docDocument : docDocumentList) {
-                String iconCls = "";
-                String state = "open";
+                String iconCls = "icon-node";
                 TreeNodeJson node = new TreeNodeJson(
                         docDocument.getParentId(),
                         docDocument.getId(),
