@@ -41,10 +41,11 @@ var pageJs = function (globalPath) {
             $.messager.alert('提示', '缺少参数[文档项目ID]！', 'info', function () {
                 // window.location.href = "";
             });
+        } else {
+            _this.getDocProjectInfo(docProjectIdParam);
         }
 
         _this.initMain();
-        _this.getDocProjectInfo(docProjectIdParam);
 
         _this.dataBind();
         _this.eventBind();
@@ -72,10 +73,10 @@ var pageJs = function (globalPath) {
         // 页面左部
         mainPanel.layout("panel", "west").panel({
             region: "west",
-            width: 240,
+            width: 215,
             title: "文档目录",
             border: true,
-            minWidth: 200,
+            minWidth: 215,
             maxWidth: 350,
             split: true,
             collapsible: false,
@@ -104,6 +105,11 @@ var pageJs = function (globalPath) {
                 iconCls: "icon-reload",
                 handler: function () {
                     docDocumentTree.tree("reload");
+                }
+            }, {
+                iconCls: "icon-linkTo",
+                handler: function () {
+
                 }
             }]
         });
@@ -149,7 +155,7 @@ var pageJs = function (globalPath) {
             onClick: function (node) {
             },
             onDblClick: function (node) {
-                var tabUrl = documentEditUrl + "?documentId=" + node.attributes.id;
+                var tabUrl = documentEditUrl + "?docDocumentId=" + node.attributes.id;
                 _this.addTab(node.attributes.title, tabUrl, node.attributes.id);
             },
             onBeforeExpand: function (node) {
@@ -242,8 +248,8 @@ var pageJs = function (globalPath) {
         if (id && tabsCenterMap[id]) {
             oldTabName = tabsCenterMap[id];
         }
-        if (oldTabName && tabsCenter.tabs("exists", tabName)) {
-            tabsCenter.tabs("select", tabName);
+        if (oldTabName && tabsCenter.tabs("exists", oldTabName)) {
+            tabsCenter.tabs("select", oldTabName);
         } else {
             var tabs = tabsCenter.tabs("tabs");
             if (tabs.length >= 6) {
@@ -280,15 +286,8 @@ var pageJs = function (globalPath) {
     this.closeTab = function () {
         var tab = tabsCenter.tabs('getSelected');
         if (tab) {
-            if (tab.panel("options") && tab.panel("options").id) {
-                delete tabsCenterMap[tab.panel("options").id];
-            }
             var index = tabsCenter.tabs('getTabIndex', tab);
             tabsCenter.tabs('close', index);
-            var tabs = tabsCenter.tabs('tabs');
-            if (tabs && tabs.length <= 0) {
-                tabsIndex = 1;
-            }
         }
     };
 

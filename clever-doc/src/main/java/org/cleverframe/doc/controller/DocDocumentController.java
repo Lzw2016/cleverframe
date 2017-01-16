@@ -140,6 +140,7 @@ public class DocDocumentController extends BaseController {
         if (beanValidator(bindingResult, ajaxMessage)) {
             DocDocument docDocument = BeanMapper.mapper(docDocumentUpdateVo, DocDocument.class);
             docDocumentService.updateDocDocument(docDocument, ajaxMessage);
+            ajaxMessage.setResult(docDocument);
         }
         return ajaxMessage;
     }

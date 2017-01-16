@@ -87,6 +87,9 @@ public class DocDocumentService extends BaseService {
             ajaxMessage.setFailMessage("更新的文档不存在");
             return false;
         }
+        if (docDocument.getParentId() == null) {
+            docDocument.setParentId(oldDocDocument.getParentId());
+        }
         // 修改了父节点 - 修改 FullPath
         if (!oldDocDocument.getParentId().equals(docDocument.getParentId())) {
             if (docDocument.getParentId() == -1) {

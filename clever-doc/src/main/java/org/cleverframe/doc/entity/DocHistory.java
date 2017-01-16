@@ -1,5 +1,6 @@
 package org.cleverframe.doc.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import org.cleverframe.core.persistence.entity.IdEntity;
 import org.hibernate.annotations.DynamicInsert;
 import org.hibernate.annotations.DynamicUpdate;
@@ -31,6 +32,7 @@ public class DocHistory extends IdEntity {
     /**
      * 创建时间
      */
+    @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", locale = "zh", timezone = "GMT+8")
     private Date createDate;
 
     /**

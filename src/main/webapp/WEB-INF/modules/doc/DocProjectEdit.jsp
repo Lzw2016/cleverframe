@@ -34,7 +34,7 @@
 <body>
 <div id="mainPanel" class="easyui-layout" data-options="fit:true,border:false">
     <!-- 页面左部 -->
-    <div data-options="region:'west',title:'文档目录',split:true,border:true,collapsible:false" style="width:240px;">
+    <div data-options="region:'west',title:'文档目录',split:true,border:true,collapsible:false" style="width:215px;">
         <div id="docDocumentTreeLoading" class="panel-loading" style="display: none;">刷新中，请稍待...</div>
         <%-- 项目文档树 --%>
         <ul id="docDocumentTree"></ul>

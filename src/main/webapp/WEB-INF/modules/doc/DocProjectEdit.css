@@ -73,3 +73,7 @@
 .icon-history {
     background: url('image/clock-history.png') no-repeat center center;
 }
+
+.icon-linkTo {
+    background: url('image/link_to_editor.png') no-repeat center center;
+}
