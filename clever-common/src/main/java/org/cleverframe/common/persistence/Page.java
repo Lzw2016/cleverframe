@@ -83,7 +83,7 @@ public class Page<T> {
      */
     private boolean lastPage = false;
     /**
-     * 总页数 [ pageCount = this.count / getPageSize() + 1 ] >= 1
+     * 总页数 [ pageCount = (this.count + getPageSize() -1) / getPageSize() ] >= 1
      */
     private int pageCount = 1;
     /**
@@ -123,7 +123,7 @@ public class Page<T> {
      * @param count    查询到的数据总数
      */
     public Page(int pageNo, int pageSize, long count) {
-        this(pageNo, pageSize, count, new ArrayList<T>());
+        this(pageNo, pageSize, count, new ArrayList<>());
     }
 
     /**
@@ -133,7 +133,7 @@ public class Page<T> {
      * @param pageSize 每页的数据量
      */
     public Page(int pageNo, int pageSize) {
-        this(pageNo, pageSize, 0, new ArrayList<T>());
+        this(pageNo, pageSize, 0, new ArrayList<>());
     }
 
     /**
@@ -195,7 +195,7 @@ public class Page<T> {
     public void init() {
         this.firstPage = this.getPageNo() <= 1;
         this.lastPage = this.getPageNo() >= this.getPageCount();
-        this.pageCount = (int) (this.getCount() / this.getPageSize() + 1);
+        this.pageCount = (int) ((this.getCount() + this.getPageSize() - 1) / this.getPageSize());
         if (this.pageCount <= 1) {
             this.pageCount = 1;
         }
@@ -310,7 +310,7 @@ public class Page<T> {
      * 总页数
      */
     public int getPageCount() {
-        this.pageCount = (int) (this.getCount() / this.getPageSize() + 1);
+        this.pageCount = (int) ((this.getCount() + this.getPageSize() - 1) / this.getPageSize());
         if (this.pageCount <= 1) {
             this.pageCount = 1;
         }
