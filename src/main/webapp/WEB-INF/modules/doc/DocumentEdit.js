@@ -227,7 +227,7 @@ var pageJs = function (globalPath) {
     // 初始化文档历史版本对话框
     this.initDocHistoryDialog = function () {
         docHistoryDialog.dialog({
-            title: "文档保存历史",
+            title: "文档保存历史 - 双击还原到指定历史文档",
             closed: true,
             minimizable: false,
             maximizable: true,

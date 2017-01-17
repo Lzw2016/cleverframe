@@ -52,8 +52,20 @@ public class FileUploadController extends BaseController {
             FileInfo fileInfo = fileInfoList.get(0);
             result.put("success", 1);
             result.put("message", message.getSuccessMessage());
-            // TODO 不能写死
-            result.put("url", "http://localhost:8080/cleverframe/mvc/filemanager/manager/download?uuid=" + fileInfo.getUuid());
+            //"http://localhost:8080/cleverframe/mvc/filemanager/manager/download?uuid=" + fileInfo.getUuid()
+            StringBuilder sb = new StringBuilder();
+            if (request.getProtocol().toUpperCase().startsWith("HTTP/")) {
+                sb.append("http://");
+            }
+            sb.append(request.getServerName());
+            if (80 != request.getServerPort()) {
+                sb.append(":").append(request.getServerPort());
+            }
+            sb.append(request.getContextPath());
+            String[] paths = request.getServletPath().split("/");
+            sb.append("/").append(paths[1]); // mvc
+            sb.append("/filemanager/manager/download?uuid=").append(fileInfo.getUuid());
+            result.put("url", sb.toString());
         }
         return result;
     }
