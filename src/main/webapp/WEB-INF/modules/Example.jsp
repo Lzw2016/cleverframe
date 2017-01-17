@@ -57,7 +57,14 @@
     <link rel="stylesheet" href="${applicationScope.staticPath}/editor.md/css/editormd.min.css"/>
     <script type="text/javascript" src="${applicationScope.staticPath}/JQuery/jQuery-1.12.3/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/editormd.min.js"></script>
-
+    <%--Editor.md 显示文档需要 --%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/marked.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/prettify.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/raphael.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/underscore.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/sequence-diagram.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/flowchart.min.js"></script>--%>
+    <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/jquery.flowchart.min.js"></script>--%>
 
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>

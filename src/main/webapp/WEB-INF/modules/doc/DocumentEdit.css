@@ -10,7 +10,7 @@ body {
     margin: 0 auto;
 }
 
-.documentInfoDiv table{
+.documentInfoDiv table {
     color: #333333;
     width: 100%;
     font-size: 12px;
@@ -40,4 +40,8 @@ body {
 /*自定义图标*/
 .icon-history {
     background: url('image/clock-history.png') no-repeat center center;
+}
+
+.icon-revert {
+    background: url('image/document-revert-4.png') no-repeat center center;
 }

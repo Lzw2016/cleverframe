@@ -46,8 +46,8 @@ var pageJs = function (globalPath) {
     var docHistoryTree = $("#docHistoryTree");
     // 文档历史版本树 - 分页控件
     var docHistoryPagination = $("#docHistoryPagination");
-    // 文档版本对比 - 编辑器
-    var docContentMergeView = null;
+    // 文档历史版本 - 编辑器
+    var docContentHistoryView = null;
 
     /**
      * 页面初始化方法
@@ -94,6 +94,9 @@ var pageJs = function (globalPath) {
         // Twitter Emoji (Twemoji)  graphics files url path
         editormd.twemoji = {path: twemojiPath, ext: ".png"};
 
+        // KaTeX
+        editormd.katexURL = {js: globalPath.staticPath + "/KaTeX/katex.min", css: globalPath.staticPath + "/KaTeX/katex.min"};
+
         // noinspection JSUnusedLocalSymbols 编辑器初始化配置
         editor = editormd("editormd", {
             width: "100%",
@@ -109,7 +112,8 @@ var pageJs = function (globalPath) {
             saveHTMLToTextarea: true,       // 保存 HTML 到 Textarea
             searchReplace: true,
             //watch : false,                // 关闭实时预览
-            htmlDecode: "style,script,iframe|on*",            // 开启 HTML 标签解析，为了安全性，默认不开启
+            htmlDecode: true,
+            // htmlDecode: "style,script,iframe|on*", // 开启 HTML 标签解析(为了安全性)，默认不开启
             //toolbar  : false,             //关闭工具栏
             //previewCodeHighlight : false, // 关闭预览 HTML 的代码块高亮，默认开启
             emoji: true,
@@ -179,7 +183,7 @@ var pageJs = function (globalPath) {
                     docHistoryDialog.dialog("open");
                 },
                 share: function (cm, icon, cursor, selection) {
-                    // alert("share");
+                    alert("未实现该功能");
                 }
             },
             disabledKeyMaps: ["F11", "F10"],
@@ -222,35 +226,9 @@ var pageJs = function (globalPath) {
 
     // 初始化文档历史版本对话框
     this.initDocHistoryDialog = function () {
-        var mergeViewHeight = function (mergeView) {
-            function editorHeight(editor) {
-                if (!editor) return 0;
-                return editor.getScrollInfo().clientHeight;
-            }
-
-            return Math.max(editorHeight(mergeView.leftOriginal()),
-                editorHeight(mergeView.editor()),
-                editorHeight(mergeView.rightOriginal()));
-        };
-        var resize = function (mergeView, height) {
-            if (!height || height <= 0) {
-                height = mergeViewHeight(mergeView);
-            }
-            for (var i = 0; i < 1000; i++) {
-                if (mergeView.leftOriginal())
-                    mergeView.leftOriginal().setSize(null, height);
-                mergeView.editor().setSize(null, height);
-                if (mergeView.rightOriginal())
-                    mergeView.rightOriginal().setSize(null, height);
-                var newHeight = mergeViewHeight(mergeView);
-                if (newHeight >= height) break;
-                else height = newHeight;
-            }
-            mergeView.wrap.style.height = height + "px";
-        };
         docHistoryDialog.dialog({
             title: "文档保存历史",
-            closed: false,
+            closed: true,
             minimizable: false,
             maximizable: true,
             resizable: false,
@@ -258,59 +236,76 @@ var pageJs = function (globalPath) {
             // minHeight: 300,
             modal: true,
             onOpen: function () {
-                if (docContentMergeView == null) {
-                    docContentMergeView = CodeMirror.MergeView(document.getElementById("docContentMergeView"), {
-                        // mode: "application/json",
+                if (docContentHistoryView == null) {
+                    docContentHistoryView = CodeMirror.fromTextArea(document.getElementById("docContentHistoryView"), {
                         lineNumbers: true,
                         matchBrackets: true,
+                        styleActiveLine: true,
                         indentUnit: 4,
-                        readOnly: true,
-                        origLeft: null,
-                        value: "",
-                        origRight: "",
-                        revertButtons: false,
-                        //connect: 'align',
-                        collapseIdentical: true,
-                        allowEditingOriginals: false,
-                        //showDifferences: false,
-                        highlightDifferences: false
+                        smartIndent: false,
+                        readOnly: true
                     });
-                    resize(docContentMergeView, docHistoryDialog.dialog("options").height - 70);
+                    docContentHistoryView.setSize("auto", "auto");
                 }
                 // 初始化数据
-                if (editorInitialized) {
-                    docContentMergeView.editor().setValue(editor.getValue());
-                }
                 var page = docHistoryPagination.pagination("options").pageNumber;
                 var rows = docHistoryPagination.pagination("options").pageSize;
                 _this.getDocHistory(docDocumentIdParam, page, rows);
-            },
-            onResize: function (width, height) {
-                if (docContentMergeView == null) {
-                    return;
-                }
-                resize(docContentMergeView, height - 70);
             }
         });
 
         docHistoryTree.tree({
             lines: true,
-            // loadFilter: function (data, parent) {
-            // },
-            // formatter: function (node) {
-            // },
+            formatter: function (node) {
+                var diffTime = _this.getDiffTime(node.attributes.createDate);
+                var title = "";
+                if (diffTime.years >= 1 || diffTime.months >= 1 || diffTime.days >= 1 || diffTime.hours >= 8) {
+                    title = node.attributes.createDate;
+                } else {
+                    if (diffTime.days >= 1) {
+                        title = title + diffTime.days + "天";
+                    }
+                    if (diffTime.hours >= 1) {
+                        title = title + diffTime.hours + "小时";
+                    }
+                    if (diffTime.minutes >= 1) {
+                        title = title + diffTime.minutes + "分";
+                    }
+                    if (diffTime.seconds >= 1) {
+                        title = title + diffTime.seconds + "秒";
+                    }
+                    title = title + "之前";
+                }
+                var html = [];
+                html.push('<div>');
+                html.push('<span style="display:inline-block;width: 25px;color:blue;">' + node.attributes.sequence + ')</span>');
+                html.push(title);
+                // html.push('<span class="icon-revert" style="display:inline-block;width: 22px;height: 22px;"></span>');
+                html.push('</div>');
+                return html.join('');
+            },
             onClick: function (node) {
             },
             onSelect: function (node) {
                 if (node.attributes && node.attributes.content) {
-                    docContentMergeView.rightOriginal().setValue(node.attributes.content);
+                    docContentHistoryView.setValue(node.attributes.content);
+                } else {
+                    docContentHistoryView.setValue("");
                 }
+            },
+            onDblClick: function (node) {
+                $.messager.confirm("确认还原", "您确认还原文档?<br/>", function (r) {
+                    if (r) {
+                        docHistoryDialog.dialog("close");
+                        _this.revertDocDocument(docDocumentIdParam, node.attributes.id);
+                    }
+                });
             }
         });
 
         docHistoryPagination.pagination({
-            pageList: [10, 15, 25],
-            pageSize: 15,
+            pageList: [10, 25, 40],
+            pageSize: 25,
             layout: ['list', 'sep', 'first', 'prev', 'links', 'next', 'last', 'sep', 'refresh'],
             onSelectPage: function (pageNumber, pageSize) {
                 _this.getDocHistory(docDocumentIdParam, pageNumber, pageSize);
@@ -391,9 +386,10 @@ var pageJs = function (globalPath) {
                     docHistoryPagination.pagination("refresh", {total: result.count, pageNumber: result.pageNo});
                     var list = [];
                     $(result.list).each(function (index, item) {
+                        item.sequence = result.firstResult + index + 1;
                         var node = {
                             id: item.id,
-                            text: (result.firstResult + index + 1) + ") " + item.createDate,
+                            text: item.createDate,
                             iconCls: "icon-history",
                             state: "open",
                             attributes: item
@@ -401,6 +397,28 @@ var pageJs = function (globalPath) {
                         list.push(node);
                     });
                     docHistoryTree.tree("loadData", list);
+                    docContentHistoryView.setValue("");
+                } else {
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
+    // 还原文档
+    this.revertDocDocument = function (docDocumentId, historyId, callback) {
+        // 加载浮层 - 显示
+        var maskTarget = "body";
+        $.mask({target: maskTarget, loadMsg: "正在处理，请稍候..."});
+        $.ajax({
+            type: "POST", dataType: "JSON", url: revertDocDocumentUrl, async: true, data: {documentId: docDocumentId, historyId: historyId},
+            success: function (data) {
+                if ($.isFunction(callback)) {
+                    callback(data);
+                }
+                $.unmask({target: maskTarget});
+                if (data.success) {
+                    _this.getDocumentInfo(docDocumentId);
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }
@@ -418,6 +436,20 @@ var pageJs = function (globalPath) {
             return decodeURIComponent(r[2]);
         }
         return null;
+    };
+
+    // 获取时间差 dateSrt -> 2016-01-10 15:14:12
+    this.getDiffTime = function (dateSrt) {
+        var result = {};
+        var diffTime = moment().diff(moment(dateSrt, "YYYY-MM-DD HH:mm:ss"));
+        var duration = moment.duration(diffTime);
+        result.years = Math.floor(duration.asYears());
+        result.months = Math.floor(duration.asMonths()) % 12;
+        result.days = Math.floor(duration.asDays()) % 30;
+        result.hours = Math.floor(duration.asHours()) % 24;
+        result.minutes = Math.floor(duration.asMinutes()) % 60;
+        result.seconds = Math.floor(duration.asSeconds()) % 60;
+        return result;
     };
 };
 

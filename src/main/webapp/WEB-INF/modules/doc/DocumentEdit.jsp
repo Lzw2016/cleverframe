@@ -6,6 +6,7 @@
   Time: 22:26
   To change this template use File | Settings | File Templates.
 --%>
+<%--<!DOCTYPE html>--%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -24,13 +25,8 @@
     <%--<script type="text/javascript" src="${applicationScope.staticPath}/JQuery/jQuery-1.12.3/jquery-1.12.3.min.js"></script>--%>
     <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/editormd.min.js"></script>
 
-    <%-- CodeMirror 需要使用动态加载 --%>
-    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.js"></script>
-    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/lib/codemirror.css">
-    <link rel="stylesheet" href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/theme/cobalt.css">
-    <link rel=stylesheet href="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/addon/merge/merge.css">
-    <script src="${applicationScope.staticPath}/CodeMirror/diff_match_patch_20121119/javascript/diff_match_patch.js"></script>
-    <script src="${applicationScope.staticPath}/CodeMirror/codemirror-5.15.2/addon/merge/merge.js"></script>
+    <%--Moment--%>
+    <script src="${applicationScope.staticPath}/Moment/moment-2.17.1/moment.min.js"></script>
 
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
@@ -86,15 +82,15 @@
 <%--文档历史版本对话框--%>
 <div id="docHistoryDialog" style="width: 850px;height:600px;">
     <div class="easyui-layout" data-options="fit:true,border:false">
-        <div data-options="region:'west',split:false,border:false" style="width:200px;">
+        <div data-options="region:'west',split:false,border:false" style="width:225px;background: #FAFAFA;border-right: 1px solid #95B8E7;">
             <%--文档历史版本树--%>
             <ul id="docHistoryTree"></ul>
         </div>
         <div data-options="region:'center',border:false">
-            <div id="docContentMergeView"></div> <%--直接显示文档内容??--%>
+            <textarea id="docContentHistoryView"></textarea>
         </div>
         <div data-options="region:'south',split:false,border:false" style="height:32px;">
-            <div id="docHistoryPagination" class="easyui-pagination" style="background:#efefef;border:1px solid #ccc;"></div>
+            <div id="docHistoryPagination" class="easyui-pagination" style="background:#efefef;border-top:1px solid #95B8E7;"></div>
         </div>
     </div>
 </div>
