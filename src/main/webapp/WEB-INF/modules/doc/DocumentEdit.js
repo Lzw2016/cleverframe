@@ -130,7 +130,7 @@ var pageJs = function (globalPath) {
             // 文件上传配置
             imageUpload: true,
             imageFormats: ["jpg", "jpeg", "gif", "png", "bmp", "webp"],
-            imageUploadURL: "./php/upload.php?test=dfdf",
+            imageUploadURL: globalPath.mvcPath + "/filemanager/fileupload/doc/upload.json",
             // 自定义工具栏
             toolbarIcons: function () {
                 return [
