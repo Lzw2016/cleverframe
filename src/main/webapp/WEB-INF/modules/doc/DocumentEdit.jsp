@@ -35,6 +35,7 @@
     <script type="text/javascript" src="${applicationScope.modulesPath}/doc/DocumentEdit.js"></script>
     <%-- 页面标题 --%>
     <title>文档编辑</title>
+    <base target="_blank" />
 </head>
 <body>
 <div id="editormd" style="width: 100%;height: 100%">

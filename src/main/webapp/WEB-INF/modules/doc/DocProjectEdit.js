@@ -17,6 +17,8 @@ var pageJs = function (globalPath) {
 
     // 主面板
     var mainPanel = $("#mainPanel");
+    // 文档项目名称
+    var docProjectName = $("#docProjectName");
     // 项目文档树
     var docDocumentTree = $("#docDocumentTree");
     // 项目文档树 - 加载中
@@ -32,6 +34,40 @@ var pageJs = function (globalPath) {
     // 中央Tab面板 - 文档ID:叶签标题
     var tabsCenterMap = {};
 
+    // 新增文档对话框
+    var addDocumentDialog = $("#addDocumentDialog");
+    // 新增文档项目ID
+    var addDocumentProjectId = $("#addDocumentProjectId");
+    // 新增文档表单
+    var addDocumentForm = $("#addDocumentForm");
+    // 文档标题
+    var addDocumentTitle = $("#addDocumentTitle");
+    // 上级文档
+    var addDocumentParentId = $("#addDocumentParentId");
+    // 备注信息
+    var addDocumentRemarks = $("#addDocumentRemarks");
+    // 新增代码模版对话框-按钮栏 保存
+    var addDocumentDialogButtonsSave = $("#addDocumentDialogButtonsSave");
+    // 新增代码模版对话框-按钮栏 取消
+    var addDocumentDialogButtonsCancel = $("#addDocumentDialogButtonsCancel");
+
+    // 编辑文档对话框
+    var editDocumentDialog = $("#editDocumentDialog");
+    // 编辑文档项目ID
+    var editDocumentProjectId = $("#editDocumentProjectId");
+    // 编辑文档表单
+    var editDocumentForm = $("#editDocumentForm");
+    // 文档标题 - 编辑
+    var editDocumentTitle = $("#editDocumentTitle");
+    // 上级文档 - 编辑
+    var editDocumentParentId = $("#editDocumentParentId");
+    // 备注信息 - 编辑
+    var editDocumentRemarks = $("#editDocumentRemarks");
+    // 编辑代码模版对话框-按钮栏 保存
+    var editDocumentDialogButtonsSave = $("#editDocumentDialogButtonsSave");
+    // 编辑代码模版对话框-按钮栏 取消
+    var editDocumentDialogButtonsCancel = $("#editDocumentDialogButtonsCancel");
+
     /**
      * 页面初始化方法
      */
@@ -46,6 +82,8 @@ var pageJs = function (globalPath) {
         }
 
         _this.initMain();
+        _this.initAddDocumentDialog();
+        _this.initEditDocumentDialog();
 
         _this.dataBind();
         _this.eventBind();
@@ -84,18 +122,24 @@ var pageJs = function (globalPath) {
             tools: [{
                 iconCls: "icon-expandAll",
                 handler: function () {
+                    docDocumentTree.tree('expandAll');
                 }
             }, {
                 iconCls: "icon-collapseAll",
                 handler: function () {
+                    docDocumentTree.tree('collapseAll');
                 }
             }, {
                 iconCls: "icon-addDocument",
                 handler: function () {
+                    addDocumentDialog.dialog("open");
+                    addDocumentForm.form('reset');
                 }
             }, {
                 iconCls: "icon-edit",
                 handler: function () {
+                    editDocumentDialog.dialog("open");
+                    editDocumentForm.form('reset');
                 }
             }, {
                 iconCls: "icon-remove",
@@ -109,7 +153,15 @@ var pageJs = function (globalPath) {
             }, {
                 iconCls: "icon-linkTo",
                 handler: function () {
-
+                    var tab = tabsCenter.tabs('getSelected');
+                    if (tab && tab.panel("options").id) {
+                        var node = docDocumentTree.tree('find', tab.panel("options").id);
+                        if (node) {
+                            docDocumentTree.tree('expandAll');
+                            docDocumentTree.tree('select', node.target);
+                            docDocumentTree.tree('scrollTo', node.target);
+                        }
+                    }
                 }
             }]
         });
@@ -180,8 +232,12 @@ var pageJs = function (globalPath) {
                         docDocumentTree.tree("reload");
                         break;
                     case "addDocument" :
+                        addDocumentDialog.dialog("open");
+                        addDocumentForm.form('reset');
                         break;
                     case "edit":
+                        editDocumentDialog.dialog("open");
+                        editDocumentForm.form('reset');
                         break;
                     case "delete":
                         break;
@@ -190,12 +246,20 @@ var pageJs = function (globalPath) {
                     case "history":
                         break;
                     case "expand":
+                        if (selectNode) {
+                            docDocumentTree.tree('expand', selectNode.target);
+                        }
                         break;
                     case "collapse":
+                        if (selectNode) {
+                            docDocumentTree.tree('collapse', selectNode.target);
+                        }
                         break;
                     case "expandAll":
+                        docDocumentTree.tree('expandAll');
                         break;
                     case "collapseAll":
+                        docDocumentTree.tree('collapseAll');
                         break;
                 }
             }
@@ -224,6 +288,78 @@ var pageJs = function (globalPath) {
         });
     };
 
+    // 新增文档对话框 初始化
+    this.initAddDocumentDialog = function () {
+        addDocumentDialog.dialog({
+            title: "新增文档",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            modal: true,
+            buttons: "#addDocumentDialogButtons",
+            onOpen: function () {
+            }
+        });
+        addDocumentTitle.textbox({
+            required: true,
+            validType: 'length[0,100]'
+        });
+        addDocumentParentId.combotree({
+            required: true,
+            editable: false,
+            animate: false,
+            checkbox: false,
+            cascadeCheck: true,
+            onlyLeafCheck: false,
+            lines: true,
+            dnd: false,
+            valueField: 'id',
+            textField: 'text'
+        });
+        addDocumentRemarks.textbox({
+            required: false,
+            validType: 'length[0,255]',
+            multiline: true
+        });
+    };
+
+    // 编辑文档对话框 初始化
+    this.initEditDocumentDialog = function () {
+        editDocumentDialog.dialog({
+            title: "编辑文档",
+            closed: true,
+            minimizable: false,
+            maximizable: false,
+            resizable: false,
+            modal: true,
+            buttons: "#editDocumentDialogButtons",
+            onOpen: function () {
+            }
+        });
+        editDocumentTitle.textbox({
+            required: true,
+            validType: 'length[0,100]'
+        });
+        editDocumentParentId.combotree({
+            required: true,
+            editable: false,
+            animate: false,
+            checkbox: false,
+            cascadeCheck: true,
+            onlyLeafCheck: false,
+            lines: true,
+            dnd: false,
+            valueField: 'id',
+            textField: 'text'
+        });
+        editDocumentRemarks.textbox({
+            required: false,
+            validType: 'length[0,255]',
+            multiline: true
+        });
+    };
+
     // 获取文档和项目名称
     this.getDocProjectInfo = function (docProjectId) {
         // 加载浮层 - 显示
@@ -235,6 +371,7 @@ var pageJs = function (globalPath) {
                 $.unmask({target: maskTarget});
                 if (data.success) {
                     docProjectInfo = data.result;
+                    docProjectName.text("《" + docProjectInfo.name + "》");
                 } else {
                     $.messager.alert("提示", data.failMessage, "warning");
                 }

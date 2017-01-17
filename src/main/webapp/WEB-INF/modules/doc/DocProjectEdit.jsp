@@ -33,6 +33,22 @@
 </head>
 <body>
 <div id="mainPanel" class="easyui-layout" data-options="fit:true,border:false">
+    <!-- 页面上部 -->
+    <div data-options="region:'north',border:false">
+        <div class="tabs-header" style="overflow: hidden; height: 40px;">
+            <div class="logo">
+                编辑文档
+                <span id="docProjectName"></span>
+            </div>
+            <div class="topNav">
+                当前用户：<a href="javascript:void(0)"><span id="currentUser"></span></a> |
+                <a href="javascript:void(0)">个人主页</a> |
+                <a href="javascript:void(0)">系统消息(0)</a> |
+                <a href="javascript:void(0)">安全退出</a>
+            </div>
+        </div>
+    </div>
+
     <!-- 页面左部 -->
     <div data-options="region:'west',title:'文档目录',split:true,border:true,collapsible:false" style="width:215px;">
         <div id="docDocumentTreeLoading" class="panel-loading" style="display: none;">刷新中，请稍待...</div>
@@ -45,10 +61,9 @@
             <div data-options="name:'addDocument',iconCls:'icon-addDocument'">新增文档</div>
             <div data-options="name:'edit',iconCls:'icon-edit'">编辑</div>
             <div data-options="name:'delete',iconCls:'icon-remove'">删除</div>
-            <div data-options="name:'history',iconCls:'icon-history'">历史版本</div>
-            <div data-options="name:'properties',iconCls:'icon-properties'">文档属性</div>
+            <%--<div data-options="name:'history',iconCls:'icon-history'">历史版本</div>--%>
+            <%--<div data-options="name:'properties',iconCls:'icon-properties'">文档属性</div>--%>
             <div class="menu-sep"></div>
-            <%--TODO 展开或折叠只需要两个 - 自动判断 --%>
             <div data-options="name:'expand',iconCls:'icon-expand'">展开当前文档</div>
             <div data-options="name:'expandAll',iconCls:'icon-expandAll'">展开所有文档</div>
             <div data-options="name:'collapse',iconCls:'icon-collapse'">折叠当前文档</div>
@@ -65,6 +80,63 @@
     </div>
 </div>
 
+<%-- 新增文档对话框 --%>
+<div id="addDocumentDialog" style="width: 500px;height: 350px;padding: 5px 10px">
+    <form id="addDocumentForm" method="post" style="margin-top: 10px;">
+        <input id="addDocumentProjectId" type="hidden" name="projectId">
+        <div class="row">
+            <span class="columnLast">
+                <label for="addDocumentTitle">文档标题</label>
+                <input id="addDocumentTitle" name="title"/>
+            </span>
+        </div>
+        <div class="row">
+            <span class="columnLast">
+                <label for="addDocumentParentId">上级文档</label>
+                <input id="addDocumentParentId" name="parentId"/>
+            </span>
+        </div>
+        <div class="row" style="margin-top: 5px;margin-bottom: 2px;">
+            <label for="addDocumentRemarks">备注信息</label>
+        </div>
+        <div class="row" style="margin-left: 15px;">
+            <input id="addDocumentRemarks" name="remarks" style="width: 440px; height: 160px;"/>
+        </div>
+    </form>
+</div>
+<div id="addDocumentDialogButtons">
+    <a id="addDocumentDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">新增</a>
+    <a id="addDocumentDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
 
+<%-- 编辑文档对话框 --%>
+<div id="editDocumentDialog" style="width: 500px;height: 350px;padding: 5px 10px">
+    <form id="editDocumentForm" method="post" style="margin-top: 10px;">
+        <input type="hidden" name="id">
+        <input id="editDocumentProjectId" type="hidden" name="projectId">
+        <div class="row">
+            <span class="columnLast">
+                <label for="editDocumentTitle">文档标题</label>
+                <input id="editDocumentTitle" name="title"/>
+            </span>
+        </div>
+        <div class="row">
+            <span class="columnLast">
+                <label for="editDocumentParentId">上级文档</label>
+                <input id="editDocumentParentId" name="parentId"/>
+            </span>
+        </div>
+        <div class="row" style="margin-top: 5px;margin-bottom: 2px;">
+            <label for="editDocumentRemarks">备注信息</label>
+        </div>
+        <div class="row" style="margin-left: 15px;">
+            <input id="editDocumentRemarks" name="remarks" style="width: 440px; height: 160px;"/>
+        </div>
+    </form>
+</div>
+<div id="editDocumentDialogButtons">
+    <a id="editDocumentDialogButtonsSave" class="easyui-linkbutton" data-options="iconCls:'icon-ok'">更新</a>
+    <a id="editDocumentDialogButtonsCancel" class="easyui-linkbutton" data-options="iconCls:'icon-cancel'">取消</a>
+</div>
 </body>
 </html>
