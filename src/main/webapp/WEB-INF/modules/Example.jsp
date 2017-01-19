@@ -58,6 +58,7 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/JQuery/jQuery-1.12.3/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/editormd.min.js"></script>
     <%--Editor.md 显示文档需要 --%>
+    <%--<link rel="stylesheet" href="${applicationScope.staticPath}/editor.md/css/editormd.preview.min.css"/>--%>
     <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/marked.min.js"></script>--%>
     <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/prettify.min.js"></script>--%>
     <%--<script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/raphael.min.js"></script>--%>

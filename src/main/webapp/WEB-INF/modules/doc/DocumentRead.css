@@ -1,0 +1,6 @@
+.editormd-html-preview {
+    /* TODO 动态宽度 */
+    /*width: 80%;*/
+    width: 1000px;
+    margin: 0 auto;
+}

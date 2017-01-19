@@ -5,6 +5,7 @@
   Time: 11:46
   To change this template use File | Settings | File Templates.
 --%>
+<!DOCTYPE html>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <head>
@@ -17,10 +18,18 @@
     <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/jquery-easyui-1.4.5/locale/easyui-lang-zh_CN.js"></script>--%>
     <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/extend/jquery.easyui.customize.js"></script>--%>
 
-    <%--Editor.md--%>
+    <%--Editor.md 显示文档需要 --%>
+    <%--<link rel="stylesheet" href="${applicationScope.staticPath}/editor.md/css/editormd.preview.min.css"/>--%>
     <link rel="stylesheet" href="${applicationScope.staticPath}/editor.md/css/editormd.min.css"/>
     <script type="text/javascript" src="${applicationScope.staticPath}/JQuery/jQuery-1.12.3/jquery-1.12.3.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/editormd.min.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/marked.min.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/prettify.min.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/raphael.min.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/underscore.min.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/sequence-diagram.min.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/flowchart.min.js"></script>
+    <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/jquery.flowchart.min.js"></script>
 
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
@@ -31,7 +40,7 @@
     <title>阅读文档</title>
 </head>
 <body>
-<div id="editormd" style="width: 100%;height: 100%">
+<div id="editormd">
     <textarea style="display:none;"></textarea>
 </div>
 </body>
