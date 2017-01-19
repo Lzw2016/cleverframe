@@ -17,6 +17,31 @@ public class DocDocumentQueryVo extends BaseRequestVo {
     @NotNull(message = "文档项目ID不能为空")
     private Long projectId;
 
+    /**
+     * 查询的全路径
+     */
+    private String fullPath;
+
+    /**
+     * 排除的子节点全路径
+     */
+    private String excludePath;
+
+    /**
+     * 是否有Root节点
+     */
+    private boolean hasRoot;
+
+    /**
+     * Root节点名称
+     */
+    private String rootName;
+
+    /**
+     * 节点是否打开
+     */
+    private boolean open;
+
     /*--------------------------------------------------------------
      *          getter、setter
      * -------------------------------------------------------------*/
@@ -27,5 +52,45 @@ public class DocDocumentQueryVo extends BaseRequestVo {
 
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
+    }
+
+    public String getFullPath() {
+        return fullPath;
+    }
+
+    public void setFullPath(String fullPath) {
+        this.fullPath = fullPath;
+    }
+
+    public String getExcludePath() {
+        return excludePath;
+    }
+
+    public void setExcludePath(String excludePath) {
+        this.excludePath = excludePath;
+    }
+
+    public boolean isHasRoot() {
+        return hasRoot;
+    }
+
+    public void setHasRoot(boolean hasRoot) {
+        this.hasRoot = hasRoot;
+    }
+
+    public String getRootName() {
+        return rootName;
+    }
+
+    public void setRootName(String rootName) {
+        this.rootName = rootName;
+    }
+
+    public boolean isOpen() {
+        return open;
+    }
+
+    public void setOpen(boolean open) {
+        this.open = open;
     }
 }

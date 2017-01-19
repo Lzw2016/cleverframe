@@ -1,5 +1,6 @@
 package org.cleverframe.doc.controller;
 
+import org.apache.commons.lang3.StringUtils;
 import org.cleverframe.common.controller.BaseController;
 import org.cleverframe.common.mapper.BeanMapper;
 import org.cleverframe.common.tree.BuildTreeUtils;
@@ -58,16 +59,30 @@ public class DocDocumentController extends BaseController {
             HttpServletResponse response,
             @Valid DocDocumentQueryVo docDocumentQueryVo,
             BindingResult bindingResult) {
+        if (StringUtils.isNotBlank(docDocumentQueryVo.getFullPath())) {
+            docDocumentQueryVo.setFullPath(docDocumentQueryVo.getFullPath() + "%");
+        }
+        if (StringUtils.isNotBlank(docDocumentQueryVo.getFullPath())) {
+            docDocumentQueryVo.setExcludePath(docDocumentQueryVo.getExcludePath() + "%");
+        }
         AjaxMessage<List<ITreeNode>> ajaxMessage = new AjaxMessage<>(true, "获取项目文档成功", null);
-        String state = "open";
-        if ("true".equalsIgnoreCase(request.getParameter("isClose"))) {
-            state = "closed";
+        String iconCls = "icon-node";
+        String state = "closed";
+        if (docDocumentQueryVo.isOpen()) {
+            state = "open";
         }
         if (beanValidator(bindingResult, ajaxMessage)) {
-            List<DocDocument> docDocumentList = docDocumentService.findByProjectId(docDocumentQueryVo.getProjectId());
+            List<DocDocument> docDocumentList = docDocumentService.findByProjectId(docDocumentQueryVo.getProjectId(), docDocumentQueryVo.getFullPath(), docDocumentQueryVo.getExcludePath());
             List<ITreeNode> treeNodeList = new ArrayList<>();
+            if (docDocumentQueryVo.isHasRoot()) {
+                if (StringUtils.isBlank(docDocumentQueryVo.getRootName())) {
+                    docDocumentQueryVo.setRootName("根路径");
+                }
+                // 增加根节点
+                TreeNodeJson rootNode = new TreeNodeJson(-1L, -1L, "", docDocumentQueryVo.getRootName(), iconCls, false, state);
+                treeNodeList.add(rootNode);
+            }
             for (DocDocument docDocument : docDocumentList) {
-                String iconCls = "icon-node";
                 TreeNodeJson node = new TreeNodeJson(
                         docDocument.getParentId(),
                         docDocument.getId(),

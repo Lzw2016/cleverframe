@@ -37,10 +37,12 @@ public class DocDocumentService extends BaseService {
     /**
      * 获取项目所有的文档信息，不包含文档内容
      *
-     * @param projectId 项目ID
+     * @param projectId   项目ID
+     * @param fullPath    匹配的路径
+     * @param excludePath 不匹配的路径
      */
-    public List<DocDocument> findByProjectId(Serializable projectId) {
-        return docDocumentDao.findByProjectId(projectId);
+    public List<DocDocument> findByProjectId(Serializable projectId, String fullPath, String excludePath) {
+        return docDocumentDao.findByProjectId(projectId, fullPath, excludePath);
     }
 
     /**
@@ -108,7 +110,7 @@ public class DocDocumentService extends BaseService {
         // 新增历史记录
         String oldContent = StringUtils.trimToEmpty(oldDocDocument.getContent());
         String content = StringUtils.trimToEmpty(docDocument.getContent());
-        if (!oldContent.equals(content)) {
+        if (StringUtils.isNotBlank(content) && !oldContent.equals(content)) {
             DocHistory docHistory = new DocHistory();
             docHistory.setCreateDate(new Date());
             docHistory.setCreateBy(getUserUtils().getUserCode());

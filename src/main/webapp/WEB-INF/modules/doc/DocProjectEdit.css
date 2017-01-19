@@ -45,12 +45,12 @@ body {
 
 #addDocumentForm .row label {
     display: inline-block;
-    width: 60px;
-    text-align: right;
+    width: 80px;
+    text-align: center;
 }
 
 #addDocumentForm .row input, select {
-    width: 300px;
+    width: 365px;
 }
 
 #addDocumentForm .row .column {
@@ -69,8 +69,8 @@ body {
 
 #editDocumentForm .row label {
     display: inline-block;
-    width: 60px;
-    text-align: right;
+    width: 80px;
+    text-align: center;
 }
 
 #editDocumentForm .row input, select {

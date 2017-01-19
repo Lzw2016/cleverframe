@@ -10,6 +10,12 @@ var pageJs = function (globalPath) {
     var docProjectInfoUrl = globalPath.mvcPath + "/doc/docproject/getDocProject.json";
     // 文档编辑器
     var documentEditUrl = globalPath.mvcPath + "/doc/docdocument/DocumentEdit.html";
+    // 新增文档
+    var addDocDocumentUrl = globalPath.mvcPath + "/doc/docdocument/addDocDocument.json";
+    // 更新文档
+    var updateDocDocumentUrl = globalPath.mvcPath + "/doc/docdocument/updateDocDocument.json";
+    // 删除文档
+    var delDocDocumentUrl = globalPath.mvcPath + "/doc/docdocument/delDocDocument.json";
     // 文档项目名称
     var docProjectIdParam = null;
     // 文档项目信息
@@ -53,6 +59,8 @@ var pageJs = function (globalPath) {
 
     // 编辑文档对话框
     var editDocumentDialog = $("#editDocumentDialog");
+    // 编辑文档ID
+    var editDocumentId = $("#editDocumentId");
     // 编辑文档项目ID
     var editDocumentProjectId = $("#editDocumentProjectId");
     // 编辑文档表单
@@ -104,6 +112,30 @@ var pageJs = function (globalPath) {
                 _this.closeTab();
             }
         });
+
+        addDocumentDialogButtonsSave.linkbutton({
+            onClick: function () {
+                _this.addDocDocument();
+            }
+        });
+
+        addDocumentDialogButtonsCancel.linkbutton({
+            onClick: function () {
+                addDocumentDialog.dialog("close");
+            }
+        });
+
+        editDocumentDialogButtonsSave.linkbutton({
+            onClick: function () {
+                _this.updateDocDocument();
+            }
+        });
+
+        editDocumentDialogButtonsCancel.linkbutton({
+            onClick: function () {
+                editDocumentDialog.dialog("close");
+            }
+        });
     };
 
     // ---------------------------------------------------------------------------------------------------------
@@ -138,12 +170,16 @@ var pageJs = function (globalPath) {
             }, {
                 iconCls: "icon-edit",
                 handler: function () {
-                    editDocumentDialog.dialog("open");
-                    editDocumentForm.form('reset');
+                    var selectNode = docDocumentTree.tree("getSelected");
+                    if (selectNode && selectNode.attributes) {
+                        editDocumentDialog.dialog("open");
+                        editDocumentForm.form('load', selectNode.attributes);
+                    }
                 }
             }, {
                 iconCls: "icon-remove",
                 handler: function () {
+                    _this.delDocDocument();
                 }
             }, {
                 iconCls: "icon-reload",
@@ -184,7 +220,8 @@ var pageJs = function (globalPath) {
                 if (param.id) {
                     return false;
                 }
-                param.isClose = "false";
+                param.open = "true";
+                param.hasRoot = "false";
                 param.projectId = docProjectIdParam;
                 docDocumentTreeLoading.css("display", "block");
             },
@@ -236,10 +273,13 @@ var pageJs = function (globalPath) {
                         addDocumentForm.form('reset');
                         break;
                     case "edit":
-                        editDocumentDialog.dialog("open");
-                        editDocumentForm.form('reset');
+                        if (selectNode && selectNode.attributes) {
+                            editDocumentDialog.dialog("open");
+                            editDocumentForm.form('load', selectNode.attributes);
+                        }
                         break;
                     case "delete":
+                        _this.delDocDocument();
                         break;
                     case "properties":
                         break;
@@ -284,6 +324,17 @@ var pageJs = function (globalPath) {
                 if (tabs && tabs.length <= 0) {
                     tabsIndex = 1;
                 }
+            },
+            onSelect: function (title, index) {
+                var tab = tabsCenter.tabs('getTab', title);
+                if (tab && tab.panel("options").id) {
+                    var node = docDocumentTree.tree('find', tab.panel("options").id);
+                    if (node) {
+                        // docDocumentTree.tree('expandAll');
+                        docDocumentTree.tree('select', node.target);
+                        docDocumentTree.tree('scrollTo', node.target);
+                    }
+                }
             }
         });
     };
@@ -299,13 +350,42 @@ var pageJs = function (globalPath) {
             modal: true,
             buttons: "#addDocumentDialogButtons",
             onOpen: function () {
+                addDocumentParentId.combotree("reload", docDocumentTreeUrl);
             }
         });
         addDocumentTitle.textbox({
             required: true,
             validType: 'length[0,100]'
         });
+        //noinspection JSUnusedLocalSymbols
         addDocumentParentId.combotree({
+            // url: docDocumentTreeUrl,
+            method: "POST",
+            onBeforeLoad: function (node, param) {
+                // 展开节点不加载数据
+                if (param.id) {
+                    return false;
+                }
+                param.open = "true";
+                param.hasRoot = "true";
+                param.rootName = "根节点";
+                param.projectId = docProjectIdParam;
+            },
+            onLoadSuccess: function (node, data) {
+                var selectNode = docDocumentTree.tree("getSelected");
+                if (selectNode && selectNode.attributes && selectNode.attributes.id) {
+                    addDocumentParentId.combotree("setValue", selectNode.attributes.id);
+                }
+            },
+            loadFilter: function (data, parent) {
+                if (data.success) {
+                    return data.result;
+                } else {
+                    return [];
+                }
+            },
+            valueField: 'id',
+            textField: 'text',
             required: true,
             editable: false,
             animate: false,
@@ -313,9 +393,7 @@ var pageJs = function (globalPath) {
             cascadeCheck: true,
             onlyLeafCheck: false,
             lines: true,
-            dnd: false,
-            valueField: 'id',
-            textField: 'text'
+            dnd: false
         });
         addDocumentRemarks.textbox({
             required: false,
@@ -335,13 +413,46 @@ var pageJs = function (globalPath) {
             modal: true,
             buttons: "#editDocumentDialogButtons",
             onOpen: function () {
+                editDocumentParentId.combotree("reload", docDocumentTreeUrl);
             }
         });
         editDocumentTitle.textbox({
             required: true,
             validType: 'length[0,100]'
         });
+        //noinspection JSUnusedLocalSymbols
         editDocumentParentId.combotree({
+            // url: docDocumentTreeUrl,
+            method: "POST",
+            onBeforeLoad: function (node, param) {
+                // 展开节点不加载数据
+                if (param.id) {
+                    return false;
+                }
+                param.open = "true";
+                param.hasRoot = "true";
+                param.rootName = "根节点";
+                var selectNode = docDocumentTree.tree("getSelected");
+                if (selectNode && selectNode.attributes && selectNode.attributes.fullPath) {
+                    param.excludePath = selectNode.attributes.fullPath + "%";
+                }
+                param.projectId = docProjectIdParam;
+            },
+            onLoadSuccess: function (node, data) {
+                var selectNode = docDocumentTree.tree("getSelected");
+                if (selectNode && selectNode.attributes && selectNode.attributes.parentId) {
+                    editDocumentParentId.combotree("setValue", selectNode.attributes.parentId);
+                }
+            },
+            loadFilter: function (data, parent) {
+                if (data.success) {
+                    return data.result;
+                } else {
+                    return [];
+                }
+            },
+            valueField: 'id',
+            textField: 'text',
             required: true,
             editable: false,
             animate: false,
@@ -349,9 +460,7 @@ var pageJs = function (globalPath) {
             cascadeCheck: true,
             onlyLeafCheck: false,
             lines: true,
-            dnd: false,
-            valueField: 'id',
-            textField: 'text'
+            dnd: false
         });
         editDocumentRemarks.textbox({
             required: false,
@@ -378,6 +487,110 @@ var pageJs = function (globalPath) {
             }
         });
     };
+
+    // 新增文档
+    this.addDocDocument = function () {
+        var maskTarget = addDocumentDialog.panel("body");
+        addDocumentForm.form("submit", {
+            url: addDocDocumentUrl,
+            onSubmit: function (param) {
+                if (!addDocumentForm.form("validate")) {
+                    return false;
+                }
+                addDocumentProjectId.val(docProjectIdParam);
+                // 提交之前
+                addDocumentDialogButtonsSave.linkbutton("disable");
+                addDocumentDialogButtonsCancel.linkbutton("disable");
+                $.mask({target: maskTarget, loadMsg: "正在新增，请稍候..."});
+            },
+            success: function (data) {
+                $.unmask({target: maskTarget});
+                addDocumentDialogButtonsSave.linkbutton("enable");
+                addDocumentDialogButtonsCancel.linkbutton("enable");
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    addDocumentDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    // TODO 动态的添加树节点
+                    docDocumentTree.tree("reload");
+                } else {
+                    // 保存失败
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
+    // 更新文档
+    this.updateDocDocument = function () {
+        var maskTarget = editDocumentDialog.panel("body");
+        editDocumentForm.form("submit", {
+            url: updateDocDocumentUrl,
+            onSubmit: function (param) {
+                if (!editDocumentForm.form("validate")) {
+                    return false;
+                }
+                // editDocumentId.val();
+                editDocumentProjectId.val(docProjectIdParam);
+                // 提交之前
+                editDocumentDialogButtonsSave.linkbutton("disable");
+                editDocumentDialogButtonsCancel.linkbutton("disable");
+                $.mask({target: maskTarget, loadMsg: "正在更新，请稍候..."});
+            },
+            success: function (data) {
+                $.unmask({target: maskTarget});
+                editDocumentDialogButtonsSave.linkbutton("enable");
+                editDocumentDialogButtonsCancel.linkbutton("enable");
+                data = $.parseJSON(data);
+                if (data.success) {
+                    // 保存成功
+                    editDocumentDialog.dialog('close');
+                    $.messager.show({title: '提示', msg: data.successMessage, timeout: 5000, showType: 'slide'});
+                    // TODO 动态的更新树节点
+                    docDocumentTree.tree("reload");
+                } else {
+                    // 保存失败
+                    $.messager.alert("提示", data.failMessage, "warning");
+                }
+            }
+        });
+    };
+
+    // 删除文档
+    this.delDocDocument = function (callback) {
+        var selectNode = docDocumentTree.tree("getSelected");
+        if (!selectNode || !selectNode.attributes) {
+            return;
+        }
+        if (selectNode.children && selectNode.children.length >= 1) {
+            $.messager.alert("提示", "存在子文档不能删除！", "info");
+            return;
+        }
+        $.messager.confirm("确认删除", "您确要彻底删除文档,此操作不可退回?<br/>删除: " + selectNode.attributes.title, function (r) {
+                if (r) {
+                    var maskTarget = "body";
+                    $.mask({target: maskTarget, loadMsg: "正在删除，请稍候..."});
+                    $.ajax({
+                        type: "POST", dataType: "JSON", url: delDocDocumentUrl, async: true, data: {id: selectNode.attributes.id},
+                        success: function (data) {
+                            if ($.isFunction(callback)) {
+                                callback(data);
+                            }
+                            $.unmask({target: maskTarget});
+                            if (data.success) {
+                                // TODO 动态的更新树节点
+                                docDocumentTree.tree("reload");
+                            } else {
+                                $.messager.alert("提示", data.failMessage, "warning");
+                            }
+                        }
+                    });
+                }
+            }
+        );
+    }
+    ;
 
     //以iframe方式增加页面
     this.addTab = function (tabName, tabUrl, id) {

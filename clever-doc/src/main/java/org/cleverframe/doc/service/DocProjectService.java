@@ -105,7 +105,7 @@ public class DocProjectService extends BaseService {
             ajaxMessage.setFailMessage("需要删除的文档项目不存在");
             return false;
         }
-        List<DocDocument> docDocumentList = docDocumentDao.findByProjectId(docProject.getId());
+        List<DocDocument> docDocumentList = docDocumentDao.findByProjectId(docProject.getId(), null, null);
         Set<Serializable> documentIds = new HashSet<>();
         for (DocDocument docDocument : docDocumentList) {
             documentIds.add(docDocument.getId());

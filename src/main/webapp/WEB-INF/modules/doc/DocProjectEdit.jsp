@@ -112,7 +112,7 @@
 <%-- 编辑文档对话框 --%>
 <div id="editDocumentDialog" style="width: 500px;height: 350px;padding: 5px 10px">
     <form id="editDocumentForm" method="post" style="margin-top: 10px;">
-        <input type="hidden" name="id">
+        <input id="editDocumentId" type="hidden" name="id">
         <input id="editDocumentProjectId" type="hidden" name="projectId">
         <div class="row">
             <span class="columnLast">

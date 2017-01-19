@@ -37,11 +37,15 @@ public class DocDocumentDao extends BaseDao<DocDocument> {
     /**
      * 获取项目所有的文档信息，不包含文档内容
      *
-     * @param projectId 项目ID
+     * @param projectId   项目ID
+     * @param fullPath    匹配的路径
+     * @param excludePath 不匹配的路径
      */
-    public List<DocDocument> findByProjectId(Serializable projectId) {
+    public List<DocDocument> findByProjectId(Serializable projectId, String fullPath, String excludePath) {
         Parameter param = new Parameter();
         param.put("projectId", projectId);
+        param.put("fullPath", fullPath);
+        param.put("excludePath", excludePath);
         String sql = QLScriptUtils.getSQLScript("org.cleverframe.doc.dao.DocDocumentDao.findByProjectId");
         return hibernateDao.findBySql(sql, param);
     }
