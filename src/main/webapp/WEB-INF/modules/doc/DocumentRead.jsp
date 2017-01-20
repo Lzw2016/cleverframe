@@ -40,8 +40,18 @@
     <title>阅读文档</title>
 </head>
 <body>
+<div>
+    1212112
+</div>
+
+<%--文档内容--%>
 <div id="editormd">
     <textarea style="display:none;"></textarea>
+</div>
+
+
+<div>
+12121221
 </div>
 </body>
 </html>

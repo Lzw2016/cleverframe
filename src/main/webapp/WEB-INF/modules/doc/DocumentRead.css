@@ -1,6 +1,14 @@
+body {
+    font-family: PingFang SC, Hiragino Sans GB, Helvetica Neue, Microsoft Yahei, WenQuanYi Micro Hei, sans-serif;
+    background-color: #F9F9F5;
+    color: #2C3E50;
+}
+
 .editormd-html-preview {
     /* TODO 动态宽度 */
     /*width: 80%;*/
     width: 1000px;
     margin: 0 auto;
+    background-color: #F9F9F5;
+    border: 1px solid #E1E1E8;
 }

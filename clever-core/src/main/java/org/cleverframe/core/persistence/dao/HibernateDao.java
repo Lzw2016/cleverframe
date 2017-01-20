@@ -280,6 +280,10 @@ public class HibernateDao<T extends Serializable> {
         if (!JavaBeanUtils.copyTo(entity, idEntity, updateNullField, updateEmptyField)) {
             throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
         }
+        // This method is not called every time the object's state is persisted during a flush
+        // 每次刷新时对象的状态始终保持不调用此方法.
+        // TODO onUpdate 并不是每次都调用 想办法解决！
+        idEntity.onUpdate(getSession());
         getSession().update(idEntity);
         entity = (E) idEntity;
         return entity;
