@@ -44,6 +44,8 @@ public abstract class IdEntity implements BaseEntity, Lifecycle {
     /*在Session.update()操作之前触发*/
     @Override
     public boolean onUpdate(Session session) throws CallbackException {
+        // This method is not called every time the object's state is persisted during a flush
+        // 每次刷新时对象的状态始终保持不调用此方法. - 需要手动调用
         return Lifecycle.NO_VETO;
     }
 

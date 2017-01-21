@@ -17,6 +17,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Query;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
+import org.hibernate.classic.Lifecycle;
 import org.hibernate.criterion.Criterion;
 import org.hibernate.criterion.DetachedCriteria;
 import org.hibernate.criterion.Projections;
@@ -224,6 +225,7 @@ public class HibernateDao<T extends Serializable> {
     public <E extends DataEntity> void deleteForSoft(E entity) {
         DataEntity dataEntity = this.getEntity(entity.getClass(), entity.getId());
         dataEntity.setDelFlag(BaseEntity.DEL_FLAG_DELETE);
+        dataEntity.onUpdate(getSession());
         getSession().update(dataEntity);
     }
 
@@ -249,6 +251,9 @@ public class HibernateDao<T extends Serializable> {
      * @param <E>    实体类泛型
      */
     public <E extends Serializable> void update(E entity) {
+        if (entity instanceof Lifecycle) {
+            ((Lifecycle) entity).onUpdate(getSession());
+        }
         getSession().update(entity);
     }
 
@@ -268,6 +273,7 @@ public class HibernateDao<T extends Serializable> {
     @SuppressWarnings({"UnusedAssignment", "unchecked"})
     public <E extends IdEntity> E update(E entity, boolean updateNullField, boolean updateEmptyField) {
         if (updateNullField && updateEmptyField) {
+            entity.onUpdate(getSession());
             getSession().update(entity);
             return entity;
         }
@@ -280,9 +286,6 @@ public class HibernateDao<T extends Serializable> {
         if (!JavaBeanUtils.copyTo(entity, idEntity, updateNullField, updateEmptyField)) {
             throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
         }
-        // This method is not called every time the object's state is persisted during a flush
-        // 每次刷新时对象的状态始终保持不调用此方法.
-        // TODO onUpdate 并不是每次都调用 想办法解决！
         idEntity.onUpdate(getSession());
         getSession().update(idEntity);
         entity = (E) idEntity;
@@ -306,6 +309,9 @@ public class HibernateDao<T extends Serializable> {
         }
         if (!JavaBeanUtils.copyTo(entity, object, false, true)) {
             throw new RuntimeException("### update异常(动态更新,可以控制不更新空值字段)");
+        }
+        if (object instanceof Lifecycle) {
+            ((Lifecycle) object).onUpdate(getSession());
         }
         getSession().update(object);
         return object;

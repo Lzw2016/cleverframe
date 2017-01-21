@@ -37,6 +37,7 @@ public abstract class DataEntity extends IdEntity {
 
     /**
      * 返回用户信息获取接口
+     *
      * @return 获取失败返回null
      */
     public static IUserUtils getUserUtils() {
@@ -124,6 +125,8 @@ public abstract class DataEntity extends IdEntity {
      * */
     @Override
     public boolean onUpdate(Session session) throws CallbackException {
+        // This method is not called every time the object's state is persisted during a flush
+        // 每次刷新时对象的状态始终保持不调用此方法. - 需要手动调用
         logger.debug("DataEntity--onUpdate");
         this.updateBy = getUserUtils().getUserCode();
         this.updateDate = new Date();

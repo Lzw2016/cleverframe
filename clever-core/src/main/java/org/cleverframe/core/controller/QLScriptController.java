@@ -26,7 +26,6 @@ import org.springframework.web.servlet.ModelAndView;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
-import java.util.Date;
 
 /**
  * 作者：LiZW <br/>
@@ -114,8 +113,6 @@ public class QLScriptController extends BaseController {
         AjaxMessage<String> message = new AjaxMessage<>(true, "数据库脚本保存成功", null);
         QLScript qLScript = BeanMapper.mapper(qlScriptUpdateVo, QLScript.class);
         if (beanValidator(bindingResult, message)) {
-            qLScript.setUpdateDate(new Date());
-            qLScript.setUpdateBy(getUserUtils().getUserCode());
             qLScriptService.updateQLScript(qLScript);
             QLScriptUtils.removeTemplateCache(qLScript.getName());
         }
