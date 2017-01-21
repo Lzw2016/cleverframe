@@ -34,7 +34,6 @@ var pageJs = function (globalPath) {
         // KaTeX
         editormd.katexURL = {js: globalPath.staticPath + "/KaTeX/katex.min", css: globalPath.staticPath + "/KaTeX/katex.min"};
 
-
         // 加载浮层 - 显示
         // var maskTarget = "body";
         // $.mask({target: maskTarget, loadMsg: "正在加载，请稍候..."});
@@ -44,8 +43,12 @@ var pageJs = function (globalPath) {
                 // $.unmask({target: maskTarget});
                 if (data.success) {
                     var docDocumentInfo = data.result;
+                    var markdownContent = docDocumentInfo.content;
+                    if ($.trim(markdownContent) == "") {
+                        markdownContent = "空文档!";
+                    }
                     var editormdView = editormd.markdownToHTML("editormd", {
-                        markdown: docDocumentInfo.content,      //+ "\r\n" + $("#append-test").text(),
+                        markdown: markdownContent,              //+ "\r\n" + $("#append-test").text(),
                         //htmlDecode      : true,               // 开启 HTML 标签解析(为了安全性)，默认不开启
                         htmlDecode: "style,script,iframe",      // you can filter tags decode
                         //toc             : false,

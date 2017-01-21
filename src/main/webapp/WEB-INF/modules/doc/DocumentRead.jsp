@@ -41,17 +41,18 @@
 </head>
 <body>
 <div>
-    1212112
+    <%--页面头部--%>
 </div>
-
-<%--文档内容--%>
-<div id="editormd">
-    <textarea style="display:none;"></textarea>
-</div>
-
 
 <div>
-12121221
+    <%--文档内容--%>
+    <div id="editormd">
+        <textarea style="display:none;"></textarea>
+    </div>
+</div>
+
+<div>
+    <%--页面底部--%>
 </div>
 </body>
 </html>

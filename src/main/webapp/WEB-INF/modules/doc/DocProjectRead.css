@@ -1,0 +1,85 @@
+body {
+    font-family: "宋体", "华文宋体", "Helvetica Neue", ​Helvetica, ​Arial, ​sans-serif, serif;
+}
+
+.logo {
+    font-family: "楷体", "华文楷体", "宋体", "华文宋体", "Helvetica Neue", ​Helvetica, ​Arial, ​sans-serif, serif;
+    font-size: 22px;
+    font-weight: bold;
+    color: #444;
+    cursor: default;
+    position: absolute;
+    top: 10px;
+    left: 15px;
+    line-height: 22px;
+}
+
+.topNav {
+    position: absolute;
+    right: 8px;
+    top: 10px;
+    font-size: 12px;
+    line-height: 25px;
+}
+
+.topNav a {
+    text-decoration: none;
+    color: #222;
+    font-weight: normal;
+    font-size: 12px;
+    line-height: 25px;
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.topNav a:hover {
+    text-decoration: underline;
+    color: blue;
+}
+
+/* 重写EasyUI样式-面板工具按钮间距增加 */
+.layout-panel .panel-tool a {
+    margin: 0 0 0 5px;
+}
+
+.westBodyCls {
+    background: #FAFAFA;
+}
+
+.documentTitle {
+
+}
+
+/*设置树节点样式*/
+.tree-title a {
+    color: #364149;
+}
+
+.tree-title a:focus, .tree-title a:hover {
+    color: #de2c3b;
+}
+
+.tree-title a {
+    text-decoration: none;
+}
+
+/*自定义图标*/
+.icon-windowClose {
+    background: url('image/window-close-2.png') no-repeat center center;
+}
+
+.icon-expandAll {
+    background: url('image/toggle-expand.png') no-repeat center center;
+}
+
+.icon-collapseAll {
+    background: url('image/toggle.png') no-repeat center center;
+}
+
+.icon-node {
+    background: url('image/page.png') no-repeat center center;
+}
+
+.icon-linkTo {
+    background: url('image/link_to_editor.png') no-repeat center center;
+}
