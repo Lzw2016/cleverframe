@@ -10,6 +10,10 @@ var pageJs = function (globalPath) {
     var emojiPath = globalPath.staticPath + "/Image/emoji/";
     // Twitter Emoji 图片地址
     var twemojiPath = globalPath.staticPath + "/Image/twemoji/72x72/";
+    // katexJsUrl
+    var katexJsUrl = globalPath.staticPath + "/KaTeX/katex.min";
+    // katexCssUrl
+    var katexCssUrl = globalPath.staticPath + "/KaTeX/katex.min";
     // 文档ID
     var docDocumentIdParam = null;
     // 编辑器显示对象
@@ -24,7 +28,26 @@ var pageJs = function (globalPath) {
                 // window.location.href = "";
             });
         }
+        _this.initEditormdView();
 
+        _this.dataBind();
+        _this.eventBind();
+    };
+
+    /**
+     * 页面数据初始化
+     */
+    this.dataBind = function () {
+    };
+
+    /**
+     * 界面事件绑定方法
+     */
+    this.eventBind = function () {
+    };
+
+    // ---------------------------------------------------------------------------------------------------------
+    this.initEditormdView = function () {
         // You can custom Emoji's graphics files url path
         editormd.emoji = {path: emojiPath, ext: ".png"};
 
@@ -32,7 +55,7 @@ var pageJs = function (globalPath) {
         editormd.twemoji = {path: twemojiPath, ext: ".png"};
 
         // KaTeX
-        editormd.katexURL = {js: globalPath.staticPath + "/KaTeX/katex.min", css: globalPath.staticPath + "/KaTeX/katex.min"};
+        editormd.katexURL = {js: katexJsUrl, css: katexCssUrl};
 
         // 加载浮层 - 显示
         // var maskTarget = "body";
@@ -68,27 +91,11 @@ var pageJs = function (globalPath) {
                 }
             }
         });
-
         //console.log("返回一个 jQuery 实例 =>", testEditormdView);
         // 获取Markdown源码
         //console.log(testEditormdView.getMarkdown());
-        _this.dataBind();
-        _this.eventBind();
     };
 
-    /**
-     * 页面数据初始化
-     */
-    this.dataBind = function () {
-    };
-
-    /**
-     * 界面事件绑定方法
-     */
-    this.eventBind = function () {
-    };
-
-    // ---------------------------------------------------------------------------------------------------------
     // 获取URL参数
     this.getUrlParam = function (name) {
         //构造一个含有目标参数的正则表达式对象

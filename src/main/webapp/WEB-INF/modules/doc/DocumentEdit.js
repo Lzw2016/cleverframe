@@ -19,6 +19,10 @@ var pageJs = function (globalPath) {
     var emojiPath = globalPath.staticPath + "/Image/emoji/";
     // Twitter Emoji 图片地址
     var twemojiPath = globalPath.staticPath + "/Image/twemoji/72x72/";
+    // katexJsUrl
+    var katexJsUrl = globalPath.staticPath + "/KaTeX/katex.min";
+    // katexCssUrl
+    var katexCssUrl = globalPath.staticPath + "/KaTeX/katex.min";
     // 编辑器实例
     var editor = null;
     // 编辑器实例 - 初始化成功
@@ -95,7 +99,7 @@ var pageJs = function (globalPath) {
         editormd.twemoji = {path: twemojiPath, ext: ".png"};
 
         // KaTeX
-        editormd.katexURL = {js: globalPath.staticPath + "/KaTeX/katex.min", css: globalPath.staticPath + "/KaTeX/katex.min"};
+        editormd.katexURL = {js: katexJsUrl, css: katexCssUrl};
 
         // noinspection JSUnusedLocalSymbols 编辑器初始化配置
         editor = editormd("editormd", {
