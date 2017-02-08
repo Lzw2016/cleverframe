@@ -1,10 +1,16 @@
-# MySQL设置编码=================================
+# MySQL设置=================================
+# 设置编码
 SET character_set_client = utf8 ;
 SET character_set_connection = utf8 ;
 SET character_set_database = utf8 ;
 SET character_set_results = utf8 ;
 SET character_set_server = utf8 ;
+
+# 修改密码
+update user set password=password('lizhiwei') where user='root';
+
+# 设置远程访问
+GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'lizhiwei' WITH GRANT OPTION;
+
+# 立即保存配置信息
 FLUSH PRIVILEGES ;
-
-
-
