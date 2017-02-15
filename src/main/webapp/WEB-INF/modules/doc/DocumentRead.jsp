@@ -31,6 +31,12 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/flowchart.min.js"></script>
     <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/jquery.flowchart.min.js"></script>
 
+    <%-- Bootstrap --%>
+    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" />
+    <%--<script src="${applicationScope.staticPath}/Bootstrap/js/jquery-1.12.3.min.js"></script>--%>
+    <script src="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
+
     <%-- 加载自定义的全局JS文件 --%>
     <script type="text/javascript" src="${applicationScope.mvcPath}/core/globaljs/globalPath.js"></script>
     <%-- 当前页面的CSS、JS脚本 --%>
@@ -44,7 +50,7 @@
     <%--页面头部--%>
 </div>
 
-<div>
+<div class="container">
     <%--文档内容--%>
     <div id="editormd">
         <textarea style="display:none;"></textarea>

@@ -235,4 +235,4 @@ clever-sys
 
 
 ## ----------------------------------------- 文档模块 ----------------------------------------- ##
-/${base.mvcPath}/doc/document/DocumentEdit.html
+/${base.mvcPath}/doc/docdocument/DocumentEdit.html

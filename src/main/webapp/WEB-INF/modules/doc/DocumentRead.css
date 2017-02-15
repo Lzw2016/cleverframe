@@ -5,9 +5,6 @@ body {
 }
 
 .editormd-html-preview {
-    /* TODO 动态宽度 */
-    /*width: 80%;*/
-    width: 1000px;
     margin: 0 auto;
     background-color: #F9F9F5;
     border: 1px solid #E1E1E8;

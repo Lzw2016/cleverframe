@@ -18,10 +18,10 @@
     <%--<script type="text/javascript" src="${applicationScope.staticPath}/EasyUI/ajxGlobalEventByEasyUI.js"--%>
 
     <%-- Bootstrap --%>
-    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.6-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.6-dist/css/bootstrap-theme.min.css" />
-    <script src="${applicationScope.staticPath}/Bootstrap/js/jquery-1.12.3.min.js"></script>
-    <script src="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.6-dist/js/bootstrap.min.js"></script>
+    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" />
+    <%--<script src="${applicationScope.staticPath}/Bootstrap/js/jquery-1.12.3.min.js"></script>--%>
+    <script src="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
     <%-- CodeMirror --%>
     <%--<script src="//cdn.bootcss.com/jquery/1.12.1/jquery.js"></script>--%>
