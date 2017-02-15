@@ -32,8 +32,8 @@
     <script type="text/javascript" src="${applicationScope.staticPath}/editor.md/lib/jquery.flowchart.min.js"></script>
 
     <%-- Bootstrap --%>
-    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap.min.css" />
-    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css" />
+    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/css/bootstrap-theme.min.css"/>
     <%--<script src="${applicationScope.staticPath}/Bootstrap/js/jquery-1.12.3.min.js"></script>--%>
     <script src="${applicationScope.staticPath}/Bootstrap/bootstrap-3.3.7-dist/js/bootstrap.min.js"></script>
 
@@ -46,14 +46,26 @@
     <title>阅读文档</title>
 </head>
 <body>
-<div>
-    <%--页面头部--%>
-</div>
+<div class="container-fluid">
+    <div class="row">
+        <%--页面头部--%>
+        <%-- 文章标题 作者 最后更新时间 字数 阅读次数 文档菜单 文档信息--%>
+        <%--参考 http://ibeetl.com/guide/#beetl--%>
+    </div>
 
-<div class="container">
-    <%--文档内容--%>
-    <div id="editormd">
-        <textarea style="display:none;"></textarea>
+    <div class="row">
+        <div class="col-sm-10 col-md-10 col-lg-10">
+            <%--文档内容--%>
+            <div id="editormd" <%--class="container"--%>>
+                <textarea style="display:none;"></textarea>
+            </div>
+        </div>
+
+        <div class="col-sm-2 col-md-2 col-lg-2">
+            <div style="margin-left: 5px;margin-top:10px;padding: 10px 0 20px 5px; border: 1px solid #E1E1E8;">
+                文档菜单
+            </div>
+        </div>
     </div>
 </div>
 

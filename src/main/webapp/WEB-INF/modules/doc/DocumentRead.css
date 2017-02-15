@@ -5,7 +5,7 @@ body {
 }
 
 .editormd-html-preview {
-    margin: 0 auto;
+    margin: 10px 10px 10px 25px;
     background-color: #F9F9F5;
     border: 1px solid #E1E1E8;
 }
