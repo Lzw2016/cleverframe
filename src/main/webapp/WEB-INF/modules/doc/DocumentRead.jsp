@@ -46,13 +46,13 @@
     <title>阅读文档</title>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <%--页面头部--%>
-        <%-- 文章标题 作者 最后更新时间 字数 阅读次数 文档菜单 文档信息--%>
-        <%--参考 http://ibeetl.com/guide/#beetl--%>
-    </div>
-
+<div class="header">
+    <%--页面头部--%>
+    <%-- 文章标题 作者 最后更新时间 字数 阅读次数 文档菜单 文档信息--%>
+    <%--参考 http://ibeetl.com/guide/#beetl--%>
+    文章标题 作者 最后更新时间 字数 阅读次数 文档菜单 文档信息
+</div>
+<div class="container-fluid content">
     <div class="row">
         <div class="col-sm-10 col-md-10 col-lg-10">
             <%--文档内容--%>
@@ -62,8 +62,9 @@
         </div>
 
         <div class="col-sm-2 col-md-2 col-lg-2">
-            <div style="margin-left: 5px;margin-top:10px;padding: 10px 0 20px 5px; border: 1px solid #E1E1E8;">
-                文档菜单
+            <div style="margin-top:10px; border: 1px solid #E1E1E8;">
+                <%--文档菜单--%>
+                <div id="custom-toc-container" style="margin-top: 10px;"></div>
             </div>
         </div>
     </div>

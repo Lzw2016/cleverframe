@@ -9,3 +9,30 @@ body {
     background-color: #F9F9F5;
     border: 1px solid #E1E1E8;
 }
+
+.header {
+    height: 45px;
+    background: #f9f3d7;
+    position: fixed;
+    left: 0;
+    top: 0;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
+    padding: 0 50px;
+    border-bottom: 1px solid #f5e539;
+}
+
+.content {
+    margin-top: 45px;
+}
+
+#custom-toc-container ul {
+    -webkit-padding-start: 20px;
+}
+
+#custom-toc-container li {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

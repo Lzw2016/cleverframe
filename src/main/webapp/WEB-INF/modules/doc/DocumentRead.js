@@ -76,7 +76,7 @@ var pageJs = function (globalPath) {
                         htmlDecode: "style,script,iframe",      // you can filter tags decode
                         //toc             : false,
                         tocm: true,    // Using [TOCM]
-                        //tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+                        tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
                         //gfm             : false,
                         //tocDropdown     : true,
                         // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
