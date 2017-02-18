@@ -23,16 +23,48 @@ body {
     border-bottom: 1px solid #f5e539;
 }
 
+.page {
+    width: 100%;
+    position: relative;
+    margin: auto;
+    /*max-width: 1600px;*/
+    box-sizing: border-box;
+    padding: 45px 380px 50px 50px;
+}
+
 .content {
-    margin-top: 45px;
+    position: relative;
 }
 
-#custom-toc-container ul {
-    -webkit-padding-start: 20px;
+.menu {
+    position: fixed;
+    width: 300px;
+    margin-left: 60px;
+    margin-bottom: 15px;
+    padding-top: 50px;
+    /*padding: 60px 5px 10px;*/
+    border-left: 1px solid #ccc;
+    box-sizing: border-box;
+    height: 100%;
+    font-size: 14px;
+    top: 0;
+    right: 0;
+    /*overflow-x: hidden;*/
+    /*overflow-y: scroll;*/
 }
 
-#custom-toc-container li {
+.menu a {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.menu ul, menu, dir {
+    /*display: block;*/
+    /*list-style-type: disc;*/
+    /*-webkit-margin-before: 1em;*/
+    /*-webkit-margin-after: 1em;*/
+    /*-webkit-margin-start: 0;*/
+    /*-webkit-margin-end: 0;*/
+    -webkit-padding-start: 25px;
 }

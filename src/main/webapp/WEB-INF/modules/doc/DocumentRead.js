@@ -70,13 +70,13 @@ var pageJs = function (globalPath) {
                     if ($.trim(markdownContent) == "") {
                         markdownContent = "空文档!";
                     }
-                    var editormdView = editormd.markdownToHTML("editormd", {
+                    editormdView = editormd.markdownToHTML("editormd", {
                         markdown: markdownContent,              //+ "\r\n" + $("#append-test").text(),
                         //htmlDecode      : true,               // 开启 HTML 标签解析(为了安全性)，默认不开启
                         htmlDecode: "style,script,iframe",      // you can filter tags decode
                         //toc             : false,
                         tocm: true,    // Using [TOCM]
-                        tocContainer    : "#custom-toc-container", // 自定义 ToC 容器层
+                        tocContainer: "#custom-toc-container", // 自定义 ToC 容器层
                         //gfm             : false,
                         //tocDropdown     : true,
                         // markdownSourceCode : true, // 是否保留 Markdown 源码，即是否删除保存源码的 Textarea 标签
@@ -86,6 +86,7 @@ var pageJs = function (globalPath) {
                         flowChart: true,          // 默认不解析
                         sequenceDiagram: true     // 默认不解析
                     });
+                    _this.anchorLinkOffset();
                 } else {
                     // $.messager.alert("提示", data.failMessage, "warning");
                 }
@@ -106,6 +107,27 @@ var pageJs = function (globalPath) {
             return decodeURIComponent(r[2]);
         }
         return null;
+    };
+
+    // 锚点链接的偏移问题
+    this.anchorLinkOffset = function () {
+        var handler = function (hash) {
+            var target = $(".content a[name='" + hash.slice(1) + "']");
+            if (target.length == 1) {
+                var top = target.offset().top - 50;
+                if (top > 0) {
+                    $('html,body').animate({scrollTop: top}, 500);
+                }
+            }
+        };
+        $(".menu a[href^='#'][href!='#']").click(function () {
+            handler(this.hash);
+            history.pushState({}, '', this.href);
+            return false;
+        });
+        if (location.hash) {
+            handler(location.hash);
+        }
     };
 };
 
