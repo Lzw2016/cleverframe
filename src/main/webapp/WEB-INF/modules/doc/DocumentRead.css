@@ -21,6 +21,7 @@ body {
     box-sizing: border-box;
     padding: 0 50px;
     border-bottom: 1px solid #f5e539;
+    font-family: Consolas, monaco, "Helvetica Neue", Helvetica, Arial, "Hiragino Sans GB", "Microsoft YaHei", 微软雅黑, STHeiti, "WenQuanYi Micro Hei", sans-serif;
 }
 
 .page {
@@ -38,7 +39,7 @@ body {
 
 .menu {
     position: fixed;
-    width: 300px;
+    width: 310px;
     margin-left: 60px;
     margin-bottom: 15px;
     padding-top: 50px;
@@ -46,7 +47,7 @@ body {
     border-left: 1px solid #ccc;
     box-sizing: border-box;
     height: 100%;
-    font-size: 14px;
+    font-size: 13px;
     top: 0;
     right: 0;
     /*overflow-x: hidden;*/
@@ -57,6 +58,7 @@ body {
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+    text-decoration: none;
 }
 
 .menu ul, menu, dir {
@@ -68,3 +70,52 @@ body {
     /*-webkit-margin-end: 0;*/
     -webkit-padding-start: 25px;
 }
+
+.headerDivFirst {
+    position: absolute;
+    top: 5px;
+    left: 80px;
+}
+
+#title {
+    font-size: 24px;
+    display: inline-block;
+    max-width: 750px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.headerDivLast {
+    position: absolute;
+    top: 20px;
+    right: 15px;
+    /*background-color: #D6DBDF;*/
+    /*color: #2C3E50;*/
+}
+
+.headerDivLast span {
+    position: relative;
+    margin-right: 5px;
+}
+
+#createBy {
+    font-size: 13px;
+}
+
+#createDate {
+    font-size: 13px;
+}
+
+#updateBy {
+    font-size: 13px;
+}
+
+#updateDate {
+    font-size: 13px;
+}
+
+#numberOfWords {
+    font-size: 13px;
+}
+

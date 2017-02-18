@@ -18,6 +18,21 @@ var pageJs = function (globalPath) {
     var docDocumentIdParam = null;
     // 编辑器显示对象
     var editormdView = null;
+    // 文档信息
+    var docDocumentInfo = null;
+    // 文章标题
+    var title = $("#title");
+    // 作者
+    var createBy = $("#createBy");
+    // 创建时间
+    var createDate = $("#createDate");
+    // 更新人
+    var updateBy = $("#updateBy");
+    // 最后更新时间
+    var updateDate = $("#updateDate");
+    // 字数
+    var numberOfWords = $("#numberOfWords");
+
     /**
      * 页面初始化方法
      */
@@ -65,7 +80,8 @@ var pageJs = function (globalPath) {
             success: function (data) {
                 // $.unmask({target: maskTarget});
                 if (data.success) {
-                    var docDocumentInfo = data.result;
+                    docDocumentInfo = data.result;
+                    _this.setHeader(docDocumentInfo);
                     var markdownContent = docDocumentInfo.content;
                     if ($.trim(markdownContent) == "") {
                         markdownContent = "空文档!";
@@ -95,6 +111,31 @@ var pageJs = function (globalPath) {
         //console.log("返回一个 jQuery 实例 =>", testEditormdView);
         // 获取Markdown源码
         //console.log(testEditormdView.getMarkdown());
+    };
+
+    // 设置页头信息
+    this.setHeader = function (docDocumentInfo) {
+        if (docDocumentInfo == null) {
+            return;
+        }
+        title.text(docDocumentInfo.title);
+        createBy.text("作者:" + docDocumentInfo.createBy);
+        createDate.text("创建时间:" + docDocumentInfo.createDate);
+        if (docDocumentInfo.updateBy) {
+            updateBy.text("更新人:" + docDocumentInfo.updateBy);
+        } else {
+            updateBy.text("");
+        }
+        if (docDocumentInfo.updateDate) {
+            updateDate.text("最后更新时间:" + docDocumentInfo.updateDate);
+        } else {
+            updateDate.text("");
+        }
+        if (docDocumentInfo.content) {
+            numberOfWords.text("字数:" + docDocumentInfo.content.length);
+        } else {
+            numberOfWords.text("");
+        }
     };
 
     // 获取URL参数

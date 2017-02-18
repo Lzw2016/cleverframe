@@ -34,11 +34,18 @@
 </head>
 <body>
 <div class="page">
+    <%--页面头部--%>
     <div class="header">
-        <%--页面头部--%>
-        <%-- 文章标题 作者 最后更新时间 字数 阅读次数 文档菜单 文档信息--%>
-        <%--参考 http://ibeetl.com/guide/#beetl--%>
-        文章标题 作者 最后更新时间 字数 阅读次数 文档菜单 文档信息
+        <span class="headerDivFirst">
+            <span id="title"><%--文章标题--%></span>
+        </span>
+        <span class="headerDivLast">
+            <span id="createBy"><%--作者--%></span>
+            <span id="createDate"><%--创建时间--%></span>
+            <span id="updateBy"><%--更新人--%></span>
+            <span id="updateDate"><%--最后更新时间--%></span>
+            <span id="numberOfWords"><%--字数--%></span>
+        </span>
     </div>
 
     <%--文档内容--%>
