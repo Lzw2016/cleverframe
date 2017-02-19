@@ -181,7 +181,9 @@ var pageJs = function (globalPath) {
         // 表单验证配置
         $('#docProjectAddForm').validator({
             fields: {
-                'name': 'required;length(3~50)'
+                'name': 'required;length(3~50)',
+                'readme': 'length(0~600)',
+                'remarks': 'length(0~230)'
             },
             msgMaker: function (opt) {
                 // 自定义错误提示方式
