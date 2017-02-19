@@ -32,6 +32,10 @@
     width: 300px;
 }
 
+.groups .group .box-con {
+    min-height: 400px;
+}
+
 .groups .group .box {
     float: left;
     width: 200px;
@@ -39,6 +43,7 @@
     border: 1px solid #DDD;
     margin: 20px 10px 10px 0;
     position: relative;
+    /*cursor: pointer;*/
 }
 
 .groups .group .box:hover {
@@ -47,7 +52,7 @@
 
 .groups .group .box .info {
     padding: 10px;
-    cursor: pointer;
+    /*cursor: pointer;*/
 }
 
 .groups .group .box .info .title {
@@ -72,11 +77,11 @@
     bottom: 0;
     left: 0;
     right: 0;
-    height: 30px;
+    height: 35px;
     padding: 5px;
     color: rgba(0, 0, 0, 0.4);
     background-color: rgba(0, 0, 0, 0.1);
-    text-align: center;
+    text-align: left;
 }
 
 .groups .group .box .status .creator {
@@ -145,4 +150,91 @@
 .groups .group .box-to-add:hover {
     opacity: 1;
     background-color: #F2F2F2;
+}
+
+/*分页插件样式*/
+#paginatorDiv {
+    text-align: center;
+}
+
+#paginatorDiv .pagination {
+    margin: 10px 0 20px;
+}
+
+#paginatorDiv .arrow {
+    display: inline-block;
+    overflow: hidden;
+    border-left: 5px dashed transparent;
+    border-bottom: 5px dashed transparent;
+    border-right: 5px dashed transparent;
+    border-top: 5px solid #fff;
+    vertical-align: middle
+}
+
+#paginatorDiv .arrow2 {
+    border-left: 5px dashed transparent;
+    border-bottom: 5px dashed transparent;
+    border-top: 5px dashed transparent;
+    border-right: 5px solid #ccc
+}
+
+#paginatorDiv .arrow3 {
+    border-top: 5px dashed transparent;
+    border-bottom: 5px dashed transparent;
+    border-right: 5px dashed transparent;
+    border-left: 5px solid #ccc
+}
+
+#paginatorDiv .pagination > li > a {
+    margin-right: 5px;
+    border-radius: 2px;
+    background: #fff;
+    color: #333;
+    border-color: #ccc;
+    padding: 6px 15px
+}
+
+#paginatorDiv .pagination > li > a:hover, #paginatorDiv .pagination > li > a:focus {
+    color: #fff;
+    background: #fb9400;
+    border-color: #fb9400
+}
+
+#paginatorDiv .pagination > .active > a, #paginatorDiv .pagination > .active > a:hover, #paginatorDiv .pagination > .active > a:focus {
+    color: #fff;
+    background: #fb9400;
+    border-color: #fb9400
+}
+
+#paginatorDiv .pagination .arrow2 {
+    margin: 3px 8px 5px 0
+}
+
+#paginatorDiv .pagination a:hover .arrow2 {
+    border-right-color: #fff
+}
+
+#paginatorDiv .pagination .arrow3 {
+    margin: 3px 0 5px 8px
+}
+
+#paginatorDiv .pagination a:hover .arrow3 {
+    border-left-color: #fff
+}
+
+#docProjectAddDiv {
+    width: 550px;
+    margin: 10px 0 10px;
+}
+
+#docProjectAddDiv textarea {
+    resize: none;
+}
+
+#docProjectReadme {
+    height: 100px;
+}
+
+#docProjectRemarks {
+    height: 70px;
 }
