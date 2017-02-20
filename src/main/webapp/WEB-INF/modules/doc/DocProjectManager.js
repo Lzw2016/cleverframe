@@ -24,6 +24,8 @@ var pageJs = function (globalPath) {
     var docProjectInfoDiv = $("#docProjectInfoDiv");
     // 当前分页信息
     var pageInfo = null;
+    // 数据分页大小
+    var pageSize = 14;
 
     /**
      * 页面初始化方法
@@ -39,7 +41,7 @@ var pageJs = function (globalPath) {
             last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
             page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
             onPageChange: function (num, type) {
-                _this.setDocProjectInfo(15, num, function (data) {
+                _this.setDocProjectInfo(pageSize, num, function (data) {
                     if (data.success) {
                         pageInfo = {totalPages: data.result.pageCount, currentPage: data.result.pageNo};
                         paginatorUl.jqPaginator("option", pageInfo);
@@ -71,7 +73,7 @@ var pageJs = function (globalPath) {
     // 重新加载当前页数据
     this.reloadPageData = function () {
         if (pageInfo) {
-            _this.setDocProjectInfo(15, pageInfo.currentPage, function (data) {
+            _this.setDocProjectInfo(pageSize, pageInfo.currentPage, function (data) {
                 if (data.success) {
                     pageInfo = {totalPages: data.result.pageCount, currentPage: data.result.pageNo};
                     paginatorUl.jqPaginator("option", pageInfo);

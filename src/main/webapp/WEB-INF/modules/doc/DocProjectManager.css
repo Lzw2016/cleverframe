@@ -33,7 +33,7 @@
 }
 
 .groups .group .box-con {
-    min-height: 400px;
+    min-height: 480px;
 }
 
 .groups .group .box {
@@ -41,7 +41,7 @@
     width: 200px;
     height: 128px;
     border: 1px solid #DDD;
-    margin: 20px 10px 10px 0;
+    margin: 20px 10px 10px 10px;
     position: relative;
     /*cursor: pointer;*/
 }
