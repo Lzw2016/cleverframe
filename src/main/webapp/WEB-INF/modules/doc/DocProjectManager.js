@@ -22,6 +22,8 @@ var pageJs = function (globalPath) {
     var paginatorUl = $("#paginatorUl");
     // 文档项目信息Div
     var docProjectInfoDiv = $("#docProjectInfoDiv");
+    // 当前分页信息
+    var pageInfo = null;
 
     /**
      * 页面初始化方法
@@ -37,8 +39,12 @@ var pageJs = function (globalPath) {
             last: '<li class="last"><a href="javascript:void(0);">末页<\/a><\/li>',
             page: '<li class="page"><a href="javascript:void(0);">{{page}}<\/a><\/li>',
             onPageChange: function (num, type) {
-                _this.setDocProjectInfo(15, num);
-                // 设置分页插件页数信息
+                _this.setDocProjectInfo(15, num, function (data) {
+                    if (data.success) {
+                        pageInfo = {totalPages: data.result.pageCount, currentPage: data.result.pageNo};
+                        paginatorUl.jqPaginator("option", pageInfo);
+                    }
+                });
             }
         });
 
@@ -60,23 +66,34 @@ var pageJs = function (globalPath) {
 
     };
 
-
     // ---------------------------------------------------------------------------------------------------------
 
-    // this.queryDocProjectUrl
+    // 重新加载当前页数据
+    this.reloadPageData = function () {
+        if (pageInfo) {
+            _this.setDocProjectInfo(15, pageInfo.currentPage, function (data) {
+                if (data.success) {
+                    pageInfo = {totalPages: data.result.pageCount, currentPage: data.result.pageNo};
+                    paginatorUl.jqPaginator("option", pageInfo);
+                }
+            });
+        }
+    };
 
     // 设置文档项目信息
-    this.setDocProjectInfo = function (pageSize, pageNo) {
+    this.setDocProjectInfo = function (pageSize, pageNo, callBack) {
         var loadingIndex = layer.msg(' 加载中......', {icon: 16}); // , shade: [0.3, "#CCC"]
         $.ajax({
             url: queryDocProjectUrl, data: {rows: pageSize, page: pageNo}, dataType: 'json', type: 'post',
             success: function (data) {
                 layer.close(loadingIndex);
+                if ($.isFunction(callBack)) {
+                    callBack(data);
+                }
                 if (data.success) {
                     docProjectInfoDiv.html("");
                     var html = [];
                     $(data.result.list).each(function (index, item) {
-                        var id = _this.getUUID(32, 16);
                         html.push('<div class="box">');
                         html.push('    <div class="info">');
                         html.push('        <div class="title">' + item.name + '</div>');
@@ -85,16 +102,14 @@ var pageJs = function (globalPath) {
                         html.push('    <div class="status">' + item.createDate + '<span class="creator">@' + item.createBy + '</span></div>');
                         // html.push('    <div class="star"><i class="glyphicon glyphicon-star"></i></div>');
                         html.push('    <div class="tools">');
-                        html.push('        <i class="glyphicon glyphicon-pencil" title="编辑"></i>');
+                        html.push('        <i class="glyphicon glyphicon-pencil" title="编辑" onclick="pageJsObject.addOrUpdateDocProject(' + item.id + ')"></i>');
                         html.push('        <i class="glyphicon glyphicon-export" title="转到编辑页面" onclick="pageJsObject.openDocProjectEdit(' + item.id + ')"></i>');
                         html.push('        <i class="glyphicon glyphicon-eye-open" title="阅读" onclick="pageJsObject.openDocProjectRead(' + item.id + ')"></i>');
                         html.push('        <i class="glyphicon glyphicon-trash" title="删除" onclick="pageJsObject.delDocProject(' + item.id + ')"></i>');
                         html.push('    </div>');
                         html.push('</div>');
-
-
                     });
-                    html.push('<div class="box-to-add" onclick="pageJsObject.addDocProject()"></div>');
+                    html.push('<div class="box-to-add" onclick="pageJsObject.addOrUpdateDocProject()"></div>');
                     docProjectInfoDiv.html(html.join(" "));
                 } else {
                     layer.alert(data.failMessage, {icon: 0});
@@ -113,8 +128,11 @@ var pageJs = function (globalPath) {
                 url: delDocProjectUrl, data: {id: docProjectId}, dataType: 'json', type: 'post',
                 success: function (data) {
                     if (data.success) {
-                        layer.alert("删除成功", {icon: 1});
-                        // TODO 刷新页面
+                        layer.alert("删除成功", {
+                            icon: 1, end: function () {
+                                _this.reloadPageData();
+                            }
+                        });
                     } else {
                         layer.alert(data.failMessage, {icon: 0});
                     }
@@ -140,16 +158,17 @@ var pageJs = function (globalPath) {
     };
 
     // 新增项目文档
-    this.addDocProject = function () {
+    this.addOrUpdateDocProject = function (docProjectId) {
         var html = [];
         html.push('<div id="docProjectAddDiv">');
         html.push('    <form class="form-horizontal" id="docProjectAddForm">');
+        html.push('        <input id="docProjectId" name="id" type="hidden">');
         html.push('        <div class="form-group">');
         html.push('            <label for="docProjectName" class="col-sm-3 control-label">');
         html.push('                文档项目名称 <span style="color:#CC0000;">*</span>');
         html.push('            </label>');
         html.push('            <div class="col-sm-9">');
-        html.push('                <input id="docProjectName" name="name" type="text" class="form-control" placeholder="文档项目名称">'); // data-rule="required"
+        html.push('                <input id="docProjectName" name="name" type="text" class="form-control" placeholder="文档项目名称">');
         html.push('            </div>');
         html.push('        </div>');
         html.push('        <div class="form-group">');
@@ -168,12 +187,29 @@ var pageJs = function (globalPath) {
         html.push('</div>');
         // 显示表单对话框
         layer.open({
-            type: 1, skin: 'layui-layer-rim', area: ['580px', '380px'], content: html.join(" "), btn: ['新增', '取消'],
+            type: 1,
+            skin: 'layui-layer-rim',
+            area: ['580px', '380px'],
+            content: html.join(" "),
+            btn: [(docProjectId ? '更新' : '新增'), '取消'],
+            title: (docProjectId ? '更新' : '新增') + "文档项目信息",
             yes: function (index, layero) {
                 $('#docProjectAddForm').isValid(function (v) {
                     if (v) {
-                        // TODO 发送新增文档项目请求
-                        layer.close(index);
+                        $.ajax({
+                            url: (docProjectId ? updateDocProjectUrl : addDocProjectUrl),
+                            data: $("#docProjectAddForm").serialize(),
+                            dataType: 'json',
+                            type: 'post',
+                            success: function (data) {
+                                if (data.success) {
+                                    layer.close(index);
+                                    _this.reloadPageData();
+                                } else {
+                                    layer.alert(data.failMessage, {icon: 0});
+                                }
+                            }
+                        });
                     }
                 });
             }
@@ -191,6 +227,20 @@ var pageJs = function (globalPath) {
                 console.log(opt);
             }
         });
+        // 更新赋值
+        if (docProjectId) {
+            $.ajax({
+                url: getDocProjectUrl, data: {id: docProjectId}, dataType: 'json', type: 'post',
+                success: function (data) {
+                    if (data.success) {
+                        $("#docProjectId").val(data.result.id);
+                        $("#docProjectName").val(data.result.name);
+                        $("#docProjectReadme").val(data.result.readme);
+                        $("#docProjectRemarks").val(data.result.remarks);
+                    }
+                }
+            });
+        }
     };
 
     // 获取一个UUID
