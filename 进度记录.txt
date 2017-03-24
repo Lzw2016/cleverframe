@@ -126,7 +126,7 @@ clever-sys
 /${base.mvcPath}/quartz/main
 
 /${base.mvcPath}/quartz/joblog/JobDetailLog.html
-/${base.mvcPath}/quartz/joblog/findQrtzJobLogByPage.html
+/${base.mvcPath}/quartz/joblog/findQrtzJobLogByPage.json
 
 /${base.mvcPath}/quartz/schedulerlog/SchedulerLog.html
 /${base.mvcPath}/quartz/schedulerlog/findSchedulerLogByPage.json

@@ -23,7 +23,7 @@ public class MavenClear {
         long start = System.currentTimeMillis();
         System.out.println("开始时间：" + start);
 
-        findFile(new File("D:\\Maven\\.m2"));
+        findFile(new File("D:\\ToolsSoftware\\Maven\\.m2"));
 
         long end = System.currentTimeMillis();
         System.out.println("完成，用时：" + (end - start));
