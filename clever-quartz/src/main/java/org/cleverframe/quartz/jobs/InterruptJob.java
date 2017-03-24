@@ -26,6 +26,7 @@ public class InterruptJob implements InterruptableJob {
     public void execute(JobExecutionContext context) throws JobExecutionException {
         for (int i = 0; i < 100000; i++) {
             if (!flag) {
+                logger.info("[InterruptJob] ================================= 中断测试任务 | 任务中断退出");
                 return;
             }
             try {

@@ -20,5 +20,6 @@ public class TestJobA implements Job {
         for (Map.Entry<String, Object> entry : jobDataMap.entrySet()) {
             logger.info("[TestJobA] ================================= Key:" + entry.getKey() + " || value:" + entry.getValue());
         }
+        logger.info("[TestJobA] ================================= 执行完成");
     }
 }
