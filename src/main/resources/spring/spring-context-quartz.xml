@@ -32,5 +32,7 @@
         <!-- Job接受applicationContext的成员变量名 -->
         <property name="applicationContextSchedulerContextKey" value="applicationContext" />
         <property name="overwriteExistingJobs" value="true" />
+        <!--事务定义-->
+        <property name="transactionManager" ref="transactionManager"/>
     </bean>
 </beans>

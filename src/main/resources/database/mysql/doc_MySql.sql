@@ -1,91 +1,91 @@
-/* -------------------------------- IdEntity --------------------------------
-id              bigint          NOT NULL    auto_increment          COMMENT '±àºÅ',
-company_code    varchar(255)    NOT NULL                            COMMENT 'Êı¾İËùÊô¹«Ë¾µÄ»ú¹¹±àÂë',
-org_code        varchar(255)    NOT NULL                            COMMENT 'Êı¾İÖ±Êô»ú¹¹µÄ±àÂë',
-create_by       varchar(255)    NOT NULL                            COMMENT '´´½¨Õß',
-create_date     datetime        NOT NULL                            COMMENT '´´½¨Ê±¼ä',
-update_by       varchar(255)    NOT NULL                            COMMENT '¸üĞÂÕß',
-update_date     datetime        NOT NULL                            COMMENT '¸üĞÂÊ±¼ä',
-remarks         varchar(255)                                        COMMENT '±¸×¢ĞÅÏ¢',
-del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT 'É¾³ı±ê¼Ç£¨1£ºÕı³££»2£ºÉ¾³ı£»3£ºÉóºË£©',
-uuid            varchar(36)     NOT NULL                            COMMENT 'Êı¾İÈ«¾Ö±êÊ¶UUID',
+ï»¿/* -------------------------------- IdEntity --------------------------------
+id              bigint          NOT NULL    auto_increment          COMMENT 'ç¼–å·',
+company_code    varchar(255)    NOT NULL                            COMMENT 'æ•°æ®æ‰€å±å…¬å¸çš„æœºæ„ç¼–ç ',
+org_code        varchar(255)    NOT NULL                            COMMENT 'æ•°æ®ç›´å±æœºæ„çš„ç¼–ç ',
+create_by       varchar(255)    NOT NULL                            COMMENT 'åˆ›å»ºè€…',
+create_date     datetime        NOT NULL                            COMMENT 'åˆ›å»ºæ—¶é—´',
+update_by       varchar(255)    NOT NULL                            COMMENT 'æ›´æ–°è€…',
+update_date     datetime        NOT NULL                            COMMENT 'æ›´æ–°æ—¶é—´',
+remarks         varchar(255)                                        COMMENT 'å¤‡æ³¨ä¿¡æ¯',
+del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT 'åˆ é™¤æ ‡è®°ï¼ˆ1ï¼šæ­£å¸¸ï¼›2ï¼šåˆ é™¤ï¼›3ï¼šå®¡æ ¸ï¼‰',
+uuid            varchar(36)     NOT NULL                            COMMENT 'æ•°æ®å…¨å±€æ ‡è¯†UUID',
 
 PRIMARY KEY (id)
 
-£¨1£ºÕı³££»2£ºÉ¾³ı£»3£ºÉóºË£©
-£¨0£º·ñ£»1£ºÊÇ£©
-£¨0£ºÒş²Ø£»1£ºÏÔÊ¾£©
-£¨1£ºËùÓĞÊı¾İ£»2£ºËùÔÚ¹«Ë¾¼°ÒÔÏÂÊı¾İ£»3£ºËùÔÚ¹«Ë¾Êı¾İ£»4£ºËùÔÚ»ú¹¹¼°ÒÔÏÂÊı¾İ£»5£ºËùÔÚ»ú¹¹Êı¾İ£»8£º½ö±¾ÈËÊı¾İ£»9£º°´Ã÷Ï¸ÉèÖÃ£©
+ï¼ˆ1ï¼šæ­£å¸¸ï¼›2ï¼šåˆ é™¤ï¼›3ï¼šå®¡æ ¸ï¼‰
+ï¼ˆ0ï¼šå¦ï¼›1ï¼šæ˜¯ï¼‰
+ï¼ˆ0ï¼šéšè—ï¼›1ï¼šæ˜¾ç¤ºï¼‰
+ï¼ˆ1ï¼šæ‰€æœ‰æ•°æ®ï¼›2ï¼šæ‰€åœ¨å…¬å¸åŠä»¥ä¸‹æ•°æ®ï¼›3ï¼šæ‰€åœ¨å…¬å¸æ•°æ®ï¼›4ï¼šæ‰€åœ¨æœºæ„åŠä»¥ä¸‹æ•°æ®ï¼›5ï¼šæ‰€åœ¨æœºæ„æ•°æ®ï¼›8ï¼šä»…æœ¬äººæ•°æ®ï¼›9ï¼šæŒ‰æ˜ç»†è®¾ç½®ï¼‰
 
 -------------------------------- IdEntity -------------------------------- */
 
 
 /* ====================================================================================================================
-    doc_project -- ÎÄµµÏîÄ¿±í
+    doc_project -- æ–‡æ¡£é¡¹ç›®è¡¨
 ==================================================================================================================== */
 CREATE TABLE doc_project
 (
-    id              bigint          NOT NULL    auto_increment          COMMENT '±àºÅ',
-    company_code    varchar(255)    NOT NULL                            COMMENT 'Êı¾İËùÊô¹«Ë¾µÄ»ú¹¹±àÂë',
-    org_code        varchar(255)    NOT NULL                            COMMENT 'Êı¾İÖ±Êô»ú¹¹µÄ±àÂë',
-    create_by       varchar(255)    NOT NULL                            COMMENT '´´½¨Õß',
-    create_date     datetime        NOT NULL                            COMMENT '´´½¨Ê±¼ä',
-    update_by       varchar(255)    NOT NULL                            COMMENT '¸üĞÂÕß',
-    update_date     datetime        NOT NULL                            COMMENT '¸üĞÂÊ±¼ä',
-    remarks         varchar(255)                                        COMMENT '±¸×¢ĞÅÏ¢',
-    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT 'É¾³ı±ê¼Ç£¨1£ºÕı³££»2£ºÉ¾³ı£»3£ºÉóºË£©',
-    uuid            varchar(36)     NOT NULL                            COMMENT 'Êı¾İÈ«¾Ö±êÊ¶UUID',
+    id              bigint          NOT NULL    auto_increment          COMMENT 'ç¼–å·',
+    company_code    varchar(255)    NOT NULL                            COMMENT 'æ•°æ®æ‰€å±å…¬å¸çš„æœºæ„ç¼–ç ',
+    org_code        varchar(255)    NOT NULL                            COMMENT 'æ•°æ®ç›´å±æœºæ„çš„ç¼–ç ',
+    create_by       varchar(255)    NOT NULL                            COMMENT 'åˆ›å»ºè€…',
+    create_date     datetime        NOT NULL                            COMMENT 'åˆ›å»ºæ—¶é—´',
+    update_by       varchar(255)    NOT NULL                            COMMENT 'æ›´æ–°è€…',
+    update_date     datetime        NOT NULL                            COMMENT 'æ›´æ–°æ—¶é—´',
+    remarks         varchar(255)                                        COMMENT 'å¤‡æ³¨ä¿¡æ¯',
+    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT 'åˆ é™¤æ ‡è®°ï¼ˆ1ï¼šæ­£å¸¸ï¼›2ï¼šåˆ é™¤ï¼›3ï¼šå®¡æ ¸ï¼‰',
+    uuid            varchar(36)     NOT NULL                            COMMENT 'æ•°æ®å…¨å±€æ ‡è¯†UUID',
 
-    name            varchar(100)    NOT NULL    UNIQUE                  COMMENT 'ÎÄµµÏîÄ¿Ãû³Æ',
-    readme          MediumText                                          COMMENT 'ÎÄµµ½éÉÜºÍËµÃ÷',
-    summary         MediumText                                          COMMENT 'ÎÄµµÄ¿Â¼',
+    name            varchar(100)    NOT NULL    UNIQUE                  COMMENT 'æ–‡æ¡£é¡¹ç›®åç§°',
+    readme          MediumText                                          COMMENT 'æ–‡æ¡£ä»‹ç»å’Œè¯´æ˜',
+    summary         MediumText                                          COMMENT 'æ–‡æ¡£ç›®å½•',
     PRIMARY KEY (id)
-) COMMENT = 'ÎÄµµÏîÄ¿±í';
+) COMMENT = 'æ–‡æ¡£é¡¹ç›®è¡¨';
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/
 
 
 /* ====================================================================================================================
-    doc_document -- ÎÄµµ±í
+    doc_document -- æ–‡æ¡£è¡¨
 ==================================================================================================================== */
 CREATE TABLE doc_document
 (
-    id              bigint          NOT NULL    auto_increment          COMMENT '±àºÅ',
-    company_code    varchar(255)    NOT NULL                            COMMENT 'Êı¾İËùÊô¹«Ë¾µÄ»ú¹¹±àÂë',
-    org_code        varchar(255)    NOT NULL                            COMMENT 'Êı¾İÖ±Êô»ú¹¹µÄ±àÂë',
-    create_by       varchar(255)    NOT NULL                            COMMENT '´´½¨Õß',
-    create_date     datetime        NOT NULL                            COMMENT '´´½¨Ê±¼ä',
-    update_by       varchar(255)    NOT NULL                            COMMENT '¸üĞÂÕß',
-    update_date     datetime        NOT NULL                            COMMENT '¸üĞÂÊ±¼ä',
-    remarks         varchar(255)                                        COMMENT '±¸×¢ĞÅÏ¢',
-    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT 'É¾³ı±ê¼Ç£¨1£ºÕı³££»2£ºÉ¾³ı£»3£ºÉóºË£©',
-    uuid            varchar(36)     NOT NULL                            COMMENT 'Êı¾İÈ«¾Ö±êÊ¶UUID',
+    id              bigint          NOT NULL    auto_increment          COMMENT 'ç¼–å·',
+    company_code    varchar(255)    NOT NULL                            COMMENT 'æ•°æ®æ‰€å±å…¬å¸çš„æœºæ„ç¼–ç ',
+    org_code        varchar(255)    NOT NULL                            COMMENT 'æ•°æ®ç›´å±æœºæ„çš„ç¼–ç ',
+    create_by       varchar(255)    NOT NULL                            COMMENT 'åˆ›å»ºè€…',
+    create_date     datetime        NOT NULL                            COMMENT 'åˆ›å»ºæ—¶é—´',
+    update_by       varchar(255)    NOT NULL                            COMMENT 'æ›´æ–°è€…',
+    update_date     datetime        NOT NULL                            COMMENT 'æ›´æ–°æ—¶é—´',
+    remarks         varchar(255)                                        COMMENT 'å¤‡æ³¨ä¿¡æ¯',
+    del_flag        char(1)         NOT NULL    DEFAULT '1'             COMMENT 'åˆ é™¤æ ‡è®°ï¼ˆ1ï¼šæ­£å¸¸ï¼›2ï¼šåˆ é™¤ï¼›3ï¼šå®¡æ ¸ï¼‰',
+    uuid            varchar(36)     NOT NULL                            COMMENT 'æ•°æ®å…¨å±€æ ‡è¯†UUID',
 
-    project_id      bigint          NOT NULL                            COMMENT 'ÎÄµµÏîÄ¿ID-¹ØÁªdoc_project(ÎÄµµÏîÄ¿±í)',
-    parent_id       bigint          NOT NULL                            COMMENT '¸¸¼¶±àºÅ,¸ù½ÚµãµÄ¸¸¼¶±àºÅÊÇ£º-1',
-    full_path       varchar(255)    NOT NULL    UNIQUE                  COMMENT 'Ê÷½á¹¹µÄÈ«Â·¾¶ÓÃ¡°-¡±¸ô¿ª,°üº¬×Ô¼ºµÄID',
-    title           varchar(100)    NOT NULL                            COMMENT 'ÎÄµµ»òÕßÕÂ½ÚµÄ±êÌâ',
-    content         MediumText                                          COMMENT 'ÎÄµµÄÚÈİ',
+    project_id      bigint          NOT NULL                            COMMENT 'æ–‡æ¡£é¡¹ç›®ID-å…³è”doc_project(æ–‡æ¡£é¡¹ç›®è¡¨)',
+    parent_id       bigint          NOT NULL                            COMMENT 'çˆ¶çº§ç¼–å·,æ ¹èŠ‚ç‚¹çš„çˆ¶çº§ç¼–å·æ˜¯ï¼š-1',
+    full_path       varchar(255)    NOT NULL    UNIQUE                  COMMENT 'æ ‘ç»“æ„çš„å…¨è·¯å¾„ç”¨â€œ-â€éš”å¼€,åŒ…å«è‡ªå·±çš„ID',
+    title           varchar(100)    NOT NULL                            COMMENT 'æ–‡æ¡£æˆ–è€…ç« èŠ‚çš„æ ‡é¢˜',
+    content         MediumText                                          COMMENT 'æ–‡æ¡£å†…å®¹',
     PRIMARY KEY (id)
-) COMMENT = 'ÎÄµµ±í';
+) COMMENT = 'æ–‡æ¡£è¡¨';
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/
 
 
 /* ====================================================================================================================
-    doc_history -- ÎÄµµÀúÊ·±í
+    doc_history -- æ–‡æ¡£å†å²è¡¨
 ==================================================================================================================== */
 CREATE TABLE doc_history
 (
-    id              bigint          NOT NULL    auto_increment          COMMENT '±àºÅ',
-    create_by       varchar(255)    NOT NULL                            COMMENT '´´½¨Õß',
-    create_date     datetime        NOT NULL                            COMMENT '´´½¨Ê±¼ä',
-    document_id     bigint          NOT NULL                            COMMENT 'ÎÄµµID-¹ØÁªdoc_document(ÎÄµµ±í)',
-    content         MediumText      NOT NULL                            COMMENT 'ÎÄµµÄÚÈİ',
+    id              bigint          NOT NULL    auto_increment          COMMENT 'ç¼–å·',
+    create_by       varchar(255)    NOT NULL                            COMMENT 'åˆ›å»ºè€…',
+    create_date     datetime        NOT NULL                            COMMENT 'åˆ›å»ºæ—¶é—´',
+    document_id     bigint          NOT NULL                            COMMENT 'æ–‡æ¡£ID-å…³è”doc_document(æ–‡æ¡£è¡¨)',
+    content         MediumText      NOT NULL                            COMMENT 'æ–‡æ¡£å†…å®¹',
     PRIMARY KEY (id)
-) COMMENT = 'ÎÄµµÀúÊ·±í';
+) COMMENT = 'æ–‡æ¡£å†å²è¡¨';
 /*------------------------------------------------------------------------------------------------------------------------
 
 --------------------------------------------------------------------------------------------------------------------------*/

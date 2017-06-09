@@ -267,6 +267,7 @@ CREATE TABLE qrtz_job_log
     next_run_time           datetime                                        COMMENT '下一次执行时间',
     run_count               int             NOT NULL                        COMMENT '执行次数',
     ip_address              varchar(200)    NOT NULL                        COMMENT '执行节点IP,可能有多个(‘;’分隔)',
+    status                  char(1)         NOT NULL                        COMMENT '任务执行状态(0:成功;1:失败)',
     exception_info          mediumtext                                      COMMENT '异常信息',
     is_veto                 char(1)         NOT NULL                        COMMENT '是否被否决（0：否；1：是）',
     before_job_data         mediumtext                                      COMMENT '执行前的JobDataMap数据',
