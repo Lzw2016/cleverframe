@@ -3,17 +3,17 @@ package org.cleverframe.common.utils;
 import java.text.DecimalFormat;
 
 /**
- * 存储数据大小工具类，用于数据转换，B、KB、MB、GB、TB、PB<br/>
+ * 存储空间大小换算工具，B、KB、MB、GB、TB、PB<br/>
  * <p/>
  * 作者：LiZW <br/>
  * 创建时间：2016-5-9 21:43 <br/>
  */
 public class DataSizeUtils {
-    public static long ONE_KB = 1024;
-    public static long ONE_MB = ONE_KB * 1024;
-    public static long ONE_GB = ONE_MB * 1024;
-    public static long ONE_TB = ONE_GB * 1024;
-    public static long ONE_PB = ONE_TB * 1024;
+    private static long ONE_KB = 1024;
+    private static long ONE_MB = ONE_KB * 1024;
+    private static long ONE_GB = ONE_MB * 1024;
+    private static long ONE_TB = ONE_GB * 1024;
+    private static long ONE_PB = ONE_TB * 1024;
 
     /**
      * 返回容易读取的数据大小
